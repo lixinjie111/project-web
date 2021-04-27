@@ -1,4 +1,5 @@
-import Login from '../views/login/index'
+import Login from '../views/login/login'
+import Forgetpwd from '../views/login/forgetpwd'
 import Home from '../views/home/index'
 /*
 * 页面结构
@@ -10,6 +11,15 @@ let routes = [
         component: Login,
         meta: {
             title: '登录',
+            isNeedLogin: false
+        }
+    },
+    {
+        name: 'forgetpwd',
+        path: '/forgetpwd',
+        component: Forgetpwd,
+        meta: {
+            title: '忘记密码',
             isNeedLogin: false
         }
     },

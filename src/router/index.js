@@ -10,6 +10,7 @@ const router = {
 
 // 构建VueRouter对象
 let vueRouter = new VueRouter(router)
+
 // 拦截路由，进行授权判断和缓存限制
 vueRouter.beforeEach((to, from, next) => {
     var menuList = [];
@@ -44,5 +45,15 @@ vueRouter.beforeEach((to, from, next) => {
     // }
 })
 
+// 重置title
+vueRouter.afterEach((to) => {
+    // reset the page title
+    const title = to.meta && to.meta.title ? to.meta.title : '项目管理';
+    document.title = title
+    // 从路由的元信息中获取 title 属性
+    if (to.meta.title) {
+        document.title = to.meta.title;
+    }
+})
 
 export default vueRouter
