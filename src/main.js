@@ -6,6 +6,7 @@ import 'x-intelligent-ui/dist/main.css'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
+import '@/assets/css/reset.css'
 
 Vue.config.productionTip = false
 

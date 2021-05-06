@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './home'
+import store from '@/store'
 
 const router = {
     mode:'history', // 对应的是 html5 的history API 有状态的路由
@@ -13,22 +14,17 @@ let vueRouter = new VueRouter(router)
 
 // 拦截路由，进行授权判断和缓存限制
 vueRouter.beforeEach((to, from, next) => {
-    var menuList = [];
-    var menuMap = JSON.parse(sessionStorage.getItem('menuMap'));
-    for (var p in menuMap) {
-        if (menuMap[p].href && menuMap[p].href != '') {
-            menuList.push(menuMap[p].href)
-        }
-    }
+    setStoreMenu(to)
+    
     if (to.meta.isNeedLogin) {
         // TODO 验证用户是否登录，以及用户是否有访问该路由的权限
-        if (menuList.indexOf(to.path) > -1 || to.path == '/') {
+        // if (menuList.indexOf(to.path) > -1 || to.path == '/') {
             next()
-        } else {
-            let redirectUrl = {path: '/login'};
-            redirectUrl = to.name !== 'login' ? {query: { redirect: to.fullPath }, ...redirectUrl} : redirectUrl;
-            next(redirectUrl)
-        }
+        // } else {
+        //     let redirectUrl = {path: '/login'};
+        //     redirectUrl = to.name !== 'login' ? {query: { redirect: to.fullPath }, ...redirectUrl} : redirectUrl;
+        //     next(redirectUrl)
+        // }
     } else {
         // if (menuList.indexOf(to.path) > -1 || to.path == '/') {
             next()
@@ -56,4 +52,47 @@ vueRouter.afterEach((to) => {
     }
 })
 
+function setStoreMenu(to){
+    let path = to.path;
+    let {permissionKey, permissionParent} = to.meta;
+    let {menuMap, topMenu, firstMenu, secondMenu} = store.state.system;
+    if(to.path === '/'){
+        setStore(topMenu[0], firstMenu.children[0], {}, firstMenu.children, secondMenu); // 修改菜单
+        return ;
+    } else {
+        let activeFirstMenuIndex = menuMap['level-1'].findIndex((item) => item.meta.permissionKey === permissionParent);
+        let activeFirstMenu = menuMap['level-1'][activeFirstMenuIndex];
+    //    store.dispatch('activeFirstMenu', activeFirstMenu); // 修改侧边栏激活状态
+        let {secondMenu, thirdMenu, navList, activeNav} = [{}, {}, [], {}]
+       if(activeFirstMenu.children && activeFirstMenu.children.length){
+            let activeSecondMenuIndex = activeFirstMenu.children.findIndex((item) => item.path === to.path);
+            if(activeSecondMenuIndex !== -1){
+                secondMenu = activeFirstMenu.children[activeSecondMenuIndex];
+                navList = activeFirstMenu.children;
+                activeNav = secondMenu;
+            } else {
+                activeFirstMenu.children.map(second => {
+                    if(second.children) {
+                        let activeThirdMenuIndex = second.children.findIndex((item) => item.path === to.path);
+                        if(activeThirdMenuIndex !== -1){
+                            secondMenu = second;
+                            thirdMenu = second.children[activeThirdMenuIndex];
+                            navList = secondMenu.children;
+                            activeNav = thirdMenu;
+                        }
+                    }
+                });
+            }
+            
+       }
+       setStore(activeFirstMenu, secondMenu, thirdMenu, navList, activeNav)
+    }
+}
+function setStore(firstMenu, secondMenu, thirdMenu, navList, activeNav){
+    store.dispatch('activeFirstMenu', firstMenu);
+    store.dispatch('activeSecondMenu', secondMenu); // 修改二级激活菜单
+    store.dispatch('activeThirdMenu', thirdMenu); // 修改三级激活菜单
+    store.dispatch('navMenu', navList); // 修改横向nav菜单
+    store.dispatch('activeNavMenu', activeNav); // 修改nav激活菜单
+}
 export default vueRouter

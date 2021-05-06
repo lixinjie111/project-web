@@ -1,6 +1,9 @@
-import Login from '../views/login/login'
-import Forgetpwd from '../views/login/forgetpwd'
-import Home from '../views/home/index'
+import Login from '@/views/login/login.vue'
+import Forgetpwd from '@/views/login/forgetpwd.vue'
+import DefaultLayout from '@/views/layout/DefaultLayout.vue' // 默认左右结构
+import Org from './org'
+import Project from './project'
+// console.log(Org)
 /*
 * 页面结构
 */
@@ -25,16 +28,16 @@ let routes = [
     },
     {
         name: 'home',
-        path: '/home',
-        alias: '/',
-        component: Home,
+        path: '/',
+        component: DefaultLayout,
+        // level: 'top', // 顶层菜单
         meta: {
-            title: '首页',
             isNeedLogin: true, // 是否需要登录
-        }
-        // children: [
-
-        // ]
+        },
+        children: [
+            Org,
+            Project
+        ]
     }
 ]
 

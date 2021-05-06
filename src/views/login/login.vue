@@ -1,7 +1,7 @@
 <template>
   <div class="login-body">
     <div class="login-header">
-      <img class="logo" src="../../assets/images/login/login-logo.png" />
+      <img class="logo" src="@/assets/images/login/login-logo.png" />
     </div>
     <div class="login-content">
       <div class="login-title">欢迎登录项目管理平台</div>
@@ -55,7 +55,7 @@ export default {
         if (valid) {
           alert('submit!');
         } else {
-          console.log('error submit!!');
+          // console.log('error submit!!');
           return false;
         }
       });
@@ -72,6 +72,7 @@ export default {
   .login-header {
     text-align: center;
     .logo {
+      display: inline-block;
       margin: 142px auto 0 auto;
       width: 307px;
     }
