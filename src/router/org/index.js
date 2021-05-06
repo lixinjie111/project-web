@@ -1,4 +1,4 @@
-import Simple from '@/views/layout/SimpleNav.vue'
+import Simple from '@/layout/SimpleNav.vue'
 import User from '@/views/org/user.vue'
 import Depart from '@/views/org/depart.vue'
 import Role from '@/views/org/role.vue'

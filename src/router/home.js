@@ -1,6 +1,6 @@
 import Login from '@/views/login/login.vue'
 import Forgetpwd from '@/views/login/forgetpwd.vue'
-import DefaultLayout from '@/views/layout/DefaultLayout.vue' // 默认左右结构
+import DefaultLayout from '@/layout/DefaultLayout.vue' // 默认左右结构
 import Org from './org'
 import Project from './project'
 // console.log(Org)

@@ -1,4 +1,4 @@
-import EmptyLayout from '@/views/layout/EmptyLayout.vue'
+import EmptyLayout from '@/layout/EmptyLayout.vue'
 import User from '@/views/project/home.vue'
 import Depart from '@/views/org/depart.vue'
 import Role from '@/views/org/role.vue'
