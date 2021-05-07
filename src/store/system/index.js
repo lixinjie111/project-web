@@ -2,7 +2,7 @@ import mutations from './mutations'
 import actions from './actions'
 
 const state = {
-  menuMap: {}, // 所有的菜单Map，键为ID，值为菜单
+  menuMap: {}, // 所有的菜单Map，键值为层级 level-1,
   topMenu: [], // 顶级节点
   firstMenu: {}, // 当前的一级菜单 --- 当前激活侧边栏
   secondMenu: {}, // 当前的二级菜单 --- 横向算是二级菜单或三级菜单

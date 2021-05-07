@@ -20,7 +20,11 @@
 <script>
 export default {
   name: 'tree',
-  
+  methods: {
+    onSelect(){
+      
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

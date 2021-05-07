@@ -17,10 +17,10 @@ export default {
     methods: {
         getRoutes() { // 请求接口 按照接口去掉不需要字段
             this.$store.dispatch('initTopMenu', menuList);
-            // this.$store.dispatch('activeFirstMenu', menuList[0]);
-            // this.$store.dispatch('activeSecondMenu', this.$store.state.system.firstMenu.children[0]); // 修改横向nav激活菜单
-            // this.$store.dispatch('navMenu', this.$store.state.system.firstMenu.children);
-            // this.$store.dispatch('activeNavMenu', this.$store.state.system.secondMenu);
+            this.$store.dispatch('activeFirstMenu', menuList[0]);
+            this.$store.dispatch('activeSecondMenu', this.$store.state.system.firstMenu.children[0]); // 修改横向nav激活菜单
+            this.$store.dispatch('navMenu', this.$store.state.system.firstMenu.children);
+            this.$store.dispatch('activeNavMenu', this.$store.state.system.secondMenu);
             
             this.$router.replace({path: this.$store.state.system.activeNavMenu.path});
             // for (let i = 0; i < this.$router.options.routes.length; i++) {
@@ -37,7 +37,9 @@ export default {
         }
     },
     mounted() {
-        this.getRoutes()
+        let { topMenu } = this.$store.state.system;
+        !topMenu.length && this.getRoutes(); // vuex已经缓存菜单
+        
     }
 }
 </script>
@@ -51,7 +53,7 @@ export default {
     .layout-container{
         width: calc(100vw - 80px);
         min-height: 100vh;
-        background: rgba(0, 0, 0, 0.1);
+        background: #D8D8D8;
     }
 }
 </style>

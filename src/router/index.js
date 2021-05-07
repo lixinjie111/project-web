@@ -56,6 +56,7 @@ function setStoreMenu(to){
     let path = to.path;
     let {permissionKey, permissionParent} = to.meta;
     let {menuMap, topMenu, firstMenu, secondMenu} = store.state.system;
+    if(!topMenu.length) return; // vuex已经缓存菜单
     if(to.path === '/'){
         setStore(topMenu[0], firstMenu.children[0], {}, firstMenu.children, secondMenu); // 修改菜单
         return ;

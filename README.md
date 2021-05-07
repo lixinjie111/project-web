@@ -1,5 +1,11 @@
 # project_web
 
+### 规范
+组件 首字母大写驼峰式  MenuSider --- @/components/MenuSider.vue
+class 中划线 user-content
+methods 首字母小写 驼峰式 handleGetInfo
+html 双引号 js 单引号
+
 ## Project setup
 ```
 npm install
@@ -28,3 +34,5 @@ https://lanhuapp.com/web/#/item/project/stage?pid=a843f2c3-3351-4390-822e-b8c503
 
 ### git地址
 git@gitlab.yzmsri.com:web/project/project-web.git
+
+
