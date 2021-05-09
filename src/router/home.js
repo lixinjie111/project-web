@@ -3,7 +3,7 @@ import Forgetpwd from '@/views/login/forgetpwd.vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue' // 默认左右结构
 import Org from './org'
 import Project from './project'
-// console.log(Org)
+import Task from './task'
 /*
 * 页面结构
 */
@@ -36,7 +36,8 @@ let routes = [
         },
         children: [
             Org,
-            Project
+            Project,
+            Task,
         ]
     }
 ]
