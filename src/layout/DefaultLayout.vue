@@ -51,6 +51,7 @@ export default {
     //     height: 100vh;
     // }
     .layout-container{
+        // min-width: 1360px;
         width: calc(100vw - 80px);
         min-height: 100vh;
         background: #D8D8D8;

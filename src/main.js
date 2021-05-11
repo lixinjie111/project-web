@@ -6,6 +6,11 @@ import 'x-intelligent-ui/dist/main.css'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
+
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
 import '@/assets/css/reset.css'
 
 Vue.config.productionTip = false
@@ -13,6 +18,7 @@ Vue.config.productionTip = false
 Vue.use(Xui)
 Vue.use(Vuex)
 Vue.use(VueRouter)
+Vue.use(VXETable)
 
 new Vue({
   render: h => h(App),

@@ -1,11 +1,12 @@
+import menu from '../../utils/menu'
 import * as types from './mutation-types'
 
 export default {
   [types.INIT_TOP_MENU] (state, menu) {
     state.topMenu = menu
-    // state.menuMap.level1 = menu; // 单独处理一级菜单 
+    state.menuList = toMenuListByTree(menu)
+    console.log(state.menuList)
     state.menuMap = toMenuMapByLevel(menu)
-    sessionStorage.setItem('menuMap',JSON.stringify(state.menuMap))
   },
   [types.ACTIVE_FIRST_MENU] (state, menu) {
     state.firstMenu = menu
@@ -42,24 +43,43 @@ export default {
   }
 }
 
-function toMenuMapByLevel (topMenu) {
-  let menuMap = {}
-  getMapRecursion(menuMap, topMenu)
-  console.log(menuMap)
-  return menuMap
+function toMenuListByTree (topMenu) {
+  let menuList = [];
+  getListRecursion(menuList, topMenu)
+  return menuList;
 }
 
-function getMapRecursion (menuMap, parentMenu) {
+// 遍历所有有权限路由
+function getListRecursion (menuList, parentMenu) {
   if(Array.isArray(parentMenu)){
      for (let itemMenu of parentMenu) {
-       let key = `level-${itemMenu.level}`;
-      Array.isArray(menuMap[key]) ? menuMap[key].push(itemMenu) : menuMap[key] = [itemMenu]
+      menuList.push(itemMenu.path);
       if (itemMenu.children) {
-        getMapRecursion(menuMap, itemMenu.children)
+        getListRecursion(menuList, itemMenu.children)
       }
      }
   } else {
-    menuMap[`level-${parentMenu.level}`] = parentMenu
+    menuList.push(parentMenu.path);
+  }
+}
+
+function toMenuMapByLevel (topMenu) {
+  let  menuMap = {};
+  if(Array.isArray(topMenu)){
+    topMenu.map((item, index)=> {
+      menuMap[index] = [],
+      getMapMenu(menuMap[index], item)
+    })
+  };
+  return menuMap;
+}
+// 遍历单个子树路由 menuMap
+function getMapMenu(list, parentMenu) {
+  list.push(parentMenu.path);
+  if(parentMenu.children && Array.isArray(parentMenu.children)){
+    for (let itemMenu of parentMenu.children) {
+      getMapMenu(list, itemMenu)
+    }
   }
 }
 

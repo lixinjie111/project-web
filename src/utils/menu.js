@@ -23,7 +23,7 @@ export default [
     },
     children: [
       {
-        path: '/project/home', name: '首页', level: 2, meta: {icon: '', permissionKey: 'home', permissionParent: 'project'},
+        path: '/project/home', name: '首页',  meta: {icon: '', permissionKey: 'home', permissionParent: 'project'},
         children: [
           {path: '/project/home/task', name: '首页-项目1', level: 3, meta: {icon: '', permissionKey: 'depart', permissionParent: 'project' }}
         ]
