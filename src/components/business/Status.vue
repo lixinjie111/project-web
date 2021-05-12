@@ -1,5 +1,5 @@
 <template>
-  <span :class="'status'+(parseInt(value) + 1)">{{ statuses[value] }}</span>
+  <span :class="'status'+(parseInt(value) + 1)"><i class="iconfont" :class="icons[value]"></i>{{ statuses[value] }}</span>
 </template>
 
 <script>
@@ -13,6 +13,13 @@
     },
     data() {
       return {
+        icons: [
+          'iconjianshao',
+          'iconshijian',
+          'iconxiaoyan',
+          'iconlishijilu',
+          'iconyanqi',
+        ],
         statuses: [
           '未开始',
           '进行中',
@@ -40,5 +47,9 @@
       text-align: center;
       line-height: 24px;
     }
+  }
+
+  .iconfont {
+    margin-right: 4px;
   }
 </style>

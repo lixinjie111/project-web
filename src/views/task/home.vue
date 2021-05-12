@@ -32,12 +32,12 @@
         <a-divider type="vertical" />
         <FlatButton>
           新建任务
-          <MyIcon slot="icon" name="plus"/>
+          <MyIcon slot="icon" name="icontianjia" type="main"/>
         </FlatButton>
         <a-divider type="vertical" />
         <FlatButton>
           导出
-          <MyIcon slot="icon" name="export"/>
+          <MyIcon slot="icon" name="icondaochu"/>
         </FlatButton>
       </div>
     </div>

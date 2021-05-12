@@ -1,7 +1,7 @@
 <template>
   <a-table
       bordered
-      class="table-margin"
+      class="tree-table-wrapper"
       :row-selection="rowSelection"
       :expandIconColumnIndex="2"
       :loading="loading"
@@ -133,8 +133,47 @@
 </script>
 
 <style scoped>
-  .table-margin {
+  .tree-table-wrapper {
     margin: 16px;
     background-color: white;
+  }
+</style>
+
+<style lang="scss">
+  $border: 1px solid #EAEDF7;
+  .tree-table-wrapper {
+    /*border: $border;*/
+    border-radius: 2px;
+
+    .ant-table-thead {
+      height: 48px;
+      border: $border;
+
+      th {
+        font-size: 14px;
+        font-weight: 500;
+        color: #97A0C3;
+        line-height: 22px;
+        padding: 12px;
+        background: #FFFFFF;
+      }
+    }
+
+    .ant-table-tbody {
+      border: $border;
+      tr {
+        height: 48px;
+
+        td {
+          font-size: 14px;
+          font-weight: 400;
+          color: #242F57;
+          line-height: 22px;
+          padding: 12px;
+          border-bottom: $border;
+          border-right: $border;
+        }
+      }
+    }
   }
 </style>
