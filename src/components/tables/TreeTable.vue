@@ -1,7 +1,9 @@
 <template>
   <a-table
-      border
+      bordered
       class="table-margin"
+      :row-selection="rowSelection"
+      :expandIconColumnIndex="2"
       :loading="loading"
       :data-source="tableData"
       :columns="tableColumns">
@@ -10,6 +12,9 @@
     </template>
     <template slot="priority" slot-scope="text">
       <Priority :value="text"/>
+    </template>
+    <template slot="progress" slot-scope="text">
+      <a-progress :percent="text*10" size="small"/>
     </template>
   </a-table>
 </template>
@@ -25,6 +30,17 @@
       return {
         loading: false,
         removeList: [],
+        rowSelection: {
+          onChange: (selectedRowKeys, selectedRows) => {
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+          },
+          onSelect: (record, selected, selectedRows) => {
+            console.log(record, selected, selectedRows);
+          },
+          onSelectAll: (selected, selectedRows, changeRows) => {
+            console.log(selected, selectedRows, changeRows);
+          },
+        },
         tableData: [
           { id: 1000, name: 'vxe-table 从入门到放弃1', status: 3, type: 'mp3', size: 1024, date: '2020-08-01' },
           {
@@ -56,10 +72,10 @@
           { id: 24555, name: 'vxe-table 从入门到放弃9', status: 1, type: 'avi', size: 224, date: '2020-10-01' }
         ],
         tableColumns: [
-          {
-            type: 'checkbox',
-            width: 60,
-          },
+          // {
+          //   type: 'checkbox',
+          //   width: 60,
+          // },
           {
             dataIndex: 'id',
             title: 'ID',
@@ -104,8 +120,11 @@
             title: '工时/剩余',
           },
           {
-            dataIndex: 'date',
+            dataIndex: 'status',
             title: '进度',
+            scopedSlots: {
+              customRender: 'progress'
+            }
           },
         ]
       }
