@@ -2,18 +2,18 @@
   <div class="home">
     <div class="header">
       <div class="left">
-        <div class="all">
-          全部
-          <span>8</span>
-        </div>
-        <a-divider type="vertical" />
-        <div>
-          指派给我
-        </div>
-        <a-divider type="vertical" />
-        <div>
-          在周报中显示
-        </div>
+        <a-radio-group default-value="a" size="large">
+          <a-radio-button value="a" class="all">
+            全部
+            <span>8</span>
+          </a-radio-button>
+          <a-radio-button value="b">
+            指派给我
+          </a-radio-button>
+          <a-radio-button value="c">
+            在周报中显示
+          </a-radio-button>
+        </a-radio-group>
       </div>
       <div>
         <a-dropdown :trigger="['click']">
@@ -30,9 +30,15 @@
           </a-menu>
         </a-dropdown>
         <a-divider type="vertical" />
-        <FlatButton>新建任务</FlatButton>
+        <FlatButton>
+          新建任务
+          <MyIcon slot="icon" name="plus"/>
+        </FlatButton>
         <a-divider type="vertical" />
-        <FlatButton>导出</FlatButton>
+        <FlatButton>
+          导出
+          <MyIcon slot="icon" name="export"/>
+        </FlatButton>
       </div>
     </div>
     <TreeTable></TreeTable>
@@ -42,10 +48,11 @@
 <script>
   import TreeTable from '@/components/tables/TreeTable';
   import FlatButton from '@/components/buttons/FlatButton';
+  import MyIcon from "@/components/others/MyIcon";
 
   export default {
     name: 'TaskHome',
-    components: { TreeTable, FlatButton },
+    components: { TreeTable, FlatButton, MyIcon },
     props: {
       msg: String
     },
@@ -68,6 +75,8 @@
     height: 50px;
     border-bottom: 1px solid #EAEDF7;
     padding: 0 8px;
+    margin-bottom: 16px;
+
     .left {
       display: flex;
       align-items: center;
