@@ -12,12 +12,8 @@
         <div class="tree-view-item">
           <span class="tree-view-left">{{ item.title }}</span>
           <div class="tree-view-right">
-            <span class="tree-view-operation" v-if="operation.indexOf('edit') !== -1" @click.stop="onHandleEdit(item)">
-              <img src="//assets.2dfire.com/frontend/a7a2aed48cbeac93209d8cf12abb7120.png" alt="编辑"/>
-            </span>
-            <span class="tree-view-operation" v-if="operation.indexOf('del') !== -1" @click.stop="onHandleDelete(item)">
-              <img src="//assets.2dfire.com/frontend/ddb26080b4607970693a064ceef5a672.png" alt="删除"/>
-            </span>
+            <span class="tree-view-operation iconfont iconxiezuo" v-if="operation.indexOf('edit') !== -1" @click.stop="onHandleEdit(item)"></span>
+            <span class="tree-view-operation iconfont iconshanchu" v-if="operation.indexOf('del') !== -1" @click.stop="onHandleDelete(item)"></span>
           </div>
         </div>
       </template>
@@ -31,17 +27,20 @@ export default {
     // 树形结构数据
     treeData: { 
       type: Array,
-      default: []
+      required: true,
+      default: () => []
     },
     // 操作列表
     operation: {
       type: Array,
-      default: []
+      required: false,
+      default: () => []
     },
     // 默认展开指定的树节点
     defaultExpandKeys: {
       type: Array,
-      default: []
+      required: false,
+      default: () => []
     }
   },
   methods: {
@@ -63,13 +62,16 @@ export default {
 .tree {
   /deep/ .ant-tree li {
     // 修改选中背景颜色
-    .ant-tree-node-content-wrapper.ant-tree-node-selected {
-      background: #F0F8FF;
+    .ant-tree-node-content-wrapper{
+      height: 30px;
+      .ant-tree-node-selected {
+        background: #F0F8FF;
+      }
     }
     span.ant-tree-switcher{
       width:16px;
       height:16px;
-      margin:4px;
+      margin: 6px 4px;
       // 修改树结构合起的icon
       &.ant-tree-switcher_close{
         background:url('//assets.2dfire.com/frontend/b415e20fc703838e5a028437366ff22a.png') no-repeat;
@@ -80,8 +82,20 @@ export default {
       }
       // 修改树结构展开的icon
       &.ant-tree-switcher_open{
-        background:url('//assets.2dfire.com/frontend/568ca02f82eee05829d276881363c22a.png') no-repeat;
-        background-size:contain;
+        // background: #fff;
+        // background:url('//assets.2dfire.com/frontend/568ca02f82eee05829d276881363c22a.png') no-repeat;
+        // background-size:contain;
+        &:before{
+          display: inline-block;
+          color: #97A0C3;
+          font-family: "iconfont" !important;
+          font-size: 16px;
+          font-style: normal;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          content: '\e651';
+          background: #fff;
+        }
         i{
           display: none;
         }

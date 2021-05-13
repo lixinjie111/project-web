@@ -54,7 +54,7 @@ export default {
         // min-width: 1360px;
         width: calc(100vw - 80px);
         min-height: 100vh;
-        background: #D8D8D8;
+        background: #F4F7FC;;
     }
 }
 </style>

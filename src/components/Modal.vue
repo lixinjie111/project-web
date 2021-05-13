@@ -1,6 +1,6 @@
 <template>
   <a-modal v-model="isShow" 
-    :width="width" :closable="closable" 
+    :width="width" :closable="closable" :centered="true" :destroyOnClose="true"
     :okText="okText" :okType="okType" :cancelText="cancelText" :cancelType="cancelType"
     @ok="handleOk">
     <div slot="title" class="modal-header">
@@ -50,14 +50,9 @@ export default {
       default: 'primary'
     }
   },
-  data() {
-    return {
-      visible: true
-    }
-  },
   methods: {
     handleOk() {
-      this.$emit('modal-sure')
+      this.$emit('modal-sure');
     }
   }
 }

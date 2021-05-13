@@ -27,7 +27,8 @@ export default {
   props: {
     breadcrumbList: {
       type: Array,
-      default: []
+      required: true,
+      default: () => []
     }
   }
 }

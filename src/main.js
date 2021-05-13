@@ -12,6 +12,11 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 
 import '@/assets/css/reset.css'
+import '@/assets/iconfont/iconfont.css'
+
+// 引入自定义组件
+import initGlobalComponents from './components'
+initGlobalComponents();
 
 Vue.config.productionTip = false
 

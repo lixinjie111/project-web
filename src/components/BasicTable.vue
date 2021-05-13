@@ -22,11 +22,13 @@ export default {
   props: {
     setTableColumns: {
       type: Array,
-      default: []
+      required: true,
+      default: () => []
     },
     tableData: {
       type: Array,
-      default: []
+      required: true,
+      default: () => []
     }
   }, 
   data() {
