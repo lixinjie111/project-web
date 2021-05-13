@@ -1,10 +1,10 @@
-import EmptyLayout from '@/layout/EmptyLayout.vue'
+import Simple from '@/layout/SimpleNav.vue'
 import User from '@/views/task/home.vue'
 
 export default {
   name: '项目',
   path: '',
-  component: EmptyLayout,
+  component: Simple,
   level: 1,
   meta: {
     icon: '',
