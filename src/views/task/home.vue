@@ -55,19 +55,6 @@
     components: { TreeTable, FlatButton, MyIcon },
     data() {
       return {
-        loading: false,
-        removeList: [],
-        rowSelection: {
-          onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-          },
-          onSelect: (record, selected, selectedRows) => {
-            console.log(record, selected, selectedRows);
-          },
-          onSelectAll: (selected, selectedRows, changeRows) => {
-            console.log(selected, selectedRows, changeRows);
-          },
-        },
         tableData: [
           { id: 1000, name: 'vxe-table 从入门到放弃1', status: 3, type: 'mp3', size: 1024, date: '2020-08-01' },
           {
