@@ -17,6 +17,7 @@ vueRouter.beforeEach((to, from, next) => {
     setStoreMenu(to)
     
     if (to.meta.isNeedLogin) {
+        let {menuList} = store.state.system;
         // TODO 验证用户是否登录，以及用户是否有访问该路由的权限
         // if (menuList.indexOf(to.path) > -1 || to.path == '/') {
             next()
@@ -55,14 +56,22 @@ vueRouter.afterEach((to) => {
 function setStoreMenu(to){
     let path = to.path;
     let {permissionKey, permissionParent} = to.meta;
-    let {menuMap, topMenu, firstMenu, secondMenu} = store.state.system;
+    let {menuList, menuMap, topMenu, firstMenu, secondMenu} = store.state.system;
     if(!topMenu.length) return; // vuex已经缓存菜单
-    if(to.path === '/'){
+    // 默认地址
+    if(menuList.indexOf(path) === -1 || path === '/'){
         setStore(topMenu[0], firstMenu.children[0], {}, firstMenu.children, secondMenu); // 修改菜单
         return ;
-    } else {
-        let activeFirstMenuIndex = menuMap['level-1'].findIndex((item) => item.meta.permissionKey === permissionParent);
-        let activeFirstMenu = menuMap['level-1'][activeFirstMenuIndex];
+    } else if(menuList.indexOf(path) > -1) { // 有菜单权限 设置菜单
+        // let activeFirstMenuIndex = topMenu.findIndex((item) => item.meta.permissionKey === permissionParent);
+        let activeFirstMenuIndex = null;
+        for(let key in menuMap) {
+            if(menuMap[key].indexOf(path) > -1) {
+                activeFirstMenuIndex = key;
+                return ;
+            }
+        }
+        let activeFirstMenu = topMenu[activeFirstMenuIndex];
     //    store.dispatch('activeFirstMenu', activeFirstMenu); // 修改侧边栏激活状态
         let {secondMenu, thirdMenu, navList, activeNav} = [{}, {}, [], {}]
        if(activeFirstMenu.children && activeFirstMenu.children.length){

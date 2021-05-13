@@ -16,15 +16,18 @@ export default {
   props: {
     type: { // type = 'title' / 'breadcrumb'
       type: String,
+      required: true,
       default: ""
     },
     title: {//title
       type: String,
+      required: false,
       default: ""
     },
     breadcrumbList: {
       type: Array,
-      default: []
+      required: false,
+      default: () => []
     }
   },
   components: {Breadcrumb}

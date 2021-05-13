@@ -6,10 +6,17 @@ import 'x-intelligent-ui/dist/main.css'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
-import '@/assets/css/reset.css'
+
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
+
+import '@/assets/css/reset.css'
+import '@/assets/iconfont/iconfont.css'
+
+// 引入自定义组件
+import initGlobalComponents from './components'
+initGlobalComponents();
 
 Vue.config.productionTip = false
 
