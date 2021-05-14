@@ -1,8 +1,8 @@
 <template>
   <a-modal v-model="isShow" 
-    :width="width" :closable="closable" :centered="true" :destroyOnClose="true"
+    :width="Number(width)" :closable="closable" :centered="true" :destroyOnClose="true"
     :okText="okText" :okType="okType" :cancelText="cancelText" :cancelType="cancelType"
-    @ok="handleOk">
+    @ok="handleOk" @cancel="handleCancel">
     <div slot="title" class="modal-header">
       <div v-if="title" :class="headeralgin">{{title}}</div>
       <slot name="title"></slot>
@@ -53,6 +53,9 @@ export default {
   methods: {
     handleOk() {
       this.$emit('modal-sure');
+    },
+    handleCancel(){
+      this.$emit('modal-cancel')
     }
   }
 }
@@ -73,6 +76,12 @@ export default {
     &.right {
       text-align: right;
     }
+  }
+}
+/deep/ .ant-modal-content {
+  border-radius: 8px;
+  .ant-modal-header {
+    border-radius: 8px 8px 0 0;
   }
 }
 </style>

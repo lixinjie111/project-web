@@ -28,11 +28,8 @@ let confirmSimple = function (message, onOk, onCancel, okBtnText, cancelBtnText)
 /**
  * 根据配置弹出弹框
  */
-let confirmWithConfig = function (config, onOk, onCancel) {
-  let propsData = Object.assign(config, {
-    onOk: onOk,
-    onCancel: onCancel
-  })
+let confirmWithConfig = function (config) {
+  let propsData = Object.assign(config)
   let ConfirmComponent = Vue.extend(Confirm)
   return new ConfirmComponent({
     el: document.createElement('div'),
@@ -44,7 +41,7 @@ let confirm = function (arg1, onOk, onCancel) {
   if (typeof arg1 === 'string') {
     return confirmSimple(arg1, onOk, onCancel)
   } else {
-    return confirmWithConfig(arg1, onOk, onCancel)
+    return confirmWithConfig(arg1)
   }
 }
 
