@@ -42,6 +42,7 @@
       </div>
     </div>
     <TreeTable :columns="tableColumns" :data-source="tableData"/>
+    <TaskAdd isShow />
   </div>
 </template>
 
@@ -49,10 +50,11 @@
   import TreeTable from '@/components/tables/TreeTable';
   import FlatButton from '@/components/buttons/FlatButton';
   import MyIcon from "@/components/others/MyIcon";
+  import TaskAdd from "./components/add";
 
   export default {
     name: 'TaskHome',
-    components: { TreeTable, FlatButton, MyIcon },
+    components: { TreeTable, FlatButton, MyIcon, TaskAdd },
     data() {
       return {
         tableData: [
