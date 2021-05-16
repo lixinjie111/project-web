@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="isShow" 
+  <a-modal :visible="isShow"
     :width="Number(width)" :closable="closable" :centered="true" :destroyOnClose="true"
     :okText="okText" :okType="okType" :cancelText="cancelText" :cancelType="cancelType"
     @ok="handleOk" @cancel="handleCancel">
@@ -13,7 +13,7 @@
 <script>
 export default {
   props: {
-    isShow: { 
+    isShow: {
       type: Boolean,
       default: false
     },

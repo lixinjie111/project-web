@@ -1,7 +1,7 @@
 <template>
   <div class="icon">
     {{showName}}
-    <i class="iconfont iconjianshao"></i>
+    <i class="iconfont iconjianshao" @click="$emit('close')"></i>
   </div>
 </template>
 
@@ -48,6 +48,7 @@
   cursor: default;
   text-align: center;
   position: relative;
+  display: inline-block;
 
   .iconfont {
     width: 14px;

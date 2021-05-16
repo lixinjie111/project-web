@@ -30,7 +30,7 @@
           </a-menu>
         </a-dropdown>
         <a-divider type="vertical" />
-        <FlatButton>
+        <FlatButton @click="handleCreate">
           新建任务
           <MyIcon slot="icon" name="icontianjia" type="main"/>
         </FlatButton>
@@ -42,7 +42,7 @@
       </div>
     </div>
     <TreeTable :columns="tableColumns" :data-source="tableData"/>
-    <TaskAdd isShow />
+    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleOK" />
   </div>
 </template>
 
@@ -142,16 +142,22 @@
               customRender: 'progress'
             }
           },
-        ]
+        ],
+        showCreate: false,
+        showEdit: false,
       }
     },
     props: {
       msg: String
     },
     methods: {
-      handleClick() {
+      handleCreate() {
         console.log('test')
-      }
+        this.showCreate = true;
+      },
+      handleOK(data) {
+        this.showCreate = false;
+      },
     }
   }
 </script>
