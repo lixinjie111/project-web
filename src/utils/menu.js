@@ -22,14 +22,7 @@ export default [
       permissionKey: 'project'
     },
     children: [
-      {
-        path: '/project/home', name: '首页',  meta: {icon: '', permissionKey: 'home', permissionParent: 'project'},
-        children: [
-          {path: '/project/home/task', name: '首页-项目1', level: 3, meta: {icon: '', permissionKey: 'depart', permissionParent: 'project' }}
-        ]
-      },
-      {path: '/project/depart',  name: '项目1', level: 2, meta: {icon: '', permissionKey: 'depart', permissionParent: 'project' }},
-      {path: '/project/role',  name: '项目2', level: 2, meta: {icon: '', permissionKey: 'role', permissionParent: 'project' }},
+      {path: '/project/overview', name: '概览', level: 2, meta: {icon: '', permissionKey: 'overview', permissionParent: 'project'}}
     ]
   }
 ]
