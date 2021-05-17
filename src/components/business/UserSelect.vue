@@ -1,13 +1,15 @@
 <template>
   <div>
     <UserIcon :value="item" v-for="(item, index) in userList" @close="handleDelete(index)"/>
-    <a-popover trigger="click" placement="bottomLeft">
+    <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
       <CircleButton></CircleButton>
       <template slot="content">
         <a-tree
             :checkedKeys="users"
             @check="handleChange"
-            checkable
+            @select="handleSelect"
+            :checkable="multiple"
+            :selectable="!multiple"
             :auto-expand-parent="autoExpandParent"
             :tree-data="dataSource"
         />
@@ -70,10 +72,15 @@
           },
         ],
         autoExpandParent: true,
+        showPopup: false,
       }
     },
     props: {
       value: Array,
+      multiple: {
+        default: false,
+        type: Boolean,
+      }
     },
     computed: {
       userList() {
@@ -83,6 +90,13 @@
     methods: {
       handleChange(e) {
         console.log(e)
+        this.users = e;
+        this.$emit('change', e)
+        this.$emit('input', e)
+      },
+      handleSelect(e) {
+        console.log(e);
+        this.showPopup = false;
         this.users = e;
         this.$emit('change', e)
         this.$emit('input', e)

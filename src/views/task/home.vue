@@ -18,14 +18,11 @@
       <div>
         <a-dropdown :trigger="['click']">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-            列表 <a-icon type="down" />
+            {{ viewTypes[viewType] }} <a-icon type="down" />
           </a>
-          <a-menu slot="overlay">
-            <a-menu-item key="0">
-              列表
-            </a-menu-item>
-            <a-menu-item key="1">
-              看板
+          <a-menu slot="overlay" @click="handleViewType">
+            <a-menu-item :key="index" v-for="(item, index) in viewTypes">
+              {{item}}
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -145,12 +142,18 @@
         ],
         showCreate: false,
         showEdit: false,
+        viewType: 0,
+        viewTypes: ['列表', '看板'],
       }
     },
     props: {
       msg: String
     },
     methods: {
+      handleViewType(e) {
+        // console.log('test', e)
+        this.viewType = e.key;
+      },
       handleCreate() {
         console.log('test')
         this.showCreate = true;

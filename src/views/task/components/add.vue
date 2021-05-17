@@ -8,7 +8,7 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-model-item label="类型" prop="name">
-            <a-select v-model="form.type" placeholder="" />
+            <a-select v-model="form.type" placeholder="" :options="types" />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
@@ -34,7 +34,7 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-model-item label="参与人" prop="participates">
-            <UserSelect v-model="form.participates" />
+            <UserSelect v-model="form.participates" multiple />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
@@ -54,10 +54,11 @@
 <script>
   import Modal from '@/components/Modal.vue'
   import UserSelect from "@/components/business/UserSelect";
+  import PrioritySelect from "@/components/business/PrioritySelect";
 
   export default {
     name: "TaskAdd",
-    components: { Modal, UserSelect },
+    components: { Modal, UserSelect, PrioritySelect },
     props: {
       // isShow: {
       //   type: Boolean,
@@ -69,7 +70,18 @@
         form: {
           incharge:[],
           participates:[],
+          priority: 1,
         },
+        types: [
+          {
+            key: 1,
+            label: '开发',
+          },
+          {
+            key: 2,
+            label: '管理',
+          },
+        ],
       }
     },
     methods: {
