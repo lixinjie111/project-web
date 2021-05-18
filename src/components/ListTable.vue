@@ -2,15 +2,17 @@
     <div class="list-table-container">
         <div class="item-tr" v-for="(dataItem,dataIndex) in data" :key="dataIndex">
             <div class="item-td" v-for="(columnsItem,columnsIndex) in columns" :key="columnsIndex"
-                 :style="{width:columnsItem.width}">
+                 :style="{width: columnsItem.width}">
                 <template v-if="columnsItem.key == 'index'">
                     <div class="item-td-index">{{dataIndex + 1}}</div>
                 </template>
-                <template v-if="columnsItem.slot">
-                    <slot :name="columnsItem.slot" :row="{...dataItem,index:dataIndex}"></slot>
+                <template v-else-if="columnsItem.slot">
+                    <slot :name="columnsItem.slot" :row="{...dataItem,ellipsis: columnsItem.ellipsis,index:dataIndex}"></slot>
                 </template>
                 <template v-else>
-                    <div class="item-td-value">{{dataItem[columnsItem.key]}}</div>
+                    <TextToolTip className="item-td-value" :content="dataItem[columnsItem.key]"
+                                 :refName="'tip' + dataIndex + columnsIndex"
+                                 :ellipsis="columnsItem.ellipsis"></TextToolTip>
                     <div class="item-td-title">{{columnsItem.title}}</div>
                 </template>
             </div>
@@ -19,13 +21,18 @@
 </template>
 
 <script>
+    import TextToolTip from "./TextToolTip";
+
     export default {
         name: "ListTable",
+        components: {TextToolTip},
         props: {
+            // 表格列名
             columns: {
                 type: Array,
                 default: () => []
             },
+            // 表格数据
             data: {
                 type: Array,
                 default: () => []
@@ -59,7 +66,7 @@
                     color: #242F57;
                 }
 
-                .item-td-value {
+                /deep/ .item-td-value {
                     font-size: 16px;
                     font-family: PingFangSC-Medium, PingFang SC;
                     font-weight: 500;
