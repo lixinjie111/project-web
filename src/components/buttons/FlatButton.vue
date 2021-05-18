@@ -1,5 +1,5 @@
 <template>
-  <a-button class="flat-button" type="link" @click="emit('click')">
+  <a-button class="flat-button" type="link" @click="$emit('click')">
     <slot name="icon"/>
     <slot />
   </a-button>

@@ -6,6 +6,7 @@
       :expandIconColumnIndex="2"
       :loading="loading"
       :data-source="dataSource"
+      rowKey="id"
       :columns="columns">
     <template slot="status" slot-scope="text">
       <Status :value="text"/>

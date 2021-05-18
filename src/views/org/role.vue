@@ -12,81 +12,15 @@
       <div class="role-table">
         <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
       </div>
-      <Pagination :total="total" :curPageNum="curPageNum" :pageSize="pageSize"></Pagination>
-      <!-- <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="center" @modal-sure="handleSubmit">
-        <a-form-model slot="content" ref="userForm"  class="user-form" layout="vertical" :model="form" :rules="rules">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-model-item label="用户名" prop="username">
-                <a-input v-model="form.username" placeholder="用户名" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="真实姓名" prop="name">
-                <a-input v-model="form.name" placeholder="真实姓名" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          
-          <a-form-model-item label="部门" prop="depart">
-            <a-tree-select
-              v-model="form.depart"
-              style="width: 100%"
-              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-              :tree-data="treeList"></a-tree-select>
-          </a-form-model-item>
-
-          <a-form-model-item prop="role">
-            <template slot="label">
-              <span>角色分组</span>
-              <span class="second-title">(分组决定用户的权限列表)</span>
-            </template>
-            <a-select mode="multiple" :default-value="form.role">
-              <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
-                {{ (i + 9).toString(36) + i }}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
-
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-model-item prop="password">
-                <template slot="label">
-                  <span>密码</span>
-                  <span class="second-title">(6位以上，包含大小写字母和数字)</span>
-                </template>
-                <a-input-password v-model="form.password" placeholder="密码"></a-input-password>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="电话" prop="tel">
-                <a-input v-model="form.tel" placeholder="电话" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-model-item prop="position">
-                <template slot="label">
-                  <span>职位</span>
-                  <span class="second-title">(职位影响内容和用户列表的顺序)</span>
-                </template>
-                <a-input v-model="form.position" placeholder="职位"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="性别" prop="sex">
-                <a-radio-group v-model="form.sex">
-                  <a-radio :style="radioStyle" value="Man">男</a-radio>
-                  <a-radio :style="radioStyle" value="Women">女</a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </Modal> -->
-      
+      <Pagination v-if="total > pageSize" :total="total" :curPageNum="curPageNum" :pageSize="pageSize" @pagination-change-pagesize="handleChangePageSize" @pagination-change-page="handleChangePage"></Pagination>
     </div>
+    <Modal width="400" :isShow="isShowModal" :title="modalTitle" :okText="okText" :cancelText="cancelText" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
+        <a-form-model slot="content" ref="roleForm" class="role-form" layout="vertical" :model="form" :rules="rules">
+          <a-form-model-item label="分组名称" prop="roleName">
+            <a-input v-model="form.roleName" placeholder="" />
+          </a-form-model-item>
+        </a-form-model>
+      </Modal>
   </div>
 </template>
 <script>
@@ -94,6 +28,8 @@ import ContentHeader from '@/components/ContentHeader.vue'
 import BasicTable from '@/components/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
 import Pagination from '@/components/Pagination.vue'
+
+import * as api from '@/api/index'
 export default {
   name: 'roleorg',
   components: {ContentHeader, BasicTable, Modal, Pagination},
@@ -105,32 +41,38 @@ export default {
 
       // 配置表格各字段
       setTableColumns: [
-        {type: 'checkbox', width: '60'},
-        {title: '用户ID', field: 'name', showOverflow: true,},
-        {title: '真实姓名', field: 'name', showOverflow: true,},
-        {title: '用户姓名', field: 'name', showOverflow: true,},
-        {title: '职位', field: 'role'},
-        {title: '性别', field: 'sex'},
-        {title: '电话', field: 'time', showOverflow: true,},
-        {title: '最后登录', field: 'time', showOverflow: true,},
-        {title: '访问次数', field: 'time', showOverflow: true,},
-        {title: '冻结', field: 'flag', width: '70', 
+        {title: '编号', type: 'seq', width: 50},
+        {title: '分组名称', field: 'roleName', showOverflow: true,},
+        {title: '维护', width: '340', 
           slots: {
             // 使用 JSX 渲染
             default: ({ row }) => {
               return [
-                <a-switch size='small' v-model={row.flag} onClick={() => this.changeSwitch(row)}></a-switch>
+                <div class="permission">
+                  <a-button onClick={() => this.handlePermission('role', row)}>
+                    <span class="iconfont iconrenyuan"></span>
+                    <span>组员管理</span>
+                  </a-button>
+                  <a-button onClick={() => this.handlePermission('operation', row)}>
+                    <span class="iconfont iconsuoding"></span>
+                    <span>操作权限</span>
+                  </a-button>
+                  <a-button onClick={() => this.handlePermission('data', row)}>
+                    <span class="iconfont iconshujuku"></span>
+                    <span>数据权限</span>
+                  </a-button>
+                </div>
               ]
             }
           }
         },
-        { title: '操作', field: 'flag', 
+        { title: '操作', width: '110',
           slots: {
             default: ({row, rowIndex}) => {
               return [
                 <div class="operations">
-                  <span onClick={() => this.handleAddEditUser('edit', row)}>编辑</span>
-                  <span onClick={() => this.handleDelUser(row)}>删除</span>
+                  <span class="iconfont iconxiezuo" onClick={() => this.handleAddEditRole('edit', row)}></span>
+                  <span class="iconfont iconshanchu" onClick={() => this.handleDelURole(row)}></span>
                 </div>
               ]
             }
@@ -138,22 +80,102 @@ export default {
         },
       ],
       tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '<span style="color:red">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', flag: true, time: 1600261774531, html1: '<span style="color:blue">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
+        { "roleId": 1, "roleName": "管理员1"},
+        { "roleId": 2, "roleName": "管理员2"},
+        { "roleId": 3, "roleName": "管理员3"},
+        { "roleId": 4, "roleName": "管理员4"},
+        { "roleId": 5, "roleName": "管理员5"},
       ],
       
+      // modal相关数据
+      isShowModal: false,
+      modalTitle: '',
+      cancelText: '取消',
+      okText: '',
+      form: {
+        roleId: '',
+        roleName: ''
+      },
+      rules: {}
     }
   },
   methods: {
-    onShowSizeChange(current, pageSize) {
+    // 切换条目数量
+    handleChangePageSize(pageSize, pageNum) {
       this.pageSize = pageSize;
+      if(pageNum) this.curPageNum = pageNum;
+      this.handleGetRoleList();
+    },
+    // 切换当前页码
+    handleChangePage(pageNum){
+      this.curPageNum = pageNum;
+      this.handleGetRoleList();
+    },
+    // 获取角色分组列表
+    async handleGetRoleList(){
+      let {code, data, msg} = await api.org.getRoleList(this.curPageNum, this.pageSize);
+    },
+    // 维护 type: 组员管理 role, 操作权限 operation, 数据权限 data 
+    handlePermission(type, role) {
+      console.log(type, role)
+    },
+    // 新增、编辑角色
+    handleAddEditRole(type, role) {
+      if(type === 'add'){
+        this.modalTitle = '添加权限分组';
+        this.okText = '创建并继续配置';
+        this.$set(this, 'form', {roleId: '', roleName: ''})
+      } else {
+        this.modalTitle = '编辑分组名称';
+        this.okText = '保存';
+        this.$set(this, 'form', role)
+      }
+      this.isShowModal = true;
+    },
+    // 保存新增、编辑
+    handleSubmit(){
+      this.$refs.roleForm.validate(async (valid) => {
+        if (valid) {
+          let {code, data, msg} = api.org.handlePostPutRoleInfo(form.roleName, form.roleId);
+          if(code === 0){
+            this.handleCancel();
+            this.$message.success(msg);
+          } else{
+            this.$message.error(msg);
+          }
+        } else {
+          return false;
+        }
+      });
+    },
+    // 取消新增、编辑角色
+    handleCancel(){
+      this.isShowModal = false;
+    },
+    // 删除角色
+    handleDelURole(role) {
+      this.$confirms({
+        title: '提示',
+        message: `您确定要删除 ${role.roleName} 吗？`,
+        okText: '确认删除',
+        onOk(){
+          api.org.handleDelRole(role.roleId).then((code, data, msg) => {
+            if(code === 0){
+              this.$message.success('删除成功！');
+              this.getRoleList();
+            }else{
+              this.$message.error('删除失败！');
+            }
+          })
+        },
+        cancelText: '取消',
+        onCancel() {
+        }
+      });
     }
+  },
+  mounted (){
+    this.handleGetRoleList();
   }
 }
 </script>
@@ -161,12 +183,46 @@ export default {
 .role-container {
   margin: 16px 24px 24px 24px;
   .role-content {
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    flex: 1;
     height: calc(100vh - 163px);
     background: #fff;
     border-radius: 4px;
     border: 1px solid #EAEDF7;
+    .role-table {
+      flex: 1;
+      /deep/ .vxe-grid{
+        height: 100%;
+      }
+      .permission {
+        > button{
+          padding: 0 8px;
+          border-radius: 4px;
+          span {
+            &:nth-child(1) {
+              margin-right: 4px;
+            }
+          }
+          &:nth-child(n+2){
+            margin-left: 12px;
+          }
+        }
+      }
+      .operations {
+        .iconfont {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          color: #0064FF;
+          background: rgba(255, 255, 255, 0.01);
+          cursor: pointer;
+          &.iconshanchu {
+            color: #FF4C60;
+          }
+        }
+      }
+    }
   }
 }
 </style>

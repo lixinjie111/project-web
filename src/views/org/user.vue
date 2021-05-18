@@ -16,7 +16,7 @@
       <div class="userorg-right">
         <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
       </div>
-      <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="center" @modal-sure="handleSubmit">
+      <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="center" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
         <a-form-model slot="content" ref="userForm"  class="user-form" layout="vertical" :model="form" :rules="rules">
           <a-row :gutter="24">
             <a-col :span="12">
@@ -195,8 +195,8 @@ export default {
             default: ({row, rowIndex}) => {
               return [
                 <div class="operations">
-                  <span onClick={() => this.handleAddEditUser('edit', row)}>编辑</span>
-                  <span onClick={() => this.handleDelUser(row)}>删除</span>
+                  <span class="iconfont iconxiezuo" onClick={() => this.handleAddEditUser('edit', row)}></span>
+                  <span class="iconfont iconshanchu" onClick={() => this.handleDelUser(row)}></span>
                 </div>
               ]
             }
@@ -290,6 +290,11 @@ export default {
       });
     },
 
+    // 取消新增、编辑用户信息
+    handleCancel() {
+      this.isShowModal = false;
+    },
+
     // 删除用户条目
     handleDelUser(row) {
       console.log('row', row)
@@ -356,7 +361,17 @@ export default {
     border-radius: 4px;
     border: 1px solid #EAEDF7;
     .operations {
-
+      .iconfont {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        color: #0064FF;
+        background: rgba(255, 255, 255, 0.01);
+        cursor: pointer;
+        &.iconshanchu {
+          color: #FF4C60;
+        }
+      }
     }
   }
 }

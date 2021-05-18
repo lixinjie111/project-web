@@ -1,5 +1,5 @@
 <template>
-  <span :class="'priority'+(parseInt(value) + 1)">{{ prioritis[value] }}</span>
+  <span :class="'priority'+(parseInt(value) + 1)" @click="$emit('click')">{{ prioritis[value] }}</span>
 </template>
 
 <script>
@@ -37,6 +37,7 @@
       color: nth($colors, $i);
       text-align: center;
       line-height: 24px;
+      cursor: default;
     }
   }
 </style>

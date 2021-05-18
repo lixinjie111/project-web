@@ -46,6 +46,7 @@
       color: nth($colors, $i);
       text-align: center;
       line-height: 24px;
+      cursor: default;
     }
   }
 

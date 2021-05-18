@@ -1,7 +1,7 @@
 <template>
   <button class="wrapper" @click="$emit('click')">
     <div class="circle">
-      +
+      <i class="iconfont iconjia"></i>
     </div>
     <div class="slot" v-if="$slots.length > 0">
       <slot />
@@ -11,13 +11,13 @@
 
 <script>
   export default {
-    name: "Circle"
+    name: "CircleButton"
   }
 </script>
 
 <style scoped>
   .wrapper {
-    display: flex;
+    display: inline-flex;
     /*justify-content: space-evenly;*/
     align-items: center;
     font-size: 14px;

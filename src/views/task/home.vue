@@ -18,19 +18,16 @@
       <div>
         <a-dropdown :trigger="['click']">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-            列表 <a-icon type="down" />
+            {{ viewTypes[viewType] }} <a-icon type="down" />
           </a>
-          <a-menu slot="overlay">
-            <a-menu-item key="0">
-              列表
-            </a-menu-item>
-            <a-menu-item key="1">
-              看板
+          <a-menu slot="overlay" @click="handleViewType">
+            <a-menu-item :key="index" v-for="(item, index) in viewTypes">
+              {{item}}
             </a-menu-item>
           </a-menu>
         </a-dropdown>
         <a-divider type="vertical" />
-        <FlatButton>
+        <FlatButton @click="handleCreate">
           新建任务
           <MyIcon slot="icon" name="icontianjia" type="main"/>
         </FlatButton>
@@ -42,6 +39,7 @@
       </div>
     </div>
     <TreeTable :columns="tableColumns" :data-source="tableData"/>
+    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleOK" />
   </div>
 </template>
 
@@ -49,10 +47,11 @@
   import TreeTable from '@/components/tables/TreeTable';
   import FlatButton from '@/components/buttons/FlatButton';
   import MyIcon from "@/components/others/MyIcon";
+  import TaskAdd from "./components/add";
 
   export default {
     name: 'TaskHome',
-    components: { TreeTable, FlatButton, MyIcon },
+    components: { TreeTable, FlatButton, MyIcon, TaskAdd },
     data() {
       return {
         tableData: [
@@ -140,16 +139,28 @@
               customRender: 'progress'
             }
           },
-        ]
+        ],
+        showCreate: false,
+        showEdit: false,
+        viewType: 0,
+        viewTypes: ['列表', '看板'],
       }
     },
     props: {
       msg: String
     },
     methods: {
-      handleClick() {
+      handleViewType(e) {
+        // console.log('test', e)
+        this.viewType = e.key;
+      },
+      handleCreate() {
         console.log('test')
-      }
+        this.showCreate = true;
+      },
+      handleOK(data) {
+        this.showCreate = false;
+      },
     }
   }
 </script>
