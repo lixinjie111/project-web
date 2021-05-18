@@ -1,10 +1,10 @@
-import Simple from '@/layout/SimpleNav.vue'
+import Empty from '@/layout/EmptyLayout.vue'
 import Overview from '@/views/product/overview.vue'
 
 export default {
   name: '产品',
   path: '',
-  component: Simple,
+  component: Empty,
   meta: {
     icon: '',
     permissionKey: 'product'

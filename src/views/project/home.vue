@@ -1,5 +1,9 @@
 <template>
-    <div class="home-container">
+    <div class="layout">
+        <HeaderNav>
+            <div slot="nav-left">首页</div>
+        </HeaderNav>
+        <div class="home-container">
         <ContentHeader type="title" title="项目">
             <div slot="operation">
                 <a-button class="mr-16">
@@ -31,15 +35,17 @@
             </ListTable>
         </div>
     </div>
+    </div>
 </template>
 <script>
+    import HeaderNav from '@/components/MenuNav.vue'
     import ContentHeader from '@/components/ContentHeader.vue'
     import BasicTabs from "@/components/BasicTabs";
     import ListTable from "@/components/ListTable";
 
     export default {
         name: 'userorg',
-        components: {ListTable, BasicTabs, ContentHeader},
+        components: {ListTable, BasicTabs, ContentHeader, HeaderNav},
         data() {
             return {
                 tabList: [

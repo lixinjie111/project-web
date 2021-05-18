@@ -1,10 +1,10 @@
-import Simple from '@/layout/SimpleNav.vue'
+import Empty from '@/layout/EmptyLayout.vue'
 import Home from '@/views/project/home.vue'
 
 export default {
   name: '项目',
   path: '',
-  component: Simple,
+  component: Empty,
   meta: {
     icon: '',
     permissionKey: 'project'

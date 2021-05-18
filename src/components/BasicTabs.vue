@@ -37,7 +37,7 @@
                 },1000);
             },
             changeTab(index) {
-                window.scrollTo(0, this.tabTop - 100);
+                // window.scrollTo(0, this.tabTop - 100);
                 this.tabActive = index;
                 this.$emit('change', index);
             }

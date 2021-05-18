@@ -1,41 +1,55 @@
 <template>
-    <div class="overview-container">
-        <ContentHeader type="title" title="产品">
-            <div slot="operation">
-                <a-button class="mr-16">
-                    <span class="iconfont icondaochu"></span>
-                    导出
-                </a-button>
-                <a-button type="primary">
-                    <span class="iconfont iconjia"></span>
-                    添加产品
-                </a-button>
+    <div class="layout">
+        <HeaderNav>
+            <div slot="nav-left">概览</div>
+        </HeaderNav>
+        <div class="overview-container">
+            <ContentHeader type="title" title="产品">
+                <div slot="operation">
+                    <a-button class="mr-16">
+                        <span class="iconfont icondaochu"></span>
+                        导出
+                    </a-button>
+                    <a-button type="primary">
+                        <span class="iconfont iconjia"></span>
+                        添加产品
+                    </a-button>
+                </div>
+            </ContentHeader>
+            <div class="overview-content">
+                <BasicTabs :tabList="tabList" @change="tabChange"></BasicTabs>
+                <ListTable :columns="columns" :data="listData" class="mt-25">
+                    <div slot="name" slot-scope="data">
+                        <TextToolTip className="table-name" :content="data.row.name"
+                                     :refName="'table-name' + data.row.index" :ellipsis="data.row.ellipsis"></TextToolTip>
+                        <p class="table-num">产品代号占位</p>
+                    </div>
+                    <div slot="closeTime" slot-scope="data" class="table-close-time">
+                        <p class="table-name">{{data.row.closeTime}}</p>
+                        <p class="table-title">关闭时间</p>
+                        <IconToolTip class="table-tip" iconName="icontishi" content="资源方申请停止合作"></IconToolTip>
+                    </div>
+                    <div slot="action" slot-scope="data" class="table-action">
+                        <IconToolTip iconName="iconxiezuo" content="编辑" @action="edit"></IconToolTip>
+                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="close"></IconToolTip>
+                        <IconToolTip iconName="iconshanchu" content="删除" @action="del"></IconToolTip>
+                    </div>
+                </ListTable>
             </div>
-        </ContentHeader>
-        <div class="overview-content">
-            <BasicTabs :tabList="tabList"></BasicTabs>
-            <ListTable :columns="columns" :data="listData" class="mt-25">
-                <div slot="name" slot-scope="data">
-                    <TextToolTip className="table-name" :content="data.row.name"
-                                 :refName="'table-name' + data.row.index" :ellipsis="data.row.ellipsis"></TextToolTip>
-                    <p class="table-num">产品代号占位</p>
-                </div>
-                <div slot="action" slot-scope="data">
-                    关闭
-                </div>
-            </ListTable>
         </div>
     </div>
 </template>
 <script>
+    import HeaderNav from '@/components/MenuNav.vue'
     import ContentHeader from '@/components/ContentHeader.vue'
     import BasicTabs from "@/components/BasicTabs";
     import ListTable from "@/components/ListTable";
     import TextToolTip from "@/components/TextToolTip";
+    import IconToolTip from "@/components/IconToolTip";
 
     export default {
         name: 'userorg',
-        components: {TextToolTip, ListTable, BasicTabs, ContentHeader},
+        components: {IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
         data() {
             return {
                 tabList: [
@@ -65,22 +79,21 @@
                     {
                         title: '产品负责人',
                         key: 'people',
-                        width: '23%',
+                        width: '25%',
                         ellipsis: true
                     },
                     {
                         title: '创建时间',
                         key: 'createTime',
-                        width: '15%'
+                        width: '19%'
                     },
                     {
-                        title: '关闭时间',
-                        key: 'closeTime',
-                        width: '15%'
+                        slot: 'closeTime',
+                        width: '19%'
                     },
                     {
                         slot: 'action',
-                        width: '20%'
+                        width: '10%'
                     },
                 ],
                 listData: [
@@ -99,7 +112,20 @@
                 ]
             }
         },
-        methods: {}
+        methods: {
+            tabChange(index) {
+                console.log(index);
+            },
+            edit() {
+                console.log('edit');
+            },
+            close() {
+                console.log('close');
+            },
+            del() {
+                console.log('del');
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -127,6 +153,30 @@
                 font-family: PingFangSC-Regular, PingFang SC;
                 font-weight: 400;
                 color: #0064FF;
+            }
+
+            .table-title {
+                font-size: 12px;
+                font-family: PingFangSC-Regular, PingFang SC;
+                font-weight: 400;
+                color: #7C88B1;
+            }
+
+            .table-close-time {
+                position: relative;
+
+                /deep/ .table-tip{
+                    position: absolute;
+                    top: 10px;
+                    right: 0;
+                }
+            }
+
+            .table-action {
+                .icon-tooltip {
+                    display: inline-block;
+                    margin-right: 18px;
+                }
             }
         }
     }
