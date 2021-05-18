@@ -40,8 +40,8 @@
 <script>
     import HeaderNav from '@/components/MenuNav.vue'
     import ContentHeader from '@/components/ContentHeader.vue'
-    import BasicTabs from "@/components/BasicTabs";
-    import ListTable from "@/components/ListTable";
+    import BasicTabs from "@/components/tabs/BasicTabs";
+    import ListTable from "@/components/tables/ListTable";
 
     export default {
         name: 'userorg',

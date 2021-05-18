@@ -42,10 +42,10 @@
 <script>
     import HeaderNav from '@/components/MenuNav.vue'
     import ContentHeader from '@/components/ContentHeader.vue'
-    import BasicTabs from "@/components/BasicTabs";
-    import ListTable from "@/components/ListTable";
-    import TextToolTip from "@/components/TextToolTip";
-    import IconToolTip from "@/components/IconToolTip";
+    import BasicTabs from "@/components/tabs/BasicTabs";
+    import ListTable from "@/components/tables/ListTable";
+    import TextToolTip from "@/components/tooltip/TextToolTip";
+    import IconToolTip from "@/components/tooltip/IconToolTip";
 
     export default {
         name: 'userorg',

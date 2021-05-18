@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import TextToolTip from "./TextToolTip";
+    import TextToolTip from "../tooltip/TextToolTip";
 
     export default {
         name: "ListTable",
