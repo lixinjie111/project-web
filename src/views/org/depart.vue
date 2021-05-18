@@ -3,7 +3,7 @@
     <ContentHeader type="title" title="部门结构"></ContentHeader>
     <div class="depart-content">
       <div class="depart-left">
-        <Tree v-if="treeList.length" :treeData="treeList" :operation="['del']" @onSelectTreeNodes="handleGetDepartUsers" @onDeleteTreeNode="handleDeleteDepart"></Tree>
+        <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" :operation="['del']" @onSelectTreeNodes="handleGetDepartUsers" @onDeleteTreeNode="handleDeleteDepart"></Tree>
         <div v-else class="empty">添加部门</div>
       </div>
       <div class="depart-right">
@@ -31,63 +31,80 @@
 </template>
 <script>
 import Tree from '@/components/Tree.vue';
-import ContentHeader from '@/components/ContentHeader.vue'
 import Breadcrumb from '@/components/Breadcrumb.vue'
 export default {
   name: 'departorg',
-  components: {Tree, ContentHeader, Breadcrumb},
+  components: {Tree, Breadcrumb},
   data() {
     return {
       treeList: [
         {
-            "key":"99230713",
-            "value": "万科集团",
-            "title":"万科集团",
+          "id":"992307132",
+          // "value": "万科集团",
+          "name":"万科集团",
+          // scopedSlots: {
+          //     title:"custom"
+          // },
+        },
+        {
+            "id":"99230713",
+            // "value": "万科集团",
+            "name":"万科集团",
             // ⚠️重点这这里⚠️每一条数据上都添加scopedSlots属性
-            "scopedSlots":{
-                "title":"custom"
-            },
+            // "scopedSlots":{
+            //     title:"custom"
+            // },
             "children":[
                 {
-                    "key":"99230992",
-                    "value": "华东区域",
-                    "title":"华东区域",
+                    "id":"99230992",
+                    // "value": "华东区域",
+                    "name":"华东区域",
                     "scopedSlots":{
-                        "title":"custom"
+                        "name":"custom"
                     },
                     "children":[
                         {
-                            "key":"99230112",
-                            "value":"杭州万科",
-                            "title":"杭州万科",
+                            "id":"99230112",
+                            "name":"杭州万科",
                             "scopedSlots":{
-                                "title":"custom"
+                                "name":"custom"
                             },
                             "children":[],
                         }
                     ],
                 },
                 {
-                    "key":"99230993",
-                    "value":"华南区域",
-                    "title":"华南区域",
+                    "id":"99230993",
+                    "name":"华南区域",
                     "scopedSlots":{
-                        "title":"custom"
+                        "name":"custom"
                     },
                     "children":[],
                 },
                 {
-                    "key":"99231020",
-                    "value":"华北区域",
-                    "title":"华北区域",
+                    "id":"99231020",
+                    "name":"华北区域",
                     "scopedSlots":{
-                      "title":"custom"
+                      "name":"custom"
                     },
                     "children":[],
                 }
             ],
+        },
+        {
+          "id":"9923071314",
+          "name":"万科集团",
+          "scopedSlots":{
+              "title":"custom"
+          },
         }
       ],
+      replaceFields: {
+        key: 'id',
+        value: 'name',
+        title: 'name',
+        children: 'children'
+      },
       count: 0,
       arrPath: [], // 面包屑
       list: [], // 子部门列表

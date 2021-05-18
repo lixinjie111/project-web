@@ -24,6 +24,11 @@
 export default {
   name: 'tree',
   props: {
+    // 替换树形结构字段
+    replaceFields: {
+      type: Object, 
+      required: true
+    },
     // 树形结构数据
     treeData: { 
       type: Array,
@@ -43,9 +48,14 @@ export default {
       default: () => []
     }
   },
+  data(){
+    return {
+      slots: {}
+    }
+  },
   methods: {
-    onSelect(selectedKeys){
-      this.$emit('onSelectTreeNodes', selectedKeys)
+    onSelect(selectedKeys, e){
+      this.$emit('onSelectTreeNodes', selectedKeys, e.selectedNodes)
     },
     // 编辑处理
     onHandleEdit(item){
@@ -54,7 +64,25 @@ export default {
     // 删除处理
     onHandleDelete(item){
       this.$emit('onDeleteTreeNode', item);
+    },
+    // 递归处理数据
+    handleData(data){
+      let {key, title, children} = this.replaceFields;
+      data.map((item, index) => {
+        if(this.operation.length) {
+          item['scopedSlots'] = {title: 'custom'}
+        }
+        item['key'] = item[key];
+        item['title'] = item[title];
+        if(item[children]) item['children'] = item[children];
+        if(item['children'] && item['children'].length){
+          this.handleData(item['children'])
+        }
+      })
     }
+  },
+  created(){
+    this.handleData(this.treeData);
   }
 }
 </script>
@@ -72,10 +100,23 @@ export default {
       width:16px;
       height:16px;
       margin: 6px 4px;
+      line-height: 16px;
+      overflow: hidden;
       // 修改树结构合起的icon
       &.ant-tree-switcher_close{
-        background:url('//assets.2dfire.com/frontend/b415e20fc703838e5a028437366ff22a.png') no-repeat;
-        background-size:contain;
+        // background:url('//assets.2dfire.com/frontend/b415e20fc703838e5a028437366ff22a.png') no-repeat;
+        // background-size:contain;
+        &:before {
+          display: inline-block;
+          color: #97A0C3;
+          font-family: "iconfont" !important;
+          font-size: 16px;
+          font-style: normal;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          content: '\e653;';
+          background: #fff;
+        }
         i{
           display: none;
         }

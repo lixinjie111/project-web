@@ -38,8 +38,8 @@ export default {
   [types.REMOVE_USER_INFO] (state) {
     state.userInfo = {}
   },
-  [types.INIT_PERMISSION] (state, firstMenu){
-    state.permission = getBtnPermission(firstMenu)
+  [types.INIT_PERMISSION] (state, permissionList){
+    state.permission = permissionList
   }
 }
 
@@ -83,22 +83,22 @@ function getMapMenu(list, parentMenu) {
   }
 }
 
-function getBtnPermission (firstMenu){
-  let permissionArr = [];
-  let getPermission = function(menu){
-    if(menu){
-      if(menu.permission){
-        permissionArr.push(menu.permission)
-      }
-      if(menu.childList){
-        menu.childList.forEach(item=>{
-          getPermission(item)
-        })
-      }else{
-        return false;
-      }
-    }
-  }
-  getPermission(firstMenu);
-  return permissionArr;
-}
+// function getBtnPermission (firstMenu){
+//   let permissionArr = [];
+//   let getPermission = function(menu){
+//     if(menu){
+//       if(menu.permission){
+//         permissionArr.push(menu.permission)
+//       }
+//       if(menu.childList){
+//         menu.childList.forEach(item=>{
+//           getPermission(item)
+//         })
+//       }else{
+//         return false;
+//       }
+//     }
+//   }
+//   getPermission(firstMenu);
+//   return permissionArr;
+// }

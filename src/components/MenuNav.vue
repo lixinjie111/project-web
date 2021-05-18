@@ -1,11 +1,16 @@
 <template>
   <div class="nav-container">
-    <slot name="nav-left"></slot>
+    <div class="nav-left">
+      <slot name="nav-left"></slot>
+    </div>
     <ul class="nav-list">
-      <li :class='["nav-item", activeNavMenu && activeNavMenu.meta && item.meta.permissionKey === activeNavMenu.meta.permissionKey ? "active" : ""]' v-for="(item, index) in navlist" :key="index" @click="handleChangePage(index)">
+      <li :class='["nav-item", activeNavMenu && activeNavMenu.meta && item.path === activeNavMenu.path ? "active" : ""]' v-for="(item, index) in navlist" :key="index" @click="handleChangePage(index)">
         <span>{{item.name}}</span>
       </li>
     </ul>
+    <div class="nav-right">
+      <slot name="nav-right"></slot>
+    </div>
   </div>
 </template>
 <script>
@@ -34,11 +39,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 .nav-container {
+  display: flex;
   width: calc(100vw - 80px);
   background: #fff;
+  .nav-left, .nav-right {
+    width: 240px;
+    height: 51px;
+    background: #fff;
+  }
   .nav-list {
+    flex: 1;
     display: flex;
     height: 51px;
+    flex-shrink: 0;
     justify-content: center;
     .nav-item {
       position: relative;

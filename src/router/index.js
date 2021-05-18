@@ -14,7 +14,7 @@ let vueRouter = new VueRouter(router)
 
 // 拦截路由，进行授权判断和缓存限制
 vueRouter.beforeEach((to, from, next) => {
-    setStoreMenu(to)
+    setStoreMenu(to);
     
     if (to.meta.isNeedLogin) {
         let {menuList} = store.state.system;
@@ -55,48 +55,56 @@ vueRouter.afterEach((to) => {
 
 function setStoreMenu(to){
     let path = to.path;
-    let {permissionKey, permissionParent} = to.meta;
-    let {menuList, menuMap, topMenu, firstMenu, secondMenu} = store.state.system;
+    let {permissionKey, entryPath} = to.meta;
+    let {menuList, menuMap, topMenu, firstMenu, secondMenu, permission} = store.state.system;
     if(!topMenu.length) return; // vuex已经缓存菜单
-    // 默认地址
-    if(menuList.indexOf(path) === -1 || path === '/'){
+    // 有些页面不在菜单列表，根据数据操作权限 能进入某些页面
+    if(permission.indexOf(permissionKey) > -1) {
+        getrouterPath(entryPath)
+        return ;
+    } else if(menuList.indexOf(path) === -1 || path === '/'){
+        // 默认地址
         setStore(topMenu[0], firstMenu.children[0], {}, firstMenu.children, secondMenu); // 修改菜单
         return ;
     } else if(menuList.indexOf(path) > -1) { // 有菜单权限 设置菜单
         // let activeFirstMenuIndex = topMenu.findIndex((item) => item.meta.permissionKey === permissionParent);
-        let activeFirstMenuIndex = null;
-        for(let key in menuMap) {
-            if(menuMap[key].indexOf(path) > -1) {
-                activeFirstMenuIndex = key;
-                return ;
-            }
+        getrouterPath(path);
+    } 
+}
+function getrouterPath(path){
+    let {menuMap, topMenu} = store.state.system;
+    let activeFirstMenuIndex = null;
+    for(let key in menuMap) {
+        if(menuMap[key].indexOf(path) > -1) {
+            activeFirstMenuIndex = key;
+            return ;
         }
-        let activeFirstMenu = topMenu[activeFirstMenuIndex];
-    //    store.dispatch('activeFirstMenu', activeFirstMenu); // 修改侧边栏激活状态
-        let {secondMenu, thirdMenu, navList, activeNav} = [{}, {}, [], {}]
-       if(activeFirstMenu.children && activeFirstMenu.children.length){
-            let activeSecondMenuIndex = activeFirstMenu.children.findIndex((item) => item.path === to.path);
-            if(activeSecondMenuIndex !== -1){
-                secondMenu = activeFirstMenu.children[activeSecondMenuIndex];
-                navList = activeFirstMenu.children;
-                activeNav = secondMenu;
-            } else {
-                activeFirstMenu.children.map(second => {
-                    if(second.children) {
-                        let activeThirdMenuIndex = second.children.findIndex((item) => item.path === to.path);
-                        if(activeThirdMenuIndex !== -1){
-                            secondMenu = second;
-                            thirdMenu = second.children[activeThirdMenuIndex];
-                            navList = secondMenu.children;
-                            activeNav = thirdMenu;
-                        }
-                    }
-                });
-            }
-            
-       }
-       setStore(activeFirstMenu, secondMenu, thirdMenu, navList, activeNav)
     }
+    let activeFirstMenu = topMenu[activeFirstMenuIndex];
+//    store.dispatch('activeFirstMenu', activeFirstMenu); // 修改侧边栏激活状态
+    let {secondMenu, thirdMenu, navList, activeNav} = [{}, {}, [], {}]
+    if(activeFirstMenu.children && activeFirstMenu.children.length){
+        let activeSecondMenuIndex = activeFirstMenu.children.findIndex((item) => item.path === path);
+        if(activeSecondMenuIndex !== -1){
+            secondMenu = activeFirstMenu.children[activeSecondMenuIndex];
+            navList = activeFirstMenu.children;
+            activeNav = secondMenu;
+        } else {
+            activeFirstMenu.children.map(second => {
+                if(second.children) {
+                    let activeThirdMenuIndex = second.children.findIndex((item) => item.path === to.path);
+                    if(activeThirdMenuIndex !== -1){
+                        secondMenu = second;
+                        thirdMenu = second.children[activeThirdMenuIndex];
+                        navList = secondMenu.children;
+                        activeNav = thirdMenu;
+                    }
+                }
+            });
+        }
+            
+    }
+    setStore(activeFirstMenu, secondMenu, thirdMenu, navList, activeNav)
 }
 function setStore(firstMenu, secondMenu, thirdMenu, navList, activeNav){
     store.dispatch('activeFirstMenu', firstMenu);
