@@ -2,6 +2,7 @@ import Login from '@/views/login/login.vue'
 import Forgetpwd from '@/views/login/forgetpwd.vue'
 import DefaultLayout from '@/layout/DefaultLayout.vue' // 默认左右结构
 import Org from './org'
+import Product from './product'
 import Project from './project'
 import Task from './task'
 /*
@@ -36,6 +37,7 @@ let routes = [
         },
         children: [
             Org,
+            Product,
             Project,
             Task,
         ]

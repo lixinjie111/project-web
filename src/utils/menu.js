@@ -14,15 +14,27 @@ export default [
     ]
   },
   {
-    name: '项目',
+    name: '产品',
     path: '',
     level: 1,
     meta: {
       icon: '',
-      permissionKey: 'project'
+      permissionKey: 'product'
     },
     children: [
-      {path: '/project/overview', name: '概览', level: 2, meta: {icon: '', permissionKey: 'overview', permissionParent: 'project'}}
+      {path: '/product/overview', name: '概览', level: 2, meta: {icon: '', permissionKey: 'overview', permissionParent: 'product'}}
     ]
-  }
+  },
+ {
+   name: '项目',
+   path: '',
+   level: 1,
+   meta: {
+     icon: '',
+     permissionKey: 'project'
+   },
+   children: [
+     {path: '/project/home', name: '首页', level: 2, meta: {icon: '', permissionKey: 'home', permissionParent: 'project'}}
+   ]
+ }
 ]

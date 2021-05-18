@@ -1,5 +1,5 @@
 import Simple from '@/layout/SimpleNav.vue'
-import Overview from '@/views/project/overview.vue'
+import Home from '@/views/project/home.vue'
 
 export default {
   name: '项目',
@@ -10,6 +10,6 @@ export default {
     permissionKey: 'project'
   },
   children: [
-    {path: '/project/overview', component: Overview, name: '概览', meta: {icon: '', permissionKey: 'overview', permissionParent: 'project' }},
+    {path: '/project/home', component: Home, name: '首页', meta: {icon: '', permissionKey: 'home', permissionParent: 'project' }},
   ]
 }
