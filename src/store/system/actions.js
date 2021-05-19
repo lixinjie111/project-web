@@ -25,7 +25,7 @@ export default {
   removeUserInfo ({commit}) {
     commit(types.REMOVE_USER_INFO)
   },
-  initPermission({commit},firstMenu){
-      commit(types.INIT_PERMISSION, firstMenu)
+  initPermission({commit}, permissionList){
+      commit(types.INIT_PERMISSION, permissionList)
   }
 }

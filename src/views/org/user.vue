@@ -8,7 +8,7 @@
     <div class="userorg-content">
       <div class="userorg-left">
         <div class="userorg-tree">
-          <Tree v-if="treeList.length" :treeData="treeList" @onSelectTreeNodes="handleGetDepartUsers"></Tree>
+          <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" @onSelectTreeNodes="handleGetDepartUsers"></Tree>
           <div v-else class="empty">暂无部门</div>
         </div>
         <div class="btn" @click="handleGotoPage">管理部门结构</div>
@@ -93,12 +93,11 @@
 </template>
 <script>
 import Tree from '@/components/Tree.vue';
-import ContentHeader from '@/components/ContentHeader.vue'
 import BasicTable from '@/components/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
 export default {
   name: 'userorg',
-  components: {Tree, ContentHeader, BasicTable, Modal},
+  components: {Tree, BasicTable, Modal},
   data() {
     return {
       total: 50, // 总数据条数
@@ -107,67 +106,72 @@ export default {
 
       treeList: [
         {
-          "key":"992307132",
-          "value": "万科集团",
-          "title":"万科集团",
+          "id":"992307132",
+          // "value": "万科集团",
+          "name":"万科集团",
           "scopedSlots":{
-              "title":"custom"
+              "name":"custom"
           },
         },
         {
-            "key":"99230713",
-            "value": "万科集团",
-            "title":"万科集团",
+            "id":"99230713",
+            // "value": "万科集团",
+            "name":"万科集团",
             // ⚠️重点这这里⚠️每一条数据上都添加scopedSlots属性
             "scopedSlots":{
-                "title":"custom"
+                "name":"custom"
             },
             "children":[
                 {
-                    "key":"99230992",
-                    "value": "华东区域",
-                    "title":"华东区域",
+                    "id":"99230992",
+                    // "value": "华东区域",
+                    "name":"华东区域",
                     "scopedSlots":{
-                        "title":"custom"
+                        "name":"custom"
                     },
                     "children":[
                         {
-                            "key":"99230112",
-                            "value":"杭州万科",
-                            "title":"杭州万科",
+                            "id":"99230112",
+                            "name":"杭州万科",
                             "scopedSlots":{
-                                "title":"custom"
+                                "name":"custom"
                             },
                             "children":[],
                         }
                     ],
                 },
                 {
-                    "key":"99230993",
-                    "value":"华南区域",
-                    "title":"华南区域",
+                    "id":"99230993",
+                    "name":"华南区域",
                     "scopedSlots":{
-                        "title":"custom"
+                        "name":"custom"
                     },
                     "children":[],
                 },
                 {
-                    "key":"99231020",
-                    "value":"华北区域",
-                    "title":"华北区域",
+                    "id":"99231020",
+                    "name":"华北区域",
                     "scopedSlots":{
-                      "title":"custom"
+                      "name":"custom"
                     },
                     "children":[],
                 }
             ],
         },
         {
-          "key":"9923071314",
-          "value":"万科集团",
-          "title":"万科集团",
+          "id":"9923071314",
+          "name":"万科集团",
+          "scopedSlots":{
+              "name":"custom"
+          },
         }
       ],
+      replaceFields: {
+        key: 'id',
+        value: 'name',
+        title: 'name',
+        children: 'children',
+      },
 
       // 配置表格各字段
       setTableColumns: [
@@ -204,15 +208,15 @@ export default {
         },
       ],
       tableData: [
-                  { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '<span style="color:red">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img1.gif' },
-                  { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-                  { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
-                  { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
-                  { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-                  { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', flag: true, time: 1600261774531, html1: '<span style="color:blue">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
-                  { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-                  { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
-                ],
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '<span style="color:red">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', flag: true, time: 1600261774531, html1: '<span style="color:blue">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
+      ],
       
       isShowModal: false, // 编辑 新增modal
       modal: {

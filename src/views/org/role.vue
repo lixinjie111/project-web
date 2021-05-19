@@ -24,7 +24,6 @@
   </div>
 </template>
 <script>
-import ContentHeader from '@/components/ContentHeader.vue'
 import BasicTable from '@/components/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
 import Pagination from '@/components/Pagination.vue'
@@ -32,7 +31,7 @@ import Pagination from '@/components/Pagination.vue'
 import * as api from '@/api/index'
 export default {
   name: 'roleorg',
-  components: {ContentHeader, BasicTable, Modal, Pagination},
+  components: {BasicTable, Modal, Pagination},
   data() {
     return {
       total: 50, // 总数据条数
@@ -117,10 +116,22 @@ export default {
     },
     // 维护 type: 组员管理 role, 操作权限 operation, 数据权限 data 
     handlePermission(type, role) {
-      console.log(type, role)
+      console.log(type, role);
+      if(type==='role'){
+        this.$router.push({
+          path: '/org/member',
+          query: { roleName: role.roleName, roleId: role.roleId }
+        })
+      }else if(type === 'operation'){
+        this.$router.push({
+          path: '/org/operat',
+          query: { roleName: role.roleName, roleId: role.roleId }
+        })
+      }
     },
     // 新增、编辑角色
     handleAddEditRole(type, role) {
+      
       if(type === 'add'){
         this.modalTitle = '添加权限分组';
         this.okText = '创建并继续配置';

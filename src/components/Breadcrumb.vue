@@ -2,14 +2,14 @@
   <a-breadcrumb>
     <a-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="index" :class="item.iconposition === 'before'? 'mr-r': 'mr-l'">
       <a v-if="item.path" :href="item.path">
-        <a-icon v-if="item.iconposition === 'before'" :type="item.icon" />
+        <span :class="['iconfont', item.icon]" v-if="item.iconposition === 'before'"></span>
         <span>{{item.name}}</span>
-        <a-icon v-if="item.iconposition === 'after'" :type="item.icon" />
+        <span :class="['iconfont', item.icon]" v-if="item.iconposition === 'after'"></span>
       </a>
       <template v-else>
-        <a-icon v-if="item.iconposition === 'before'" :type="item.icon" />
+        <span :class="['iconfont', item.icon]" v-if="item.iconposition === 'before'"></span>
         <span>{{item.name}}</span>
-        <a-icon v-if="item.iconposition === 'after'" :type="item.icon" />
+        <span :class="['iconfont', item.icon]" v-if="item.iconposition === 'after'"></span>
       </template>
     </a-breadcrumb-item>
   </a-breadcrumb>
@@ -42,30 +42,30 @@ export default {
   > span{
     &.mr-r {
       &:first-child {
-        .anticon {
+        .iconfont {
           margin-right: 16px;
         }
       }
       &:nth-child(n+2) {
-        .anticon {
+        .iconfont {
           margin-right: 6px;
         }
       }
     }
     &.mr-l {
       &:first-child {
-        .anticon {
+        .iconfont {
           margin-left: 16px;
         }
       }
       &:nth-child(n+2) {
-        .anticon {
+        .iconfont {
           margin-left: 6px;
         }
       }
     }
   }
-  .anticon {
+  .iconfont {
     font-size: 16px;
   }
   .ant-breadcrumb-link {
