@@ -1,7 +1,7 @@
 <template>
     <div class="layout">
         <HeaderNav>
-            <div slot="nav-left">概览</div>
+            <div slot="nav-left" class="nav-left-title">概览</div>
         </HeaderNav>
         <div class="overview-container">
             <ContentHeader type="title" title="产品">
@@ -151,6 +151,15 @@
     }
 </script>
 <style lang="scss" scoped>
+    .nav-left-title {
+        padding: 0 24px;
+        line-height: 51px;
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #242F57;
+    }
+
     .overview-container {
         margin: 16px 24px 24px 24px;
 
