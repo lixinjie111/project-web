@@ -19,11 +19,11 @@
             <div class="overview-content">
                 <BasicTabs :tabList="tabList" @change="tabChange"></BasicTabs>
                 <ListTable :columns="columns" :data="listData" class="mt-25">
-                    <div slot="name" slot-scope="data">
+                    <template slot="name" slot-scope="data">
                         <TextToolTip className="table-name" :content="data.row.name"
-                                     :refName="'table-name' + data.row.index" :ellipsis="data.row.ellipsis"></TextToolTip>
+                                     :refName="'table-name' + data.row.index"></TextToolTip>
                         <p class="table-num">产品代号占位</p>
-                    </div>
+                    </template>
                     <div slot="closeTime" slot-scope="data" class="table-close-time">
                         <p class="table-name">{{data.row.closeTime}}</p>
                         <p class="table-title">关闭时间</p>
@@ -35,6 +35,10 @@
                         <IconToolTip iconName="iconshanchu" content="删除" @action="del"></IconToolTip>
                     </div>
                 </ListTable>
+                <Pagination v-if="total > pageSize"
+                            :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
+                            @pagination-change-pagesize="handleChangePageSize"
+                            @pagination-change-page="handleChangePage"></Pagination>
             </div>
         </div>
     </div>
@@ -46,10 +50,11 @@
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
+    import Pagination from '@/components/Pagination'
 
     export default {
-        name: 'userorg',
-        components: {IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
+        name: 'overview',
+        components: {Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
         data() {
             return {
                 tabList: [
@@ -109,10 +114,27 @@
                         createTime: '2021/03/30',
                         closeTime: '2021/04/30'
                     }
-                ]
+                ],
+                total: 50, // 总数据条数
+                pageSize: 10, // 页面数据size
+                curPageNum: 1, // 当前页码
             }
         },
         methods: {
+            // 切换条目数量
+            handleChangePageSize(pageSize, pageNum) {
+                this.pageSize = pageSize;
+                if(pageNum) this.curPageNum = pageNum;
+                this.getList();
+            },
+            // 切换当前页码
+            handleChangePage(pageNum){
+                this.curPageNum = pageNum;
+                this.getList();
+            },
+            getList() {
+
+            },
             tabChange(index) {
                 console.log(index);
             },

@@ -1,13 +1,9 @@
 <template>
     <div class="text-tooltip">
-        <a-tooltip class="item" :visible="isShowTooltip">
+        <a-tooltip :visible="isShowTooltip">
             <span slot="title">{{content}}</span>
-            <p v-if="ellipsis" :class="['over-flow', className]" @mouseenter="onMouseEnter(refName)"
-               @mouseleave="onMouseLeave()">
+            <p :class="['over-flow', className]" @mouseenter="onMouseEnter(refName)" @mouseleave="onMouseLeave()">
                 <span :ref="refName">{{content||'-'}}</span>
-            </p>
-            <p v-else :class="className">
-                <span>{{content||'-'}}</span>
             </p>
         </a-tooltip>
     </div>
@@ -37,11 +33,6 @@
                 default: () => {
                     return ''
                 }
-            },
-            // 是否需要省略文字
-            ellipsis: {
-                type: Boolean,
-                default: false
             }
         },
         data() {
@@ -67,9 +58,11 @@
 </script>
 
 <style lang="scss" scoped>
-    .over-flow {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+    .text-tooltip {
+        .over-flow {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     }
 </style>

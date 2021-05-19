@@ -1,6 +1,6 @@
 <template>
     <div class="icon-tooltip" :class="className">
-        <a-tooltip class="item">
+        <a-tooltip>
             <span slot="title">{{content}}</span>
             <i :class="['iconfont', iconName]" @click="action"></i>
         </a-tooltip>
@@ -45,7 +45,7 @@
     .icon-tooltip {
         > i {
             cursor: pointer;
-            color: #333333;
+            color: #7C88B1;
             font-size: 16px;
         }
     }
