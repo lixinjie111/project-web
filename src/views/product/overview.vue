@@ -6,7 +6,7 @@
         <div class="overview-container">
             <ContentHeader type="title" title="产品">
                 <div slot="operation">
-                    <a-button class="mr-16">
+                    <a-button class="export-btn mr-16">
                         <span class="iconfont icondaochu"></span>
                         导出
                     </a-button>
@@ -29,7 +29,7 @@
                         <p class="table-title">关闭时间</p>
                         <IconToolTip class="table-tip" iconName="icontishi" content="资源方申请停止合作"></IconToolTip>
                     </div>
-                    <div slot="action" slot-scope="data" class="table-action">
+                    <div slot="action" class="table-action">
                         <IconToolTip iconName="iconxiezuo" content="编辑" @action="edit"></IconToolTip>
                         <IconToolTip iconName="iconkaiguan" content="关闭" @action="close"></IconToolTip>
                         <IconToolTip iconName="iconshanchu" content="删除" @action="del"></IconToolTip>
@@ -138,6 +138,12 @@
 
         .mt-25 {
             margin-top: 25px;
+        }
+
+        .export-btn {
+            color: #636E95;
+            background-color: transparent;
+            border-color: #C6CBDE;
         }
 
         .overview-content {
