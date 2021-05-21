@@ -34,7 +34,7 @@
 
 <script>
     export default {
-        name: "form",
+        name: "addForm",
         data() {
             return {
                 rules: {
