@@ -42,7 +42,7 @@
             </div>
         </div>
         <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="left" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
-
+            <AddForm slot="content"></AddForm>
         </Modal>
     </div>
 </template>
@@ -55,10 +55,13 @@
     import IconToolTip from "@/components/tooltip/IconToolTip";
     import Pagination from '@/components/Pagination'
     import Modal from '@/components/Modal.vue'
+    import AddForm from "./components/addForm";
 
     export default {
         name: 'overview',
-        components: {Modal, Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
+        components: {
+            AddForm,
+            Modal, Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
         data() {
             return {
                 tabList: [
