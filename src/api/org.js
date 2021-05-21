@@ -43,13 +43,21 @@ export function handlePutRoleMenu(roleId, menuIds){
   return httpaxios.put('/admin/role/menu', {roleId, menuIds})
 }
 /**
- * 角色-操作权限-列表
+ * 角色-操作权限-完整树
  * @param {*} parentId 父节点id
  * @param {*} lazy 是否懒加载
  * @returns 
  */
 export function handleGetMenuTree(parentId, lazy){
   return httpaxios.get('/admin/menu/tree', {lazy, parentId})
+}
+/**
+ * 获取角色配置操作权限（及菜单）已勾选配置
+ * @param {*} roleId 
+ * @returns 
+ */
+export function handleGetRoleMenuTree(roleId){
+  return httpaxios.get(`/admin/menu/tree/${roleId}`, {})
 }
 /**
  * 组织-分组成员管理 根据部门id 查询用户列表

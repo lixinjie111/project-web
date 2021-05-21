@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import HeaderNav from '@/components/MenuNav.vue'
+import HeaderNav from '@/components/menu/MenuNav.vue'
 export default {
   components: {HeaderNav}
 }

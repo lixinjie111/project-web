@@ -11,6 +11,10 @@ const router = {
 
 // 构建VueRouter对象
 let vueRouter = new VueRouter(router)
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error=> error)
+}
 
 // 拦截路由，进行授权判断和缓存限制
 vueRouter.beforeEach((to, from, next) => {
