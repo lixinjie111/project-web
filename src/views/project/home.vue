@@ -54,11 +54,10 @@
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
-    import Pagination from '@/components/Pagination'
 
     export default {
         name: 'home',
-        components: {Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs},
+        components: {IconToolTip, TextToolTip, ListTable, BasicTabs},
         data() {
             return {
                 tabList: [

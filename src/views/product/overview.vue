@@ -51,13 +51,12 @@
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
-    import Pagination from '@/components/Pagination'
     import Modal from '@/components/Modal.vue'
     import AddForm from "./components/addForm";
 
     export default {
         name: 'overview',
-        components: {AddForm, Modal, Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs},
+        components: {AddForm, Modal, IconToolTip, TextToolTip, ListTable, BasicTabs},
         data() {
             return {
                 tabList: [

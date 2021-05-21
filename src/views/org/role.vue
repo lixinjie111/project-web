@@ -26,12 +26,11 @@
 <script>
 import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
-import Pagination from '@/components/Pagination.vue'
 
 import * as api from '@/api/index'
 export default {
   name: 'roleorg',
-  components: {BasicTable, Modal, Pagination},
+  components: {BasicTable, Modal},
   data() {
     return {
       total: 50, // 总数据条数
