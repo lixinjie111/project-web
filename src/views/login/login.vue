@@ -7,7 +7,7 @@
       <div class="login-title">欢迎登录项目管理平台</div>
       <a-form-model ref="loginForm" :model="form" class="login-form" @submit="handleSubmit">
         <a-form-model-item>
-          <a-input v-model="form.name" placeholder="用户名/手机号" />
+          <a-input v-model="form.username" placeholder="用户名/手机号" />
         </a-form-model-item>
         <a-form-model-item>
           <a-input v-model="form.password" placeholder="密码" />
@@ -18,27 +18,38 @@
           <a-button
             type="primary"
             block
-            :class="form.name === '' || form.password === '' ? 'btn-disabled' : ''"
+            :class="form.username === '' || form.password === '' ? 'btn-disabled' : ''"
             html-type="submit"
             >登录</a-button
           >
         </a-form-model-item>
       </a-form-model>
+      <Verify 
+        @success="success" 
+        mode="pop"     
+        captchaType="blockPuzzle"    
+        :imgSize="{ width: '330px', height: '155px' }" 
+        ref="verify"
+        ></Verify>
     </div>
   </div>
 </template>
 
 <script>
+import Verify from '@/components/verifition/Verify.vue'
+import * as api from '@/api/index'
+import {encryptByAES} from '@/utils/cryptoJS'
 export default {
   name: "login",
+  components: {Verify},
   data() {
     return {
       form: {
-        name: "",
+        username: "",
         password: "",
       },
       rules: {
-        // name: [{ required: true, message: '请输入用户名/手机号', trigger: 'blur' }],
+        // username: [{ required: true, message: '请输入用户名/手机号', trigger: 'blur' }],
         // password: [{ required: true, message: '请输入密码', trigger: 'change' }],
       },
     };
@@ -53,13 +64,27 @@ export default {
       e.preventDefault();
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          alert('submit!');
+          this.$refs.verify.show();
         } else {
-          // console.log('error submit!!');
+
           return false;
         }
       });
     },
+    async success(){
+      try{
+        let pwd = encryptByAES(this.form.password, 'yuanzhi2teamwork');
+        let {code, data, msg} = await api.login.handleGetToken(this.form.username, pwd);
+        if(code === 0){
+
+        } else {
+          this.$message.error(msg);
+        }
+      }catch(error) {
+        console.log(error)
+      }
+      
+    }
   },
   mounted() {},
 };

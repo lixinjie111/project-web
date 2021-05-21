@@ -93,7 +93,7 @@
 </template>
 <script>
 import Tree from '@/components/Tree.vue';
-import BasicTable from '@/components/BasicTable.vue'
+import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
 export default {
   name: 'userorg',

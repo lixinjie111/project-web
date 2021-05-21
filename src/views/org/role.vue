@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import BasicTable from '@/components/BasicTable.vue'
+import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
 import Pagination from '@/components/Pagination.vue'
 

@@ -4,6 +4,9 @@ import VueAxios from 'vue-axios'
 import { getToken } from '../utils/auth.js'
 import router from '../router/index'
 
+let clientKey = process.env.NODE_ENV === 'production' ? 'teamwork' : 'test';
+console.log(process.env)
+
 Vue.use(VueAxios, axios)
 const httpaxios = {
 	instance: null,
@@ -35,8 +38,8 @@ const httpaxios = {
 						pending.push({ u: config.url + '&' + config.method, f: c });  
 				});
 				try {
-					const token = getToken()
-					config.headers['x-token'] = token
+					let auth = btoa(`Basic ${clientKey}:${clientKey}`); // Header是一个"Basic"，加一个空格，再加上"clientId:clientSecret"的base64编码
+					config.headers['Authorization'] = auth
 					return config
 				} catch (err) {
 					return Promise.reject(err)
@@ -71,7 +74,7 @@ const httpaxios = {
 				} else {
 					return data
 				}
-				if (data.code == 200) { //normal
+				if (data.code == 0) { //normal
 					// set response new token to know if open the page for 30mins and close it .
 					return data
 				}
@@ -87,27 +90,29 @@ const httpaxios = {
 			})
 		this.instance = instance
 	},
-	get: function (apiName, opts) {
+	get: function (apiName, opts, config) {
+		let conf = {headers: {'Content-Type': 'application/x-www-form-urlencoded', 'charset': 'UTF-8'}};
 		if (opts && typeof opts === 'object') {
-			opts = { params: opts }
+			opts = { params: opts, ...conf, ...config}
 		}
 		return httpaxios.request(apiName, opts, 'get')
 	},
 	post: function (apiName, opts, config) {
+		let conf = {headers: {'Content-Type': 'application/json', 'charset': 'UTF-8'}};
 		if (opts && typeof opts === 'object') {
-			opts = { data: opts, ...config }
+			opts = { data: opts, ...conf, ...config }
 		}
 		return httpaxios.request(apiName, opts, 'post')
 	},
-	put: function (apiName, opts) {
+	put: function (apiName, opts, config) {
 		if (opts && typeof opts === 'object') {
-			opts = { data: opts }
+			opts = { data: opts, ...config }
 		}
 		return httpaxios.request(apiName, opts, 'put')
 	},
-	delete: function (apiName, opts) {
+	delete: function (apiName, opts, config) {
 		if (opts && typeof opts === 'object') {
-			opts = { data: opts }
+			opts = { data: opts, ...config }
 		}
 		return httpaxios.request(apiName, opts, 'delete')
 	},

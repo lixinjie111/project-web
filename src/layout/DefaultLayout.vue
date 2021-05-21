@@ -10,7 +10,7 @@
 </template>
 <script>
 import menuList from '@/utils/menu.js'
-import MenuSider from '@/components/MenuSider.vue'
+import MenuSider from '@/components/menu/MenuSider.vue'
 export default {
     name: 'layout',
     components: {MenuSider},
@@ -40,7 +40,6 @@ export default {
     mounted() {
         let { topMenu } = this.$store.state.system;
         !topMenu.length && this.getRoutes(); // vuex已经缓存菜单
-        
     }
 }
 </script>
