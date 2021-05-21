@@ -1,8 +1,8 @@
 <template>
     <div class="layout">
-        <HeaderNav>
+        <MenuNav>
             <div slot="nav-left" class="nav-left-title">首页</div>
-        </HeaderNav>
+        </MenuNav>
         <div class="home-container">
         <ContentHeader type="title" title="项目">
             <div slot="operation">
@@ -38,7 +38,7 @@
                     <IconToolTip iconName="iconzanting" content="搁置" @action="handlePause"></IconToolTip>
                     <IconToolTip iconName="iconkaiguan" content="完成" @action="handleFinish"></IconToolTip>
                     <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit"></IconToolTip>
-                    <IconToolTip iconName="iconshanchu" content="删除" @action="handleel"></IconToolTip>
+                    <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel"></IconToolTip>
                 </div>
             </ListTable>
             <Pagination v-if="total > pageSize"
@@ -50,8 +50,6 @@
     </div>
 </template>
 <script>
-    import HeaderNav from '@/components/MenuNav.vue'
-    import ContentHeader from '@/components/ContentHeader.vue'
     import BasicTabs from "@/components/tabs/BasicTabs";
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
@@ -60,7 +58,7 @@
 
     export default {
         name: 'home',
-        components: {Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
+        components: {Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs},
         data() {
             return {
                 tabList: [
@@ -134,7 +132,7 @@
                     {
                         endTime: "2021/05/14",
                         id: 213423,
-                        progress: "90",
+                        progress: 90,
                         projectMaster: "zhangsan,wanghu",
                         projectName: "项目名称",
                         restHour: 180,
@@ -146,7 +144,7 @@
                     {
                         endTime: "2021/05/14",
                         id: 213423,
-                        progress: "20.5",
+                        progress: 20.5,
                         projectMaster: "zhangsan,wanghu",
                         projectName: "项目名称",
                         restHour: 180,
