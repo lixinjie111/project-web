@@ -1,33 +1,37 @@
 <template>
   <Modal v-bind="$attrs" width="800" title="任务编辑" okText="确定" cancelText="取消" headeralgin="center" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
     <div slot="content">
-      <div>
+      <div class="title-row">
         <div class="title">{{value.name}}</div>
         <a-checkbox>在周报中显示</a-checkbox>
       </div>
       <a-row :gutter="[16, 16]">
         <a-col :span="6"><Status :value="value.status"/></a-col>
-        <a-col :span="6"><UserSelect :value="0"/></a-col>
+        <a-col :span="6"><!--<UserSelect :value="0"/>-->
+              <TwoValue title="谢冬" subtitle="负责人">
+                <UserIcon value="谢冬" :length="1" :size="1"/>
+              </TwoValue>
+        </a-col>
 <!--        <a-col :span="6"><PrioritySelect :value="value.priority"/></a-col>-->
         <a-col :span="6">
-          <a-date-picker v-model="value.begin_date" placeholder="请选择开始日期" allowClear />
+          <DateSelect title="计划开始" icon="iconrili" v-model="value.begin_date" />
         </a-col>
         <a-col :span="6">
-          <a-date-picker v-model="value.end_date" placeholder="请选择截止日期" allowClear />
+          <DateSelect title="计划结束" icon="iconjihua" v-model="value.end_date" />
         </a-col>
       </a-row>
       <a-row :gutter="[16, 16]">
         <a-col :span="6">
-          <a-date-picker v-model="value.begin_date" placeholder="请选择开始日期" allowClear />
+          <DateSelect title="实际开始" icon="iconrili" v-model="value.begin_date" />
         </a-col>
         <a-col :span="6">
-          <a-date-picker v-model="value.end_date" placeholder="请选择截止日期" allowClear />
+          <DateSelect title="实际结束" icon="iconjihua" v-model="value.end_date" />
         </a-col>
         <a-col :span="6">
-          {{value.hours}}小时
+          <HoursSelect title="预计工时" icon="iconmiaobiao" :value="value.hours"/>
         </a-col>
         <a-col :span="6">
-          {{value.used_hours}}小时
+          <HoursSelect title="实际工时" icon="iconzhexian" :value="value.used_hours"/>
         </a-col>
       </a-row>
 
@@ -60,10 +64,14 @@
   import UserSelect from "@/components/business/UserSelect";
   import PrioritySelect from "@/components/business/PrioritySelect";
   import Status from "@/components/business/Status";
+  import TwoValue from "@/components/business/TwoValue";
+  import UserIcon from "@/components/business/UserIcon";
+  import HoursSelect from "@/components/business/HoursSelect";
+  import DateSelect from "@/components/business/DateSelect";
 
   export default {
     name: "TaskEdit",
-    components: { Modal, UserSelect, PrioritySelect, Status },
+    components: { Modal, UserSelect, PrioritySelect, Status, TwoValue, UserIcon, HoursSelect, DateSelect },
     props: {
       // isShow: {
       //   type: Boolean,
@@ -120,4 +128,8 @@
 .iconfont {
   margin-right: 4px;
 }
+  .title-row {
+    display: flex;
+    height: 50px;
+  }
 </style>
