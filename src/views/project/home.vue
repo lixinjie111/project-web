@@ -19,9 +19,9 @@
         <div class="home-content">
             <BasicTabs :tabList="tabList"></BasicTabs>
             <ListTable :columns="columns" :data="listData" class="mt-25">
-                <div slot="name" slot-scope="data" class="table-status">
+                <div slot="projectName" slot-scope="data" class="table-status">
                     <div class="table-status-bg" :style="'background:' + statusColor(data.row.status)"></div>
-                    <TextToolTip className="table-name" :content="data.row.name"
+                    <TextToolTip className="table-name" :content="data.row.projectName"
                                  :refName="'table-name' + data.row.index"></TextToolTip>
                     <p class="table-status-text">
                         <span class="circle" :style="'background:' + statusColor(data.row.status)"></span>
@@ -33,12 +33,12 @@
                     <a-progress :percent="data.row.progress" :strokeColor="statusColor(data.row.status)"/>
                 </div>
                 <div slot="action" class="table-action">
-                    <IconToolTip iconName="iconbofang" content="开始" @action="start"></IconToolTip>
-                    <IconToolTip iconName="iconyanqi" content="延期" @action="delay"></IconToolTip>
-                    <IconToolTip iconName="iconzanting" content="搁置" @action="pause"></IconToolTip>
-                    <IconToolTip iconName="iconkaiguan" content="完成" @action="finish"></IconToolTip>
-                    <IconToolTip iconName="iconxiezuo" content="编辑" @action="edit"></IconToolTip>
-                    <IconToolTip iconName="iconshanchu" content="删除" @action="del"></IconToolTip>
+                    <IconToolTip iconName="iconbofang" content="开始" @action="handleStart"></IconToolTip>
+                    <IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay"></IconToolTip>
+                    <IconToolTip iconName="iconzanting" content="搁置" @action="handlePause"></IconToolTip>
+                    <IconToolTip iconName="iconkaiguan" content="完成" @action="handleFinish"></IconToolTip>
+                    <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit"></IconToolTip>
+                    <IconToolTip iconName="iconshanchu" content="删除" @action="handleel"></IconToolTip>
                 </div>
             </ListTable>
             <Pagination v-if="total > pageSize"
@@ -91,13 +91,13 @@
                 ],
                 columns: [
                     {
-                        slot: 'name',
+                        slot: 'projectName',
                         width: '16%',
                         ellipsis: true
                     },
                     {
                         title: '项目负责人',
-                        key: 'people',
+                        key: 'projectMaster',
                         width: '16%',
                         ellipsis: true
                     },
@@ -108,17 +108,17 @@
                     },
                     {
                         title: '工时/预计',
-                        key: 'planTime',
+                        key: 'workHour',
                         width: '10%'
                     },
                     {
                         title: '工时/消耗',
-                        key: 'useTime',
+                        key: 'usedHour',
                         width: '10%'
                     },
                     {
                         title: '工时/剩余',
-                        key: 'residueTime',
+                        key: 'restHour',
                         width: '10%'
                     },
                     {
@@ -132,24 +132,28 @@
                 ],
                 listData: [
                     {
-                        status: '1',
-                        name: '智能营销SaaS智能营销SaaS智能营销SaaS智能营销SaaS',
-                        people: '段常春段常春段常春段常春',
-                        endTime: '2021/08/10',
-                        planTime: '54',
-                        useTime: '54',
-                        residueTime: '54',
-                        progress: 10
+                        endTime: "2021/05/14",
+                        id: 213423,
+                        progress: "90",
+                        projectMaster: "zhangsan,wanghu",
+                        projectName: "项目名称",
+                        restHour: 180,
+                        status: 1,
+                        statusDesc: "已延期",
+                        usedHour: 180,
+                        workHour: 180
                     },
                     {
-                        status: '2',
-                        name: '智能营销SaaS',
-                        people: '段常春',
-                        endTime: '2021/08/10',
-                        planTime: '54',
-                        useTime: '54',
-                        residueTime: '54',
-                        progress: 20
+                        endTime: "2021/05/14",
+                        id: 213423,
+                        progress: "20.5",
+                        projectMaster: "zhangsan,wanghu",
+                        projectName: "项目名称",
+                        restHour: 180,
+                        status: 3,
+                        statusDesc: "已延期",
+                        usedHour: 180,
+                        workHour: 180
                     }
                 ],
                 total: 50, // 总数据条数
@@ -160,20 +164,21 @@
         methods: {
             statusColor(status) {
                 switch (status) {
-                    case '0': //进行中
-                        return '#0064FF';
-                        break;
-                    case '1': //未开始
+                    // 0：未开始，1：进行中，2：已完成，3：已延期，4：已搁置
+                    case 0: //未开始
                         return '#1DCEC3';
                         break;
-                    case '2': //已延期
+                    case 1: //进行中
+                        return '#0064FF';
+                        break;
+                    case 2: //已完成
+                        return '#7C88B1';
+                        break;
+                    case 3: //已延期
                         return '#FF4C60';
                         break;
-                    case '3': //已搁置
+                    default:  //已搁置
                         return '#F9AD69';
-                        break;
-                    default:  //已完成
-                        return '#7C88B1';
                 }
             },
             // 切换条目数量
@@ -190,22 +195,22 @@
             getList() {
 
             },
-            start() {
+            handleStart() {
 
             },
-            delay() {
+            handleDelay() {
 
             },
-            pause() {
+            handlePause() {
 
             },
-            finish() {
+            handleFinish() {
 
             },
-            edit() {
+            handleEdit() {
 
             },
-            del() {
+            handleDel() {
 
             },
         }
