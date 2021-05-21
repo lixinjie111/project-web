@@ -1,7 +1,7 @@
 <template>
     <div class="layout">
         <HeaderNav>
-            <div slot="nav-left">概览</div>
+            <div slot="nav-left" class="nav-left-title">概览</div>
         </HeaderNav>
         <div class="overview-container">
             <ContentHeader type="title" title="产品">
@@ -10,33 +10,40 @@
                         <span class="iconfont icondaochu"></span>
                         导出
                     </a-button>
-                    <a-button type="primary">
+                    <a-button type="primary" @click="handleAdd">
                         <span class="iconfont iconjia"></span>
                         添加产品
                     </a-button>
                 </div>
             </ContentHeader>
             <div class="overview-content">
-                <BasicTabs :tabList="tabList" @change="tabChange"></BasicTabs>
+                <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
                 <ListTable :columns="columns" :data="listData" class="mt-25">
-                    <div slot="name" slot-scope="data">
-                        <TextToolTip className="table-name" :content="data.row.name"
-                                     :refName="'table-name' + data.row.index" :ellipsis="data.row.ellipsis"></TextToolTip>
-                        <p class="table-num">产品代号占位</p>
-                    </div>
-                    <div slot="closeTime" slot-scope="data" class="table-close-time">
-                        <p class="table-name">{{data.row.closeTime}}</p>
+                    <template slot="productName" slot-scope="data">
+                        <TextToolTip className="table-name" :content="data.row.productName"
+                                     :refName="'table-name' + data.row.index"></TextToolTip>
+                        <p class="table-num">{{data.row.productCode}}</p>
+                    </template>
+                    <div slot="closedTime" slot-scope="data" class="table-close-time">
+                        <p class="table-name">{{data.row.closedTime}}</p>
                         <p class="table-title">关闭时间</p>
-                        <IconToolTip class="table-tip" iconName="icontishi" content="资源方申请停止合作"></IconToolTip>
+                        <IconToolTip v-if="data.row.remark" class="table-tip" iconName="icontishi" :content="data.row.remark"></IconToolTip>
                     </div>
                     <div slot="action" class="table-action">
-                        <IconToolTip iconName="iconxiezuo" content="编辑" @action="edit"></IconToolTip>
-                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="close"></IconToolTip>
-                        <IconToolTip iconName="iconshanchu" content="删除" @action="del"></IconToolTip>
+                        <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit"></IconToolTip>
+                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="handleClose"></IconToolTip>
+                        <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel"></IconToolTip>
                     </div>
                 </ListTable>
+                <Pagination v-if="total > pageSize"
+                            :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
+                            @pagination-change-pagesize="handleChangePageSize"
+                            @pagination-change-page="handleChangePage"></Pagination>
             </div>
         </div>
+        <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="left" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
+
+        </Modal>
     </div>
 </template>
 <script>
@@ -46,10 +53,12 @@
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
+    import Pagination from '@/components/Pagination'
+    import Modal from '@/components/Modal.vue'
 
     export default {
-        name: 'userorg',
-        components: {IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
+        name: 'overview',
+        components: {Modal, Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
         data() {
             return {
                 tabList: [
@@ -72,23 +81,23 @@
                         width: '2%'
                     },
                     {
-                        slot: 'name',
+                        slot: 'productName',
                         width: '25%',
                         ellipsis: true
                     },
                     {
                         title: '产品负责人',
-                        key: 'people',
+                        key: 'productMaster',
                         width: '25%',
                         ellipsis: true
                     },
                     {
                         title: '创建时间',
-                        key: 'createTime',
+                        key: 'createdTime',
                         width: '19%'
                     },
                     {
-                        slot: 'closeTime',
+                        slot: 'closedTime',
                         width: '19%'
                     },
                     {
@@ -98,37 +107,100 @@
                 ],
                 listData: [
                     {
-                        name: '智能营销SaaS智能营销SaaS智能营销SaaS智能营销SaaS',
-                        people: '段常春，段常春，段常春，段常春，段常春，段常春',
-                        createTime: '2021/08/10',
-                        closeTime: '2021/04/30'
+                        closedTime: "2021-05-13",
+                        createdBy: "",
+                        createdTime: "2021-04-13",
+                        deletedFlag: 0,
+                        deptId: 952777,
+                        id: 0,
+                        productCode: "ISO9002",
+                        productDescription: "反正这是一个好产品，爱买不买",
+                        productMaster: "9527,95277",
+                        productName: "好产品",
+                        publicFlag: 1,
+                        remark: "测试",
+                        status: 1,
+                        updatedBy: "",
+                        updatedTime: ""
                     },
                     {
-                        name: '资源合作开发',
-                        people: '杨达东, 李春梁',
-                        createTime: '2021/03/30',
-                        closeTime: '2021/04/30'
+                        closedTime: "2021-05-13",
+                        createdBy: "",
+                        createdTime: "",
+                        deletedFlag: 0,
+                        deptId: 952777,
+                        id: 0,
+                        productCode: "ISO9002",
+                        productDescription: "反正这是一个好产品，爱买不买",
+                        productMaster: "9527,95277",
+                        productName: "好产品2",
+                        publicFlag: 1,
+                        remark: "测试",
+                        status: 1,
+                        updatedBy: "",
+                        updatedTime: ""
                     }
-                ]
+                ],
+                total: 50, // 总数据条数
+                pageSize: 10, // 页面数据size
+                curPageNum: 1, // 当前页码
+                isShowModal: false,
+                modal: {
+                    modalTitle: '添加产品',
+                    okText:'保存',
+                    cancelText:'取消'
+                }
             }
         },
         methods: {
-            tabChange(index) {
+            // 切换条目数量
+            handleChangePageSize(pageSize, pageNum) {
+                this.pageSize = pageSize;
+                if(pageNum) this.curPageNum = pageNum;
+                this.getList();
+            },
+            // 切换当前页码
+            handleChangePage(pageNum){
+                this.curPageNum = pageNum;
+                this.getList();
+            },
+            getList() {
+
+            },
+            handleChangeTab(index) {
                 console.log(index);
             },
-            edit() {
+            handleAdd() {
+               this.isShowModal = true;
+            },
+            handleEdit() {
                 console.log('edit');
             },
-            close() {
+            handleClose() {
                 console.log('close');
             },
-            del() {
+            handleDel() {
                 console.log('del');
+            },
+            handleSubmit() {
+                this.isShowModal = false;
+            },
+            handleCancel() {
+                this.isShowModal = false;
             }
         }
     }
 </script>
 <style lang="scss" scoped>
+    .nav-left-title {
+        padding: 0 24px;
+        line-height: 51px;
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #242F57;
+    }
+
     .overview-container {
         margin: 16px 24px 24px 24px;
 

@@ -1,8 +1,8 @@
 <template>
     <div class="icon-tooltip" :class="className">
-        <a-tooltip class="item">
+        <a-tooltip>
             <span slot="title">{{content}}</span>
-            <i :class="['iconfont', iconName]" @click="action"></i>
+            <i :class="['iconfont', iconName]" @click="handleAction"></i>
         </a-tooltip>
     </div>
 </template>
@@ -34,7 +34,7 @@
             }
         },
         methods: {
-            action() {
+            handleAction() {
                 this.$emit('action');
             }
         }
@@ -45,7 +45,7 @@
     .icon-tooltip {
         > i {
             cursor: pointer;
-            color: #333333;
+            color: #7C88B1;
             font-size: 16px;
         }
     }

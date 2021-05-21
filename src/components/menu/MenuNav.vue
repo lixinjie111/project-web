@@ -41,6 +41,7 @@ export default {
 .nav-container {
   display: flex;
   width: calc(100vw - 80px);
+  min-width: 1360px;
   background: #fff;
   .nav-left, .nav-right {
     width: 240px;

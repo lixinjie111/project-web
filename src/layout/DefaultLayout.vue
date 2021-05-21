@@ -58,6 +58,7 @@ export default {
         // margin-left: 80px;
         // min-width: 1360px;
         width: calc(100vw - 80px);
+        min-width: 1360px;
         min-height: 100vh;
         // overflow-x: auto;
         background: #F4F7FC;;

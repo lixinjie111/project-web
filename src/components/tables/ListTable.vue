@@ -10,9 +10,10 @@
                     <slot :name="columnsItem.slot" :row="{...dataItem,ellipsis: columnsItem.ellipsis,index:dataIndex}"></slot>
                 </template>
                 <template v-else>
-                    <TextToolTip className="item-td-value" :content="dataItem[columnsItem.key]"
+                    <TextToolTip v-if="columnsItem.ellipsis" className="item-td-value" :content="dataItem[columnsItem.key]"
                                  :refName="'tip' + dataIndex + columnsIndex"
                                  :ellipsis="columnsItem.ellipsis"></TextToolTip>
+                    <div v-else class="item-td-value">{{dataItem[columnsItem.key]||'-'}}</div>
                     <div class="item-td-title">{{columnsItem.title}}</div>
                 </template>
             </div>
