@@ -16,7 +16,6 @@
 
 <script>
   import TwoValue from "./TwoValue";
-  import moment from "moment";
 
   export default {
     name: "HoursSelect",

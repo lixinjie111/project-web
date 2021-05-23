@@ -40,7 +40,7 @@
     </div>
     <TreeTable :columns="tableColumns" :data-source="tableData"/>
     <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" />
-    <TaskEdit :isShow="showEdit" @cancel="showEdit = false" @ok="handleEditOK" :value="tableData[0]" />
+    <TaskEdit :isShow="showEdit" @cancel="showEdit = false" @ok="handleEditClose" :value="tableData[0]" @create-child="handleCreate" />
   </div>
 </template>
 
@@ -99,6 +99,15 @@
             dataIndex: 'name',
             title: '任务名称',
             treeNode: true,
+            customRender: (text, record, index) => {
+              return {
+                attrs:{},
+                props:{},
+                class:{},
+                style:{},
+                children: this.$createElement('a', {on: {click: () => this.handleEdit(record)}}, text)
+              }
+            }
           },
           {
             dataIndex: 'status',
@@ -160,10 +169,13 @@
         console.log('test')
         this.showCreate = true;
       },
+      handleEdit() {
+        this.showEdit = true;
+      },
       handleCreateOK(data) {
         this.showCreate = false;
       },
-      handleEditOK(data) {
+      handleEditClose() {
         this.showEdit = false;
       },
     }

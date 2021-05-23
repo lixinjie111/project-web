@@ -1,0 +1,73 @@
+<template>
+  <a-dropdown :trigger="['click']">
+    <TwoValue :title="statuses[value]" subtitle="当前状态">
+      <span :class="'status'+(parseInt(value) + 1)">
+        <i class="iconfont" :class="icons[value]"></i>
+      </span>
+    </TwoValue>
+    <a-menu slot="overlay" @click="handleSelect">
+      <a-menu-item v-for="(prio,index) in statuses" :key="index">
+        <Status :value="index"/>
+      </a-menu-item>
+    </a-menu>
+  </a-dropdown>
+</template>
+
+<script>
+  import TwoValue from "./TwoValue";
+  import Status from "@/components/business/Status";
+
+  export default {
+    name: "StatusSelect",
+    components: {Status, TwoValue},
+    props: {
+      value: Number,
+    },
+    data() {
+      return {
+        icons: [
+          'iconjianshao',
+          'iconshijian',
+          'iconxiaoyan',
+          'iconlishijilu',
+          'iconyanqi',
+        ],
+        statuses: [
+          '未开始',
+          '进行中',
+          '已完成',
+          '已延期',
+          '已搁置',
+        ],
+      }
+    },
+    methods: {
+      handleSelect(e) {
+        this.$emit('input', e.key);
+        this.$emit('change', e.key);
+      }
+    }
+  }
+</script>
+
+<style lang="scss" scoped>
+.two-v {
+  $colors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+  @each $color in $colors {
+    $i: index($colors, $color);
+    .status#{$i} {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border-radius: 2px;
+      color: $color;
+      text-align: center;
+      line-height: 24px;
+      cursor: default;
+    }
+  }
+}
+.row {
+  margin: 6px 0;
+}
+</style>

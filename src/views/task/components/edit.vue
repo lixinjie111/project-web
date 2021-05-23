@@ -1,12 +1,14 @@
 <template>
-  <Modal v-bind="$attrs" width="800" title="任务编辑" okText="确定" cancelText="取消" headeralgin="center" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
-    <div slot="content">
+  <a-modal :visible="isShow" :width="980" :maskClosable="false" :footer="null" title="任务编辑" @cancel="handleCancel" centered>
       <div class="title-row">
-        <div class="title">{{value.name}}</div>
+        <ToggleInput v-model="value.name">
+          <div class="title">{{value.name}}
+          </div>
+        </ToggleInput>
         <a-checkbox>在周报中显示</a-checkbox>
       </div>
       <a-row :gutter="[16, 16]">
-        <a-col :span="6"><Status :value="value.status"/></a-col>
+        <a-col :span="6"><StatusSelect v-model="value.status"/></a-col>
         <a-col :span="6"><!--<UserSelect :value="0"/>-->
               <TwoValue title="谢冬" subtitle="负责人">
                 <UserIcon value="谢冬" :length="1" :size="1"/>
@@ -40,43 +42,106 @@
           <span slot="tab">
             <i class="iconfont icondagangshitu"></i>任务信息
           </span>
-          Content of Tab Pane 1
+          <a-row :gutter="[16, 16]">
+            <a-col span="8">所属项目:</a-col>
+            <a-col span="6">任务类型:</a-col>
+            <a-col span="10">优先级:</a-col>
+          </a-row>
+          <a-row :gutter="[16, 16]">
+            <a-col span="8">智能营销方案整体设计</a-col>
+            <a-col span="6">
+              <a-select style="width: 150px">
+                <a-select-option key="1">开发</a-select-option>
+              </a-select>
+            </a-col>
+            <a-col span="10">
+              <PrioritySelect v-model="value.priority"/>
+            </a-col>
+          </a-row>
+          <a-row :gutter="[16, 16]">
+            <a-col span="8">参与人:</a-col>
+          </a-row>
+          <a-row :gutter="[16, 16]">
+            <a-col span="8"><UserSelect v-model="value.participates"/></a-col>
+          </a-row>
+          <a-row :gutter="[16, 16]">
+            <a-col span="8">任务描述:</a-col>
+          </a-row>
+          <a-row :gutter="[16, 16]">
+            <a-col span="24"><a-textarea v-model="value.desc" :autosize="{ minRows: 3, maxRows: 8 }"/></a-col>
+          </a-row>
+          <a-row :gutter="[16, 16]">
+            <a-col span="2"><a-button type="primary">保存</a-button></a-col>
+            <a-col span="2"><a-button>取消</a-button></a-col>
+          </a-row>
         </a-tab-pane>
         <a-tab-pane key="2">
           <span slot="tab">
             <i class="iconfont iconzirenwu"></i>子任务
           </span>
-          Content of Tab Pane 2
+          <a-row :gutter="[16, 16]">
+            <a-col span="20">共 0 个子任务</a-col>
+            <a-col span="4">
+              <FlatButton @click="handleCreateChildTask">
+                添加子任务
+                <MyIcon slot="icon" name="iconjia" type="main"/>
+              </FlatButton>
+            </a-col>
+          </a-row>
+          <div>
+            <a-divider></a-divider>
+          </div>
         </a-tab-pane>
         <a-tab-pane key="3">
           <span slot="tab">
             <i class="iconfont iconlianjie"></i>附件
           </span>
-          Content of Tab Pane 3
+          <a-row :gutter="[16, 16]">
+            <a-col span="20">共 0 个附件</a-col>
+            <a-col span="4">
+              <FlatButton @click="handleCreate">
+                添加附件
+                <MyIcon slot="icon" name="iconjia" type="main"/>
+              </FlatButton>
+            </a-col>
+          </a-row>
+          <div>
+            <a-divider></a-divider>
+          </div>
         </a-tab-pane>
       </a-tabs>
+    <a-row :gutter="[16, 16]">
+      <a-col span="8"><i class="iconfont iconlishijilu"></i>历史记录</a-col>
+      <a-divider></a-divider>
+    </a-row>
+    <div>
+      1, 2021-04-01 上午09:15，由 谢东 创建
     </div>
-  </Modal>
+  </a-modal>
 </template>
 
 <script>
   import Modal from '@/components/Modal.vue'
   import UserSelect from "@/components/business/UserSelect";
   import PrioritySelect from "@/components/business/PrioritySelect";
-  import Status from "@/components/business/Status";
   import TwoValue from "@/components/business/TwoValue";
   import UserIcon from "@/components/business/UserIcon";
   import HoursSelect from "@/components/business/HoursSelect";
   import DateSelect from "@/components/business/DateSelect";
+  import StatusSelect from "@/components/business/StatusSelect";
+  import ATextarea from "x-intelligent-ui/es/input/TextArea";
+  import MyIcon from "@/components/others/MyIcon";
+  import FlatButton from "@/components/buttons/FlatButton";
+  import ToggleInput from "@/components/forms/ToggleInput";
 
   export default {
     name: "TaskEdit",
-    components: { Modal, UserSelect, PrioritySelect, Status, TwoValue, UserIcon, HoursSelect, DateSelect },
+    components: {ATextarea, Modal, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput },
     props: {
-      // isShow: {
-      //   type: Boolean,
-      //   default: false
-      // },
+      isShow: {
+        type: Boolean,
+        default: false
+      },
       value: {
         type: Object,
         default: {},
@@ -120,6 +185,9 @@
       handleCancel() {
         this.$emit('cancel');
       },
+      handleCreateChildTask() {
+        this.$emit('create-child');
+      },
     },
   }
 </script>
@@ -132,4 +200,8 @@
     display: flex;
     height: 50px;
   }
+
+.ant-tabs {
+  width: 100%;
+}
 </style>
