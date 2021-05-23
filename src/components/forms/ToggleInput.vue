@@ -1,16 +1,19 @@
 <template>
-  <div>
-    <div @click="handleClick" v-show="!edit">
-      <slot />
-    </div>
-    <a-input :value="value" v-show="edit" @input="handleChange" @blur="handleEnd" @pressEnter="handleEnd" />
+  <div :class="overClass">
+    <a-tooltip placement="top">
+      <div @click="handleClick" v-show="!edit" :class="overClass">
+        <slot />
+      </div>
+      <template slot="title">点击即可编辑</template>
+    </a-tooltip>
+    <a-input :value="value" v-show="edit" @input="handleChange" @blur="handleEnd" @pressEnter="handleEnd" placeholder="输入任务名称" :class="overClass" />
   </div>
 </template>
 
 <script>
   export default {
     name: "ToggleInput",
-    props: ['value'],
+    props: ['value', 'overClass'],
     data() {
       return {
         edit: false,
@@ -31,11 +34,4 @@
 </script>
 
 <style lang="scss" scoped>
-.title {
-  height: 29px;
-  font-size: 21px;
-  font-weight: 500;
-  color: #242F57;
-  line-height: 29px;
-}
 </style>

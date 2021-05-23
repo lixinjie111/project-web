@@ -1,8 +1,8 @@
 <template>
   <a-modal :visible="isShow" :width="980" :maskClosable="false" :footer="null" title="任务编辑" @cancel="handleCancel" centered>
       <div class="title-row">
-        <ToggleInput v-model="value.name">
-          <div class="title">{{value.name}}
+        <ToggleInput v-model="value.name" overClass="title">
+          <div>{{value.name}}
           </div>
         </ToggleInput>
         <a-checkbox>在周报中显示</a-checkbox>
@@ -199,9 +199,22 @@
   .title-row {
     display: flex;
     height: 50px;
+    align-items: center;
   }
 
 .ant-tabs {
   width: 100%;
 }
+</style>
+<style lang="scss">
+  .title-row {
+    .title {
+      height: 29px;
+      font-size: 21px;
+      font-weight: 500;
+      color: #242F57;
+      line-height: 29px;
+      margin-right: 8px;
+    }
+  }
 </style>
