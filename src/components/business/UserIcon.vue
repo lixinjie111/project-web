@@ -1,7 +1,7 @@
 <template>
-  <div class="icon">
+  <div class="icon" :class="'size'+size">
     {{showName}}
-    <i class="iconfont iconjianshao" @click="$emit('close')"></i>
+    <i class="iconfont iconjianshao" @click="$emit('close')" v-if="closable"></i>
   </div>
 </template>
 
@@ -66,4 +66,13 @@
     align-items: center;
   }
 }
+  .size1 {
+    $height1: 36px;
+
+    width: $height1;
+    height: $height1;
+    background: #75B1FF;
+    border-radius: $height1 / 2;
+    font-size: 16px;
+  }
 </style>
