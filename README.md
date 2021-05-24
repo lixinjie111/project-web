@@ -35,4 +35,7 @@ https://lanhuapp.com/web/#/item/project/stage?pid=a843f2c3-3351-4390-822e-b8c503
 ### git地址
 git@gitlab.yzmsri.com:web/project/project-web.git
 
+### 组件规划表格
+https://docs.qq.com/sheet/DWUdpWmlvaG1KaENr?_t=1621216773685&tab=BB08J2
+
 
