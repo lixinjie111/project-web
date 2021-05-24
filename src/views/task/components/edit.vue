@@ -10,9 +10,7 @@
       <a-row :gutter="[16, 16]">
         <a-col :span="6"><StatusSelect v-model="value.status"/></a-col>
         <a-col :span="6"><!--<UserSelect :value="0"/>-->
-              <TwoValue title="谢冬" subtitle="负责人">
-                <UserIcon value="谢冬" :length="1" :size="1"/>
-              </TwoValue>
+              <UserSelect v-model="value.incharge" subtitle="负责人" />
         </a-col>
 <!--        <a-col :span="6"><PrioritySelect :value="value.priority"/></a-col>-->
         <a-col :span="6">
@@ -62,7 +60,7 @@
             <a-col span="8">参与人:</a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="8"><UserSelect v-model="value.participates"/></a-col>
+            <a-col span="8"><UserSelect v-model="value.participates" multiple/></a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
             <a-col span="8">任务描述:</a-col>
