@@ -96,6 +96,7 @@
             }
         },
         methods: {
+            // 设置不同项目状态的颜色
             statusColor(status) {
                 switch (status) {
                     // 0：未开始，1：进行中，2：已完成，3：已延期，4：已搁置
@@ -126,21 +127,27 @@
                 this.curPageNum = pageNum;
                 this.getList();
             },
+            // 开始项目
             handleStart() {
 
             },
+            // 延期项目
             handleDelay() {
 
             },
+            // 搁置项目
             handlePause() {
 
             },
+            // 完成项目
             handleFinish() {
 
             },
+            // 编辑项目
             handleEdit() {
 
             },
+            // 删除项目
             handleDel() {
 
             }

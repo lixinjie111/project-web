@@ -92,9 +92,9 @@
             }
         },
         methods: {
-            handleGetList() {
+            getList() {
 
-            },
+            }
         }
     }
 </script>

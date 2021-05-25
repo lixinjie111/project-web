@@ -49,7 +49,7 @@
     .basic-tabs-container {
         background: #F4F7FC;
         width: 100%;
-        z-index: 1000;
+        z-index: 999;
 
         .tabs-content {
             position: relative;

@@ -116,6 +116,7 @@
       left: 0;
       top: 0;
       background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
       .modal-dialog {
         position: absolute;
         left: 50%;

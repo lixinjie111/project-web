@@ -16,8 +16,7 @@
             <UserSelect v-model="form.productMaster" />
         </a-form-model-item>
         <a-form-model-item label="产品描述" prop="productDescription">
-            <a-textarea v-model="form.productDescription" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入产品描述"
-                        :maxLength="100"/>
+            <a-textarea v-model="form.productDescription" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入产品描述"/>
         </a-form-model-item>
         <a-form-model-item label="">
             <RelatedSelect title="关联项目" :list="projectList" :selectList="form.projectList" @change="handleChangeProject"></RelatedSelect>
