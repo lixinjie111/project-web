@@ -1,6 +1,6 @@
 <template>
     <div class="icon-tooltip" :class="className">
-        <a-tooltip>
+        <a-tooltip :destroyTooltipOnHide="true">
             <span slot="title">{{content}}</span>
             <i :class="['iconfont', iconName]" @click="handleAction"></i>
         </a-tooltip>

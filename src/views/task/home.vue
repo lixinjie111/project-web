@@ -39,7 +39,8 @@
       </div>
     </div>
     <TreeTable :columns="tableColumns" :data-source="tableData"/>
-    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleOK" />
+    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" />
+    <TaskEdit :isShow="showEdit" @cancel="showEdit = false" @ok="handleEditClose" :value="tableData[0]" @create-child="handleCreate" />
   </div>
 </template>
 
@@ -48,10 +49,11 @@
   import FlatButton from '@/components/buttons/FlatButton';
   import MyIcon from "@/components/others/MyIcon";
   import TaskAdd from "./components/add";
+  import TaskEdit from "./components/edit";
 
   export default {
     name: 'TaskHome',
-    components: { TreeTable, FlatButton, MyIcon, TaskAdd },
+    components: { TreeTable, FlatButton, MyIcon, TaskAdd, TaskEdit },
     data() {
       return {
         tableData: [
@@ -97,6 +99,15 @@
             dataIndex: 'name',
             title: '任务名称',
             treeNode: true,
+            customRender: (text, record, index) => {
+              return {
+                attrs:{},
+                props:{},
+                class:{},
+                style:{},
+                children: this.$createElement('a', {on: {click: () => this.handleEdit(record)}}, text)
+              }
+            }
           },
           {
             dataIndex: 'status',
@@ -141,7 +152,7 @@
           },
         ],
         showCreate: false,
-        showEdit: false,
+        showEdit: true,
         viewType: 0,
         viewTypes: ['列表', '看板'],
       }
@@ -158,8 +169,14 @@
         console.log('test')
         this.showCreate = true;
       },
-      handleOK(data) {
+      handleEdit() {
+        this.showEdit = true;
+      },
+      handleCreateOK(data) {
         this.showCreate = false;
+      },
+      handleEditClose() {
+        this.showEdit = false;
       },
     }
   }

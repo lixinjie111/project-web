@@ -2346,7 +2346,7 @@ html {
 }
 .ant-select-selection--single {
     position: relative;
-    height: 32px;
+    height: 40px;
     cursor: pointer;
 }
 .ant-select-selection--single .ant-select-selection__rendered {
@@ -2360,7 +2360,7 @@ html {
     display: block;
     margin-right: 11px;
     margin-left: 11px;
-    line-height: 30px;
+    line-height: 40px;
 }
 .ant-select-selection__rendered::after {
     display: inline-block;
@@ -2814,11 +2814,11 @@ html {
     position: relative;
     display: inline-block;
     width: 100%;
-    height: 32px;
-    padding: 4px 11px;
+    height: 40px;
+    padding: 9px 8px;
     color: rgba(0, 0, 0, 0.65);
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 40px;
     background-color: #fff;
     background-image: none;
     border: 1px solid #C6CBDE;
@@ -6613,7 +6613,7 @@ a.ant-btn-sm {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    color: rgba(0, 0, 0, 0.65);
+    color: #636E95;
     font-size: 14px;
     font-variant: tabular-nums;
     line-height: 1.5;
@@ -15320,11 +15320,11 @@ textarea.ant-time-picker-input {
     font-size: 14px;
     line-height: 1.5;
 }
-.ant-form-item-required::before {
+.ant-form-item-required::after {
     display: inline-block;
-    margin-right: 4px;
-    color: #f5222d;
-    font-size: 14px;
+    margin-left: 4px;
+    color: #FB343E;
+    font-size: 12px;
     font-family: SimSun, sans-serif;
     line-height: 1;
     content: '*';
@@ -15336,10 +15336,10 @@ textarea.ant-time-picker-input {
     color: #636E95;
 }
 .ant-form-item-label > label::after {
-    content: ':';
-    position: relative;
-    top: -0.5px;
-    margin: 0 8px 0 2px;
+    /*content: '：';*/
+    /*position: relative;*/
+    /*top: -0.5px;*/
+    /*margin: 0 8px 0 2px;*/
 }
 .ant-form-item-label > label.ant-form-item-no-colon::after {
     content: ' ';
@@ -15386,7 +15386,8 @@ textarea.ant-time-picker-input {
 .ant-form-item-label {
     display: inline-block;
     overflow: hidden;
-    line-height: 39.9999px;
+    /*line-height: 39.9999px;*/
+    margin-bottom: 8px;
     white-space: nowrap;
     text-align: right;
     vertical-align: middle;
@@ -15401,7 +15402,7 @@ textarea.ant-time-picker-input {
 .ant-form-extra {
     clear: both;
     min-height: 22px;
-    margin-top: -2px;
+    margin-top: 2px;
     color: rgba(0, 0, 0, 0.45);
     font-size: 14px;
     line-height: 1.5;
@@ -16106,11 +16107,11 @@ form:not(.ant-form-vertical) .ant-input-group-wrapper {
     font-size: 14px;
     line-height: 1.5;
 }
-.ant-form-item-required::before {
+.ant-form-item-required::after {
     display: inline-block;
-    margin-right: 4px;
-    color: #f5222d;
-    font-size: 14px;
+    margin-left: 4px;
+    color: #FB343E;
+    font-size: 12px;
     font-family: SimSun, sans-serif;
     line-height: 1;
     content: '*';
@@ -16122,10 +16123,10 @@ form:not(.ant-form-vertical) .ant-input-group-wrapper {
     color: #636E95;
 }
 .ant-form-item-label > label::after {
-    content: ':';
-    position: relative;
-    top: -0.5px;
-    margin: 0 8px 0 2px;
+    /*content: '：';*/
+    /*position: relative;*/
+    /*top: -0.5px;*/
+    /*margin: 0 8px 0 2px;*/
 }
 .ant-form-item-label > label.ant-form-item-no-colon::after {
     content: ' ';
@@ -16172,7 +16173,8 @@ form:not(.ant-form-vertical) .ant-input-group-wrapper {
 .ant-form-item-label {
     display: inline-block;
     overflow: hidden;
-    line-height: 39.9999px;
+    /*line-height: 39.9999px;*/
+    margin-bottom: 8px;
     white-space: nowrap;
     text-align: right;
     vertical-align: middle;
@@ -16187,7 +16189,7 @@ form:not(.ant-form-vertical) .ant-input-group-wrapper {
 .ant-form-extra {
     clear: both;
     min-height: 22px;
-    margin-top: -2px;
+    margin-top: 2px;
     color: rgba(0, 0, 0, 0.45);
     font-size: 14px;
     line-height: 1.5;

@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21755211",
+      "name": "校验",
+      "font_class": "xiaoyan1",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "21670306",
+      "name": "右2",
+      "font_class": "you2",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "21670302",
+      "name": "下2",
+      "font_class": "xia2",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
       "icon_id": "21565921",
       "name": "箭头左",
       "font_class": "jiantouzuo",

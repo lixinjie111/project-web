@@ -29,10 +29,10 @@
                         <p class="table-title">关闭时间</p>
                         <IconToolTip v-if="data.row.remark" class="table-tip" iconName="icontishi" :content="data.row.remark"></IconToolTip>
                     </div>
-                    <div slot="action" class="table-action">
-                        <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit"></IconToolTip>
-                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="handleClose"></IconToolTip>
-                        <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel"></IconToolTip>
+                    <div slot="action" slot-scope="data" class="table-action">
+                        <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
+                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="handleClose(data.row)"></IconToolTip>
+                        <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)"></IconToolTip>
                     </div>
                 </ListTable>
                 <Pagination v-if="total > pageSize"
@@ -41,24 +41,26 @@
                             @pagination-change-page="handleChangePage"></Pagination>
             </div>
         </div>
-        <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="left" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
-
+        <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
+            <AddForm slot="content"></AddForm>
+        </Modal>
+        <Modal :width="420" :isShow="showCloseModal" :title="closeModal.modalTitle" :okText="closeModal.okText" :cancelText="closeModal.cancelText" headeralgin="left" @modal-sure="handleCloseSubmit" @modal-cancel="handleCloseCancel">
+            <closeForm slot="content"></closeForm>
         </Modal>
     </div>
 </template>
 <script>
-    // import HeaderNav from '@/components/MenuNav.vue'
-    import ContentHeader from '@/components/ContentHeader.vue'
     import BasicTabs from "@/components/tabs/BasicTabs";
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
-    import Pagination from '@/components/Pagination'
     import Modal from '@/components/Modal.vue'
+    import AddForm from "./components/addForm";
+    import closeForm from "./components/closeForm";
 
     export default {
         name: 'overview',
-        components: {Modal, Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader},
+        components: {closeForm, AddForm, Modal, IconToolTip, TextToolTip, ListTable, BasicTabs},
         data() {
             return {
                 tabList: [
@@ -144,10 +146,16 @@
                 total: 50, // 总数据条数
                 pageSize: 10, // 页面数据size
                 curPageNum: 1, // 当前页码
-                isShowModal: false,
-                modal: {
+                showAddModal: false,
+                addModal: {
                     modalTitle: '添加产品',
                     okText:'保存',
+                    cancelText:'取消'
+                },
+                showCloseModal: false,
+                closeModal: {
+                    modalTitle: '关闭产品线',
+                    okText:'关闭',
                     cancelText:'取消'
                 }
             }
@@ -164,29 +172,56 @@
                 this.curPageNum = pageNum;
                 this.getList();
             },
+            // 获取产品列表
             getList() {
 
             },
+            // 切换产品状态
             handleChangeTab(index) {
                 console.log(index);
             },
+            // 添加产品
             handleAdd() {
-               this.isShowModal = true;
+               this.showAddModal = true;
             },
-            handleEdit() {
-                console.log('edit');
+            // 编辑产品
+            handleEdit(item) {
+                this.showAddModal = true;
             },
-            handleClose() {
-                console.log('close');
+            // 关闭产品
+            handleClose(item) {
+                this.showCloseModal = true;
             },
-            handleDel() {
-                console.log('del');
+            // 删除产品
+            handleDel(item) {
+                this.$confirms({
+                    title: '提示',
+                    message: `您确定要删除 ${item.productName} 吗？`,
+                    okText: '确认删除',
+                    onOk(){
+
+                    },
+                    cancelText: '取消',
+                    onCancel() {
+
+                    }
+                });
             },
-            handleSubmit() {
-                this.isShowModal = false;
+            // 添加、编辑产品保存
+            handleAddSubmit() {
+                this.showAddModal = false;
             },
-            handleCancel() {
-                this.isShowModal = false;
+            // 添加、编辑产品取消
+            handleAddCancel() {
+                this.showAddModal = false;
+            },
+            // 关闭产品保存
+            handleCloseSubmit() {
+                this.showCloseModal = false;
+            },
+            // 关闭产品取消
+            handleCloseCancel() {
+                this.showCloseModal = false;
             }
         }
     }
