@@ -15,25 +15,18 @@ export default {
     name: 'layout',
     components: {MenuSider},
     methods: {
-        getRoutes() { // 请求接口 按照接口去掉不需要字段
-            this.$store.dispatch('initTopMenu', menuList);
-            this.$store.dispatch('initPermission', ['operation', 'member'])
-            this.$store.dispatch('activeFirstMenu', menuList[0]);
-            this.$store.dispatch('activeSecondMenu', this.$store.state.system.firstMenu.children[0]); // 修改横向nav激活菜单
-            this.$store.dispatch('navMenu', this.$store.state.system.firstMenu.children);
-            this.$store.dispatch('activeNavMenu', this.$store.state.system.secondMenu);
-            
-            this.$router.replace({path: this.$store.state.system.activeNavMenu.path});
-            // for (let i = 0; i < this.$router.options.routes.length; i++) {
-            //     if (this.$router.options.routes[i].name === "home") {
-            //         this.$store.dispatch('initTopMenu', this.$router.options.routes[i].children);
-            //         this.$store.dispatch('activeFirstMenu', this.$router.options.routes[i].children[0]);
-            //         this.$store.dispatch('activeSecondMenu', this.$store.state.system.firstMenu.children[0]); // 修改横向nav激活菜单
-            //         this.$store.dispatch('navMenu', this.$store.state.system.firstMenu.children);
-            //         this.$store.dispatch('activeNavMenu', this.$store.state.system.secondMenu);
-                    
-            //         this.$router.replace({path: this.$store.state.system.activeNavMenu.path});
-            //     }
+        async getRoutes() { 
+            // let {code, data, msg} = await this.$api.org.handleGetUserMenu();
+            // if(code == 0){
+                // 请求接口 按照接口去掉不需要字段
+                this.$store.dispatch('initTopMenu', menuList);
+                // this.$store.dispatch('initPermission', ['operation', 'member'])
+                this.$store.dispatch('activeFirstMenu', menuList[0]);
+                this.$store.dispatch('activeSecondMenu', this.$store.state.system.firstMenu.children[0]); // 修改横向nav激活菜单
+                this.$store.dispatch('navMenu', this.$store.state.system.firstMenu.children);
+                this.$store.dispatch('activeNavMenu', this.$store.state.system.secondMenu);
+                
+                this.$router.replace({path: this.$store.state.system.activeNavMenu.path});
             // }
         }
     },

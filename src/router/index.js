@@ -18,32 +18,18 @@ VueRouter.prototype.push = function push(location) {
 
 // 拦截路由，进行授权判断和缓存限制
 vueRouter.beforeEach((to, from, next) => {
-    setStoreMenu(to);
-    
-    if (to.meta.isNeedLogin) {
-        let {menuList} = store.state.system;
-        // TODO 验证用户是否登录，以及用户是否有访问该路由的权限
-        // if (menuList.indexOf(to.path) > -1 || to.path == '/') {
+    if (!to.meta?.isAuth) { // 不需要登录的页面
+        // 登录禁止重复登录
+        // if(store.state.users.accessToken && to.path.indexOf('/login')){
+
+        // } else{
             next()
-        // } else {
-        //     let redirectUrl = {path: '/login'};
-        //     redirectUrl = to.name !== 'login' ? {query: { redirect: to.fullPath }, ...redirectUrl} : redirectUrl;
-        //     next(redirectUrl)
         // }
+    } else if(to.meta?.isAuth && store.state.users.accessToken){
+        setStoreMenu(to, next);
     } else {
-        // if (menuList.indexOf(to.path) > -1 || to.path == '/') {
-            next()
-        // } else {
-            // next(false);
-        // }
+        next({ path: '/login', replace: true })
     }
-    
-    // TODO 如果没有登录，则跳转到登录界面
-    // if (!sessionStorage.getItem('accessToken')) {
-    //     let redirectUrl = {path: '/login'};
-    //     redirectUrl = to.name !== 'login' ? {query: { redirect: to.fullPath }, ...redirectUrl} : redirectUrl;
-    //     next(redirectUrl)
-    // }
 })
 
 // 重置title
@@ -57,22 +43,29 @@ vueRouter.afterEach((to) => {
     }
 })
 
-function setStoreMenu(to){
+function setStoreMenu(to, next){
     let path = to.path;
     let {permissionKey, entryPath} = to.meta;
-    let {menuList, menuMap, topMenu, firstMenu, secondMenu, permission} = store.state.system;
+    let {menuList, menuMap, topMenu, firstMenu, secondMenu, permission, activeNavMenu} = store.state.system;
     if(!topMenu.length) return; // vuex已经缓存菜单
     // 有些页面不在菜单列表，根据数据操作权限 能进入某些页面
     if(permission.indexOf(permissionKey) > -1) {
         getrouterPath(entryPath)
+        next();
         return ;
     } else if(menuList.indexOf(path) === -1 || path === '/'){
         // 默认地址
         setStore(topMenu[0], firstMenu.children[0], {}, firstMenu.children, secondMenu); // 修改菜单
+        console.log(activeNavMenu)
+        next({
+            path: activeNavMenu.path,
+            replace: true
+        })
         return ;
     } else if(menuList.indexOf(path) > -1) { // 有菜单权限 设置菜单
         // let activeFirstMenuIndex = topMenu.findIndex((item) => item.meta.permissionKey === permissionParent);
         getrouterPath(path);
+        next();
     } 
 }
 function getrouterPath(path){

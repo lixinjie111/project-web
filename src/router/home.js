@@ -15,7 +15,7 @@ let routes = [
         component: Login,
         meta: {
             title: '登录',
-            isNeedLogin: false
+            isAuth: false
         }
     },
     {
@@ -24,7 +24,7 @@ let routes = [
         component: Forgetpwd,
         meta: {
             title: '忘记密码',
-            isNeedLogin: false
+            isAuth: false
         }
     },
     {
@@ -33,7 +33,7 @@ let routes = [
         component: DefaultLayout,
         // level: 'top', // 顶层菜单
         meta: {
-            isNeedLogin: true, // 是否需要登录
+            isAuth: true, // 是否需要登录
         },
         children: [
             Org,

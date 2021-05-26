@@ -14,7 +14,10 @@
         <div class="btn" @click="handleGotoPage">管理部门结构</div>
       </div>
       <div class="userorg-right">
-        <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
+        <div class="userorg-table">
+          <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
+        </div>
+        <Pagination v-if="total > pageSize" :total="total" :curPageNum="curPageNum" :pageSize="pageSize" @pagination-change-pagesize="handleChangePageSize" @pagination-change-page="handleChangePage"></Pagination>
       </div>
       <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="center" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
         <a-form-model slot="content" ref="userForm"  class="user-form" layout="vertical" :model="form" :rules="rules">
@@ -25,29 +28,28 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="真实姓名" prop="name">
-                <a-input v-model="form.name" placeholder="真实姓名" />
+              <a-form-model-item label="真实姓名" prop="realName">
+                <a-input v-model="form.realName" placeholder="真实姓名" />
               </a-form-model-item>
             </a-col>
           </a-row>
           
-          <a-form-model-item label="部门" prop="depart">
+          <a-form-model-item label="部门" prop="deptId">
             <a-tree-select
-              v-model="form.depart"
+              v-model="form.deptId"
               style="width: 100%"
               :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+              :default-value ="form.deptId"
               :tree-data="treeList"></a-tree-select>
           </a-form-model-item>
 
-          <a-form-model-item prop="role">
+          <a-form-model-item prop="roleList">
             <template slot="label">
               <span>角色分组</span>
               <span class="second-title">(分组决定用户的权限列表)</span>
             </template>
-            <a-select mode="multiple" :default-value="form.role">
-              <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
-                {{ (i + 9).toString(36) + i }}
-              </a-select-option>
+            <a-select v-model="form.roleList" mode="multiple" :default-value="form.roleList">
+              <a-select-option v-for="item in roleList" :key="item.roleId">{{ item.roleName }}</a-select-option>
             </a-select>
           </a-form-model-item>
 
@@ -56,14 +58,15 @@
               <a-form-model-item prop="password">
                 <template slot="label">
                   <span>密码</span>
-                  <span class="second-title">(6位以上，包含大小写字母和数字)</span>
+                  <!-- <span class="second-title">(6位以上，包含大小写字母和数字)</span> -->
                 </template>
-                <a-input-password v-model="form.password" placeholder="密码"></a-input-password>
+                <a-input-password disabled v-model="form.password" placeholder="密码"></a-input-password>
+                <a-button :class="['reset', form.userId ? '': 'reset-disabled']" type="link" ghost @click="handleResetPassWord(form.userId)">重置密码</a-button>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="电话" prop="tel">
-                <a-input v-model="form.tel" placeholder="电话" />
+              <a-form-model-item label="电话" prop="phone">
+                <a-input v-model="form.phone" placeholder="电话" />
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -78,10 +81,10 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="性别" prop="sex">
-                <a-radio-group v-model="form.sex">
-                  <a-radio :style="radioStyle" value="Man">男</a-radio>
-                  <a-radio :style="radioStyle" value="Women">女</a-radio>
+              <a-form-model-item label="性别" prop="gender">
+                <a-radio-group v-model="form.gender">
+                  <a-radio :style="radioStyle" :value="0">男</a-radio>
+                  <a-radio :style="radioStyle" :value="1">女</a-radio>
                 </a-radio-group>
               </a-form-model-item>
             </a-col>
@@ -95,77 +98,18 @@
 import Tree from '@/components/Tree.vue';
 import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
+import Pagination from '@/components/Pagination.vue'
 export default {
   name: 'userorg',
-  components: {Tree, BasicTable, Modal},
+  components: {Tree, BasicTable, Modal, Pagination},
   data() {
     return {
-      total: 50, // 总数据条数
+      deptId: '', // 查询部门
+      total: 0, // 总数据条数
       pageSize: 10, // 页面数据size
       curPageNum: 1, // 当前页码
 
-      treeList: [
-        {
-          "id":"992307132",
-          // "value": "万科集团",
-          "name":"万科集团",
-          "scopedSlots":{
-              "name":"custom"
-          },
-        },
-        {
-            "id":"99230713",
-            // "value": "万科集团",
-            "name":"万科集团",
-            // ⚠️重点这这里⚠️每一条数据上都添加scopedSlots属性
-            "scopedSlots":{
-                "name":"custom"
-            },
-            "children":[
-                {
-                    "id":"99230992",
-                    // "value": "华东区域",
-                    "name":"华东区域",
-                    "scopedSlots":{
-                        "name":"custom"
-                    },
-                    "children":[
-                        {
-                            "id":"99230112",
-                            "name":"杭州万科",
-                            "scopedSlots":{
-                                "name":"custom"
-                            },
-                            "children":[],
-                        }
-                    ],
-                },
-                {
-                    "id":"99230993",
-                    "name":"华南区域",
-                    "scopedSlots":{
-                        "name":"custom"
-                    },
-                    "children":[],
-                },
-                {
-                    "id":"99231020",
-                    "name":"华北区域",
-                    "scopedSlots":{
-                      "name":"custom"
-                    },
-                    "children":[],
-                }
-            ],
-        },
-        {
-          "id":"9923071314",
-          "name":"万科集团",
-          "scopedSlots":{
-              "name":"custom"
-          },
-        }
-      ],
+      treeList: [], // 部门树
       replaceFields: {
         key: 'id',
         value: 'name',
@@ -176,25 +120,26 @@ export default {
       // 配置表格各字段
       setTableColumns: [
         {type: 'checkbox', width: '60'},
-        {title: '用户ID', field: 'name', showOverflow: true,},
-        {title: '真实姓名', field: 'name', showOverflow: true,},
-        {title: '用户姓名', field: 'name', showOverflow: true,},
-        {title: '职位', field: 'role'},
-        {title: '性别', field: 'sex'},
-        {title: '电话', field: 'time', showOverflow: true,},
-        {title: '最后登录', field: 'time', showOverflow: true,},
-        {title: '访问次数', field: 'time', showOverflow: true,},
-        {title: '冻结', field: 'flag', width: '70', 
+        {title: '用户ID', field: 'userId', showOverflow: true,},
+        {title: '真实姓名', field: 'realName', showOverflow: true,},
+        {title: '用户姓名', field: 'username', showOverflow: true,},
+        {title: '职位', field: 'position'},
+        {title: '性别', field: 'gender', formatter: ({cellValue}) => cellValue==0 ? '男' : '女'},
+        {title: '电话', field: 'phone', showOverflow: true,},
+        {title: '最后登录', field: 'lastLoginTime', showOverflow: true,},
+        {title: '访问次数', field: 'viewTimes', showOverflow: true,},
+        {title: '冻结', field: 'lockFlag', width: '70', 
           slots: {
             // 使用 JSX 渲染
             default: ({ row }) => {
+              let status = !Number(row.lockFlag); // 锁定标记：0 正常 9 已锁定
               return [
-                <a-switch size='small' v-model={row.flag} onClick={() => this.changeSwitch(row)}></a-switch>
+                <a-switch size='small' v-model={status} onClick={() => this.changeSwitch(row)}></a-switch>
               ]
             }
           }
         },
-        { title: '操作', field: 'flag', 
+        { title: '操作', field: '', 
           slots: {
             default: ({row, rowIndex}) => {
               return [
@@ -207,16 +152,7 @@ export default {
           }
         },
       ],
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '<span style="color:red">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', flag: true, time: 1600261774531, html1: '<span style="color:blue">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
-      ],
+      tableData: [],
       
       isShowModal: false, // 编辑 新增modal
       modal: {
@@ -224,6 +160,7 @@ export default {
         cancelText: '取消', 
         okText: '保存'
       },
+      roleList: [], // 角色列表
 
       radioStyle: {
         display: 'inline-block',
@@ -232,27 +169,25 @@ export default {
       }, 
       // form数据
       form: {
+        userId: '',
         username: '',
-        name: '',
-        depart: '',
+        realName: '',
+        deptName: '',
         password: '',
-        tel: '',
+        phone: '',
         position: '',
-        role: [],
-        sex: 1
+        roleList: [],
+        gender: 1
       },
        rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 5, message: '用户名长度3 到 5', trigger: 'blur' },
+          // { min: 3, max: 5, message: '用户名长度3 到 5', trigger: 'blur' },
         ],
-        name: [
+        realName: [
           { required: true, message: '请输入真实姓名', trigger: 'blur' },
-          { min: 3, max: 5, message: '真实姓名长度3 到 5', trigger: 'blur' },
+          // { min: 3, max: 5, message: '真实姓名长度3 到 5', trigger: 'blur' },
         ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ]
       },
     }
   },
@@ -262,32 +197,99 @@ export default {
       this.$router.push('/org/depart')
     },
 
+    // 查询部门树
+    async handleGetDepartTree(){
+      try {
+        let {code, data, msg} = await this.$api.org.getDeptTree();
+        if(code === 0){
+          this.treeList = data;
+        }
+      }catch(error){
+        console.log(error);
+      }
+    },
+    
+    // 查询部门人员列表
+    async handleGetUserList() {
+      try {
+        let {code, data} = await this.$api.org.getAdminUserList(this.deptId, this.curPageNum, this.pageSize);
+        if(code === 0){
+          this.total = data?.total || 0;
+          this.tableData = data?.records || [];
+        }
+      }catch(error){
+        console.log(error)
+      }
+    },
+
+    // 切换条目数量
+    handleChangePageSize(pageSize, pageNum) {
+      this.pageSize = pageSize;
+      if(pageNum) this.curPageNum = pageNum;
+      this.handleGetUserList();
+    },
+    // 切换当前页码
+    handleChangePage(pageNum){
+      this.curPageNum = pageNum;
+      this.handleGetUserList();
+    },
+
     // tree选择部门 查询部门下人员
     handleGetDepartUsers(departIds){
-      console.log(departIds)
+      this.deptId = departIds.length ? departIds[0] : '';
+      this.handleGetUserList();
     },
 
     // 切换冻结状态
-    changeSwitch(row){
-      console.log(row)
+    async changeSwitch(row){
+      console.log(row);
+      try {
+        let {code, data} = await this.$api.org.handlePutLockUser(row.userId, row.lockFlag === '0' ? 9 : 0);
+        if(code === 0) {
+          this.$message.success('hahah')
+        }
+      }catch(error){
+        console.log(error)
+      }
     },
 
     // 新增、编辑用户条目
     handleAddEditUser(type, row) {
       let reset = type == 'add' ? 
-        {username: '', name: '', depart: '', password: '', tel: '', position: '', role: [], sex: 1} 
-        : {id: row.id, username: row.name, name: row.name, depart: '', password: '', tel: '', position: '', role: [], sex: row.sex};
+        {userId: '', username: '', realName: '', deptId: '', password: '', phone: '', position: '', roleList: [], gender: 1} 
+        : {userId: row.userId, username: row.username, realName: row.realName, deptId: row.deptId, password: '', phone: row.phone, position: row.position, roleList: row.roleList.map(item => item.roleId), gender: row.gender};
       this.$set(this, 'form', reset);
+      console.log(this.treeList)
 
+      !this.roleList.length && this.handleGetAdminRoleList()
       this.isShowModal = true;
     },
 
+    // 获取角色列表
+    async handleGetAdminRoleList() {
+      try {
+        let {code, data} = await this.$api.org.getAdminRoleList();
+        if(code === 0){
+          this.roleList = data;
+        }
+      }catch(error){
+        console.log(error)
+      }
+    }, 
+
     // 校验新增 编辑用户信息
     handleSubmit() {
-      this.$refs.userForm.validate(valid => {
+      console.log(this.form.roleList)
+      this.$refs.userForm.validate(async valid => {
         if (valid) {
-          alert('submit!');
-          // 接口提交成功 isShow
+          // 保存 新增和编辑
+          let {userId, username, realName, deptId, roleList, phone, position, gender} = this.form;
+          let {code} = await this.$api.org.handlePostPutAdminUser(userId, username, realName, deptId, roleList, phone, position, gender);
+          if(code === 0) {
+            this.$message.success('保存成功！');
+            this.isShowModal = false; // 接口提交成功 isShow
+            this.handleGetUserList(); // 刷新用户列表
+          }
         } else {
           return false;
         }
@@ -301,8 +303,43 @@ export default {
 
     // 删除用户条目
     handleDelUser(row) {
-      console.log('row', row)
+      this.$confirms({
+        title: '提示',
+        message: `您确定要删除 ${row.realName} 吗？`,
+        okText: '确认删除',
+        onOk:() => {
+          this.$api.org.handleDelAdminUser(row.userId).then(response => {
+            let {code} = response;
+            if(code === 0){
+              this.$message.success('删除成功！');
+              this.handleGetUserList();
+            }else{
+              this.$message.error('删除失败！');
+            }
+          })
+        },
+        cancelText: '取消',
+        onCancel() {
+        }
+      });
     },
+
+    // 重置密码
+    async handleResetPassWord(userId) {
+      console.log(userId)
+      try {
+        let {code} = await this.$api.org.handleResetPassWord(userId);
+        if(code === 0) {
+          this.$message.success('密码重置成功！')
+        }
+      }catch (error) {
+        console.log(error)
+      }
+    }
+  },
+  mounted(){
+    this.handleGetDepartTree();
+    this.handleGetUserList();
   }
 }
 </script>
@@ -359,11 +396,16 @@ export default {
   }
   .userorg-right {
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     flex: 1;
     height: calc(100vh - 163px);
     background: #fff;
     border-radius: 4px;
     border: 1px solid #EAEDF7;
+    .userorg-table {
+      flex: 1;
+    }
     .operations {
       .iconfont {
         display: inline-block;
@@ -399,6 +441,15 @@ export default {
       font-family: SimSun, sans-serif;
       line-height: 1;
       content: '*';
+    }
+  }
+  .reset{
+    position: absolute;
+    right: 16px;
+    color: #2373FF;
+    font-size: 12px;
+    &.reset-disabled{
+      cursor: not-allowed;
     }
   }
 }

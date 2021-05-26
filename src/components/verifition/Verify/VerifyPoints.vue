@@ -140,14 +140,14 @@ export default {
                 //等创建坐标执行完
                 setTimeout(async () => {
                     //发送后端请求
-                    var captchaVerification = this.secretKey? encryptByAES(this.backToken+'---'+JSON.stringify(this.checkPosArr),this.secretKey):this.backToken+'---'+JSON.stringify(this.checkPosArr)
+                    var captchaVerification = this.secretKey? encryptByAES(this.backToken+'---'+JSON.stringify(this.checkPosArr),this.secretKey, '', 'ECB', 'Pkcs7'):this.backToken+'---'+JSON.stringify(this.checkPosArr)
                     let params = {
                         captchaType:this.captchaType,
-                        "pointJson":this.secretKey? encryptByAES(JSON.stringify(this.checkPosArr),this.secretKey):JSON.stringify(this.checkPosArr),
+                        "pointJson":this.secretKey? encryptByAES(JSON.stringify(this.checkPosArr),this.secretKey, '', 'ECB', 'Pkcs7'):JSON.stringify(this.checkPosArr, 'XwKsGlMcdPMEhR1B', '', 'ECB', 'Pkcs7'),
                         "token":this.backToken
                     }
                     try {
-                        let {code, data} = await api.login.handleCheckCode(params.backToken, params.pointJson);
+                        let {code, data} = await api.login.handleCheckCode(params.backToken, params.pointJson, this.captchaType);
                         if(code === 0) {
                             if (data.repCode == "0000") {
                                 this.barAreaColor = '#4cae4c'

@@ -5,12 +5,12 @@
     </div>
     <div class="login-content">
       <div class="login-title">欢迎登录项目管理平台</div>
-      <a-form-model ref="loginForm" :model="form" class="login-form" @submit="handleSubmit">
+      <a-form-model ref="loginForm" :model="form" class="login-form" @submit="handleValidate">
         <a-form-model-item>
           <a-input v-model="form.username" placeholder="用户名/手机号" />
         </a-form-model-item>
         <a-form-model-item>
-          <a-input v-model="form.password" placeholder="密码" />
+          <a-input-password v-model="form.password" placeholder="密码" />
           <span class="login-form-forgot" @click="handleGotoPage">忘记密码？</span
           >
         </a-form-model-item>
@@ -24,13 +24,13 @@
           >
         </a-form-model-item>
       </a-form-model>
-      <Verify 
-        @success="success" 
+      <!-- <Verify 
+        @success="handleSubmit" 
         mode="pop"     
         captchaType="blockPuzzle"    
         :imgSize="{ width: '330px', height: '155px' }" 
         ref="verify"
-        ></Verify>
+        ></Verify> -->
     </div>
   </div>
 </template>
@@ -60,30 +60,28 @@ export default {
             path: '/forgetpwd'
         })
     },
-    handleSubmit(e) {
+    handleValidate(e) {
       e.preventDefault();
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.$refs.verify.show();
+          // this.$refs.verify.show();
+          this.handleSubmit()
         } else {
-
           return false;
         }
       });
     },
-    async success(){
-      try{
-        let pwd = encryptByAES(this.form.password, 'yuanzhi2teamwork');
-        let {code, data, msg} = await api.login.handleGetToken(this.form.username, pwd);
-        if(code === 0){
-
-        } else {
-          this.$message.error(msg);
-        }
-      }catch(error) {
+    handleSubmit(){
+      let pwd = encryptByAES(this.form.password, 'yuanzhi2teamwork', 'yuanzhi2teamwork');
+      api.login.handleGetToken(this.form.username, pwd).then(response => {
+        console.log(response)
+        this.$store.dispatch('setAccessToken', response.access_token)
+        this.$store.dispatch('setRefreshToken', response.refresh_token)
+        this.$store.dispatch('setUserInfo', response.user_info)
+        this.$router.push({ path: '/' })
+      }).catch(error => {
         console.log(error)
-      }
-      
+      })
     }
   },
   mounted() {},
@@ -122,6 +120,9 @@ export default {
       width: 100%;
       height: 264px;
       .ant-input {
+        height: 40px;
+      }
+      .ant-input-affix-wrapper .ant-input:not(:last-child) {
         height: 40px;
       }
       .ant-btn {

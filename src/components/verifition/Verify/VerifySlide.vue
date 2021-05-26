@@ -242,15 +242,16 @@
                 //判断是否重合
                 if (this.status && this.isEnd == false) {
                     var moveLeftDistance = parseInt((this.moveBlockLeft || '').replace('px', ''));
-                    moveLeftDistance = moveLeftDistance * 310/ parseInt(this.setSize.imgWidth)
+                    moveLeftDistance = moveLeftDistance * 310/ parseInt(this.setSize.imgWidth);
                     let params = {
                         captchaType:this.captchaType,
-                        "pointJson":this.secretKey ? encryptByAES(JSON.stringify({x:moveLeftDistance,y:5.0}),this.secretKey):JSON.stringify({x:moveLeftDistance,y:5.0}),
+                        "pointJson": this.secretKey ? encryptByAES(JSON.stringify({x:moveLeftDistance,y:5.0}), this.secretKey, '', 'ECB', 'Pkcs7'):JSON.stringify({x:moveLeftDistance,y:5.0}, 'XwKsGlMcdPMEhR1B', '', 'ECB', 'Pkcs7'),
                         "token":this.backToken
                     }
                     try {
-                        api.login.handleCheckCode(params.backToken, params.pointJson).then(data => {
-                            if (data.repCode == "0000") {
+                        api.login.handleCheckCode(params.token, params.pointJson, this.captchaType).then(res => {
+                            let {code, data} = res;
+                            if (code === 0  && data.repCode == "0000") {
                                 this.moveBlockBackgroundColor = '#5cb85c'
                                 this.leftBarBorderColor = '#5cb85c'
                                 this.iconColor = '#fff'
@@ -265,7 +266,7 @@
                                 }
                                 this.passFlag = true
                                 this.tipWords = `${((this.endMovetime-this.startMoveTime)/1000).toFixed(2)}s验证成功`
-                                var captchaVerification = this.secretKey ? encryptByAES(this.backToken+'---'+JSON.stringify({x:moveLeftDistance,y:5.0}),this.secretKey):this.backToken+'---'+JSON.stringify({x:moveLeftDistance,y:5.0})
+                                var captchaVerification = this.secretKey ? encryptByAES(this.backToken+'---'+JSON.stringify({x:moveLeftDistance,y:5.0}),this.secretKey, '', 'ECB', 'Pkcs7'):this.backToken+'---'+JSON.stringify({x:moveLeftDistance,y:5.0})
                                 setTimeout(()=>{
                                     this.tipWords = ""
                                     this.$parent.closeBox();
@@ -319,14 +320,9 @@
             },
 
             // 请求背景图片和验证图片
-            getPictrue(){
-                // let data = {
-                //     captchaType:this.captchaType,
-                //     clientUid: localStorage.getItem('slider'), 
-                //     ts: Date.now(), // 现在的时间戳
-                // }
+            async getPictrue(){
                 try {
-                    let {code, data} = api.login.handleGetCode();
+                    let {code, data} = await api.login.handleGetCode();
                     if(code === 0){
                         if (data.repCode == "0000") {
                             this.backImgBase = data.repData.originalImageBase64

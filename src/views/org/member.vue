@@ -143,7 +143,7 @@ export default {
     // 请求部门树
     async handleGetDeptTree() {
       try{
-        let {code, data, msg} = api.org.getDeptTree();
+        let {code, data, msg} = await this.$api.org.getDeptTree();
         if(code === 0) {
           this.treeList = data;
         }else{
@@ -156,7 +156,7 @@ export default {
     // 请求部门 分组成员列表
     async handleGetDeptRoleList (deptId){
       try{
-        let {code, data, msg} = api.org.handleGetDeptRoleList(this.roleId, deptId);
+        let {code, data, msg} = await this.$api.org.handleGetDeptRoleList(this.roleId, deptId);
         if(code === 0){
           this.joinUsers = data.joinUsers;
           this.unJoinUsers = data.unJoinUsers;
@@ -191,7 +191,7 @@ export default {
     async handleSave(){
       try {
         let diff = this.allJoinUserIdList.filter(item=>!this.checkJoinList.some(ele=>ele===item));
-        let {code, data, msg} = api.org.handlePostModifyUserRole(this.roleId, this.checkUnJoinList, diff);
+        let {code, data, msg} = await this.$api.org.handlePostModifyUserRole(this.roleId, this.checkUnJoinList, diff);
         if(code === 0 ){
           this.$message.success(msg);
         } else {

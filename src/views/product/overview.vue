@@ -1,8 +1,8 @@
 <template>
     <div class="layout">
-        <HeaderNav>
+        <MenuNav>
             <div slot="nav-left" class="nav-left-title">概览</div>
-        </HeaderNav>
+        </MenuNav>
         <div class="overview-container">
             <ContentHeader type="title" title="产品">
                 <div slot="operation">
@@ -47,7 +47,7 @@
     </div>
 </template>
 <script>
-    import HeaderNav from '@/components/MenuNav.vue'
+    // import HeaderNav from '@/components/MenuNav.vue'
     import ContentHeader from '@/components/ContentHeader.vue'
     import BasicTabs from "@/components/tabs/BasicTabs";
     import ListTable from "@/components/tables/ListTable";
@@ -58,7 +58,7 @@
 
     export default {
         name: 'overview',
-        components: {Modal, Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader, HeaderNav},
+        components: {Modal, Pagination, IconToolTip, TextToolTip, ListTable, BasicTabs, ContentHeader},
         data() {
             return {
                 tabList: [

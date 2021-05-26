@@ -147,7 +147,7 @@ export default {
     handleSubmit(){
       this.$refs.roleForm.validate(async (valid) => {
         if (valid) {
-          let {code, data, msg} = api.org.handlePostPutRoleInfo(form.roleName, form.roleId);
+          let {code, data, msg} = this.$api.org.handlePostPutRoleInfo(form.roleName, form.roleId);
           if(code === 0){
             this.handleCancel();
             this.$message.success(msg);
@@ -170,7 +170,7 @@ export default {
         message: `您确定要删除 ${role.roleName} 吗？`,
         okText: '确认删除',
         onOk(){
-          api.org.handleDelRole(role.roleId).then((code, data, msg) => {
+          this.$api.org.handleDelRole(role.roleId).then((code, data, msg) => {
             if(code === 0){
               this.$message.success('删除成功！');
               this.getRoleList();
