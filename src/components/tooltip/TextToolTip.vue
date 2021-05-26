@@ -1,6 +1,6 @@
 <template>
     <div class="text-tooltip">
-        <a-tooltip :visible="isShowTooltip">
+        <a-tooltip :visible="isShowTooltip" :destroyTooltipOnHide="true">
             <span slot="title">{{content}}</span>
             <p :class="['over-flow', className]" @mouseenter="onMouseEnter(refName)" @mouseleave="onMouseLeave()">
                 <span :ref="refName">{{content||'-'}}</span>

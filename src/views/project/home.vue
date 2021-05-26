@@ -4,32 +4,37 @@
             <div slot="nav-left" class="nav-left-title">首页</div>
         </MenuNav>
         <div class="home-container">
-        <ContentHeader type="title" title="项目">
-            <div slot="operation">
-                <a-button class="export-btn mr-16">
-                    <span class="iconfont icondaochu"></span>
-                    导出
-                </a-button>
-                <a-button type="primary">
-                    <span class="iconfont iconjia"></span>
-                    添加项目
-                </a-button>
+            <ContentHeader type="title" title="项目">
+                <div slot="operation">
+                    <a-button class="export-btn mr-16">
+                        <span class="iconfont icondaochu"></span>
+                        导出
+                    </a-button>
+                    <a-button type="primary" @click="handleAdd">
+                        <span class="iconfont iconjia"></span>
+                        添加项目
+                    </a-button>
+                </div>
+            </ContentHeader>
+            <div class="home-content">
+                <BasicTabs :tabList="tabList"></BasicTabs>
+                <ProjectList :list="listData" :page="pageInfo"></ProjectList>
             </div>
-        </ContentHeader>
-        <div class="home-content">
-            <BasicTabs :tabList="tabList"></BasicTabs>
-            <ProjectList :list="listData" :page="pageInfo"></ProjectList>
         </div>
-    </div>
+        <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
+            <AddForm slot="content"></AddForm>
+        </Modal>
     </div>
 </template>
 <script>
     import BasicTabs from "@/components/tabs/BasicTabs";
     import ProjectList from "./components/list";
+    import Modal from '@/components/Modal.vue'
+    import AddForm from "./components/addForm";
 
     export default {
         name: 'home',
-        components: {ProjectList, BasicTabs},
+        components: {AddForm, Modal, ProjectList, BasicTabs},
         data() {
             return {
                 tabList: [
@@ -88,13 +93,30 @@
                     total: 50, // 总数据条数
                     pageSize: 10, // 页面数据size
                     curPageNum: 1, // 当前页码
-                }
+                },
+                showAddModal: false,
+                addModal: {
+                    modalTitle: '添加项目',
+                    okText:'保存',
+                    cancelText:'取消'
+                },
             }
         },
         methods: {
             getList() {
 
-            }
+            },
+            handleAdd() {
+                this.showAddModal = true;
+            },
+            // 添加项目保存
+            handleAddSubmit() {
+                this.showAddModal = false;
+            },
+            // 添加项目取消
+            handleAddCancel() {
+                this.showAddModal = false;
+            },
         }
     }
 </script>

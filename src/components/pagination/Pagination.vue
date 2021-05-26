@@ -4,7 +4,7 @@
     <a-select-option v-for="(item, index) in pageSizeOptions" :key="index" :value="`每页 ${item} 条`">每页 {{ item }} 条</a-select-option>
   </a-select>
   <a-pagination
-    v-model="curPageNum"
+    v-model="curPage"
     :total="total"
     :page-size="pageSize"
     :show-total="total => `共${total}条 到 `"
@@ -17,6 +17,11 @@
 <script>
 export default {
   name: 'Pagination',
+  data() {
+    return {
+      curPage: this.curPageNum
+    }
+  },
   props: {
     curPageNum: {
       type: Number,
@@ -37,7 +42,6 @@ export default {
       required: true,
       default: 10
     },
-    
   },
   methods: {
     handleChangePageSize(value) {
@@ -45,7 +49,7 @@ export default {
       if(reg.test(value)) {
         let pageSize = RegExp.$2;
         let totalPageNum = Math.ceil(this.total/pageSize);
-        if(totalPageNum < this.curPageNum) {
+        if(totalPageNum < this.curPage) {
           this.$emit('pagination-change-pagesize', Number(pageSize), totalPageNum)
         } else {
           this.$emit('pagination-change-pagesize', pageSize);

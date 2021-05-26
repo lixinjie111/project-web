@@ -14,33 +14,61 @@
                 <div class="table-progress-text">{{data.row.progress}}%</div>
                 <a-progress :percent="data.row.progress" :strokeColor="statusColor(data.row.status)"/>
             </div>
-            <div slot="action" class="table-action">
-                <IconToolTip iconName="iconbofang" content="开始" @action="handleStart"></IconToolTip>
-                <IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay"></IconToolTip>
-                <IconToolTip iconName="iconzanting" content="搁置" @action="handlePause"></IconToolTip>
-                <IconToolTip iconName="iconkaiguan" content="完成" @action="handleFinish"></IconToolTip>
-                <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit"></IconToolTip>
-                <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel"></IconToolTip>
+            <div slot="action" slot-scope="data" class="table-action">
+                <IconToolTip iconName="iconbofang" content="开始" @action="handleStart(data.row)"></IconToolTip>
+                <!--<IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay(data.row)"></IconToolTip>-->
+                <IconToolTip iconName="iconzanting" content="搁置" @action="handlePause(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconkaiguan" content="完成" @action="handleFinish(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)"></IconToolTip>
             </div>
         </ListTable>
-        <Pagination v-if="page.total > page.pageSize"
-                    :total="page.total" :curPageNum="page.curPageNum" :pageSize="page.pageSize"
+        <Pagination v-if="total > pageSize"
+                    :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                     @pagination-change-pagesize="handleChangePageSize"
                     @pagination-change-page="handleChangePage"></Pagination>
-    </div>
 
+        <Modal :isShow="showEditModal" :title="editModal.modalTitle" :okText="editModal.okText" :cancelText="editModal.cancelText" headeralgin="left" @modal-sure="handleEditSubmit" @modal-cancel="handleEditCancel">
+            <AddForm slot="content"></AddForm>
+        </Modal>
+        <Modal :width="420" :isShow="showStartModal" :title="startModal.modalTitle" :okText="startModal.okText" :cancelText="startModal.cancelText" headeralgin="left" @modal-sure="handleStartSubmit" @modal-cancel="handleStartCancel">
+            <RemarkForm slot="content" name="startForm"></RemarkForm>
+        </Modal>
+        <Modal :width="420" :isShow="showPauseModal" :title="pauseModal.modalTitle" :okText="pauseModal.okText" :cancelText="pauseModal.cancelText" headeralgin="left" @modal-sure="handlePauseSubmit" @modal-cancel="handlePauseCancel">
+            <RemarkForm slot="content" name="pauseForm"></RemarkForm>
+        </Modal>
+        <Modal :width="420" :isShow="showFinishModal" :title="finishModal.modalTitle" :okText="pauseModal.okText" :cancelText="finishModal.cancelText" headeralgin="left" @modal-sure="handleFinishSubmit" @modal-cancel="handleFinishCancel">
+            <RemarkForm slot="content" name="finishForm"></RemarkForm>
+        </Modal>
+    </div>
 </template>
 
 <script>
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
+    import Modal from '@/components/Modal.vue'
+    import AddForm from "./addForm";
+    import RemarkForm from "./remarkForm";
 
     export default {
         name: "list",
-        components: {IconToolTip, TextToolTip, ListTable},
+        components: {RemarkForm, AddForm, Modal, IconToolTip, TextToolTip, ListTable},
+        props: {
+            list: {
+                type: Array,
+                default: () => []
+            },
+            page: {
+                type: Object,
+                default: () => {}
+            }
+        },
         data() {
             return {
+                total: this.page.total,
+                pageSize: this.page.pageSize,
+                curPageNum: this.page.curPageNum,
                 columns: [
                     {
                         slot: 'projectName',
@@ -81,18 +109,31 @@
                         slot: 'action',
                         width: '16'
                     }
-                ]
-            }
-        },
-        props: {
-            list: {
-                type: Array,
-                default: () => []
-            },
-            page: {
-                type: Object,
-                default: () => {
-                }
+                ],
+                showEditModal: false,
+                editModal: {
+                    modalTitle: '编辑项目',
+                    okText:'保存',
+                    cancelText:'取消'
+                },
+                showStartModal: false,
+                startModal: {
+                    modalTitle: '开始项目',
+                    okText:'开始',
+                    cancelText:'取消'
+                },
+                showPauseModal: false,
+                pauseModal: {
+                    modalTitle: '搁置项目',
+                    okText:'搁置',
+                    cancelText:'取消'
+                },
+                showFinishModal: false,
+                finishModal: {
+                    modalTitle: '完成项目',
+                    okText:'完成',
+                    cancelText:'取消'
+                },
             }
         },
         methods: {
@@ -120,37 +161,80 @@
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
                 if (pageNum) this.curPageNum = pageNum;
-                this.getList();
+                this.$parent.getList();
             },
             // 切换当前页码
             handleChangePage(pageNum) {
                 this.curPageNum = pageNum;
-                this.getList();
+                this.$parent.getList();
             },
             // 开始项目
-            handleStart() {
-
+            handleStart(item) {
+                this.showStartModal = true;
             },
             // 延期项目
-            handleDelay() {
-
-            },
+            // handleDelay(item) {
+            //
+            // },
             // 搁置项目
-            handlePause() {
-
+            handlePause(item) {
+                this.showPauseModal = true;
             },
             // 完成项目
-            handleFinish() {
-
+            handleFinish(item) {
+                this.showFinishModal = true;
             },
             // 编辑项目
-            handleEdit() {
-
+            handleEdit(item) {
+                this.showEditModal = true;
             },
             // 删除项目
-            handleDel() {
+            handleDel(item) {
+                this.$confirms({
+                    title: '提示',
+                    message: `您确定要删除 ${item.projectName} 吗？`,
+                    okText: '确认删除',
+                    onOk(){
 
-            }
+                    },
+                    cancelText: '取消',
+                    onCancel() {
+
+                    }
+                });
+            },
+            // 编辑项目保存
+            handleEditSubmit() {
+                this.showEditModal = false;
+            },
+            // 编辑项目取消
+            handleEditCancel() {
+                this.showEditModal = false;
+            },
+            // 开始项目保存
+            handleStartSubmit() {
+                this.showStartModal = false;
+            },
+            // 开始项目取消
+            handleStartCancel() {
+                this.showStartModal = false;
+            },
+            // 搁置项目保存
+            handlePauseSubmit() {
+                this.showPauseModal = false;
+            },
+            // 搁置项目取消
+            handlePauseCancel() {
+                this.showPauseModal = false;
+            },
+            // 完成项目保存
+            handleFinishSubmit() {
+                this.showFinishModal = false;
+            },
+            // 完成项目取消
+            handleFinishCancel() {
+                this.showFinishModal = false;
+            },
         }
 
     }
