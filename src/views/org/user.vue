@@ -98,10 +98,10 @@
 import Tree from '@/components/Tree.vue';
 import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
-import Pagination from '@/components/Pagination.vue'
+
 export default {
   name: 'userorg',
-  components: {Tree, BasicTable, Modal, Pagination},
+  components: {Tree, BasicTable, Modal},
   data() {
     return {
       deptId: '', // 查询部门
