@@ -19,13 +19,13 @@ export default {
   activeNavMenu ({commit}, menu) {
     commit(types.ACTIVE_NAV_MENU, menu)
   },
-  initUserInfo ({commit}, userInfo) {
-    commit(types.INIT_USER_INFO, userInfo)
-  },
-  removeUserInfo ({commit}) {
-    commit(types.REMOVE_USER_INFO)
-  },
   initPermission({commit}, permissionList){
       commit(types.INIT_PERMISSION, permissionList)
+  },
+  removeMenuData({commit}) {
+    commit(types.REMOVE_MENU_DATA)
+  },
+  removePermission({commit}){
+    commit(types.REMOVE_PERMISSION)
   }
 }

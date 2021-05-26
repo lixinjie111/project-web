@@ -339,7 +339,7 @@ export default {
     // 请求菜单及页面操作handleGetMenuTree列表
     async handleGetMenuList() {
       try{
-        let {code, data, msg} = api.org.handleGetMenuTree();
+        let {code, data, msg} = await this.$api.org.handleGetMenuTree();
         // this.
       }catch(err){
         console.log(err)
@@ -348,7 +348,7 @@ export default {
     // 请求用户已勾选
     async handleGetRoleMenuTree(){
       try {
-        let {code, data, msg} = await api.org.handleGetRoleMenuTree(this.roleId);
+        let {code, data, msg} = await this.$api.org.handleGetRoleMenuTree(this.roleId);
         if(code === 0){
           this.checkedList = data;
         }else{
@@ -361,7 +361,7 @@ export default {
     // 保存
     async handleSave(){
       try {
-        let {code, data, msg} = await api.org.handlePutRoleMenu(this.roleId, this.checkedList);
+        let {code, data, msg} = await this.$api.org.handlePutRoleMenu(this.roleId, this.checkedList);
         if(code === 0){
           this.$message.success(msg);
         }else{

@@ -1,4 +1,3 @@
-import menu from '../../utils/menu'
 import * as types from './mutation-types'
 
 export default {
@@ -23,23 +22,21 @@ export default {
   [types.ACTIVE_NAV_MENU](state, menu) {
     state.activeNavMenu = menu
   },
-  // [types.ACTIVE_HOME_PAGE] (state) {
-  //   let menuPath = []
-  //   menuPath.push({
-  //     name: '首页'
-  //   })
-  //   state.menuPath = menuPath
-    
-  //   state.secondMenu = {}
-  // },
-  [types.INIT_USER_INFO] (state, userInfo) {
-    state.userInfo = userInfo
-  },
-  [types.REMOVE_USER_INFO] (state) {
-    state.userInfo = {}
-  },
   [types.INIT_PERMISSION] (state, permissionList){
     state.permission = permissionList
+  },
+  [types.REMOVE_MENU_DATA] (state){
+    state.menuMap = {}; // 所有的菜单Map，键值为层级 level-1,
+    state.menuList = []; // 所有菜单列表
+    state.topMenu = []; // 顶级节点
+    state.firstMenu = {}; // 当前的一级菜单 --- 当前激活侧边栏
+    state.secondMenu = {}; // 当前的二级菜单 --- 横向算是二级菜单或三级菜单
+    state.thirdMenu = {}; // 当前的三级菜单
+    state.navMenu = []; // 当前横向菜单 --- 横向菜单
+    state.activeNavMenu = {}; // 横向激活菜单
+  },
+  [types.REMOVE_PERMISSION](state) {
+    state.permission = [];
   }
 }
 

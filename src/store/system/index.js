@@ -10,7 +10,6 @@ const state = {
   thirdMenu: {}, // 当前的三级菜单
   navMenu: [], // 当前横向菜单 --- 横向菜单
   activeNavMenu: {}, // 横向激活菜单
-  userInfo: {},
   permission: [] ,// 页面按钮权限
 }
 

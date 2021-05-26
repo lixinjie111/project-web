@@ -1,14 +1,90 @@
 import httpaxios from '@/utils/http'
 
 /**
+ * 获取用户菜单
+ * @param {*} parentId 
+ * @returns 
+ */
+export function handleGetUserMenu (parentId) {
+  return httpaxios.get('/admin/menu',{
+    params: {parentId},
+  })
+}
+/**
  * 组织-部门树
  * @returns 
  */
 export function getDeptTree(){
   return httpaxios.get('/admin/dept/tree', {})
 }
+
 /**
- * 组织-角色 角色列表
+ * 获取人员列表
+ * @param {*} deptId 部门id
+ * @param {*} current 当前页码
+ * @param {*} size 页面尺寸
+ * @returns 
+ */
+export function getAdminUserList(deptId, current, size){
+  return httpaxios.get('/admin/user/page', {
+    params: {deptId, current, size}
+  })
+}
+/**
+ * 锁定用户
+ * @param {*} userId 待锁定用户id
+ * @param {*} lockFlag 待修改状态
+ * @returns 
+ */
+export function handlePutLockUser(userId, lockFlag) {
+  return httpaxios.put(`/admin/user/lockUser/${userId}/${lockFlag}`, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+/**
+ * 修改用户信息 [put方法 修改用户] []
+ * @param {*} username 用户名
+ * @param {*} realName 真实姓名
+ * @param {*} deptId 部门id
+ * @param {*} role 角色列表
+ * @param {*} phone 电话
+ * @param {*} position 职位
+ * @param {*} gender 性别
+ * @returns 
+ */
+export function handlePostPutAdminUser(userId, username, realName, deptId, role, phone, position, gender) {
+  let data = userId ? {userId, username, realName, deptId, role, phone, position, gender} : {username, realName, deptId, role, phone, position, gender};
+  return httpaxios[userId ? 'put' : 'post']('/admin/user', {data})
+}
+/**
+ * 指定用户重置密码
+ * @param {*} userId 
+ * @returns 
+ */
+ export function handleResetPassWord(userId) {
+  return httpaxios.put(`/admin/user/resetPassword/${userId}`,{
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  })
+}
+/**
+ * 删除用户
+ * @param {*} userId 
+ * @returns 
+ */
+export function handleDelAdminUser(userId) {
+  return httpaxios.delete(`/admin/user/${userId}`,{})
+}
+/**
+ * 获取角色列表 不分页
+ * @returns 
+ */
+export function getAdminRoleList (){
+  return httpaxios.get('/admin/role/list')
+}
+/**
+ * 组织-角色 角色列表 分页
  * @param {*} current 页码
  * @param {*} size 页面条数pageSize
  * @returns 
@@ -23,7 +99,8 @@ export function getRoleList(current, size) {
  * @returns 
  */
 export function handlePostPutRoleInfo(roleName, roleId){
-  return roleId ? httpaxios.put('/admin/role', {roleName, roleId}) : httpaxios.post('/admin/role', {roleName})
+  return roleId ? httpaxios.put('/admin/role', {roleName, roleId}) : 
+      httpaxios.post('/admin/role', {roleName})
 }
 /**
  * 组织-角色 删除角色

@@ -22,14 +22,20 @@ module.exports = {
       }
     }
   },
-  // proxy: {
-  //   '/': {
-  //     target: '', // 目标代理接口地址
-  //     secure: false,
-  //     changeOrigin: true, // 开启代理，在本地创建一个虚拟服务端
-  //     pathRewrite: {
-  //       '^/': '/'
-  //     }
-  //   }
-  // }
+  devServer: {
+    proxy:"https://dev-teamapi.yzmetax.com", //开发环境的跨域问题解决，后端springboot服务ip 和 端口
+    port: 8080
+    // proxy: {
+    //   '/': {
+    //     target: 'https://dev-teamapi.yzmetax.com/', // 目标代理接口地址
+    //     ws: true,
+    //     secure: false,
+    //     changeOrigin: true, // 开启代理，在本地创建一个虚拟服务端
+    //     pathRewrite: {
+    //       '^/' : ''
+    //     }
+    //   }
+    // }
+  }
+  
 };

@@ -16,6 +16,8 @@ import 'vxe-table/lib/style.css'
 import '@/assets/css/reset.css'
 import '@/assets/iconfont/iconfont.css'
 
+import * as api from '@/api/index'
+
 // 引入自定义组件
 import initGlobalComponents from './components'
 initGlobalComponents();
@@ -26,6 +28,8 @@ Vue.use(Xui)
 Vue.use(Vuex)
 Vue.use(VueRouter)
 Vue.use(VXETable)
+
+Vue.prototype.$api = api
 
 new Vue({
   render: h => h(App),

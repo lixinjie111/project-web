@@ -73,6 +73,7 @@ export default {
           item['scopedSlots'] = {title: 'custom'}
         }
         item['key'] = item[key];
+        item['value'] = item[key];
         item['title'] = item[title];
         if(item[children]) item['children'] = item[children];
         if(item['children'] && item['children'].length){

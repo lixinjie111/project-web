@@ -10,14 +10,13 @@ export default {
   path: '',
   component: Simple,
   meta: {
-    icon: '',
-    permissionKey: 'org'
+    isAuth: true
   },
   children: [
-    {path: '/org/users', component: User, name: '用户', meta: {icon: '', permissionKey: 'users', permissionParent: 'org' }},
-    {path: '/org/depart', component: Depart, name: '部门', meta: {icon: '', permissionKey: 'depart', permissionParent: 'org' }},
-    {path: '/org/role', component: Role, name: '角色', meta: {icon: '', permissionKey: 'role', permissionParent: 'org' }},
-    {path: '/org/operat', component: Operation, name: '角色分组', meta: {icon: '', permissionKey: 'operation', entryPath: '/org/role' }},
-    {path: '/org/member', component: Member, name: '组员管理', meta: {icon: '', permissionKey: 'member', entryPath: '/org/role' }}
+    {path: '/org/users', component: User, name: '用户', meta: { isAuth: true }},
+    {path: '/org/depart', component: Depart, name: '部门', meta: { isAuth: true }},
+    {path: '/org/role', component: Role, name: '角色', meta: { isAuth: true }},
+    {path: '/org/operat', component: Operation, name: '角色分组', meta: {isAuth: true, permissionKey: 'operation', entryPath: '/org/role' }},
+    {path: '/org/member', component: Member, name: '组员管理', meta: {isAuth: true, permissionKey: 'member', entryPath: '/org/role' }}
   ]
 }
