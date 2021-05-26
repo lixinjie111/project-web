@@ -16,6 +16,7 @@
             </div>
             <div slot="action" slot-scope="data" class="table-action">
                 <IconToolTip iconName="iconbofang" content="开始" @action="handleStart(data.row)"></IconToolTip>
+                <!--<IconToolTip iconName="iconbofang" :disabled="true" content="开始"></IconToolTip>-->
                 <!--<IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay(data.row)"></IconToolTip>-->
                 <IconToolTip iconName="iconzanting" content="搁置" @action="handlePause(data.row)"></IconToolTip>
                 <IconToolTip iconName="iconkaiguan" content="完成" @action="handleFinish(data.row)"></IconToolTip>
