@@ -9,30 +9,14 @@
     </section>
 </template>
 <script>
-import menuList from '@/utils/menu.js'
 import MenuSider from '@/components/menu/MenuSider.vue'
 export default {
     name: 'layout',
     components: {MenuSider},
     methods: {
-        async getRoutes() { 
-            // let {code, data, msg} = await this.$api.org.handleGetUserMenu();
-            // if(code == 0){
-                // 请求接口 按照接口去掉不需要字段
-                this.$store.dispatch('initTopMenu', menuList);
-                // this.$store.dispatch('initPermission', ['operation', 'member'])
-                this.$store.dispatch('activeFirstMenu', menuList[0]);
-                this.$store.dispatch('activeSecondMenu', this.$store.state.system.firstMenu.children[0]); // 修改横向nav激活菜单
-                this.$store.dispatch('navMenu', this.$store.state.system.firstMenu.children);
-                this.$store.dispatch('activeNavMenu', this.$store.state.system.secondMenu);
-                
-                this.$router.replace({path: this.$store.state.system.activeNavMenu.path});
-            // }
-        }
+        // 
     },
     mounted() {
-        let { topMenu } = this.$store.state.system;
-        !topMenu.length && this.getRoutes(); // vuex已经缓存菜单
     }
 }
 </script>

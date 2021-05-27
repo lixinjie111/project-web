@@ -53,6 +53,15 @@ export default {
       slots: {}
     }
   },
+  watch: {
+    treeData: {
+      handler(list) {
+        this.handleData(list);
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     onSelect(selectedKeys, e){
       this.$emit('onSelectTreeNodes', selectedKeys, e.selectedNodes)
@@ -67,13 +76,13 @@ export default {
     },
     // 递归处理数据
     handleData(data){
-      let {key, title, children} = this.replaceFields;
+      let {key, title, value, children} = this.replaceFields;
       data.map((item, index) => {
         if(this.operation.length) {
           item['scopedSlots'] = {title: 'custom'}
         }
         item['key'] = item[key];
-        item['value'] = item[key];
+        item['value'] = item[value ? value : key];
         item['title'] = item[title];
         if(item[children]) item['children'] = item[children];
         if(item['children'] && item['children'].length){
@@ -81,14 +90,14 @@ export default {
         }
       })
     }
-  },
-  created(){
-    this.handleData(this.treeData);
   }
 }
 </script>
 <style lang="scss" scoped>
 .tree {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
   /deep/ .ant-tree li {
     // 修改选中背景颜色
     .ant-tree-node-content-wrapper{

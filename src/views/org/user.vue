@@ -98,10 +98,9 @@
 import Tree from '@/components/Tree.vue';
 import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
-import Pagination from '@/components/Pagination.vue'
 export default {
   name: 'userorg',
-  components: {Tree, BasicTable, Modal, Pagination},
+  components: {Tree, BasicTable, Modal},
   data() {
     return {
       deptId: '', // 查询部门
@@ -246,7 +245,8 @@ export default {
       try {
         let {code, data} = await this.$api.org.handlePutLockUser(row.userId, row.lockFlag === '0' ? 9 : 0);
         if(code === 0) {
-          this.$message.success('hahah')
+          this.$message.success('冻结成功！');
+          this.handleGetUserList();
         }
       }catch(error){
         console.log(error)
@@ -446,6 +446,7 @@ export default {
   .reset{
     position: absolute;
     right: 16px;
+    margin: 4px 0;
     color: #2373FF;
     font-size: 12px;
     &.reset-disabled{

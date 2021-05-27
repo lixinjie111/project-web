@@ -16,8 +16,8 @@
           <div class="content-right">
             <ul class="list">
               <li class="list-item" v-for="(item, index) in list" :key="index">
-                <a-input v-model="item.value"></a-input>
-                <span class="plus iconfont icontianjia" @click="handleAddDepart(index+1)"></span>
+                <a-input v-model="item.name"></a-input>
+                <span class="plus iconfont icontianjia" @click="handleAddDepart(index+1, item.parentId)"></span>
               </li>
             </ul>
             <div class="operation">
@@ -37,68 +37,7 @@ export default {
   components: {Tree, Breadcrumb},
   data() {
     return {
-      treeList: [
-        {
-          "id":"992307132",
-          // "value": "万科集团",
-          "name":"万科集团",
-          // scopedSlots: {
-          //     title:"custom"
-          // },
-        },
-        {
-            "id":"99230713",
-            // "value": "万科集团",
-            "name":"万科集团",
-            // ⚠️重点这这里⚠️每一条数据上都添加scopedSlots属性
-            // "scopedSlots":{
-            //     title:"custom"
-            // },
-            "children":[
-                {
-                    "id":"99230992",
-                    // "value": "华东区域",
-                    "name":"华东区域",
-                    "scopedSlots":{
-                        "name":"custom"
-                    },
-                    "children":[
-                        {
-                            "id":"99230112",
-                            "name":"杭州万科",
-                            "scopedSlots":{
-                                "name":"custom"
-                            },
-                            "children":[],
-                        }
-                    ],
-                },
-                {
-                    "id":"99230993",
-                    "name":"华南区域",
-                    "scopedSlots":{
-                        "name":"custom"
-                    },
-                    "children":[],
-                },
-                {
-                    "id":"99231020",
-                    "name":"华北区域",
-                    "scopedSlots":{
-                      "name":"custom"
-                    },
-                    "children":[],
-                }
-            ],
-        },
-        {
-          "id":"9923071314",
-          "name":"万科集团",
-          "scopedSlots":{
-              "title":"custom"
-          },
-        }
-      ],
+      treeList: [],
       replaceFields: {
         key: 'id',
         value: 'name',
@@ -115,6 +54,19 @@ export default {
     }
   },
   methods: {
+    // 查询部门树
+    async handleGetDepartTree(){
+      try {
+        let {code, data} = await this.$api.org.getDeptTree();
+        if(code === 0){
+          this.treeList = data;
+          this.handleSelectSubDepart(this.treeList);
+        }
+      }catch(error){
+        console.log(error);
+      }
+    },
+
     // tree选择部门 查询部门下子部门
     handleGetDepartUsers(departIds){
       this.count = 0;
@@ -136,11 +88,15 @@ export default {
     handleSelectSubDepart(nodeList){
       let departList = [...JSON.parse(JSON.stringify(nodeList)), ...Array.from({length: 10 - nodeList.length}).map(() => ({name: ''}))];
       let list = nodeList && nodeList.length ? departList : this.emptyList;
+      list.map(item => {
+        item.deptId = item.id;
+        delete item?.children
+      });
       this.$set(this, 'list', list);
     },
     // 递归遍历面包屑
     deepFinds(node, target) {
-      this.arrPath.push({name: node.value, key: node.key});
+      this.arrPath.push({name: node.name, key: node.key, parentId: node.parentId});
       if(node.key === target) {
         this.count ++;
         this.handleSelectSubDepart(node.children); 
@@ -166,12 +122,18 @@ export default {
       console.log(depart)
        this.$confirms({
         title: '提示',
-        message: `您确定要删除 ${depart.value} 分组吗？`,
+        message: `您确定要删除 ${depart.name} 分组吗？`,
         okText: '确认删除',
-        onOk() {
-          return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-          }).catch(() => console.log('Oops errors!'));
+        onOk: async () => {
+          try {
+            let {code} = await this.$api.org.handleDeleteAdminDept(depart.id);
+            if(code === 0) {
+              this.handleGetDepartTree();
+              this.$message.success('删除成功！');
+            }
+          }catch(error){
+            console.log(error)
+          }
         },
         cancelText: '取消',
         onCancel() {
@@ -179,12 +141,30 @@ export default {
       });
     },
     // 保存
-    handleSaveDepart(){
-      
+    async handleSaveDepart(){
+      try {
+        let data = this.list.filter(item => {
+          if(item.name) {
+            return {
+              parentId: item.parentId,
+              deptId: item.id,
+              name: item.name
+            }
+          }
+        });
+        console.log(data)
+        let {code} = await this.$api.org.handlePostAdminDept(data);
+        if(code === 0) {
+          this.$message.success('保存成功！');
+          this.handleGetDepartTree();
+        }
+      }catch(error){
+        console.log(error)
+      }
     }
   },
   mounted() {
-    this.handleSelectSubDepart(this.treeList);
+    this.handleGetDepartTree();
   }
 }
 </script>

@@ -28,6 +28,7 @@ vueRouter.beforeEach((to, from, next) => {
     } else if(to.meta?.isAuth && store.state.users.accessToken){
         setStoreMenu(to, next);
     } else {
+        console.log(to)
         next({ path: '/login', replace: true })
     }
 })
@@ -55,7 +56,7 @@ function setStoreMenu(to, next){
         return ;
     } else if(menuList.indexOf(path) === -1 || path === '/'){
         // 默认地址
-        setStore(topMenu[0], firstMenu.children[0], {}, firstMenu.children, secondMenu); // 修改菜单
+        setStore(topMenu[0], topMenu[0].children, {}, topMenu[0].children, topMenu[0].children[0]); // 修改菜单
         console.log(activeNavMenu)
         next({
             path: activeNavMenu.path,
@@ -89,7 +90,7 @@ function getrouterPath(path){
         } else {
             activeFirstMenu.children.map(second => {
                 if(second.children) {
-                    let activeThirdMenuIndex = second.children.findIndex((item) => item.path === to.path);
+                    let activeThirdMenuIndex = second.children.findIndex((item) => item.path === path);
                     if(activeThirdMenuIndex !== -1){
                         secondMenu = second;
                         thirdMenu = second.children[activeThirdMenuIndex];

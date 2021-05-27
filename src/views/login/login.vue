@@ -74,11 +74,14 @@ export default {
     handleSubmit(){
       let pwd = encryptByAES(this.form.password, 'yuanzhi2teamwork', 'yuanzhi2teamwork');
       api.login.handleGetToken(this.form.username, pwd).then(response => {
-        console.log(response)
         this.$store.dispatch('setAccessToken', response.access_token)
         this.$store.dispatch('setRefreshToken', response.refresh_token)
-        this.$store.dispatch('setUserInfo', response.user_info)
-        this.$router.push({ path: '/' })
+        this.$store.dispatch('setUserInfo', response.user_info);
+        this.$store.dispatch('initTopMenu').then(() => { // 查询菜单成功跳转
+          this.$router.push({ path: '/' })
+        }).catch(() => {
+          this.$message.error('未获取到菜单')
+        })
       }).catch(error => {
         console.log(error)
       })

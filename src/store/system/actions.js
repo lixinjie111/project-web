@@ -1,8 +1,21 @@
 import * as types from './mutation-types'
+import * as api from '@/api/index'
+import data from '@/utils/menu.js'
 
 export default {
-  initTopMenu ({commit}, menu) {
-    commit(types.INIT_TOP_MENU, menu)
+  initTopMenu ({commit}) {
+    return new Promise(async (resolve, reject) => {
+      // let {code, data} = await api.org.handleGetUserMenu();
+      // if(code == 0){
+        commit(types.INIT_TOP_MENU, data);
+        resolve()
+      // } else {
+      //   reject()
+      // }
+    }).catch(error => {
+      reject()
+    })
+     
   },
   activeFirstMenu ({commit}, menu) {
     commit(types.ACTIVE_FIRST_MENU, menu)

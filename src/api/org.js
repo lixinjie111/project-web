@@ -1,4 +1,5 @@
 import httpaxios from '@/utils/http'
+import http from '../utils/http'
 
 /**
  * 获取用户菜单
@@ -83,6 +84,30 @@ export function handleDelAdminUser(userId) {
 export function getAdminRoleList (){
   return httpaxios.get('/admin/role/list')
 }
+/**
+ * 创建部门
+ * @param {*} data 列表（包括编辑 新增）
+ * @returns 
+ */
+export function handlePostAdminDept(data){
+  return httpaxios.post('/admin/dept/batchUpdate', {data})
+}
+/**
+ * 删除部门
+ * @param {*} deptId 部门id
+ * @returns 
+ */
+export function handleDeleteAdminDept(deptId) {
+  return httpaxios.delete(`/admin/dept/${deptId}`)
+}
+
+
+
+
+
+
+
+
 /**
  * 组织-角色 角色列表 分页
  * @param {*} current 页码
