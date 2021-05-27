@@ -78,7 +78,7 @@ export default {
         this.$store.dispatch('setRefreshToken', response.refresh_token)
         this.$store.dispatch('setUserInfo', response.user_info);
         this.$store.dispatch('initTopMenu').then(() => { // 查询菜单成功跳转
-          this.$router.push({ path: '/' })
+          this.$router.push({ path: '/' });
         }).catch(() => {
           this.$message.error('未获取到菜单')
         })

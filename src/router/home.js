@@ -5,6 +5,7 @@ import Org from './org'
 import Product from './product'
 import Project from './project'
 import Task from './task'
+import Report from './report'
 /*
 * 页面结构
 */
@@ -40,6 +41,7 @@ let routes = [
             Product,
             Project,
             Task,
+            Report
         ]
     }
 ]

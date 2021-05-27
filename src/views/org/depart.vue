@@ -37,6 +37,7 @@ export default {
   components: {Tree, Breadcrumb},
   data() {
     return {
+      parentId: 0, // 待编辑父级id
       treeList: [],
       replaceFields: {
         key: 'id',
@@ -60,7 +61,8 @@ export default {
         let {code, data} = await this.$api.org.getDeptTree();
         if(code === 0){
           this.treeList = data;
-          this.handleSelectSubDepart(this.treeList);
+          console.log(this.parentId)
+          this.handleGetDepartUsers(this.parentId ? [this.parentId] : '');
         }
       }catch(error){
         console.log(error);
@@ -75,11 +77,13 @@ export default {
         this.$set(this, 'arrPath', []);
         if(departIds.length>0) {
           let flag=this.deepFinds(this.treeList[i], departIds[0]);
+          this.parentId = departIds[0];
           if(!flag)
             this.arrPath.pop()
           else
             break;
         } else {
+          this.parentId = 0;
           this.handleSelectSubDepart(this.treeList)
         }
       }
@@ -96,8 +100,8 @@ export default {
     },
     // 递归遍历面包屑
     deepFinds(node, target) {
-      this.arrPath.push({name: node.name, key: node.key, parentId: node.parentId});
-      if(node.key === target) {
+      this.arrPath.push({name: node.name, key: node.id, parentId: node.parentId});
+      if(node.id === target) {
         this.count ++;
         this.handleSelectSubDepart(node.children); 
         return this.count > 0;
@@ -128,7 +132,8 @@ export default {
           try {
             let {code} = await this.$api.org.handleDeleteAdminDept(depart.id);
             if(code === 0) {
-              this.handleGetDepartTree();
+              if(depart.id == this.parentId) this.parentId = 0;
+              this.handleGetDepartTree(); // 有先后顺序 （依赖parentId)
               this.$message.success('删除成功！');
             }
           }catch(error){
@@ -143,16 +148,8 @@ export default {
     // 保存
     async handleSaveDepart(){
       try {
-        let data = this.list.filter(item => {
-          if(item.name) {
-            return {
-              parentId: item.parentId,
-              deptId: item.id,
-              name: item.name
-            }
-          }
-        });
-        console.log(data)
+        let data = this.list.filter(item => item.name);
+        data.map(item => item.parentId = this.parentId);
         let {code} = await this.$api.org.handlePostAdminDept(data);
         if(code === 0) {
           this.$message.success('保存成功！');

@@ -57,9 +57,8 @@ function setStoreMenu(to, next){
     } else if(menuList.indexOf(path) === -1 || path === '/'){
         // 默认地址
         setStore(topMenu[0], topMenu[0].children, {}, topMenu[0].children, topMenu[0].children[0]); // 修改菜单
-        console.log(activeNavMenu)
         next({
-            path: activeNavMenu.path,
+            path: topMenu[0].children[0].path,
             replace: true
         })
         return ;

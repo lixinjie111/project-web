@@ -2,7 +2,7 @@
     <div class="icon-tooltip" :class="className">
         <a-tooltip :destroyTooltipOnHide="true">
             <span slot="title">{{content}}</span>
-            <i :class="['iconfont', iconName]" @click="handleAction"></i>
+            <i :class="['iconfont', iconName, disabled ? 'disabled' : '']" @click="handleAction"></i>
         </a-tooltip>
     </div>
 </template>
@@ -31,6 +31,11 @@
                 default: () => {
                     return ''
                 }
+            },
+            // 是否可点击
+            disabled: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {
@@ -47,6 +52,10 @@
             cursor: pointer;
             color: #7C88B1;
             font-size: 16px;
+
+            &.disabled {
+                color: #C6CBDE;
+            }
         }
     }
 </style>
