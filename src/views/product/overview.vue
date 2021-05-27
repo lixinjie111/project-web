@@ -3,7 +3,7 @@
         <MenuNav>
             <div slot="nav-left" class="nav-left-title">概览</div>
         </MenuNav>
-        <div class="overview-container">
+        <div class="product-overview-container">
             <ContentHeader type="title" title="产品">
                 <div slot="operation">
                     <a-button class="export-btn mr-16">
@@ -236,7 +236,7 @@
         color: #242F57;
     }
 
-    .overview-container {
+    .product-overview-container {
         margin: 16px 24px 24px 24px;
 
         .mr-16 {

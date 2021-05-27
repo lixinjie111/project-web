@@ -1,5 +1,5 @@
 <template>
-    <div>deliverables</div>
+    <div class="notarchive-deliverables-container">deliverables</div>
 </template>
 
 <script>
@@ -9,5 +9,7 @@
 </script>
 
 <style scoped lang="scss">
+.notarchive-deliverables-container {
 
+}
 </style>

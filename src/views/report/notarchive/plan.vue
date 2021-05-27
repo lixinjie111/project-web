@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="notarchive-plan-container">
         plan
     </div>
 </template>
@@ -11,5 +11,7 @@
 </script>
 
 <style scoped lang="scss">
+.notarchive-plan-container {
 
+}
 </style>

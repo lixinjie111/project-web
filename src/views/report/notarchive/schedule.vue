@@ -1,5 +1,5 @@
 <template>
-    <div>schedule</div>
+    <div class="notarchive-schedule-container">schedule</div>
 </template>
 
 <script>
@@ -9,5 +9,7 @@
 </script>
 
 <style scoped lang="scss">
+    .notarchive-schedule-container {
 
+    }
 </style>
