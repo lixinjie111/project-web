@@ -6,10 +6,9 @@ export default {
   path: '',
   component: Empty,
   meta: {
-    icon: '',
-    permissionKey: 'project'
+    isAuth: false
   },
   children: [
-    {path: '/project/home', component: Home, name: '首页', meta: {icon: '', permissionKey: 'home', permissionParent: 'project' }},
+    {path: '/project/home', component: Home, name: '首页', meta: { isAuth: false }}
   ]
 }

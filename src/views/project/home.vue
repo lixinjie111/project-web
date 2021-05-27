@@ -3,7 +3,7 @@
         <MenuNav>
             <div slot="nav-left" class="nav-left-title">首页</div>
         </MenuNav>
-        <div class="home-container">
+        <div class="project-home-container">
             <ContentHeader type="title" title="项目">
                 <div slot="operation">
                     <a-button class="export-btn mr-16">
@@ -130,7 +130,7 @@
         color: #242F57;
     }
 
-    .home-container {
+    .project-home-container {
         margin: 16px 24px 24px 24px;
 
         .export-btn {

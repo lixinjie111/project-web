@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="report-archive-container">
         archive
     </div>
 </template>
@@ -10,6 +10,8 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    .report-archive-container {
 
+    }
 </style>

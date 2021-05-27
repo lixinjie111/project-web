@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="notarchive-project-container">
         project
     </div>
 </template>
@@ -11,5 +11,7 @@
 </script>
 
 <style scoped lang="scss">
+    .notarchive-project-container {
 
+    }
 </style>

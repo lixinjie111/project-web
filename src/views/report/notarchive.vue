@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="report-notarchive-container">
         <div class="header">
             <div class="left">
-                <a-radio-group default-value="a" size="large" @change="handelChange">
-                    <a-radio-button value="schedule" class="all">
+                <a-radio-group default-value="schedule" size="large" @change="handelChange">
+                    <a-radio-button value="schedule">
                         工作进度
                     </a-radio-button>
                     <a-radio-button value="project">
@@ -53,33 +53,21 @@
 </script>
 
 <style scoped lang="scss">
-    .header {
-        background-color: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 50px;
-        border-top: 1px solid #EAEDF7;
-        border-bottom: 1px solid #EAEDF7;
-        padding: 0 8px;
-        margin-bottom: 16px;
-
-        .left {
+    .report-notarchive-container {
+        .header {
+            background-color: white;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-        }
-        .all {
-            span {
-                line-height: 16px;
-                border-radius: 4px;
-                border: 1px solid #EAEDF7;
-                padding: 0 8px;
-                width: 8px;
-                height: 16px;
-                font-size: 12px;
-                font-weight: 400;
-                color: #242F57;
-                margin-left: 4px;
+            height: 50px;
+            border-top: 1px solid #EAEDF7;
+            border-bottom: 1px solid #EAEDF7;
+            padding: 0 8px;
+            margin-bottom: 16px;
+
+            .left {
+                display: flex;
+                align-items: center;
             }
         }
     }
