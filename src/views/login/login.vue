@@ -37,7 +37,6 @@
 
 <script>
 import Verify from '@/components/verifition/Verify.vue'
-import * as api from '@/api/index'
 import {encryptByAES} from '@/utils/cryptoJS'
 export default {
   name: "login",
@@ -71,15 +70,16 @@ export default {
         }
       });
     },
-    handleSubmit(){
+    async handleSubmit(){
       let pwd = encryptByAES(this.form.password, 'yuanzhi2teamwork', 'yuanzhi2teamwork');
-      api.login.handleGetToken(this.form.username, pwd).then(response => {
+      this.$api.login.handleGetToken(this.form.username, pwd).then(response => {
         this.$store.dispatch('setAccessToken', response.access_token)
         this.$store.dispatch('setRefreshToken', response.refresh_token)
         this.$store.dispatch('setUserInfo', response.user_info);
-        this.$store.dispatch('initTopMenu').then(() => { // 查询菜单成功跳转
+        
+        Promise.all([this.$store.dispatch('initTopMenu'), this.$store.dispatch('initPermission')]).then(() => { // 查询菜单成功跳转
           this.$router.push({ path: '/' });
-        }).catch(() => {
+        }).catch(error => {
           this.$message.error('未获取到菜单')
         })
       }).catch(error => {

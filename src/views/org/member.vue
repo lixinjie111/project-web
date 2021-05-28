@@ -6,15 +6,15 @@
     <div class="member-content">
       <div class="member-left">
         <div class="member-tree">
-          <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" @onSelectTreeNodes="handleGetDepartUsers"></Tree>
+          <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" :defaultSelectedKeys="defaultSelectedKeys" @onSelectTreeNodes="handleGetDepartUsers"></Tree>
           <div v-else class="empty">暂无部门</div>
         </div>
         <div class="btn" @click="handleGotoPage">管理部门结构</div>
       </div>
       <div class="member-right">
-        <div class="member-join">
+        <div class="member-join" v-if="joinUsers.length">
           <div class="check-title">
-            <a-checkbox :indeterminate="indeterminateJoin" :checked="checkAllJoin" @change="onCheckAllChange(e, 'Join')">已加入</a-checkbox>
+            <a-checkbox :indeterminate="indeterminateJoin" :checked="checkAllJoin" @change="(e) => onCheckAllChange(e, 'Join')">已加入</a-checkbox>
           </div>
           <a-checkbox-group v-model="checkJoinList" @change="(e) => onChange(e, 'Join')">
             <div class="checkbox-item" v-for="(item) in joinUsers" :key="item.userId">
@@ -23,9 +23,9 @@
           </a-checkbox-group>
           <div class="line"></div>
         </div>
-        <div class="member-unjoin">
+        <div class="member-unjoin" v-if="unJoinUsers.length">
           <div class="check-title">
-            <a-checkbox :indeterminate="indeterminateUnJoin" :checked="checkAllUnJoin" @change="onCheckAllChange(e, 'UnJoin')">未加入</a-checkbox>
+            <a-checkbox :indeterminate="indeterminateUnJoin" :checked="checkAllUnJoin" @change="(e) => onCheckAllChange(e, 'UnJoin')">未加入</a-checkbox>
           </div>
           <a-checkbox-group v-model="checkUnJoinList" @change="(e) => onChange(e, 'UnJoin')">
             <div class="checkbox-item" v-for="(item) in unJoinUsers" :key="item.userId">
@@ -40,8 +40,6 @@
 </template>
 <script>
 import Tree from '@/components/Tree.vue'
-
-import * as api from '@/api/index'
 export default {
   name: 'operation',
   components: {Tree},
@@ -50,67 +48,19 @@ export default {
       roleId: '', // 角色id
       breadcrumbList: [
         {name: '组员管理', icon: 'iconjiantouzuo', iconposition: 'before', path: '/org/role'},
-        {name: '项目经理', icon: 'iconsuoding', iconposition: 'after'},
+        {name: '', icon: 'iconsuoding', iconposition: 'after'},
       ],
-      treeList: [
-        {
-            "id":"99230713",
-            // "value": "万科集团",
-            parent: '1',
-            "name":"万科集团",
-            // ⚠️重点这这里⚠️每一条数据上都添加scopedSlots属性
-            "children":[
-                {
-                    "id":"99230992",
-                    // "value": "华东区域",
-                    "name":"华东区域",
-                    "children":[
-                        {
-                            "id":"99230112",
-                            "name":"杭州万科",
-                            "children":[],
-                        }
-                    ],
-                },
-                {
-                    "id":"99230993",
-                    "name":"华南区域",
-                    "children":[],
-                },
-                {
-                    "id":"99231020",
-                    "name":"华北区域",
-                    "children":[],
-                }
-            ],
-        },
-        {
-          "id":"9923071314",
-          "name":"万科集团",
-        }
-      ],
+      treeList: [],
       replaceFields: {
         key: 'id',
         value: 'name',
         title: 'name',
         children: 'children',
       },
-      joinUsers: [
-        {"joinFlag": 1, "realName": "admin1", "userId": 1, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin2", "userId": 2, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin3", "userId": 3, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin4", "userId": 4, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin1", "userId": 11, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin2", "userId": 22, "username": "admin"},
-        {"joinFlag": 1, "realName": "汤姆", "userId": 33, "username": "admin"},
-        {"joinFlag": 1, "realName": "才栋梁", "userId": 44, "username": "admin"},
-      ],
-      unJoinUsers: [
-        {"joinFlag": 1, "realName": "admin1", "userId": 5, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin2", "userId": 6, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin3", "userId": 7, "username": "admin"},
-        {"joinFlag": 1, "realName": "admin4", "userId": 8, "username": "admin"}
-      ],
+      defaultSelectedKeys: [], // 默认选中节点
+
+      joinUsers: [],
+      unJoinUsers: [],
       indeterminateJoin: false, // 已加入 全选
       checkAllJoin: true,
       checkJoinList: [],
@@ -126,10 +76,6 @@ export default {
     let {roleName, roleId} = this.$route.query;
     this.breadcrumbList[1].name = roleName;
     this.roleId = roleId;
-    this.allJoinUserIdList = this.handleAllUserIds(this.joinUsers);
-    this.checkJoinList = this.allJoinUserIdList;
-    this.allUnJoinUserIdList = this.handleAllUserIds(this.unJoinUsers);
-    console.log(this.checkJoinList)
   },
   methods: {
     // 路由跳转
@@ -138,16 +84,16 @@ export default {
     },
     // 选中部门信息
     handleGetDepartUsers(departIds){
-      this.handleGetDeptRoleList(departIds[0])
+      departIds.length && this.handleGetDeptRoleList(departIds[0])
     },
     // 请求部门树
     async handleGetDeptTree() {
       try{
-        let {code, data, msg} = await this.$api.org.getDeptTree();
+        let {code, data} = await this.$api.org.getDeptTree();
         if(code === 0) {
           this.treeList = data;
-        }else{
-          this.$message.error(msg)
+          this.handleGetDeptRoleList(this.treeList?.[0].id);
+          this.defaultSelectedKeys = [this.treeList?.[0].id]
         }
       }catch(err){
         console.log(err)
@@ -158,7 +104,11 @@ export default {
       try{
         let {code, data, msg} = await this.$api.org.handleGetDeptRoleList(this.roleId, deptId);
         if(code === 0){
+          this.indeterminateJoin = false; // 已加入 全选
+          this.checkAllJoin = true;
           this.joinUsers = data.joinUsers;
+          this.indeterminateUnJoin = false; // 未加入 全选
+          this.checkAllUnJoin = false;
           this.unJoinUsers = data.unJoinUsers;
           this.allJoinUserIdList = this.handleAllUserIds(this.joinUsers);
           this.checkJoinList = this.allJoinUserIdList;
@@ -191,17 +141,20 @@ export default {
     async handleSave(){
       try {
         let diff = this.allJoinUserIdList.filter(item=>!this.checkJoinList.some(ele=>ele===item));
-        let {code, data, msg} = await this.$api.org.handlePostModifyUserRole(this.roleId, this.checkUnJoinList, diff);
+        console.log(diff, this.allJoinUserIdList, this.checkJoinList, this.allUnJoinUserIdList, this.checkUnJoinList)
+        debugger
+        let {code} = await this.$api.org.handlePostModifyUserRole(this.roleId, this.checkUnJoinList, diff);
         if(code === 0 ){
-          this.$message.success(msg);
-        } else {
-          this.$message.error(msg);
-        }
+          this.$message.success('保存成功！');
+        } 
       }catch(err) {
         console.log(err)
       }
       
     }
+  },
+  mounted() {
+    this.handleGetDeptTree();
   }
 }
 </script>

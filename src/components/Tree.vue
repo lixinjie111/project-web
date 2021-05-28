@@ -7,7 +7,7 @@
     <a-tree-node key="0-1" title="leaf" />
   </a-tree> -->
   <div class="tree">
-    <a-tree show-line :blockNode="true" :default-expanded-keys="defaultExpandKeys" :treeData="treeData" @select="onSelect">
+    <a-tree show-line :blockNode="true" :default-selected-keys="defaultSelectedKeys" :default-expanded-keys="defaultExpandKeys" :treeData="treeData" @select="onSelect">
       <template slot="custom" slot-scope="item">
         <div class="tree-view-item">
           <span class="tree-view-left">{{ item.title }}</span>
@@ -39,6 +39,11 @@ export default {
     operation: {
       type: Array,
       required: false,
+      default: () => []
+    },
+    // 默认选中节点
+    defaultSelectedKeys: {
+      type: Array,
       default: () => []
     },
     // 默认展开指定的树节点
@@ -102,6 +107,7 @@ export default {
     // 修改选中背景颜色
     .ant-tree-node-content-wrapper{
       height: 30px;
+      line-height: 30px;
       .ant-tree-node-selected {
         background: #F0F8FF;
       }

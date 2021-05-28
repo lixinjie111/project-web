@@ -101,13 +101,6 @@ export function handleDeleteAdminDept(deptId) {
   return httpaxios.delete(`/admin/dept/${deptId}`)
 }
 
-
-
-
-
-
-
-
 /**
  * 组织-角色 角色列表 分页
  * @param {*} current 页码
@@ -115,7 +108,9 @@ export function handleDeleteAdminDept(deptId) {
  * @returns 
  */
 export function getRoleList(current, size) {
-  return httpaxios.get('/admin/role/page', {current, size})
+  return httpaxios.get('/admin/role/page', {
+    params: {current, size}
+  })
 }
 /**
  * 组织-角色 编辑[put] 新增[post]角色
@@ -124,8 +119,8 @@ export function getRoleList(current, size) {
  * @returns 
  */
 export function handlePostPutRoleInfo(roleName, roleId){
-  return roleId ? httpaxios.put('/admin/role', {roleName, roleId}) : 
-      httpaxios.post('/admin/role', {roleName})
+  let data = roleId ? {roleName, roleId} : {roleName};
+  return httpaxios[roleId ? 'put' : 'post']('/admin/role', {data})
 }
 /**
  * 组织-角色 删除角色
@@ -142,7 +137,7 @@ export function handleDelRole(roleId) {
  * @returns 
  */
 export function handlePutRoleMenu(roleId, menuIds){
-  return httpaxios.put('/admin/role/menu', {roleId, menuIds})
+  return httpaxios.put('/admin/role/menu', {data: {roleId, menuIds}})
 }
 /**
  * 角色-操作权限-完整树
@@ -150,8 +145,8 @@ export function handlePutRoleMenu(roleId, menuIds){
  * @param {*} lazy 是否懒加载
  * @returns 
  */
-export function handleGetMenuTree(parentId, lazy){
-  return httpaxios.get('/admin/menu/tree', {lazy, parentId})
+export function handleGetMenuTree(parentId, lazy = false){
+  return httpaxios.get('/admin/menu/tree', {params: {lazy, parentId}})
 }
 /**
  * 获取角色配置操作权限（及菜单）已勾选配置
@@ -178,5 +173,8 @@ export function handleGetDeptRoleList(roleId, deptId){
  * @returns 
  */
 export function handlePostModifyUserRole(roleId, joins, unJoins) {
-  return httpaxios.post('/admin/user/batchModifyUserRole', {roleId, joins, unJoins})
+  return httpaxios.post('/admin/user/batchModifyUserRole', {data: {roleId, joins, unJoins}})
+}
+export function handleGetAdminUserInfo(){
+  return httpaxios.get('/admin/user/info', {})
 }

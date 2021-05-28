@@ -4,7 +4,7 @@
       <i class="logo-icon"></i>
     </div>
     <ul class="menu-list">
-      <li :class='["menu-item", activeFirstMenu && activeFirstMenu.meta && item.meta.permissionKey === activeFirstMenu.meta.permissionKey ? "active" : ""]' v-for="(item, index) in firstMenu" :key="item.meta.authKey" @click="handleChangePage(index)">
+      <li :class="['menu-item', item.id === activeFirstMenu.id ? 'active' : '']" v-for="(item, index) in firstMenu" :key="index" @click="handleChangePage(index)">
         <i class="menu-icon"></i>
         <span>{{item.name}}</span>
       </li>

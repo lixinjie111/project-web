@@ -14,7 +14,7 @@
         <div class="btn" @click="handleGotoPage">管理部门结构</div>
       </div>
       <div class="userorg-right">
-        <div class="userorg-table">
+        <div :class="['userorg-table', total > pageSize ? 'has-pagination' : 'no-pagination']">
           <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
         </div>
         <Pagination v-if="total > pageSize" :total="total" :curPageNum="curPageNum" :pageSize="pageSize" @pagination-change-pagesize="handleChangePageSize" @pagination-change-page="handleChangePage"></Pagination>
@@ -111,7 +111,7 @@ export default {
       treeList: [], // 部门树
       replaceFields: {
         key: 'id',
-        value: 'name',
+        value: 'id',
         title: 'name',
         children: 'children',
       },
@@ -171,7 +171,7 @@ export default {
         userId: '',
         username: '',
         realName: '',
-        deptName: '',
+        deptId: '',
         password: '',
         phone: '',
         position: '',
@@ -395,16 +395,19 @@ export default {
     }
   }
   .userorg-right {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
     flex: 1;
+    overflow: hidden;
     height: calc(100vh - 163px);
     background: #fff;
     border-radius: 4px;
     border: 1px solid #EAEDF7;
     .userorg-table {
-      flex: 1;
+      &.no-pagination {
+        height: 100%;
+      }
+      &.has-pagination {
+        height: calc(100% - 63px);
+      }
     }
     .operations {
       .iconfont {

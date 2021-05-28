@@ -18,14 +18,15 @@ VueRouter.prototype.push = function push(location) {
 
 // 拦截路由，进行授权判断和缓存限制
 vueRouter.beforeEach((to, from, next) => {
-    if (!to.meta?.isAuth) { // 不需要登录的页面
+    debugger
+    if (!to.meta?.isAuth && to.path !== '/') { // 不需要登录的页面
         // 登录禁止重复登录
         // if(store.state.users.accessToken && to.path.indexOf('/login')){
 
         // } else{
             next()
         // }
-    } else if(to.meta?.isAuth && store.state.users.accessToken){
+    } else if((to.meta?.isAuth || to.path === '/') && store.state.users.accessToken ){
         setStoreMenu(to, next);
     } else {
         console.log(to)
@@ -74,7 +75,7 @@ function getrouterPath(path){
     for(let key in menuMap) {
         if(menuMap[key].indexOf(path) > -1) {
             activeFirstMenuIndex = key;
-            return ;
+            break ;
         }
     }
     let activeFirstMenu = topMenu[activeFirstMenuIndex];

@@ -4,7 +4,7 @@
       <slot name="nav-left"></slot>
     </div>
     <ul class="nav-list">
-      <li :class='["nav-item", activeNavMenu && activeNavMenu.meta && item.path === activeNavMenu.path ? "active" : ""]' v-for="(item, index) in navlist" :key="index" @click="handleChangePage(index)">
+      <li :class='["nav-item", item.path === activeNavMenu.path ? "active" : ""]' v-for="(item, index) in navlist" :key="index" @click="handleChangePage(index)">
         <span>{{item.name}}</span>
       </li>
     </ul>

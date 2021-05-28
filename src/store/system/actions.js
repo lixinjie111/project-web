@@ -15,7 +15,6 @@ export default {
     }).catch(error => {
       reject()
     })
-     
   },
   activeFirstMenu ({commit}, menu) {
     commit(types.ACTIVE_FIRST_MENU, menu)
@@ -32,8 +31,18 @@ export default {
   activeNavMenu ({commit}, menu) {
     commit(types.ACTIVE_NAV_MENU, menu)
   },
-  initPermission({commit}, permissionList){
-      commit(types.INIT_PERMISSION, permissionList)
+  initPermission({commit}){
+    return new Promise(async (resolve, reject) => {
+      let {code, data} = await api.org.handleGetAdminUserInfo();
+      if(code == 0){
+        commit(types.INIT_PERMISSION, data.permissions)
+        resolve()
+      } else {
+        reject()
+      }
+    }).catch(error => {
+      reject()
+    })
   },
   removeMenuData({commit}) {
     commit(types.REMOVE_MENU_DATA)

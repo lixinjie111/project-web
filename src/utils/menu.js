@@ -2,138 +2,120 @@ export default [
     {
         name: '我的',
         path: '',
-        level: 1,
-        meta: {
-            icon: '',
-            permissionKey: 'mine'
-        },
+        id: 1,
+        permission: '',
         children: [
             {
                 path: '/mine/home',
                 name: '首页',
-                level: 2,
-                meta: {icon: '', permissionKey: 'home', permissionParent: 'mine'}
+                id: 2,
+                children: []
             },
             {
                 path: '/mine/project',
                 name: '项目',
-                level: 2,
-                meta: {icon: '', permissionKey: 'project', permissionParent: 'mine'}
+                id: 3,
+                permission: ''
             },
             {
                 path: '/mine/task',
                 name: '任务',
-                level: 2,
-                meta: {icon: '', permissionKey: 'task', permissionParent: 'mine'}
+                id: 4,
+                permission: ''
             },
             {
                 path: '/mine/dynamic',
                 name: '动态',
-                level: 2,
-                meta: {icon: '', permissionKey: 'dynamic', permissionParent: 'mine'}
+                id: 5,
+                permission: ''
             }
         ]
     },
     {
         name: '组织',
         path: '',
-        level: 1,
-        meta: {
-            icon: '',
-            permissionKey: 'org'
-        },
+        id: 6,
+        permission: '',
         children: [
             {
                 path: '/org/users',
                 name: '用户',
-                level: 2,
-                meta: {icon: '', permissionKey: 'users', permissionParent: 'org'}
+                id: 7,
+                permission: '',
             },
             {
                 path: '/org/depart',
                 name: '部门',
-                level: 2,
-                meta: {icon: '', permissionKey: 'depart', permissionParent: 'org'}
+                id: 8,
+                permission: '',
             },
             {
                 path: '/org/role',
                 name: '角色',
-                level: 2,
-                meta: {icon: '', permissionKey: 'role', permissionParent: 'org'}
+                id: 9,
+                permission: '',
             },
         ]
     },
     {
         name: '产品',
         path: '',
-        level: 1,
-        meta: {
-            icon: '',
-            permissionKey: 'product'
-        },
+        id: 10,
+        permission: '',
         children: [
             {
                 path: '/product/overview',
                 name: '概览',
-                level: 2,
-                meta: {icon: '', permissionKey: 'overview', permissionParent: 'product'}
+                id: 11,
+                permission: '',
             }
         ]
     },
     {
         name: '项目',
         path: '',
-        level: 1,
-        meta: {
-            icon: '',
-            permissionKey: 'project'
-        },
+        id: 12,
+        permission: '',
         children: [
             {
                 path: '/project/home',
                 name: '首页',
-                level: 2,
-                meta: {icon: '', permissionKey: 'home', permissionParent: 'project'}
+                id: 13,
+                permission: '',
             }
         ]
     },
     {
         name: '周报',
         path: '',
-        level: 1,
-        meta: {
-            icon: '',
-            permissionKey: 'report'
-        },
+        id: 14,
+        permission: '',
         children: [
             {
                 path: '/report/notarchive',
                 name: '未归档',
-                level: 2,
-                meta: {icon: '', permissionKey: 'notarchive', permissionParent: 'report'}
+                id: 15,
+                permission: '',
             },
             {
                 path: '/report/archive',
                 name: '已归档',
-                level: 2,
-                meta: {icon: '', permissionKey: 'archive', permissionParent: 'report'}
+                id: 16,
+                permission: '',
             }
         ]
     },
     {
         name: '统计',
         path: '',
-        level: 1,
-        meta: {
-            icon: '',
-            permissionKey: 'statistics'
-        },
+        id: 17,
+        permission: '',
         children: [
             {
                 path: '/statistics/staff',
                 name: '人员',
-                level: 2,
-                meta: {icon: '', permissionKey: 'staff', permissionParent: 'statistics'}
+                id: 17,
+                permission: '',
             }
         ]
     }

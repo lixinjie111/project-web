@@ -14,7 +14,6 @@ export default {
     name: 'layout',
     components: {MenuSider},
     methods: {
-        // 
     },
     mounted() {
     }

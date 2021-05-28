@@ -9,7 +9,7 @@
       </div>
     </ContentHeader>
     <div class="role-content">
-      <div class="role-table">
+      <div :class="['role-table', total > pageSize ? 'has-pagination' : 'no-pagination']">
         <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
       </div>
       <Pagination v-if="total > pageSize" :total="total" :curPageNum="curPageNum" :pageSize="pageSize" @pagination-change-pagesize="handleChangePageSize" @pagination-change-page="handleChangePage"></Pagination>
@@ -33,7 +33,7 @@ export default {
   components: {BasicTable, Modal},
   data() {
     return {
-      total: 50, // 总数据条数
+      total: null, // 总数据条数
       pageSize: 10, // 页面数据size
       curPageNum: 1, // 当前页码
 
@@ -77,13 +77,7 @@ export default {
           }
         },
       ],
-      tableData: [
-        { "roleId": 1, "roleName": "管理员1"},
-        { "roleId": 2, "roleName": "管理员2"},
-        { "roleId": 3, "roleName": "管理员3"},
-        { "roleId": 4, "roleName": "管理员4"},
-        { "roleId": 5, "roleName": "管理员5"},
-      ],
+      tableData: [],
       
       // modal相关数据
       isShowModal: false,
@@ -94,7 +88,11 @@ export default {
         roleId: '',
         roleName: ''
       },
-      rules: {}
+      rules: {
+        roleName: [
+          { required: true, message: '请输入分组名称', trigger: 'blur' },
+        ]
+      }
     }
   },
   methods: {
@@ -111,7 +109,17 @@ export default {
     },
     // 获取角色分组列表
     async handleGetRoleList(){
-      let {code, data, msg} = await api.org.getRoleList(this.curPageNum, this.pageSize);
+      try {
+        let {code, data} = await api.org.getRoleList(this.curPageNum, this.pageSize);
+        if(code === 0){
+          let {total, records} = data;
+          this.total = total;
+          this.tableData = records;
+        }
+      }catch(error){
+        console.log(error)
+      }
+      
     },
     // 维护 type: 组员管理 role, 操作权限 operation, 数据权限 data 
     handlePermission(type, role) {
@@ -138,7 +146,7 @@ export default {
       } else {
         this.modalTitle = '编辑分组名称';
         this.okText = '保存';
-        this.$set(this, 'form', role)
+        this.$set(this, 'form', {roleId: role.roleId, roleName: role.roleName})
       }
       this.isShowModal = true;
     },
@@ -146,12 +154,11 @@ export default {
     handleSubmit(){
       this.$refs.roleForm.validate(async (valid) => {
         if (valid) {
-          let {code, data, msg} = this.$api.org.handlePostPutRoleInfo(form.roleName, form.roleId);
+          let {code} = await this.$api.org.handlePostPutRoleInfo(this.form.roleName, this.form.roleId);
           if(code === 0){
+            this.handleGetRoleList();
             this.handleCancel();
-            this.$message.success(msg);
-          } else{
-            this.$message.error(msg);
+            this.$message.success('保存成功！');
           }
         } else {
           return false;
@@ -168,15 +175,18 @@ export default {
         title: '提示',
         message: `您确定要删除 ${role.roleName} 吗？`,
         okText: '确认删除',
-        onOk(){
-          this.$api.org.handleDelRole(role.roleId).then((code, data, msg) => {
+        onOk: async () =>{
+          try {
+            let {code} = await this.$api.org.handleDelRole(role.roleId);
             if(code === 0){
               this.$message.success('删除成功！');
-              this.getRoleList();
+              this.handleGetRoleList();
             }else{
               this.$message.error('删除失败！');
             }
-          })
+          }catch(error){
+            console.log(error)
+          }
         },
         cancelText: '取消',
         onCancel() {
@@ -193,15 +203,18 @@ export default {
 .role-container {
   margin: 16px 24px 24px 24px;
   .role-content {
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
     height: calc(100vh - 163px);
     background: #fff;
     border-radius: 4px;
     border: 1px solid #EAEDF7;
     .role-table {
-      flex: 1;
+      &.no-pagination {
+        height: 100%;
+      }
+      &.has-pagination {
+        height: calc(100% - 63px);
+      }
       /deep/ .vxe-grid{
         height: 100%;
       }
@@ -232,6 +245,9 @@ export default {
           }
         }
       }
+    }
+    /deep/ .pagination {
+      height: 60px;
     }
   }
 }
