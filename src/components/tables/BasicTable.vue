@@ -1,40 +1,71 @@
 <template>
-  <!-- <vxe-table
-    border
-    resizable
-    ref="xTable"
-    :data="tableData">
-    <vxe-table-column v-for="(item, index) in setTableField" :key="index"
-      :type="item.type" :title="item.title" :field="item.field" :width="item.width"  
-      :cell-render="{content: item.render, events: {}}">
-    </vxe-table-column>
-  </vxe-table> -->
-  <vxe-grid
-    border
-    resizable
-    height="auto"
-    :data="tableData"
-    :columns="setTableColumns">
-  </vxe-grid>
+    <!-- <vxe-table
+      border
+      resizable
+      ref="xTable"
+      :data="tableData">
+      <vxe-table-column v-for="(item, index) in setTableField" :key="index"
+        :type="item.type" :title="item.title" :field="item.field" :width="item.width"
+        :cell-render="{content: item.render, events: {}}">
+      </vxe-table-column>
+    </vxe-table> -->
+    <vxe-grid
+        border
+        resizable
+        :data="tableData"
+        :edit-config="{trigger: 'click', mode: 'cell'}"
+        :columns="setTableColumns">
+    </vxe-grid>
 </template>
-<script>
-export default {
-  props: {
-    setTableColumns: {
-      type: Array,
-      required: true,
-      default: () => []
-    },
-    tableData: {
-      type: Array,
-      required: true,
-      default: () => []
-    }
-  }, 
-  data() {
-    return {
 
+<script>
+    export default {
+        props: {
+            setTableColumns: {
+                type: Array,
+                required: true,
+                default: () => []
+            },
+            tableData: {
+                type: Array,
+                required: true,
+                default: () => []
+            }
+        },
+        data() {
+            return {}
+        }
     }
-  }
-}
 </script>
+
+<style lang="scss">
+    .vxe-table--tooltip-wrapper {
+        &.theme--dark {
+            font-size: 14px !important;
+            padding: 6px 8px !important;
+            background-color: rgba(36, 47, 87, 0.8) !important;
+            border-radius: 4px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+
+            &.placement--top {
+                .vxe-table--tooltip-arrow {
+                    border-top-color: rgba(36, 47, 87, 0.8) !important;
+
+                    &:before {
+                        border-top-color: rgba(36, 47, 87, 0.8) !important;
+                    }
+                }
+            }
+
+            &.placement--bottom {
+                .vxe-table--tooltip-arrow {
+                    border-bottom-color: rgba(36, 47, 87, 0.8) !important;
+
+                    &:before {
+                        border-bottom-color: rgba(36, 47, 87, 0.8) !important;
+                    }
+                }
+            }
+        }
+    }
+</style>
