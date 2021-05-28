@@ -20,7 +20,7 @@ time, mark, audio, video,input {
 	margin: 0;
 	padding: 0;
 	/*border: 0;*/
-	vertical-align: baseline;
+	/*vertical-align: baseline;*/
 }
 em,i{ font-style:normal;}
 /* HTML5 display-role reset for older browsers */
