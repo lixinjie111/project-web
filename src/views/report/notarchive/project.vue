@@ -1,17 +1,174 @@
 <template>
     <div class="notarchive-project-container">
-        project
+        <ContentHeader type="title" title="重点项目"></ContentHeader>
+        <Collapse title="Sophia">
+            <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
+        </Collapse>
+        <Collapse title="元讯IM工具">
+            <BasicTable :tableData="tableData" :setTableColumns="setTableColumns"></BasicTable>
+        </Collapse>
     </div>
 </template>
 
 <script>
+    import BasicTable from "@/components/tables/BasicTable";
+    import Status from "@/components/business/Status";
+    import IconToolTip from "@/components/tooltip/IconToolTip";
+    import TextToolTip from "@/components/tooltip/TextToolTip";
+    import Collapse from "@/components/collapse/Collapse";
+
     export default {
-        name: "project"
+        name: "project",
+        components: {Collapse, TextToolTip, IconToolTip, Status, BasicTable},
+        data() {
+            return {
+                tableData: [
+                    {
+                        projectName: '项目名称项目名称项目名称项目名称项目名称1',
+                        projectManger: '项目名称项目名称项目名称项目名称项目名称1',
+                        endTime: '2021-02-12',
+                        progress: 30,
+                        restDay: '20',
+                        status: 1,
+                        remark: 'iueqiwuo'
+                    },
+                    {
+                        projectName: '项目名称',
+                        projectManger: '222',
+                        endTime: '2021-02-12',
+                        progress: 30,
+                        restDay: '20',
+                        status: 2,
+                        remark: ''
+                    }
+                ],
+                setTableColumns: [
+                    {
+                        title: '项目名称',
+                        field: 'projectName',
+                        width: 280,
+                        slots: {
+                            default: ({row, rowIndex}) => {
+                                return [
+                                    <div class="table-name">
+                                        <span class={'status' + (parseInt(row.status) + 1)}></span>
+                                        <span class="index">{rowIndex + 1}</span>
+                                        <TextToolTip className="name" content={row.projectName}
+                                                     refName={'table-name' + rowIndex}></TextToolTip>
+                                    </div>
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        title: '负责人',
+                        field: 'projectManger',
+                        showOverflow: true
+                    },
+                    {
+                        title: '截止日期',
+                        field: 'endTime',
+                        slots: {
+                            default: ({row}) => {
+                                return [
+                                    <div class="table-time">
+                                        <span>{row.endTime}</span>
+                                        <IconToolTip iconName="iconzhuyi" content="已变更"></IconToolTip>
+                                    </div>
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        title: '进度',
+                        field: 'progress',
+                        width: 120,
+                        slots: {
+                            default: ({row}) => {
+                                return [
+                                    <a-progress percent={row.progress} size="small"/>
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        title: '剩余工期(天)',
+                        field: 'restDay',
+                        width: 120
+                    },
+                    {
+                        title: '状态',
+                        field: 'status',
+                        slots: {
+                            default: ({row}) => {
+                                return [
+                                    <Status value={row.status}></Status>
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        title: '备注',
+                        field: 'remark',
+                        showOverflow: true,
+                        editRender: {name: 'input', attrs: {type: 'text', placeholder: '请输入备注'}}
+                    }
+                ]
+            }
+        },
+        methods: {}
     }
 </script>
 
 <style scoped lang="scss">
     .notarchive-project-container {
+        padding: 0 24px;
 
+        .table-name {
+            height: 40px;
+            line-height: 40px;
+            position: relative;
+
+            $bgColors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+            @each $bg in $bgColors {
+                $i: index($bgColors, $bg);
+                .status#{$i} {
+                    position: absolute;
+                    left: -8px;
+                    top: 0px;
+                    width: 4px;
+                    height: 40px;
+                    background: nth($bgColors, $i);
+                    line-height: 24px;
+                }
+            }
+
+            .index {
+                margin: 0 16px;
+                font-size: 14px;
+                font-family: PingFangSC-Regular, PingFang SC;
+                font-weight: 400;
+                color: #97A0C3;
+                vertical-align: middle;
+            }
+
+            .text-tooltip {
+                display: inline-block;
+                vertical-align: top;
+                width: 220px;
+            }
+        }
+
+        .table-time {
+            .icon-tooltip {
+                margin-left: 5px;
+                display: inline-block;
+
+                /deep/ .iconzhuyi {
+                    color: #FF4C60;
+                    vertical-align: -1px;
+                }
+            }
+        }
     }
 </style>

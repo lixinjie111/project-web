@@ -1,0 +1,35 @@
+@import 'vxe-table/styles/variable.scss';
+
+// 修改样式变量
+/*font*/
+$vxe-font-family: PingFangSC-Regular, PingFang SC;
+$vxe-font-color: #242F57;
+
+/*size*/
+$vxe-border-radius: 2px;
+
+/*table*/
+$vxe-table-font-color: $vxe-font-color;
+$vxe-table-header-font-color: #7C88B1;
+$vxe-table-footer-font-color: $vxe-font-color;
+$vxe-table-border-radius: $vxe-border-radius;
+$vxe-table-border-color: #EAEDF7;
+$vxe-table-header-background-color: #FFFFFF;
+$vxe-table-header-font-weight: 400;
+$vxe-table-row-height-default: 40px;
+$vxe-table-row-line-height: 20px;
+$vxe-table-cell-padding-left: 8px;
+$vxe-table-cell-padding-right: 8px;
+
+/*tooltip*/
+$vxe-tooltip-dark-background-color: #242F57;
+
+/*input*/
+$vxe-input-height-default: 28px;
+
+/*switch*/
+$vxe-switch-open-background-color: #2373FF;
+$vxe-switch-close-background-color: #7C88B1;
+
+
+@import 'vxe-table/styles/modules.scss';

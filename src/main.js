@@ -12,6 +12,8 @@ import store from './store/index'
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
+// 配置vxe-table主题
+import '@/assets/css/vxe-table/main.scss'
 
 import '@/assets/css/reset.css'
 import '@/assets/iconfont/iconfont.css'
