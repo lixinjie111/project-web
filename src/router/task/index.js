@@ -1,5 +1,5 @@
 import Simple from '@/layout/SimpleNav.vue'
-import User from '@/views/task/home.vue'
+import Home from '@/views/task/home.vue'
 
 export default {
   name: '项目',
@@ -11,6 +11,6 @@ export default {
     permissionKey: 'project'
   },
   children: [
-    {path: '/task/home', component: User, name: '首页', level: 2, meta: {icon: '', permissionKey: 'users', permissionParent: 'project' }},
+    {path: '/task/home', component: Home, name: '首页', level: 2, meta: {icon: '', permissionKey: 'users', permissionParent: 'project' }},
   ]
 }
