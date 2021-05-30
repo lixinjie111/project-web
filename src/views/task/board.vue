@@ -38,18 +38,14 @@
         </FlatButton>
       </div>
     </div>
-
-    <!-- 列表 -->
-    <TreeTable :columns="tableColumns" :data-source="tableData" v-if="viewType===0"/>
-    <!-- 看板 -->
-    <div class="board" v-else>
+    <div class="board">
       <div class="group">
         <div class="name">未开始</div>
         <draggable v-model="status0" group="site">
           <transition-group>
             <div class="item" v-for="item in status0" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
-              <div class="incharge">{{item.taskExecutor}}</div>
+              <div class="title">{{item.taskName}}</div>
+              <div class="incharge">{{item.incharge}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
           </transition-group>
@@ -62,8 +58,8 @@
         <draggable v-model="status1" group="site">
           <transition-group>
             <div class="item" v-for="item in status1" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
-              <div class="incharge">{{item.taskExecutor}}</div>
+              <div class="title">{{item.taskName}}</div>
+              <div class="incharge">{{item.incharge}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
           </transition-group>
@@ -76,8 +72,8 @@
         <draggable v-model="status2" group="site">
           <transition-group>
             <div class="item" v-for="item in status2" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
-              <div class="incharge">{{item.taskExecutor}}</div>
+              <div class="title">{{item.taskName}}</div>
+              <div class="incharge">{{item.incharge}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
           </transition-group>
@@ -90,8 +86,8 @@
         <draggable v-model="status3" group="site">
           <transition-group>
             <div class="item" v-for="item in status3" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
-              <div class="incharge">{{item.taskExecutor}}</div>
+              <div class="title">{{item.taskName}}</div>
+              <div class="incharge">{{item.incharge}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
           </transition-group>
@@ -104,8 +100,8 @@
         <draggable v-model="status4" group="site">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
-              <div class="incharge">{{item.taskExecutor}}</div>
+              <div class="title">{{item.taskName}}</div>
+              <div class="incharge">{{item.incharge}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
           </transition-group>
@@ -114,8 +110,6 @@
       </div>
 
     </div>
-    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" />
-    <TaskEdit :isShow="showEdit" @cancel="showEdit = false" @ok="handleEditClose" :value="tableData[0]" @create-child="handleCreate" />
   </div>
 </template>
 
@@ -162,78 +156,13 @@
           { id: 23666, name: 'Test8', status: 1, type: 'xlsx', size: 2048, date: '2020-11-01' },
           { id: 24555, name: 'vxe-table 从入门到放弃9', status: 1, type: 'avi', size: 224, date: '2020-10-01' }
         ],
-        tableColumns: [
-          // {
-          //   type: 'checkbox',
-          //   width: 60,
-          // },
-          {
-            dataIndex: 'id',
-            title: 'ID',
-          },
-          {
-            dataIndex: 'name',
-            title: '任务名称',
-            treeNode: true,
-            customRender: (text, record, index) => {
-              return {
-                attrs:{},
-                props:{},
-                class:{},
-                style:{},
-                children: this.$createElement('a', {on: {click: () => this.handleEdit(record)}}, text)
-              }
-            }
-          },
-          {
-            dataIndex: 'status',
-            title: '状态',
-            scopedSlots: {
-              customRender: 'status'
-            }
-          },
-          {
-            dataIndex: 'status',
-            title: '优先级',
-            scopedSlots: {
-              customRender: 'priority'
-            }
-          },
-          {
-            dataIndex: 'type',
-            title: '任务类型',
-          },
-          {
-            dataIndex: 'type',
-            title: '负责人',
-          },
-          {
-            dataIndex: 'type',
-            title: '执行者',
-          },
-          {
-            dataIndex: 'type',
-            title: '工时/消耗',
-          },
-          {
-            dataIndex: 'type',
-            title: '工时/剩余',
-          },
-          {
-            dataIndex: 'status',
-            title: '进度',
-            scopedSlots: {
-              customRender: 'progress'
-            }
-          },
-        ],
         boardData: [
           {
             "beginTime": "2021/01/01",
             "endTime": "2021/04/04",
             "id": 1,
             "taskExecutor": "张珊,王五",
-            "taskName": "从入门到放弃96从入门到放弃96从入门到放弃96",
+            "taskName": "任务名称",
             status: 1
           },
           {
@@ -440,7 +369,7 @@
         line-height: 22px;
       }
       .item {
-        min-height: 106px;
+        height: 106px;
         background: #FFFFFF;
         border-radius: 4px;
         padding: 12px;
@@ -448,17 +377,11 @@
       }
 
       .title {
-        /*height: 22px;*/
+        height: 22px;
         font-size: 14px;
         font-weight: 400;
         color: #242F57;
         line-height: 22px;
-        cursor: pointer;
-
-        &:hover {
-          color: #0064FF;
-          text-decoration: underline;
-        }
       }
 
       .incharge {
@@ -467,7 +390,6 @@
         font-weight: 400;
         color: #242F57;
         line-height: 20px;
-        margin-top: 8px;
       }
 
       .plan {
@@ -478,9 +400,6 @@
         font-weight: 400;
         color: #FF4C60;
         line-height: 20px;
-        margin-top: 8px;
-        display: inline-block;
-        padding: 0 8px;
       }
 
       .ant-btn {

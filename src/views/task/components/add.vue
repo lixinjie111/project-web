@@ -13,7 +13,7 @@
         </a-col>
         <a-col :span="12">
           <a-form-model-item label="负责人" prop="incharge">
-            <UserSelect v-model="form.incharge" />
+            <UserSelect v-model="form.incharge" subtitle="负责人" />
           </a-form-model-item>
         </a-col>
       </a-row>
