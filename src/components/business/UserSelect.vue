@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserIcon v-if="multiple" :value="item" v-for="(item, index) in userList" @close="handleDelete(index)"/>
+    <UserIcon v-if="multiple" :value="item.name" :key="item.id" v-for="(item, index) in userList" @close="handleDelete(index)"/>
     <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
       <template v-if="multiple">
         <CircleButton></CircleButton>
@@ -18,8 +18,9 @@
         </TwoValue>
       </template>
       <template slot="content">
-        <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields"
-              @onSelectTreeNodes="handleSelect"
+        <a-tree v-if="treeList.length" :tree-data="treeList" :replaceFields="replaceFields"
+                :checkedKeys="userKeys"
+                @select="handleSelect"
               @check="handleChange"
               :checkable="multiple"
               :selectable="!multiple" />
@@ -40,6 +41,7 @@
     data() {
       return {
         mode: 'user', // user/add
+        userKeys: [],
         users: [],
         replaceFields: {
           key: 'id',
@@ -79,7 +81,6 @@
                     "scopedSlots":{
                       "name":"custom"
                     },
-                    "children":[],
                   }
                 ],
               },
@@ -89,7 +90,6 @@
                 "scopedSlots":{
                   "name":"custom"
                 },
-                "children":[],
               },
               {
                 "id":"99231020",
@@ -97,7 +97,6 @@
                 "scopedSlots":{
                   "name":"custom"
                 },
-                "children":[],
               }
             ],
           },
@@ -140,17 +139,25 @@
         return null;
       },
       handleChange(e) {
-        let id = e[0];
-        let user = this.getUserById(id, this.treeList);
-        console.log(e, user);
-        this.users = user;
-        this.$emit('change', user)
-        this.$emit('input', user)
+        let users = [];
+        e.forEach(id => {
+          let user = this.getUserById(id, this.treeList);
+          if (! user.children)
+            users.push(user);
+          // console.log(e, user);
+        })
+        this.userKeys = e;
+        this.users = users;
+        this.$emit('change', users)
+        this.$emit('input', users)
       },
       handleSelect(e) {
         let id = e[0];
-        this.showPopup = false;
         let user = this.getUserById(id, this.treeList);
+        if (user.children) {
+          return;
+        }
+        this.showPopup = false;
         console.log(e, user);
         this.users = user;
         this.$emit('change', user)

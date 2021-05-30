@@ -48,7 +48,7 @@
         <draggable v-model="status0" group="site">
           <transition-group>
             <div class="item" v-for="item in status0" :key="item.id">
-              <div class="title">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
@@ -62,7 +62,7 @@
         <draggable v-model="status1" group="site">
           <transition-group>
             <div class="item" v-for="item in status1" :key="item.id">
-              <div class="title">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
@@ -76,7 +76,7 @@
         <draggable v-model="status2" group="site">
           <transition-group>
             <div class="item" v-for="item in status2" :key="item.id">
-              <div class="title">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
@@ -90,7 +90,7 @@
         <draggable v-model="status3" group="site">
           <transition-group>
             <div class="item" v-for="item in status3" :key="item.id">
-              <div class="title">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
@@ -104,7 +104,7 @@
         <draggable v-model="status4" group="site">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
-              <div class="title">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan">2021年04月16日 - 2021年04月18日</div>
             </div>
@@ -453,6 +453,12 @@
         font-weight: 400;
         color: #242F57;
         line-height: 22px;
+        cursor: pointer;
+
+        &:hover {
+          color: #0064FF;
+          text-decoration: underline;
+        }
       }
 
       .incharge {
