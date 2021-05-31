@@ -1,7 +1,7 @@
 <template>
     <div class="basic-tabs-container">
         <div class="tabs-content">
-            <div class="item" v-for="(item,index) in tabList" :key="index" :class="tabActive == index + 1 ? 'active' : ''" @click="changeTab(index+1)">{{item.name}}<span v-show="tabActive == index + 1">{{item.total}}</span></div>
+            <div class="item" v-for="(item,index) in tabList" :key="index" :class="tabActive == index + 1 ? 'active' : ''" @click="changeTab(index+1,item.status)">{{item.name}}<span v-show="tabActive == index + 1">{{item.num}}</span></div>
             <div class="line"></div>
         </div>
     </div>
@@ -36,10 +36,10 @@
                     });
                 },1000);
             },
-            changeTab(index) {
+            changeTab(index,status) {
                 // window.scrollTo(0, this.tabTop - 100);
                 this.tabActive = index;
-                this.$emit('change', index);
+                this.$emit('change', status);
             }
         }
     }

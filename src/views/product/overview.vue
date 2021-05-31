@@ -25,7 +25,7 @@
                         <p class="table-num">{{data.row.productCode}}</p>
                     </template>
                     <div slot="closedTime" slot-scope="data" class="table-close-time">
-                        <p class="table-name">{{data.row.closedTime}}</p>
+                        <p class="table-name">{{data.row.closedTime || '-'}}</p>
                         <p class="table-title">关闭时间</p>
                         <IconToolTip v-if="data.row.remark" class="table-tip" iconName="icontishi" :content="data.row.remark"></IconToolTip>
                     </div>
@@ -57,6 +57,7 @@
     import Modal from '@/components/Modal.vue'
     import AddForm from "./components/addForm";
     import closeForm from "./components/closeForm";
+    import XEUtils from 'xe-utils'
 
     export default {
         name: 'overview',
@@ -66,15 +67,18 @@
                 tabList: [
                     {
                         name: '未关闭',
-                        total: 8
+                        status: 0,
+                        num: 0
                     },
                     {
                         name: '关闭',
-                        total: 10
+                        status: 1,
+                        num: 0
                     },
                     {
                         name: '全部产品',
-                        total: 888
+                        status: 2,
+                        num: 0
                     }
                 ],
                 columns: [
@@ -90,59 +94,24 @@
                     {
                         title: '产品负责人',
                         key: 'productMaster',
-                        width: '25%',
+                        width: '23%',
                         ellipsis: true
                     },
                     {
                         title: '创建时间',
                         key: 'createdTime',
-                        width: '19%'
+                        width: '20%'
                     },
                     {
                         slot: 'closedTime',
-                        width: '19%'
+                        width: '20%'
                     },
                     {
                         slot: 'action',
                         width: '10%'
                     },
                 ],
-                listData: [
-                    {
-                        closedTime: "2021-05-13",
-                        createdBy: "",
-                        createdTime: "2021-04-13",
-                        deletedFlag: 0,
-                        deptId: 952777,
-                        id: 0,
-                        productCode: "ISO9002",
-                        productDescription: "反正这是一个好产品，爱买不买",
-                        productMaster: "9527,95277",
-                        productName: "好产品",
-                        publicFlag: 1,
-                        remark: "测试",
-                        status: 1,
-                        updatedBy: "",
-                        updatedTime: ""
-                    },
-                    {
-                        closedTime: "2021-05-13",
-                        createdBy: "",
-                        createdTime: "",
-                        deletedFlag: 0,
-                        deptId: 952777,
-                        id: 0,
-                        productCode: "ISO9002",
-                        productDescription: "反正这是一个好产品，爱买不买",
-                        productMaster: "9527,95277",
-                        productName: "好产品2",
-                        publicFlag: 1,
-                        remark: "测试",
-                        status: 1,
-                        updatedBy: "",
-                        updatedTime: ""
-                    }
-                ],
+                listData: [],
                 total: 50, // 总数据条数
                 pageSize: 10, // 页面数据size
                 curPageNum: 1, // 当前页码
@@ -160,25 +129,49 @@
                 }
             }
         },
+        created() {
+            this.getCount();
+            this.getList(0);
+        },
         methods: {
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
                 if(pageNum) this.curPageNum = pageNum;
-                this.getList();
+                this.getList(0);
             },
             // 切换当前页码
             handleChangePage(pageNum){
                 this.curPageNum = pageNum;
-                this.getList();
+                this.getList(0);
+            },
+            // 获取产品列表状态数量
+            async getCount(){
+                try {
+                    let {code, data} = await this.$api.product.getProductCount(this.curPageNum, this.pageSize);
+                    if(code === 0){
+                        XEUtils.merge(this.tabList,data);
+                    }
+                }catch(error){
+                    console.log(error)
+                }
             },
             // 获取产品列表
-            getList() {
-
+            async getList(status){
+                try {
+                    let {code, data} = await this.$api.product.getProductList(this.curPageNum, this.pageSize, status);
+                    if(code === 0){
+                        let {total, records} = data;
+                        this.total = total;
+                        this.listData = records;
+                    }
+                }catch(error){
+                    console.log(error)
+                }
             },
             // 切换产品状态
-            handleChangeTab(index) {
-                console.log(index);
+            handleChangeTab(status) {
+                this.getList(status);
             },
             // 添加产品
             handleAdd() {
