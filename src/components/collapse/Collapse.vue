@@ -47,7 +47,7 @@
             }
 
             > i {
-                margin: 0 10px;
+                margin-right: 10px;
                 font-size: 15px;
                 color: #7C88B1;
 
