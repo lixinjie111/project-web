@@ -8,10 +8,11 @@
       </div>
     </ContentHeader>
     <div class="table">
-      <a-table :data-source="dataSource" :columns="columns">
-
-      </a-table>
+      <a-table :data-source="dataSource" :columns="columns" />
     </div>
+    <a-modal title="选择成员" v-model="showEdit">
+      <a-table />
+    </a-modal>
   </div>
 </template>
 
@@ -23,6 +24,7 @@
     components: {ContentHeader},
     data() {
       return {
+        showEdit: false,
         dataSource: [
           {
             "beginTime": "2021/05/14",
@@ -91,9 +93,10 @@
     },
     methods: {
       handleAddEditUser() {
-
+        this.showEdit = true;
       },
       handleEdit(record) {
+        this.showEdit = true;
       },
       handleDelete(record) {
         this.dataSource.splice(this.dataSource.indexOf(record), 1);
