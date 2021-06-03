@@ -31,7 +31,8 @@
                     </div>
                     <div slot="action" slot-scope="data" class="table-action">
                         <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
-                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="handleClose(data.row)"></IconToolTip>
+                        <IconToolTip iconName="iconkaiguan" :disabled="true" content="已关闭" v-if="data.row.status"></IconToolTip>
+                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="handleClose(data.row)" v-else></IconToolTip>
                         <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)"></IconToolTip>
                     </div>
                 </ListTable>
@@ -42,10 +43,10 @@
             </div>
         </div>
         <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
-            <AddForm slot="content"></AddForm>
+            <AddForm ref="addForm" slot="content" :form="editForm"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showCloseModal" :title="closeModal.modalTitle" :okText="closeModal.okText" :cancelText="closeModal.cancelText" headeralgin="left" @modal-sure="handleCloseSubmit" @modal-cancel="handleCloseCancel">
-            <closeForm slot="content"></closeForm>
+            <closeForm ref="closeForm" slot="content"></closeForm>
         </Modal>
     </div>
 </template>
@@ -57,7 +58,6 @@
     import Modal from '@/components/Modal.vue'
     import AddForm from "./components/addForm";
     import closeForm from "./components/closeForm";
-    import XEUtils from 'xe-utils'
 
     export default {
         name: 'overview',
@@ -121,19 +121,24 @@
                     okText:'保存',
                     cancelText:'取消'
                 },
+                closeItem: {},
                 showCloseModal: false,
                 closeModal: {
                     modalTitle: '关闭产品线',
                     okText:'关闭',
                     cancelText:'取消'
-                }
+                },
+                editForm: {}
             }
         },
         created() {
-            this.getCount();
-            this.getList(0);
+            this.resetList();
         },
         methods: {
+            resetList() {
+                this.getCount();
+                this.getList(0);
+            },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
@@ -150,7 +155,12 @@
                 try {
                     let {code, data} = await this.$api.product.getProductCount(this.curPageNum, this.pageSize);
                     if(code === 0){
-                        XEUtils.merge(this.tabList,data);
+                        this.tabList = this.tabList.map((item) => {
+                            let t = data.find((i) => {
+                                return i.status == item.status;
+                            });
+                            return {...item, ...t};
+                        });
                     }
                 }catch(error){
                     console.log(error)
@@ -178,12 +188,31 @@
                this.showAddModal = true;
             },
             // 编辑产品
-            handleEdit(item) {
+            async handleEdit(item) {
                 this.showAddModal = true;
+                console.log('item',item);
+                try {
+                    let {code, data} = await this.$api.product.getProductDetail(item.id);
+                    if(code === 0){
+                        this.editForm = {
+                            id: data.id,
+                            cancelRelIds:'',
+                            productName: data.productName,
+                            productDescription: data.productDescription,
+                            productCode: data.productCode,
+                            masterList: data.masterList,
+                            publicFlag: data.publicFlag,
+                            projectList: data.relList
+                        };
+                    }
+                }catch(error){
+                    console.log(error)
+                }
             },
             // 关闭产品
             handleClose(item) {
                 this.showCloseModal = true;
+                this.closeItem =  item;
             },
             // 删除产品
             handleDel(item) {
@@ -191,8 +220,18 @@
                     title: '提示',
                     message: `您确定要删除 ${item.productName} 吗？`,
                     okText: '确认删除',
-                    onOk(){
-
+                    onOk: async () => {
+                        try {
+                            let {code} = await this.$api.product.delProduct(item.id);
+                            if(code === 0){
+                                this.$message.success('删除成功！');
+                                this.resetList();
+                            }else{
+                                this.$message.error('删除失败！');
+                            }
+                        }catch(error){
+                            console.log(error)
+                        }
                     },
                     cancelText: '取消',
                     onCancel() {
@@ -201,16 +240,52 @@
                 });
             },
             // 添加、编辑产品保存
-            handleAddSubmit() {
-                this.showAddModal = false;
+            async handleAddSubmit() {
+                this.$refs.addForm.$refs.addForm.validate(async (valid) => {
+                    if (valid) {
+                        let params = this.$refs.addForm.$refs.addForm.model;
+                        try {
+                            if(params.id) { //编辑
+                                let {code} = await this.$api.product.editProduct(params);
+                                if(code === 0){
+                                    this.resetList();
+                                    this.showAddModal = false;
+                                }
+                            }else { //编辑添加
+                               let {code} = await this.$api.product.addProduct(params);
+                               if(code === 0){
+                                   this.resetList();
+                                   this.showAddModal = false;
+                               }
+                            }
+                        }catch(error){
+                            console.log(error)
+                        }
+                    } else {
+                        console.log('提交失败!');
+                        return false;
+                    }
+                });
+
             },
             // 添加、编辑产品取消
             handleAddCancel() {
                 this.showAddModal = false;
             },
             // 关闭产品保存
-            handleCloseSubmit() {
-                this.showCloseModal = false;
+            async handleCloseSubmit() {
+                console.log(this.closeItem);
+                try {
+                    let remark = this.$refs.closeForm.$refs.closeForm.model.remark;
+                    let {code} = await this.$api.product.closeProduct(this.closeItem.id, remark);
+                    if(code === 0){
+                        this.$message.success('关闭成功！');
+                        this.resetList();
+                        this.showCloseModal = false;
+                    }
+                }catch(error){
+                    console.log(error);
+                }
             },
             // 关闭产品取消
             handleCloseCancel() {
