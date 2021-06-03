@@ -1,6 +1,6 @@
 <template>
     <div class="list-container">
-        <ListTable :columns="columns" :data="list" class="mt-25">
+        <ListTable :columns="columns" :data="list" class="mt-25" @jump="handelJump">
             <div slot="projectName" slot-scope="data" class="table-status">
                 <div class="table-status-bg" :style="'background:' + statusColor(data.row.status)"></div>
                 <TextToolTip className="table-name" :content="data.row.projectName"
@@ -158,6 +158,10 @@
                         return '#F9AD69';
                 }
             },
+            handelJump(item) {
+                console.log(item);
+                this.$router.push('/task/home');
+            },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
@@ -244,6 +248,10 @@
 <style scoped lang="scss">
     .list-container {
         margin-top: 25px;
+
+        /deep/ .item-td {
+            cursor: pointer;
+        }
 
         .table-status {
             position: relative;

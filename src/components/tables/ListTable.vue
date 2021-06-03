@@ -2,7 +2,7 @@
     <div class="list-table-container">
         <div class="item-tr" v-for="(dataItem,dataIndex) in data" :key="dataIndex">
             <div class="item-td" v-for="(columnsItem,columnsIndex) in columns" :key="columnsIndex"
-                 :style="{width: columnsItem.width}">
+                 :style="{width: columnsItem.width}" @click="handleJump(dataItem)">
                 <template v-if="columnsItem.key == 'index'">
                     <div class="item-td-index">{{dataIndex + 1}}</div>
                 </template>
@@ -37,6 +37,11 @@
             data: {
                 type: Array,
                 default: () => []
+            }
+        },
+        methods: {
+            handleJump(item) {
+                this.$emit('jump',item);
             }
         }
     }
