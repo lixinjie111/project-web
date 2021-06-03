@@ -18,7 +18,7 @@ export default {
   name: 'MenuNav',
   data() {
     return {
-      
+
     }
   },
   computed: {
@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted(){
-   
+
   }
 }
 </script>
@@ -45,7 +45,7 @@ export default {
   min-width: 1360px;
   background: #fff;
   .nav-left, .nav-right {
-    width: 240px;
+    width: 440px;
     height: 51px;
     background: #fff;
   }

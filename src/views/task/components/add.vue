@@ -55,6 +55,7 @@
   import Modal from '@/components/Modal.vue'
   import UserSelect from "@/components/business/UserSelect";
   import PrioritySelect from "@/components/business/PrioritySelect";
+  import {createTask} from "@/api/task";
 
   export default {
     name: "TaskAdd",
@@ -92,7 +93,29 @@
             console.log(data)
             console.log('submit!', this.form);
             // 接口提交成功 isShow
-            this.$emit('ok', this.form);
+            createTask({
+              "executorList": [
+                {
+                  "userId": 88888,
+                  "userName": "曹达隆"
+                }
+              ],
+              "masterList": [
+                {
+                  "userId": 88888,
+                  "userName": "曹达隆"
+                }
+              ],
+              "planBeginTime": "2020-10-30 12:12:12",
+              "planEndTime": "2020-10-30 12:12:12",
+              "priority": 0,
+              "projectId": 9393939,
+              "taskDescription": "bbbb",
+              "taskName": "这个是任务",
+              "taskType": 0
+            }).then(res => {
+              this.$emit('ok', this.form);
+            }).catch(err => {});
           } else {
             return false;
           }

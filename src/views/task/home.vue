@@ -1,8 +1,9 @@
 <template>
-  <div class="home">
+  <div class="task-home">
     <MenuNav>
       <div slot="nav-left" class="nav-left-title">
-        这里写样式
+        <a class="back" @click="handleHome"><i class="iconfont iconshouye"></i>首页</a>
+        <a-select :options="projectList" class="proj-list" size="small"/>
       </div>
     </MenuNav>
     <div class="header">
@@ -131,42 +132,22 @@
   import TaskAdd from "./components/add";
   import TaskEdit from "./components/edit";
   import draggable from 'vuedraggable';
+  import {getTaskList} from "@/api/task";
+  import {taskTypes} from "@/const/data";
 
   export default {
     name: 'TaskHome',
     components: { TreeTable, FlatButton, MyIcon, TaskAdd, TaskEdit, draggable },
     data() {
       return {
-        tableData: [
-          { id: 1000, name: 'vxe-table 从入门到放弃1', status: 3, type: 'mp3', size: 1024, date: '2020-08-01' },
+        page: 1,
+        projectList: [
           {
-            id: 1005,
-            name: 'Test2',
-            status: 1,
-            type: 'mp4',
-            size: null,
-            date: '2021-04-01',
-            children: [
-              { id: 24300, name: 'Test3', status: 1, type: 'avi', size: 1024, date: '2020-03-01' },
-              { id: 20045, name: 'vxe-table 从入门到放弃4', status: 1, type: 'html', size: 600, date: '2021-04-01' },
-              {
-                id: 10053,
-                name: 'vxe-table 从入门到放弃96',
-                status: 1,
-                type: 'avi',
-                size: null,
-                date: '2021-04-01',
-                children: [
-                  { id: 24330, name: 'vxe-table 从入门到放弃5', status: 1, type: 'txt', size: 25, date: '2021-10-01' },
-                  { id: 21011, name: 'Test6', status: 2, type: 'pdf', size: 512, date: '2020-01-01' },
-                  { id: 22200, name: 'Test7', status: 1, type: 'js', size: 1024, date: '2021-06-01' }
-                ]
-              }
-            ]
-          },
-          { id: 23666, name: 'Test8', status: 1, type: 'xlsx', size: 2048, date: '2020-11-01' },
-          { id: 24555, name: 'vxe-table 从入门到放弃9', status: 1, type: 'avi', size: 224, date: '2020-10-01' }
+            key: 1,
+            label: '秀梅苯肼基材'
+          }
         ],
+        tableData: [],
         tableColumns: [
           // {
           //   type: 'checkbox',
@@ -177,7 +158,7 @@
             title: 'ID',
           },
           {
-            dataIndex: 'name',
+            dataIndex: 'taskName',
             title: '任务名称',
             treeNode: true,
             customRender: (text, record, index) => {
@@ -205,23 +186,30 @@
             }
           },
           {
-            dataIndex: 'type',
+            dataIndex: 'taskType',
             title: '任务类型',
+            customRender(text) {
+              return taskTypes[text];
+            }
           },
           {
-            dataIndex: 'type',
+            dataIndex: 'taskMaster',
             title: '负责人',
           },
           {
-            dataIndex: 'type',
+            dataIndex: 'taskExecutor',
             title: '执行者',
           },
           {
-            dataIndex: 'type',
+            dataIndex: 'workHour',
+            title: '工时/预计',
+          },
+          {
+            dataIndex: 'usedHour',
             title: '工时/消耗',
           },
           {
-            dataIndex: 'type',
+            dataIndex: 'restHour',
             title: '工时/剩余',
           },
           {
@@ -367,7 +355,20 @@
         }
       },
     },
+    mounted() {
+      this.getTableList();
+      // getProjectList().then(res => {}).catch(e => {});
+    },
     methods: {
+      getTableList() {
+        getTaskList(this.page, 20, 9393939).then(res => {
+          if (res.code === 0 && res.data) {
+            this.tableData = res.data.records;
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       handleViewType(e) {
         // console.log('test', e)
         this.viewType = e.key;
@@ -385,13 +386,39 @@
       handleEditClose() {
         this.showEdit = false;
       },
+      handleHome() {
+        this.$router.push('/mine/home');
+      },
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.home {
+.task-home {
+  .back {
+    width: 68px;
+    height: 32px;
+    background: #F4F7FC;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #242F57;
+    line-height: 24px;
+    padding: 4px;
+    margin: 9px 12px 0 16px;
+
+    .iconfont {
+      margin-right: 4px;
+    }
+  }
+  .proj-list {
+    min-width: 236px;
+    height: 32px;
+    background: #F4F7FC;
+    border-radius: 8px;
+  }
+
   .header {
     background-color: white;
     display: flex;
@@ -496,6 +523,20 @@
 }
 </style>
 <style lang="scss">
+  .task-home {
+    .ant-select-selection--single {
+      height: 32px;
+      line-height: 32px;
+      background: #F4F7FC;
+      border: none;
+      border-radius: 8px;
+      box-shadow: none !important;
+
+      .ant-select-selection__rendered {
+        line-height: 32px;
+      }
+    }
+  }
   .header {
     .left {
       .ant-radio-button-wrapper {
