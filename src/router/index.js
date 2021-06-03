@@ -19,7 +19,6 @@ VueRouter.prototype.push = function push(location) {
 
 // 拦截路由，进行授权判断和缓存限制
 vueRouter.beforeEach((to, from, next) => {
-    debugger
     if (!to.meta?.isAuth && to.path !== '/') { // 不需要登录的页面
         // 登录禁止重复登录
         // if(store.state.users.accessToken && to.path.indexOf('/login')){
@@ -38,12 +37,12 @@ vueRouter.beforeEach((to, from, next) => {
 // 重置title
 vueRouter.afterEach((to) => {
     // reset the page title
-    const title = to.meta && to.meta.title ? to.meta.title : '项目管理';
+    const title = to.meta && to.meta?.title ? to.meta.title : '项目管理';
     document.title = title
     // 从路由的元信息中获取 title 属性
-    if (to.meta.title) {
-        document.title = to.meta.title;
-    }
+    // if (to.meta.title) {
+    //     document.title = to.meta.title;
+    // }
 })
 
 function setStoreMenu(to, next){

@@ -6,9 +6,9 @@ export default {
   path: '',
   component: Empty,
   meta: {
-    isAuth: false
+    isAuth: true
   },
   children: [
-    {path: '/project/home', component: Home, name: '首页', meta: { isAuth: false }}
+    {path: '/project/home', component: Home, name: '首页', meta: { isAuth: true }}
   ]
 }

@@ -9,12 +9,12 @@ export default {
   path: '',
   component: Empty,
   meta: {
-    isAuth: false
+    isAuth: true
   },
   children: [
-    {path: '/mine/home', component: Home, name: '首页', meta: { isAuth: false }},
-    {path: '/mine/project', component: Project, name: '项目', meta: { isAuth: false }},
-    {path: '/mine/task', component: Task, name: '任务', meta: { isAuth: false }},
-    {path: '/mine/dynamic', component: Dynamic, name: '动态', meta: { isAuth: false }}
+    {path: '/mine/home', component: Home, name: '首页', meta: { isAuth: true }},
+    {path: '/mine/project', component: Project, name: '项目', meta: { isAuth: true }},
+    {path: '/mine/task', component: Task, name: '任务', meta: { isAuth: true }},
+    {path: '/mine/dynamic', component: Dynamic, name: '动态', meta: { isAuth: true }}
   ]
 }
