@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import Tree from '@/components/Tree.vue'
+import Tree from '@/components/tree/Tree.vue'
 export default {
   name: 'operation',
   components: {Tree},
@@ -231,11 +231,27 @@ export default {
       .checkbox-item {
         float: left;
         padding-left: 24px;
-        width: 120px;
+        width: 140px;
         height: 46px;
         line-height: 46px;
         &:last-child {
           margin-right: auto;
+        }
+        /deep/ .ant-checkbox-wrapper {
+          vertical-align: top;
+          .ant-checkbox{
+            display: inline-block;
+            vertical-align: middle;
+          }
+          >span:nth-child(2) {
+            display: inline-block;
+            width: 100px;
+            vertical-align: middle;
+            font-size: 14px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
         }
       }
     }

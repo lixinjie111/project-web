@@ -175,6 +175,10 @@ export function handleGetDeptRoleList(roleId, deptId){
 export function handlePostModifyUserRole(roleId, joins, unJoins) {
   return httpaxios.post('/admin/user/batchModifyUserRole', {data: {roleId, joins, unJoins}})
 }
+/**
+ * 
+ * @returns 查询用户全部信息
+ */
 export function handleGetAdminUserInfo(){
   return httpaxios.get('/admin/user/info', {})
 }

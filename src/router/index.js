@@ -2,6 +2,7 @@
 import VueRouter from 'vue-router'
 import routes from './home'
 import store from '@/store'
+import {isInPermission} from '@/utils/common.js'
 
 const router = {
     mode:'history', // 对应的是 html5 的history API 有状态的路由
@@ -51,7 +52,7 @@ function setStoreMenu(to, next){
     let {menuList, menuMap, topMenu, firstMenu, secondMenu, permission, activeNavMenu} = store.state.system;
     if(!topMenu.length) return; // vuex已经缓存菜单
     // 有些页面不在菜单列表，根据数据操作权限 能进入某些页面
-    if(permission.indexOf(permissionKey) > -1) {
+    if(isInPermission(permissionKey)) {
         getrouterPath(entryPath)
         next();
         return ;

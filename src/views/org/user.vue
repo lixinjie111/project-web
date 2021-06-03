@@ -2,7 +2,7 @@
   <div class="userorg-container">
     <ContentHeader type="title" title="用户管理">
       <div slot="operation">
-        <a-button type="primary" @click="handleAddEditUser('add')">添加用户</a-button>
+        <a-button v-if="isInPermission('sys_user_add')" type="primary" @click="handleAddEditUser('add')">添加用户</a-button>
       </div>
     </ContentHeader>
     <div class="userorg-content">
@@ -19,88 +19,18 @@
         </div>
         <Pagination v-if="total > pageSize" :total="total" :curPageNum="curPageNum" :pageSize="pageSize" @pagination-change-pagesize="handleChangePageSize" @pagination-change-page="handleChangePage"></Pagination>
       </div>
-      <Modal :isShow="isShowModal" :title="modal.modalTitle" :okText="modal.okText" :cancelText="modal.cancelText" headeralgin="center" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
-        <a-form-model slot="content" ref="userForm"  class="user-form" layout="vertical" :model="form" :rules="rules">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-model-item label="用户名" prop="username">
-                <a-input v-model="form.username" placeholder="用户名" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="真实姓名" prop="realName">
-                <a-input v-model="form.realName" placeholder="真实姓名" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          
-          <a-form-model-item label="部门" prop="deptId">
-            <a-tree-select
-              v-model="form.deptId"
-              style="width: 100%"
-              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-              :default-value ="form.deptId"
-              :tree-data="treeList"></a-tree-select>
-          </a-form-model-item>
-
-          <a-form-model-item prop="roleList">
-            <template slot="label">
-              <span>角色分组</span>
-              <span class="second-title">(分组决定用户的权限列表)</span>
-            </template>
-            <a-select v-model="form.roleList" mode="multiple" :default-value="form.roleList">
-              <a-select-option v-for="item in roleList" :key="item.roleId">{{ item.roleName }}</a-select-option>
-            </a-select>
-          </a-form-model-item>
-
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-model-item prop="password">
-                <template slot="label">
-                  <span>密码</span>
-                  <!-- <span class="second-title">(6位以上，包含大小写字母和数字)</span> -->
-                </template>
-                <a-input-password disabled v-model="form.password" placeholder="密码"></a-input-password>
-                <a-button :class="['reset', form.userId ? '': 'reset-disabled']" type="link" ghost @click="handleResetPassWord(form.userId)">重置密码</a-button>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="电话" prop="phone">
-                <a-input v-model="form.phone" placeholder="电话" />
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-model-item prop="position">
-                <template slot="label">
-                  <span>职位</span>
-                  <span class="second-title">(职位影响内容和用户列表的顺序)</span>
-                </template>
-                <a-input v-model="form.position" placeholder="职位"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="性别" prop="gender">
-                <a-radio-group v-model="form.gender">
-                  <a-radio :style="radioStyle" :value="0">男</a-radio>
-                  <a-radio :style="radioStyle" :value="1">女</a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-        </a-form-model>
-      </Modal>
+      <UserForm :isShow="isShowModal" :modal="modal" :form="form" :treeList="treeList" :roleList="roleList" @submitUserForm="handleRefresh" @closeUserForm="isShowModal = false"></UserForm>
     </div>
   </div>
 </template>
 <script>
-import Tree from '@/components/Tree.vue';
-import BasicTable from '@/components/tables/BasicTable.vue'
-import Modal from '@/components/Modal.vue'
+import Tree from '@/components/tree/Tree.vue';
+import BasicTable from '@/components/tables/BasicTable.vue';
+import UserForm from './components/UserForm.vue';
+import {isInPermission} from '@/utils/common.js'
 export default {
   name: 'userorg',
-  components: {Tree, BasicTable, Modal},
+  components: {Tree, BasicTable, UserForm},
   data() {
     return {
       deptId: '', // 查询部门
@@ -118,7 +48,7 @@ export default {
 
       // 配置表格各字段
       setTableColumns: [
-        {type: 'checkbox', width: '60'},
+        // {type: 'checkbox', width: '60'},
         {title: '用户ID', field: 'userId', showOverflow: true,},
         {title: '真实姓名', field: 'realName', showOverflow: true,},
         {title: '用户姓名', field: 'username', showOverflow: true,},
@@ -127,7 +57,7 @@ export default {
         {title: '电话', field: 'phone', showOverflow: true,},
         {title: '最后登录', field: 'lastLoginTime', showOverflow: true,},
         {title: '访问次数', field: 'viewTimes', showOverflow: true,},
-        {title: '冻结', field: 'lockFlag', width: '70', 
+        {title: '冻结', field: 'lockFlag', width: '70', visible: isInPermission('sys_user_lock'),
           slots: {
             // 使用 JSX 渲染
             default: ({ row }) => {
@@ -138,13 +68,13 @@ export default {
             }
           }
         },
-        { title: '操作', field: '', 
+        { title: '操作', field: '', visible: isInPermission('sys_user_edit') || isInPermission('sys_user_del'),
           slots: {
             default: ({row, rowIndex}) => {
               return [
                 <div class="operations">
-                  <span class="iconfont iconxiezuo" onClick={() => this.handleAddEditUser('edit', row)}></span>
-                  <span class="iconfont iconshanchu" onClick={() => this.handleDelUser(row)}></span>
+                  { isInPermission('sys_user_edit') ? <span class="iconfont iconxiezuo" onClick={() => this.handleAddEditUser('edit', row)}></span> : null}
+                  { isInPermission('sys_user_del') ? <span class="iconfont iconshanchu" onClick={() => this.handleDelUser(row)}></span> : null}
                 </div>
               ]
             }
@@ -152,6 +82,8 @@ export default {
         },
       ],
       tableData: [],
+
+      roleList: [], // 角色列表
       
       isShowModal: false, // 编辑 新增modal
       modal: {
@@ -159,38 +91,11 @@ export default {
         cancelText: '取消', 
         okText: '保存'
       },
-      roleList: [], // 角色列表
-
-      radioStyle: {
-        display: 'inline-block',
-        height: '30px',
-        lineHeight: '30px',
-      }, 
-      // form数据
-      form: {
-        userId: '',
-        username: '',
-        realName: '',
-        deptId: '',
-        password: '',
-        phone: '',
-        position: '',
-        roleList: [],
-        gender: 1
-      },
-       rules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          // { min: 3, max: 5, message: '用户名长度3 到 5', trigger: 'blur' },
-        ],
-        realName: [
-          { required: true, message: '请输入真实姓名', trigger: 'blur' },
-          // { min: 3, max: 5, message: '真实姓名长度3 到 5', trigger: 'blur' },
-        ],
-      },
+      form: {}
     }
   },
   methods: {
+    isInPermission,
     // 路由跳转
     handleGotoPage() {
       this.$router.push('/org/depart')
@@ -256,10 +161,9 @@ export default {
     // 新增、编辑用户条目
     handleAddEditUser(type, row) {
       let reset = type == 'add' ? 
-        {userId: '', username: '', realName: '', deptId: '', password: '', phone: '', position: '', roleList: [], gender: 1} 
+        {userId: '', username: '', realName: '', deptId: '', password: '', phone: '', position: '', roleList: [], gender: 0} 
         : {userId: row.userId, username: row.username, realName: row.realName, deptId: row.deptId, password: '', phone: row.phone, position: row.position, roleList: row.roleList.map(item => item.roleId), gender: row.gender};
       this.$set(this, 'form', reset);
-      console.log(this.treeList)
 
       !this.roleList.length && this.handleGetAdminRoleList()
       this.isShowModal = true;
@@ -277,28 +181,10 @@ export default {
       }
     }, 
 
-    // 校验新增 编辑用户信息
-    handleSubmit() {
-      console.log(this.form.roleList)
-      this.$refs.userForm.validate(async valid => {
-        if (valid) {
-          // 保存 新增和编辑
-          let {userId, username, realName, deptId, roleList, phone, position, gender} = this.form;
-          let {code} = await this.$api.org.handlePostPutAdminUser(userId, username, realName, deptId, roleList, phone, position, gender);
-          if(code === 0) {
-            this.$message.success('保存成功！');
-            this.isShowModal = false; // 接口提交成功 isShow
-            this.handleGetUserList(); // 刷新用户列表
-          }
-        } else {
-          return false;
-        }
-      });
-    },
-
-    // 取消新增、编辑用户信息
-    handleCancel() {
-      this.isShowModal = false;
+    // 关闭弹窗刷新列表
+    handleRefresh() {
+      this.isShowModal = false; // 接口提交成功 isShow
+      this.handleGetUserList(); // 刷新用户列表
     },
 
     // 删除用户条目
@@ -323,19 +209,6 @@ export default {
         }
       });
     },
-
-    // 重置密码
-    async handleResetPassWord(userId) {
-      console.log(userId)
-      try {
-        let {code} = await this.$api.org.handleResetPassWord(userId);
-        if(code === 0) {
-          this.$message.success('密码重置成功！')
-        }
-      }catch (error) {
-        console.log(error)
-      }
-    }
   },
   mounted(){
     this.handleGetDepartTree();
@@ -424,38 +297,4 @@ export default {
     }
   }
 }
- /deep/.ant-modal .user-form {
-  .second-title {
-    margin-left: 8px;
-    font-size: 12px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #97A0C3;
-  }
-  .ant-form-item-required{
-    &:before {
-      display: none;
-    }
-    &:after {
-      display: inline-block;
-      margin-right: 4px;
-      color: #f5222d;
-      font-size: 14px;
-      font-family: SimSun, sans-serif;
-      line-height: 1;
-      content: '*';
-    }
-  }
-  .reset{
-    position: absolute;
-    right: 16px;
-    margin: 4px 0;
-    color: #2373FF;
-    font-size: 12px;
-    &.reset-disabled{
-      cursor: not-allowed;
-    }
-  }
-}
-  
 </style>

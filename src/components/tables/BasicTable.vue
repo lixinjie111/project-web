@@ -12,7 +12,9 @@
     <vxe-grid
         border
         resizable
+        :row-class-name="rowClassName"
         :data="tableData"
+        :tree-config ="treeConfig"
         :edit-config="{trigger: 'click', mode: 'cell'}"
         :columns="setTableColumns">
     </vxe-grid>
@@ -30,6 +32,15 @@
                 type: Array,
                 required: true,
                 default: () => []
+            },
+            treeConfig: {
+                type: Object,
+                required: false,
+                default: () => {}
+            },
+            rowClassName: {
+                type: String | Function,
+                default: ''
             }
         },
         data() {

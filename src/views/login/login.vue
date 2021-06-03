@@ -11,8 +11,7 @@
         </a-form-model-item>
         <a-form-model-item>
           <a-input-password v-model="form.password" placeholder="密码" />
-          <span class="login-form-forgot" @click="handleGotoPage">忘记密码？</span
-          >
+          <!-- <span class="login-form-forgot" @click="handleGotoPage">忘记密码？</span> -->
         </a-form-model-item>
         <a-form-model-item>
           <a-button
@@ -54,16 +53,15 @@ export default {
     };
   },
   methods: {
-    handleGotoPage() {
-        this.$router.push({
-            path: '/forgetpwd'
-        })
-    },
+    // handleGotoPage() {
+    //     this.$router.push({
+    //         path: '/forgetpwd'
+    //     })
+    // },
     handleValidate(e) {
       e.preventDefault();
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          // this.$refs.verify.show();
           this.handleSubmit()
         } else {
           return false;

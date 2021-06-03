@@ -20,6 +20,7 @@ const persistedState = createPersistedState({
 const state = {}
 
 export default new Vuex.Store({
+  namespaced: true,
   state,
   mutations,
   actions,

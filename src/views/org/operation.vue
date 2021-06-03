@@ -8,32 +8,32 @@
         <!-- 一级树全展示 竖形列表 -->
         <div class="level-1" v-for="(item, index1) in treeList" :key="item.id">
           <div class="checkbox-item">
-            <span :class="['expand', 'iconfont', item.isExpand ? 'iconxia1' : 'iconyou1']" v-if="item.children.length" @click="handleExpand(index1)"></span>
-            <a-checkbox :value="item.id">{{item.name}}</a-checkbox>
+            <span :class="['expand', 'iconfont', item.isExpand ? 'iconxia1' : 'iconyou1']" v-show="item.children.length" @click="handleExpand(index1)"></span>
+            <a-checkbox :value="item.id" @change="handleCheckbox(item, false)">{{item.name}}</a-checkbox>
           </div>
           <!-- 二级树全展示 一行展示 不存在单选 -->
-          <div class="level-2" v-if="item.isExpand">
+          <div class="level-2" v-show="item.isExpand">
             <div class="level-2-parent">
               <div class="checkbox-item" v-for="(level2, index2) in item.children" :key="level2.id">
-                <span :class="['expand', 'iconfont', level2.isExpand ? 'iconxia1' : 'iconyou1']" v-if="level2.children.length" @click="handleExpand(index1, index2)"></span>
-                <a-checkbox :value="level2.id">{{level2.name}}</a-checkbox>
+                <span :class="['expand', 'iconfont', level2.isExpand ? 'iconxia1' : 'iconyou1']" v-show="level2.children.length" @click="handleExpand(index1, index2)"></span>
+                <a-checkbox :value="level2.id" @change="handleCheckbox(level2, item)">{{level2.name}}</a-checkbox>
               </div>
             </div>
             <template v-for="(level2, index2) in item.children" >
               <!-- 下拉展开显示 三级菜单 -->
-              <div class="level-3" v-if="level2.children && level2.isExpand"  :key="`level-3${level2.id}`">
+              <div class="level-3" v-show="level2.children && level2.isExpand"  :key="`level-3${level2.id}`">
                 <div class="level-3-parent">
                   <div class="checkbox-item" v-for="(level3, index3) in level2.children" :key="level3.id">
-                    <span :class="['expand', 'iconfont', level3.isExpand ? 'iconxia1' : 'iconyou1']" v-if="level3.children.length" @click="handleExpand(index1, index2, index3)"></span>
-                    <a-checkbox :value="level3.id">{{level3.name}}</a-checkbox>
+                    <span :class="['expand', 'iconfont', level3.isExpand ? 'iconxia1' : 'iconyou1']" v-show="level3.children.length" @click="handleExpand(index1, index2, index3)"></span>
+                    <a-checkbox :value="level3.id" @change="handleCheckbox(level3, item)">{{level3.name}}</a-checkbox>
                   </div>
                 </div>
                 <template v-for="(level3) in level2.children">
                   <!-- 下拉展开显示 四级菜单 -->
-                  <div class="level-4" v-if="level3.children && level3.isExpand" :key="`level-4${level3.id}`">
+                  <div class="level-4" v-show="level3.children && level3.isExpand" :key="`level-4${level3.id}`">
                     <div class="checkbox-item" v-for="(level4) in level3.children" :key="level4.id">
-                      <span class="expand iconfont iconyou1" v-if="level4.children.length"></span>
-                      <a-checkbox :value="level4.id">{{level4.name}}</a-checkbox>
+                      <span class="expand iconfont iconyou1" v-show="level4.children.length"></span>
+                      <a-checkbox :value="level4.id" @change="handleCheckbox(level4, item)">{{level4.name}}</a-checkbox>
                     </div>
                   </div>
                 </template>
@@ -46,7 +46,6 @@
   </div>
 </template>
 <script>
-import * as api from '@/api/index'
 export default {
   name: 'operation',
   components: {},
@@ -67,6 +66,57 @@ export default {
     this.roleId = roleId;
   },
   methods: {
+    // 关联父级选中 取消
+    handleCheckbox(node, parent) {
+      console.log(this.checkedList)
+      let methods = this.checkedList.includes(node.id) ? 'del' : 'add';
+      node?.children?.length && this.handleSubCheckList(node.children, methods);
+      setTimeout(() => {
+        if(parent){
+          let checkList = this.handleParentCheckboxList(parent);
+          this.$set(this, 'checkedList', [...new Set(checkList)]);
+        }
+      }, 0)
+    },
+    // 修改父节点选中状态
+    handleParentCheckboxList(rootNode) {
+      let nodeList = [], parentList = [], parentCheckedList = [];
+      const depthEach=function(item){
+        if(item.children){
+          for(let k in item.children){
+            depthEach(item.children[k]);
+            nodeList.push(item.children[k]);
+            parentList.push(item.children[k].parentId);
+          }
+        }
+      }
+      depthEach(rootNode);
+      nodeList.map(item => (this.checkedList.includes(item.id) || parentCheckedList.includes(item.id)) && parentCheckedList.push(item.parentId));
+      parentList = [...new Set(parentList)]; // 全部parentId
+      parentCheckedList = [...new Set(parentCheckedList)]; // 选中parentId
+      parentCheckedList = parentCheckedList?.length>1 ? parentCheckedList : [];
+      const diff = function(arr1, arr2) {
+        return arr1.filter((i) => arr2.indexOf(i) < 0)
+      }
+      let diffList = diff(parentList, parentCheckedList);
+      let checkList = diff([...this.checkedList, ...parentCheckedList], diffList)
+      return checkList;
+    },
+    // 修改子节点
+    handleSubCheckList(nodeList, methods){
+      if(methods === 'add'){
+        nodeList?.map(item => {
+          this.checkedList.push(item.id);
+          item?.children?.length && this.handleSubCheckList(item.children, methods);  
+        })
+      }else if(methods === 'del'){
+        nodeList?.map(item => {
+          let index = this.checkedList.findIndex(ele => ele === item.id);
+          this.checkedList.includes(item.id) && this.checkedList.splice(index, 1);
+          item?.children?.length && this.handleSubCheckList(item.children, methods)
+        });
+      }
+    },
     // 预处理树形结构
     handlePreData(data){
       Array.isArray(data) && data.map(item=>{
@@ -120,6 +170,8 @@ export default {
     },
     // 保存
     async handleSave(){
+      console.log(this.checkedList)
+      debugger
       try {
         let {code} = await this.$api.org.handlePutRoleMenu(this.roleId, this.checkedList?.join(','));
         if(code === 0){

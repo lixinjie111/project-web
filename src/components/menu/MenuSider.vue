@@ -10,18 +10,29 @@
       </li>
     </ul>
     <div class="menu-static">
-      <div class="menu-setup"></div>
+      <a-popover v-model="visible" overlayClassName="set" placement="rightTop" trigger="click">
+        <template slot="content">
+          <p class="set-item" @click="handleShowModal">修改密码</p>
+          <p class="set-item" @click="handleLogout">退出登录</p>
+        </template>
+        <div class="menu-setup iconfont iconshezhi"></div>
+      </a-popover>
       <div class="menu-user"></div>
     </div>
+    <ForgetForm :isShow="isShowModal" @closePwd="isShowModal = false"></ForgetForm>
   </div>
 </template>
 
 <script>
+import ForgetForm from './components/ForgetForm.vue'
+
 export default {
   name: 'MenuSider',
+  components: {ForgetForm},
   data(){
     return {
-      
+      visible: false,
+      isShowModal: false,
     }
   },
   computed: {
@@ -38,6 +49,37 @@ export default {
       this.$store.dispatch('navMenu', this.firstMenu[index].children);
       this.$store.dispatch('activeNavMenu', this.activeSecondMenu);
       this.$router.push({path: this.activeNavMenu.path});
+    },
+    // 修改密码
+    handleShowModal() {
+      this.visible = false; // 关闭气泡框
+      this.isShowModal = true;
+    },
+    // 退出登录
+    handleLogout(){
+      this.visible = false; // 关闭气泡框
+      this.$confirms({
+        title: '提示',
+        message: `您确定要退出登录吗？`,
+        okText: '确认',
+        onOk: async () => {
+          try {
+            let {code} = await this.$api.login.handleLogout();
+            if(code === 0) {
+              this.$store.dispatch('logOut').then(() => {
+                this.$router.push({ path: '/login' })
+              });
+              this.$message.success('退出成功！');
+            }
+            
+          }catch(error){
+            console.log(error)
+          }
+        },
+        cancelText: '取消',
+        onCancel() {
+        }
+      });
     }
   },
   mounted(){
@@ -96,12 +138,14 @@ export default {
   }
   .menu-static{
     margin-top: 20px;
+    
     .menu-setup{
       margin: 0 auto;
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: white;
+      font-size: 22px;
+      color: white;
       cursor: pointer;
     }
     .menu-user {
@@ -111,6 +155,24 @@ export default {
       border-radius: 50%;
       background: white;
       cursor: pointer;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.set {
+  .ant-popover-inner {
+    border-radius: 8px;
+  }
+  .ant-popover-inner-content {
+    padding: 0 8px;
+
+    .set-item {
+      padding: 0 8px;
+      line-height: 40px;
+      &:nth-child(n + 2){
+        border-top: 1px solid #EAEDF7;
+      }
     }
   }
 }

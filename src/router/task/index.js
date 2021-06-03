@@ -1,16 +1,20 @@
 import Simple from '@/layout/SimpleNav.vue'
 import Home from '@/views/task/home.vue'
+import Team from '@/views/task/team.vue'
+import Archive from '@/views/task/archive.vue'
+import Dynamic from '@/views/task/dynamic.vue'
 
 export default {
   name: '项目',
   path: '',
   component: Simple,
-  level: 1,
   meta: {
-    icon: '',
-    permissionKey: 'project'
+    isAuth: true
   },
   children: [
-    {path: '/task/home', component: Home, name: '首页', level: 2, meta: {icon: '', permissionKey: 'users', permissionParent: 'project' }},
+    {path: '/task/home', component: Home, name: '任务', meta: {isAuth: true}},
+    {path: '/task/team', component: Team, name: '团队', meta: { isAuth: true }},
+    {path: '/task/archive', component: Archive, name: '文档', meta: { isAuth: true }},
+    {path: '/task/dynamic', component: Dynamic, name: '动态', meta: { isAuth: true }},
   ]
 }

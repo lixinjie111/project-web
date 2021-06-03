@@ -32,9 +32,8 @@ let routes = [
     },
     {
         name: 'home',
-        path: '/',
+        path: '',
         component: DefaultLayout,
-        // level: 'top', // 顶层菜单
         meta: {
             isAuth: true, // 是否需要登录
         },
