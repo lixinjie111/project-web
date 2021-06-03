@@ -11,37 +11,37 @@ export default {
     path: '',
     component: Simple,
     meta: {
-        isAuth: false
+        isAuth: true
     },
     children: [
         {
             path: '/report/notarchive',
             component: Notarchive,
             name: '未归档',
-            meta: {isAuth: false},
+            meta: {isAuth: true},
             children: [
                 {
                     path: '/report/notarchive/schedule',
                     component: Schedule,
                     name: '工作进度',
-                    meta: {isAuth: false}
+                    meta: {isAuth: true}
                 },
                 {
                     path: '/report/notarchive/project',
                     component: Project,
                     name: '重点项目',
-                    meta: {isAuth: false}
+                    meta: {isAuth: true}
                 },
                 {
                     path: '/report/notarchive/plan',
                     component: Plan,
                     name: '月度计划',
-                    meta: {isAuth: false}
+                    meta: {isAuth: true}
                 },                {
                     path: '/report/notarchive/deliverables',
                     component: Deliverables,
                     name: '月度交付物验收',
-                    meta: {isAuth: false}
+                    meta: {isAuth: true}
                 }
             ]
         },
@@ -49,7 +49,7 @@ export default {
             path: '/report/archive',
             component: Archive,
             name: '已归档',
-            meta: {isAuth: false}
+            meta: {isAuth: true}
         }
     ]
 }

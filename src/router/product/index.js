@@ -6,9 +6,9 @@ export default {
   path: '',
   component: Empty,
   meta: {
-    isAuth: false
+    isAuth: true
   },
   children: [
-    {path: '/product/overview', component: Overview, name: '概览', meta: { isAuth: false }}
+    {path: '/product/overview', component: Overview, name: '概览', meta: { isAuth: true }}
   ]
 }

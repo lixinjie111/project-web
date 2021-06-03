@@ -1,17 +1,16 @@
 import * as types from './mutation-types'
 import * as api from '@/api/index'
-import data from '@/utils/menu.js'
 
 export default {
   initTopMenu ({commit}) {
     return new Promise(async (resolve, reject) => {
-      // let {code, data} = await api.org.handleGetUserMenu();
-      // if(code == 0){
+      let {code, data} = await api.org.handleGetUserMenu();
+      if(code == 0){
         commit(types.INIT_TOP_MENU, data);
         resolve()
-      // } else {
-      //   reject()
-      // }
+      } else {
+        reject()
+      }
     }).catch(error => {
       reject()
     })

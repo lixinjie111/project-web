@@ -21,22 +21,24 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main-container{
-    // position: relative;
+    position: relative;
     display: flex;
-    // .sider-container{
-    //     position: fixed;
-    //     left: 0;
-    //     top: 0;
-    //     width: 80px;
-    //     height: 100vh;
-    // }
+    // overflow: hidden;
+    .sider-container{
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 80px;
+        height: 100vh;
+        z-index: 10;
+    }
     .layout-container{
-        // margin-left: 80px;
-        // min-width: 1360px;
+        margin-left: 80px;
+        min-width: 1360px;
         width: calc(100vw - 80px);
         min-width: 1360px;
-        min-height: 100vh;
-        // overflow-x: auto;
+        height: 100vh;
+        overflow-x: auto;
         background: #F4F7FC;;
     }
 }

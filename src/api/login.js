@@ -58,4 +58,10 @@ export function handleCheckCode(token, pointJson, captchaType) {
     }
   );
 }
-
+/**
+ * 用户退出登录
+ * @returns 
+ */
+export function handleLogout(){
+  return httpaxios.delete('/auth/token/logout', {})
+}

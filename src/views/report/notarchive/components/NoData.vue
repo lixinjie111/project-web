@@ -1,0 +1,38 @@
+<template>
+  <div class="no-data">
+    <img src="@/assets/images/report/no-data.png" />
+    <div class="title">本周周报暂未生成</div>
+    <a-button type="primary">更新生成时间</a-button>
+</div>
+</template>
+<script>
+export default {
+  name: 'NoData',
+  data() {
+    return {}
+  },
+  methods: {}
+}
+</script>
+<style lang="scss" scoped>
+.no-data {
+  padding: 64px 0;
+  text-align: center;
+  background: #FFFFFF;
+  border-radius: 4px;
+  border: 1px solid #EAEDF7;
+  > img {
+    margin: 0 auto;
+    width: 102px;
+    height: 102px;
+  }
+  .title {
+    height: 50px;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #7C88B1;
+    line-height: 50px;
+  }
+}
+</style>

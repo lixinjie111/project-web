@@ -2,7 +2,7 @@
   <div class="role-container">
     <ContentHeader type="title" title="角色分组">
       <div slot="operation">
-        <a-button type="primary" @click="handleAddEditRole('add')">
+        <a-button v-if="isInPermission('sys_role_add')" type="primary" @click="handleAddEditRole('add')">
           <span class="iconfont iconjia"></span>
           添加角色分组
         </a-button>
@@ -26,8 +26,7 @@
 <script>
 import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal.vue'
-
-import * as api from '@/api/index'
+import {isInPermission} from '@/utils/common.js'
 export default {
   name: 'roleorg',
   components: {BasicTable, Modal},
@@ -42,35 +41,52 @@ export default {
         {title: '编号', type: 'seq', width: 50},
         {title: '分组名称', field: 'roleName', showOverflow: true,},
         {title: '维护', width: '340', 
+          visible: isInPermission('sys_user_batch_role') || isInPermission('sys_role_perm'),
           slots: {
             // 使用 JSX 渲染
             default: ({ row }) => {
               return [
                 <div class="permission">
-                  <a-button onClick={() => this.handlePermission('role', row)}>
-                    <span class="iconfont iconrenyuan"></span>
-                    <span>组员管理</span>
-                  </a-button>
-                  <a-button onClick={() => this.handlePermission('operation', row)}>
-                    <span class="iconfont iconsuoding"></span>
-                    <span>操作权限</span>
-                  </a-button>
-                  <a-button onClick={() => this.handlePermission('data', row)}>
-                    <span class="iconfont iconshujuku"></span>
-                    <span>数据权限</span>
-                  </a-button>
+                  {
+                    isInPermission('sys_user_batch_role') ? 
+                    (<a-button onClick={() => this.handlePermission('role', row)}>
+                      <span class="iconfont iconrenyuan"></span>
+                      <span>组员管理</span>
+                    </a-button>)
+                    :
+                    null
+                  }
+                  {
+                    isInPermission('sys_role_perm') ? 
+                    (<a-button onClick={() => this.handlePermission('operation', row)}>
+                      <span class="iconfont iconsuoding"></span>
+                      <span>操作权限</span>
+                    </a-button>)
+                    :
+                    null
+                  }
+                  {
+                    false ?
+                    (<a-button onClick={() => this.handlePermission('data', row)}>
+                      <span class="iconfont iconshujuku"></span>
+                      <span>数据权限</span>
+                    </a-button>)
+                    :
+                    null
+                  }
                 </div>
               ]
             }
           }
         },
         { title: '操作', width: '110',
+          visible: isInPermission('sys_role_edit') || isInPermission('sys_role_del'),
           slots: {
             default: ({row, rowIndex}) => {
               return [
                 <div class="operations">
-                  <span class="iconfont iconxiezuo" onClick={() => this.handleAddEditRole('edit', row)}></span>
-                  <span class="iconfont iconshanchu" onClick={() => this.handleDelURole(row)}></span>
+                  {isInPermission('sys_role_edit') ? <span class="iconfont iconxiezuo" onClick={() => this.handleAddEditRole('edit', row)}></span> : null}
+                  {isInPermission('sys_role_del') ? <span class="iconfont iconshanchu" onClick={() => this.handleDelURole(row)}></span> : null}
                 </div>
               ]
             }
@@ -96,6 +112,7 @@ export default {
     }
   },
   methods: {
+    isInPermission,
     // 切换条目数量
     handleChangePageSize(pageSize, pageNum) {
       this.pageSize = pageSize;
@@ -110,7 +127,7 @@ export default {
     // 获取角色分组列表
     async handleGetRoleList(){
       try {
-        let {code, data} = await api.org.getRoleList(this.curPageNum, this.pageSize);
+        let {code, data} = await this.$api.org.getRoleList(this.curPageNum, this.pageSize);
         if(code === 0){
           let {total, records} = data;
           this.total = total;

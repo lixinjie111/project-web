@@ -82,6 +82,12 @@ export default [
                 name: '首页',
                 id: 13,
                 permission: '',
+                children: [
+                    {path: '/task/home',  name: '任务'},
+                    {path: '/task/team', name: '团队'},
+                    {path: '/task/archive',  name: '文档'},
+                    {path: '/task/dynamic',  name: '动态'},
+                  ]
             }
         ]
     },

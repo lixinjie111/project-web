@@ -33,7 +33,7 @@
   import UserIcon from './UserIcon';
   import TwoValue from './TwoValue';
   import CircleButton from "../buttons/CircleButton";
-  import Tree from "@/components/Tree";
+  import Tree from "@/components/tree/Tree";
 
   export default {
     name: "UserSelect",

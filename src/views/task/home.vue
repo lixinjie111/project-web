@@ -1,5 +1,10 @@
 <template>
   <div class="home">
+    <MenuNav>
+      <div slot="nav-left" class="nav-left-title">
+        这里写样式
+      </div>
+    </MenuNav>
     <div class="header">
       <div class="left">
         <a-radio-group default-value="a" size="large">

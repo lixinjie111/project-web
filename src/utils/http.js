@@ -64,8 +64,6 @@ const httpaxios = {
 				if (status === 401) { // token过期重定向 login
 					// message.error( msg)
 					store.dispatch('logOut').then(() => {
-						store.dispatch('removeMenuData') // 移除menu
-						store.dispatch('removePermission') // 移除页面权限
 						router.push({ path: '/login' })
 					})
 					return;

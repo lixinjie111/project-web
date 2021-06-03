@@ -3,7 +3,7 @@
     <ContentHeader type="title" title="部门结构"></ContentHeader>
     <div class="depart-content">
       <div class="depart-left">
-        <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" :operation="['del']" @onSelectTreeNodes="handleGetDepartUsers" @onDeleteTreeNode="handleDeleteDepart"></Tree>
+        <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" :operation="[isInPermission('sys_dept_del') ? 'del' : '']" @onSelectTreeNodes="handleGetDepartUsers" @onDeleteTreeNode="handleDeleteDepart"></Tree>
         <div v-else class="empty">添加部门</div>
       </div>
       <div class="depart-right">
@@ -17,11 +17,11 @@
             <ul class="list">
               <li class="list-item" v-for="(item, index) in list" :key="index">
                 <a-input v-model="item.name"></a-input>
-                <span class="plus iconfont icontianjia" @click="handleAddDepart(index+1, item.parentId)"></span>
+                <span v-if="isInPermission('sys_dept_batchUpdate')" class="plus iconfont icontianjia" @click="handleAddDepart(index+1, item.parentId)"></span>
               </li>
             </ul>
-            <div class="operation">
-              <a-button type="primary" @click="handleSaveDepart">保存</a-button>
+            <div class="operation" v-if="isInPermission('sys_dept_batchUpdate')">
+              <a-button type="primary" v-if="isInPermission('sys_dept_batchUpdate')" @click="handleSaveDepart">保存</a-button>
             </div>
           </div>
         </div>
@@ -30,8 +30,10 @@
   </div>
 </template>
 <script>
-import Tree from '@/components/Tree.vue';
-import Breadcrumb from '@/components/Breadcrumb.vue'
+import Tree from '@/components/tree/Tree.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
+import {isInPermission} from '@/utils/common.js';
+
 export default {
   name: 'departorg',
   components: {Tree, Breadcrumb},
@@ -55,6 +57,7 @@ export default {
     }
   },
   methods: {
+    isInPermission,
     // 查询部门树
     async handleGetDepartTree(){
       try {
