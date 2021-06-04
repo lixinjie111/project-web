@@ -20,78 +20,21 @@ import IconToolTip from "@/components/tooltip/IconToolTip";
 import TextToolTip from "@/components/tooltip/TextToolTip";
 import NoData from './components/NoData';
 import Select from './components/Select';
+
+import {isInPermission} from '@/utils/common.js'
+
 export default {
     name: "plan",
     components: {Header, TextToolTip, IconToolTip, Select, BasicTable, NoData},
     data() {
         return {
             deptId: this.$store.state.users.userInfo.deptId,
-            tableData: [
-                    {
-                        id: 1,
-                        projectName: '项目名称项目名称项目名称项目名称项目名称1',
-                        projectManger: '项目名称项目名称项目名称项目名称项目名称1',
-                        desc: '根据原型和业务逻辑，完成前端页面开发',
-                        good: '前端页面',
-                        startTime: '2021-02-12',
-                        endTime: '2021-02-12',
-                        status: 1,
-                        remark: 'iueqiwuo',
-                        children: [
-                            {
-                                id: 11,
-                                projectName: '项目名称项目名称项目名称项目名称项目名称1',
-                                projectManger: '项目名称项目名称项目名称项目名称项目名称1',
-                                desc: '根据原型和业务逻辑，完成前端页面开发',
-                                good: '前端页面',
-                                startTime: '2021-02-12',
-                                endTime: '2021-02-12',
-                                status: 1,
-                                remark: 'iueqiwuo',
-                            },
-                            {
-                                id: 11,
-                                projectName: '名称1',
-                                projectManger: '11111',
-                                desc: '根据原型和业务逻辑，完成前端页面开发',
-                                good: '前端页面',
-                                startTime: '2021-02-12',
-                                endTime: '2021-02-12',
-                                status: 3,
-                                remark: 'iueqiwuo',
-                            }
-                        ]
-                    },
-                    {
-                        id: 2,
-                        projectName: '项目名称',
-                        projectManger: '222',
-                        desc: '根据原型和业务逻辑，完成前端页面开发',
-                        good: '前端页面',
-                        startTime: '2021-02-12',
-                        endTime: '2021-02-12',
-                        status: 2,
-                        remark: '',
-                        children: [
-                            {
-                                id: 22,
-                                projectName: '名称2',
-                                projectManger: '11111',
-                                desc: '根据原型和业务逻辑，完成前端页面开发',
-                                good: '前端页面',
-                                startTime: '2021-02-12',
-                                endTime: '2021-02-12',
-                                status: 1,
-                                remark: 'iueqiwuo',
-                            }
-                        ]
-                    }
-                ],
+            tableData: [],
             treeConfig: {expandAll: true, showIcon: false, children: 'children'},
             setTableColumns: [
                 {
                     title: '工作任务',
-                    field: 'projectName',
+                    field: 'title',
                     treeNode: true,
                     minWidth: 358,
                     slots: {
@@ -99,7 +42,7 @@ export default {
                             return [
                                 <div class="table-name">
                                     <span class="index">{$seq ? `${$seq}.${$rowIndex + 1}` : $rowIndex + 1}</span>
-                                    <TextToolTip className="name" content={row.projectName}
+                                    <TextToolTip className="name" content={row.title}
                                                 refName={'table-name' + $rowIndex}></TextToolTip>
                                 </div>
                             ]
@@ -108,42 +51,45 @@ export default {
                 },
                 {
                     title: '负责人',
-                    field: 'projectManger',
+                    field: 'master',
                     minWidth: 112,
                     showOverflow: true
                 },
                 {
                     title: '月度工作计划描述',
-                    field: 'desc',
-                    minWidth: 284
+                    field: 'description',
+                    minWidth: 284,
+                    editRender: {name: 'input', enabled: isInPermission('business_projectmonth_edit'), attrs: {type: 'text', placeholder: '请输入月度工作计划描述'}}
                 },
                 {
                     title: '月度交付物',
-                    field: 'good',
-                    minWidth: 102
+                    field: 'deliverable',
+                    minWidth: 112,
+                    editRender: {name: 'input', enabled: isInPermission('business_projectmonth_edit'), attrs: {type: 'text', placeholder: '请输入月度交付物'}}
                 },
                 {
                     title: '验收标准',
-                    field: 'status',
-                    minWidth: 88
+                    field: 'acceptanceCriteria',
+                    minWidth: 112,
+                    editRender: {name: 'input', enabled: isInPermission('business_projectmonth_edit'), attrs: {type: 'text', placeholder: '请输入验收标准'}}
                 },
                 {
                     title: '任务开始日期',
-                    field: 'startTime',
+                    field: 'beginTime',
                     minWidth: 116,
                         slots: {
                         default: ({row}) => {
                             return [
                                 <div class="table-time">
-                                    <span>{row.startTime}</span>
+                                    <span>{row.beginTime}</span>
                                     {
-                                        row.status === 1 ? 
-                                        <IconToolTip iconName="iconrili-qitian-tianchong" content="本周新增"></IconToolTip>
-                                        :
-                                        row.status == 2 ?
-                                        <IconToolTip iconName="iconrili-sanshitian-tianchong" content="本月新增"></IconToolTip>
-                                        :
-                                        ''
+                                        // row.status === 1 ? 
+                                        // <IconToolTip iconName="iconrili-qitian-tianchong" content="本周新增"></IconToolTip>
+                                        // :
+                                        // row.status == 2 ?
+                                        // <IconToolTip iconName="iconrili-sanshitian-tianchong" content="本月新增"></IconToolTip>
+                                        // :
+                                        // ''
                                     }
                                 </div>
                             ]
@@ -160,13 +106,13 @@ export default {
                                 <div class="table-time">
                                     <span>{row.endTime}</span>
                                     {
-                                        row.status === 1 ? 
-                                        <IconToolTip iconName="iconrili-yuechu-tianchong" content="上月延期"></IconToolTip>
-                                        :
-                                        row.status == 2 ?
-                                        <IconToolTip iconName="iconrili-yuemo-tianchong" content="本月截止"></IconToolTip>
-                                        :
-                                        ''
+                                        // row.status === 1 ? 
+                                        // <IconToolTip iconName="iconrili-yuechu-tianchong" content="上月延期"></IconToolTip>
+                                        // :
+                                        // row.status == 2 ?
+                                        // <IconToolTip iconName="iconrili-yuemo-tianchong" content="本月截止"></IconToolTip>
+                                        // :
+                                        // ''
                                     }
                                 </div>
                             ]
@@ -187,7 +133,7 @@ export default {
                     slots: {
                         default:({row}) => {
                             return [
-                                <Select status={row.status} onSelected-status={(status) => this.handleChangeStatus(row, status)}></Select>
+                                <Select type={isInPermission('business_projectmonth_status')} status={row.status} onSelected-status={(status) => this.handleChangeStatus(row, status)}></Select>     
                             ]
                         }
                     }
@@ -205,16 +151,36 @@ export default {
         handleSetSelectedTree(deptId){
             this.deptId = deptId;
             // 查询table
-            this.tableData = []
+            this.handleGetMonthList()
         },
-        // 
-        handleChangeStatus(row, status){
+        // 切换状态
+        async handleChangeStatus(row, status){
             console.log(row, status)
+            try {
+                let {code} = await this.$api.report.handlePutMonthStatus(row.id, status);
+                if(code === 0){
+                    row.staus = status;
+                }   
+            } catch (error) {
+                console.log(error)
+            }
             row.status = status;
+        },
+        // 查询列表
+        async handleGetMonthList() {
+            try {
+                let {code, data} = await this.$api.report.handleGetMonthList(this.deptId);
+                if(code === 0) {
+                    this.tableData = data;
+                }
+            }catch(error) {
+
+            }
         }
     },
     mounted() {
         // 查询table
+        this.handleGetMonthList()
     }
 }
 </script>

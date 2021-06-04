@@ -1,6 +1,6 @@
 <template>
-  <div class="select">
-    <a-dropdown :trigger="['click']">
+  <div class="select" >
+    <a-dropdown v-if="type" :trigger="['click']">
       <div :class="['btn', `status${value.status}`]">
         <span>{{value.name}}</span>
         <span class="iconfont iconxia1"></span>
@@ -9,6 +9,7 @@
         <a-menu-item v-for="(item,index) in acceptanceList" :key="index">{{item.name}}</a-menu-item>
       </a-menu>
     </a-dropdown>
+    <div v-else :class="['btn', `status${value.status}`]">{{value.name}}</div>
   </div>
 </template>
 <script>
@@ -17,17 +18,21 @@ export default {
   name: 'Select',
   components: {Priority},
   props: {
-    status: null
+    status: null,
+    type: { // select展示形式 true select, false text
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       value: {},
       acceptanceList: [
-        { status: 1, name: '不匹配' },
-        { status: 2, name: '待验收' },
-        { status: 3, name: '已通过' },
+        { status: 1, name: '待验收' },
+        { status: 2, name: '已通过' },
+        { status: 3, name: '已延期' },
         { status: 4, name: '已取消' },
-        { status: 5, name: '已延期' },
+        { status: 5, name: '不匹配' },
         { status: 6, name: '未通过' }
       ]
     }
@@ -44,6 +49,9 @@ export default {
     handleSelect({key}){
       this.$emit('selected-status', this.acceptanceList[key].status)
     }
+  },
+  mounted(){
+    console.log(this.type)
   }
 }
 </script>
@@ -64,10 +72,11 @@ export default {
       }
     }
   }
-  $colors: #97A0C3 ,#0064FF , #08BD6C, #97A0C2, #FE774B, #FF4C60;
+  $colors: #0064FF, #08BD6C, #FE774B, #97A0C3, #97A0C2, #FF4C60;
   @each $clr in $colors {
     $i: index($colors, $clr);
     .status#{$i} {
+      font-size: 12px;
       background: rgba(255, 255, 255, 0.01);
       color: $clr;
       cursor: default;

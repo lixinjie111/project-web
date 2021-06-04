@@ -21,50 +21,20 @@
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import Priority from "@/components/business/Priority";
     import NoData from './components/NoData';
+
+    import {isInPermission} from '@/utils/common.js'
+
     export default {
         name: "schedule",
         components: {Header, TextToolTip, IconToolTip, Status, Priority, BasicTable, NoData},
         data() {
             return {
                 deptId: this.$store.state.users.userInfo.deptId,
-                tableData: [
-                    {
-                        id: 1,
-                        projectName: '项目名称项目名称项目名称项目名称项目名称1',
-                        projectManger: '项目名称项目名称项目名称项目名称项目名称1',
-                        endTime: '2021-02-12',
-                        progress: 30,
-                        restDay: '20',
-                        status: 1,
-                        remark: 'iueqiwuo',
-                        children: [
-                            {
-                                id: 11,
-                                projectName: '项目名称项目名称项目名称项目名称项目名称1',
-                                projectManger: '项目名称项目名称项目名称项目名称项目名称1',
-                                endTime: '2021-02-12',
-                                progress: 30,
-                                restDay: '20',
-                                status: 1,
-                                remark: 'iueqiwuo',
-                            }
-                        ]
-                    },
-                    {
-                        id: 2,
-                        projectName: '项目名称',
-                        projectManger: '222',
-                        endTime: '2021-02-12',
-                        progress: 30,
-                        restDay: '20',
-                        status: 2,
-                        remark: ''
-                    }
-                ],
+                tableData: [],
                 setTableColumns: [
                     {
                         title: '工作任务',
-                        field: 'projectName',
+                        field: 'title',
                         treeNode: true,
                         width: 280,
                         slots: {
@@ -74,7 +44,7 @@
                                         <span class={'status' + (parseInt(row.status) + 1)}></span>
                                         <div class="content-name">
                                         <span class={[row?.children ? 'none' : 'index']}>{$seq ? `${$seq}.${$rowIndex + 1}` : $rowIndex + 1}</span>
-                                        <TextToolTip className="name" content={row.projectName}
+                                        <TextToolTip className="name" content={row.title}
                                                     refName={'table-name' + $rowIndex}></TextToolTip>
                                         </div>
                                     </div>
@@ -84,27 +54,27 @@
                     },
                     {
                         title: '负责人',
-                        field: 'projectManger',
+                        field: 'projectMaster',
                         width: 150,
                         showOverflow: true
                     },
                     {
                         title: '优先级',
-                        field: 'status',
+                        field: 'priority',
                         width: 74,
                         slots: {
                             default: ({row}) => {
                                 return [
-                                    <Priority percent={row.status} size="small"/>
+                                    <Priority percent={row.priority} size="small"/>
                                 ]
                             }
                         }
                     },
                     {
                         title: '权重',
-                        field: 'progress',
+                        field: 'weight',
                         width: 84,
-                        formatter: ({cellValue}) => `${cellValue}%`
+                        // formatter: ({cellValue}) => `${cellValue}%`
                     },
                     {
                         title: '进度',
@@ -112,8 +82,9 @@
                         width: 159,
                         slots: {
                             default: ({row}) => {
+                                row.progress = /(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress;
                                 return [
-                                    <a-progress percent={row.progress} size="small"/>
+                                    <a-progress percent={Number(row.progress)} size="small"/>
                                 ]
                             }
                         }
@@ -132,14 +103,13 @@
                     },
                     {
                         title: '时间计划',
-                        field: 'endTime',
+                        field: 'planTime',
                         width: 166,
                         slots: {
                             default: ({row}) => {
                                 return [
                                     <div class="table-time">
-                                        <span>{row.endTime}</span>
-                                        <IconToolTip iconName="iconzhuyi" content="已变更"></IconToolTip>
+                                        <span>{row.planTime}</span>
                                     </div>
                                 ]
                             }
@@ -147,21 +117,30 @@
                     },
                     {
                         title: '实际结束日期',
-                        field: 'restDay',
-                        width: 120
+                        field: 'actualEndTime',
+                        minWidth: 120
                     },
                     {
                         title: '工作进展描述',
-                        field: 'remark',
+                        field: 'description',
+                        minWidth: 120,
                         showOverflow: true,
-                        editRender: {name: 'input', attrs: {type: 'text', placeholder: '请输入备注'}}
+                        editRender: {name: 'input', enabled: isInPermission('business_projectweek_edit'),attrs: {type: 'text', placeholder: '请输入工作进展描述'}}
                     },
                     {
                         title: '下周工作计划',
-                        field: 'remark',
+                        field: 'nextWeekWork',
+                        minWidth: 120,
                         showOverflow: true,
-                        editRender: {name: 'input', attrs: {type: 'text', placeholder: '请输入备注'}}
-                    }
+                        editRender: {name: 'input', enabled: isInPermission('business_projectweek_edit'), attrs: {type: 'text', placeholder: '请输入下周工作计划'}}
+                    },
+                    {
+                        title: '备注',
+                        field: 'remark',
+                        minWidth: 120,
+                        showOverflow: true,
+                        editRender: {name: 'input', enabled: isInPermission('business_projectweek_edit'), attrs: {type: 'text', placeholder: '请输入备注'}}
+                    },
                 ]
             }
         },
@@ -175,11 +154,25 @@
             handleSetSelectedTree(deptId){
                 this.deptId = deptId;
                 // 查询table
-                this.tableData = []
+                this.handleGetList();
+            },
+            async handleGetList() {
+                try {
+                    let {code, data} = await this.$api.report.handleGetWeekList(this.deptId);
+                    if(code === 0){
+                        this.tableData = data;
+                    }
+                    console.log(data)
+                } catch (error) {
+                    console.log(error)
+                }
             }
         },
         mounted() {
             // 查询table
+            this.$nextTick(() => {
+                this.handleGetList()
+            })
         }
     }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <span :class="'priority'+(parseInt(value) + 1)" @click="$emit('click')">{{ prioritis[value] }}</span>
+  <span :class="'priority'+(parseInt(value))" @click="$emit('click')">{{ prioritis[value] }}</span>
 </template>
 
 <script>
@@ -12,11 +12,11 @@
       }
     },
     data() {
-      return {
+      return { // （0：低，1：中，2：高）
         prioritis: [
-          '高',
-          '中',
           '低',
+          '中',
+          '高',
         ],
       }
     }
@@ -24,8 +24,8 @@
 </script>
 
 <style lang="scss" scoped>
-  $bgColors: #FEDFE1, #D3E3FF, #DFF8F6;
-  $colors: #FF4C60, #2373FF, #1DCEC3;
+  $bgColors: #DFF8F6, #D3E3FF, #FEDFE1;
+  $colors: #1DCEC3, #2373FF, #FF4C60;
   @each $bg in $bgColors {
     $i: index($bgColors, $bg);
     .priority#{$i} {
