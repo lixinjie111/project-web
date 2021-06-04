@@ -3,7 +3,7 @@
     <MenuNav>
       <div slot="nav-left" class="nav-left-title">
         <a class="back" @click="handleHome"><i class="iconfont iconshouye"></i>首页</a>
-        <a-select :options="projectList" class="proj-list" size="small"/>
+        <a-select :options="projectList" class="proj-list" size="small" v-model="projectId"/>
       </div>
     </MenuNav>
     <div class="header">
@@ -143,10 +143,11 @@
         page: 1,
         projectList: [
           {
-            key: 1,
+            key: 9393939,
             label: '秀梅苯肼基材'
           }
         ],
+        projectId: 9393939,
         tableData: [],
         tableColumns: [
           // {
@@ -358,10 +359,11 @@
     mounted() {
       this.getTableList();
       // getProjectList().then(res => {}).catch(e => {});
+      this.$store.dispatch('projectMemberList', this.projectId);
     },
     methods: {
       getTableList() {
-        getTaskList(this.page, 20, 9393939).then(res => {
+        getTaskList(this.page, 20, this.projectId).then(res => {
           if (res.code === 0 && res.data) {
             this.tableData = res.data.records;
           }

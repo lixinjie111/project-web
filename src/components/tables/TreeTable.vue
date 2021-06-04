@@ -15,7 +15,7 @@
       <Priority :value="text"/>
     </template>
     <template slot="progress" slot-scope="text">
-      <a-progress :percent="text*10" size="small"/>
+      <a-progress :percent="parseInt(text)" size="small"/>
     </template>
   </a-table>
 </template>
