@@ -136,7 +136,7 @@ const httpaxios = {
     }
 		const {data, params, ...rest} = opts
     return this.instance.request({
-      url: apiName,
+      url: `/api${apiName}`,
       // baseURL: process.env.VUE_APP_API_HOST,
       method:method,
 			data,

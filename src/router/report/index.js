@@ -24,24 +24,24 @@ export default {
                     path: '/report/notarchive/schedule',
                     component: Schedule,
                     name: '工作进度',
-                    meta: {isAuth: true}
+                    meta: {isAuth: true, permissionKey: null, entryPath: '/report/notarchive'}
                 },
                 {
                     path: '/report/notarchive/project',
                     component: Project,
                     name: '重点项目',
-                    meta: {isAuth: true}
+                    meta: {isAuth: true, permissionKey: null, entryPath: '/report/notarchive'}
                 },
                 {
                     path: '/report/notarchive/plan',
                     component: Plan,
                     name: '月度计划',
-                    meta: {isAuth: true}
+                    meta: {isAuth: true, permissionKey: null, entryPath: '/report/notarchive'}
                 },                {
                     path: '/report/notarchive/deliverables',
                     component: Deliverables,
                     name: '月度交付物验收',
-                    meta: {isAuth: true}
+                    meta: {isAuth: true, permissionKey: null, entryPath: '/report/notarchive'}
                 }
             ]
         },
