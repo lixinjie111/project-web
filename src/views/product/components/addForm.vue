@@ -104,7 +104,6 @@
 
             },
             handleCancelProject(item) {
-                console.log('ddd',item);
                 let index = this.form.projectList.findIndex(i => i.projectId == item.projectId);
                 this.form.projectList.splice(index, 1);
                 this.projectList.forEach((t) => {
@@ -113,9 +112,7 @@
                         this.cancelRelIds.push(item.id);
                     }
                 });
-                this.form.cancelRelIds = this.cancelRelIds.join(',');
-                console.log(this.form.cancelRelIds);
-                console.log(this.projectList);
+                // this.form.cancelRelIds = this.cancelRelIds.join(',');
             },
             handleChangeProject(list) {
                 let projectList = list.map(item => {

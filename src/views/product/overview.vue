@@ -43,7 +43,7 @@
             </div>
         </div>
         <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
-            <AddForm ref="addForm" slot="content" :form="editForm"></AddForm>
+            <AddForm ref="addForm" slot="content" :form="form"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showCloseModal" :title="closeModal.modalTitle" :okText="closeModal.okText" :cancelText="closeModal.cancelText" headeralgin="left" @modal-sure="handleCloseSubmit" @modal-cancel="handleCloseCancel">
             <closeForm ref="closeForm" slot="content"></closeForm>
@@ -128,7 +128,14 @@
                     okText:'关闭',
                     cancelText:'取消'
                 },
-                editForm: {}
+                form: {
+                    productName: '',
+                    productDescription: '',
+                    productCode: '',
+                    masterList: [],
+                    publicFlag: 0,
+                    projectList: []
+                }
             }
         },
         created() {
@@ -186,15 +193,22 @@
             // 添加产品
             handleAdd() {
                this.showAddModal = true;
+               // this.form = {
+               //     productName: '',
+               //     productDescription: '',
+               //     productCode: '',
+               //     masterList: [],
+               //     publicFlag: 0,
+               //     projectList: []
+               // };
             },
             // 编辑产品
             async handleEdit(item) {
                 this.showAddModal = true;
-                console.log('item',item);
                 try {
                     let {code, data} = await this.$api.product.getProductDetail(item.id);
                     if(code === 0){
-                        this.editForm = {
+                        this.form = {
                             id: data.id,
                             cancelRelIds:'',
                             productName: data.productName,
@@ -274,7 +288,6 @@
             },
             // 关闭产品保存
             async handleCloseSubmit() {
-                console.log(this.closeItem);
                 try {
                     let remark = this.$refs.closeForm.$refs.closeForm.model.remark;
                     let {code} = await this.$api.product.closeProduct(this.closeItem.id, remark);
