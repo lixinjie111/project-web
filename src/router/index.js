@@ -51,7 +51,7 @@ function setStoreMenu(to, next){
     let {menuList, menuMap, topMenu, firstMenu, secondMenu, permission, activeNavMenu} = store.state.system;
     if(!topMenu.length) return; // vuex已经缓存菜单
     // 有些页面不在菜单列表，根据数据操作权限 能进入某些页面
-    if(isInPermission(permissionKey)) {
+    if(isInPermission(permissionKey) || (!permissionKey && menuList.indexOf(entryPath) > -1)) {
         getrouterPath(entryPath)
         next();
         return ;

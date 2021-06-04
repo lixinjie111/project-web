@@ -27,7 +27,7 @@ module.exports = {
     // port: 8080
       proxy: {
       '/api': {
-        target: 'https://dev-teamapi.yzmetax.com/', // 目标代理接口地址
+        target: 'https://dev-teamapi.yzmetax.com', // 目标代理接口地址
         ws: true,
         secure: false,
         changeOrigin: true, // 开启代理，在本地创建一个虚拟服务端

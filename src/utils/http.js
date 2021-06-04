@@ -5,7 +5,7 @@ import store from '@/store'
 import errorCode from '@/const/errorCode'
 import { message } from 'x-intelligent-ui'
 import router from '../router/index'
-
+console.log(process.env)
 
 Vue.use(VueAxios, axios)
 const httpaxios = {

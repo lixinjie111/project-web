@@ -30,7 +30,7 @@ export default {
         top: 0;
         width: 80px;
         height: 100vh;
-        z-index: 10;
+        z-index: 100;
     }
     .layout-container{
         margin-left: 80px;
