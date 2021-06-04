@@ -33,8 +33,8 @@
 
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-model-item label="参与人" prop="participates">
-            <UserSelect v-model="form.participates" multiple />
+          <a-form-model-item label="参与人" prop="executorList">
+            <UserSelect v-model="form.executorList" multiple />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">

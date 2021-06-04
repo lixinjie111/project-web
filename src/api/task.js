@@ -16,6 +16,15 @@ export function getTaskList(current, size, projectId, myTaskFlag=false, weeklySh
 }
 
 /**
+ * 通过id查询团队成员信息
+ * @param {*} projectId 项目ID
+ * @returns {*}
+ */
+export function getProjectMemberList(projectId) {
+  return httpaxios.get('/business/member/' + projectId)
+}
+
+/**
  * 新建任务
  * @param data
  * @returns {*}

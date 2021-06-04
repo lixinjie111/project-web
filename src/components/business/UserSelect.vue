@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserIcon v-if="multiple" :value="item.name" :key="item.id" v-for="(item, index) in userList" @close="handleDelete(index)"/>
+    <UserIcon v-if="multiple" :value="item.name" :key="item.id" v-for="(item, index) in userList" closable @close="handleDelete(index)"/>
     <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
       <template v-if="multiple">
         <CircleButton></CircleButton>
