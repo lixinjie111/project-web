@@ -7,7 +7,9 @@
       :loading="loading"
       :data-source="dataSource"
       rowKey="id"
-      :columns="columns">
+      :columns="columns"
+      :pagination="{current: currentPage, pageSize: pageSize, total: total}"
+      @change="handlePage">
     <template slot="status" slot-scope="text">
       <Status :value="text"/>
     </template>
@@ -53,6 +55,20 @@
         default: [],
         type: Array,
       },
+      currentPage: {
+        type: Number
+      },
+      pageSize: {
+        type: Number
+      },
+      total: {
+        type: Number
+      },
+    },
+    methods: {
+      handlePage(page) {
+        this.$emit('pageChange', page.current);
+      }
     }
   }
 </script>

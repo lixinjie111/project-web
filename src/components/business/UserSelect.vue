@@ -1,24 +1,24 @@
 <template>
   <div>
-    <UserIcon v-if="multiple" :value="item.name" :key="item.id" v-for="(item, index) in userList" closable @close="handleDelete(index)"/>
+    <UserIcon v-if="multiple" :value="item.userName" :key="item.userId" v-for="(item, index) in userList" closable @close="handleDelete(index)"/>
     <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
       <template v-if="multiple">
         <CircleButton></CircleButton>
       </template>
       <template v-else-if="mode==='add'">
-        <UserIcon v-if="value" :value="value.name" />
+        <UserIcon v-if="value" :value="value.userName" />
         <CircleButton v-else></CircleButton>
       </template>
       <template v-else>
-        <TwoValue :title="value.name" :subtitle="subtitle" v-if="value">
-          <UserIcon :value="value.name" :length="1" :size="1"/>
+        <TwoValue :title="value.userName" :subtitle="subtitle" v-if="value">
+          <UserIcon :value="value.userName" :length="1" :size="1"/>
         </TwoValue>
         <TwoValue :subtitle="subtitle" v-else>
           <CircleButton></CircleButton>
         </TwoValue>
       </template>
       <template slot="content">
-        <a-tree v-if="treeList.length" :tree-data="treeList" :replaceFields="replaceFields"
+        <a-tree v-if="treeList.length" :tree-data="options || treeList" :replaceFields="replaceFields"
                 :checkedKeys="userKeys"
                 @select="handleSelect"
               @check="handleChange"
@@ -36,7 +36,7 @@
   import Tree from "@/components/tree/Tree";
 
   export default {
-    name: "UserSelect",
+    userName: "UserSelect",
     components: { UserIcon, CircleButton, TwoValue, Tree },
     data() {
       return {
@@ -44,67 +44,67 @@
         userKeys: [],
         users: [],
         replaceFields: {
-          key: 'id',
-          value: 'name',
-          title: 'name',
+          key: 'userId',
+          value: 'userName',
+          title: 'userName',
           children: 'children',
         },
         treeList: [
           {
-            "id":"992307132",
+            "userId":"992307132",
             // "value": "万科集团",
-            "name":"万科集团",
+            "userName":"万科集团",
             "scopedSlots":{
-              "name":"custom"
+              "userName":"custom"
             },
           },
           {
-            "id":"99230713",
+            "userId":"99230713",
             // "value": "万科集团",
-            "name":"万科集团",
+            "userName":"万科集团",
             // ⚠️重点这这里⚠️每一条数据上都添加scopedSlots属性
             "scopedSlots":{
-              "name":"custom"
+              "userName":"custom"
             },
             "children":[
               {
-                "id":"99230992",
+                "userId":"99230992",
                 // "value": "华东区域",
-                "name":"华东区域",
+                "userName":"华东区域",
                 "scopedSlots":{
-                  "name":"custom"
+                  "userName":"custom"
                 },
                 "children":[
                   {
-                    "id":"99230112",
-                    "name":"杭州万科",
+                    "userId":"99230112",
+                    "userName":"杭州万科",
                     "scopedSlots":{
-                      "name":"custom"
+                      "userName":"custom"
                     },
                   }
                 ],
               },
               {
-                "id":"99230993",
-                "name":"华南区域",
+                "userId":"99230993",
+                "userName":"华南区域",
                 "scopedSlots":{
-                  "name":"custom"
+                  "userName":"custom"
                 },
               },
               {
-                "id":"99231020",
-                "name":"华北区域",
+                "userId":"99231020",
+                "userName":"华北区域",
                 "scopedSlots":{
-                  "name":"custom"
+                  "userName":"custom"
                 },
               }
             ],
           },
           {
-            "id":"9923071314",
-            "name":"万科集团",
+            "userId":"9923071314",
+            "userName":"万科集团",
             "scopedSlots":{
-              "name":"custom"
+              "userName":"custom"
             },
           }
         ],
@@ -119,6 +119,7 @@
         type: Boolean,
       },
       subtitle: String,
+      options: Array,
     },
     computed: {
       userList() {
@@ -126,12 +127,12 @@
       }
     },
     methods: {
-      getUserById(id, users) {
+      getUserById(userId, users) {
         for (let u of users) {
-          if (u.id === id)
+          if (u.userId === userId)
             return u;
           if (u.children) {
-            let find = this.getUserById(id, u.children);
+            let find = this.getUserById(userId, u.children);
             if (find)
               return find;
           }
@@ -139,12 +140,12 @@
         return null;
       },
       handleChange(e) {
+        console.log('handleChange', e);
         let users = [];
-        e.forEach(id => {
-          let user = this.getUserById(id, this.treeList);
+        e.forEach(userId => {
+          let user = this.options ? this.getUserById(userId, this.options) : this.getUserById(userId, this.treeList);
           if (! user.children)
             users.push(user);
-          // console.log(e, user);
         })
         this.userKeys = e;
         this.users = users;
@@ -152,8 +153,8 @@
         this.$emit('input', users)
       },
       handleSelect(e) {
-        let id = e[0];
-        let user = this.getUserById(id, this.treeList);
+        let userId = e[0];
+        let user = this.options ? this.getUserById(userId, this.options) : this.getUserById(userId, this.treeList);
         if (user.children) {
           return;
         }

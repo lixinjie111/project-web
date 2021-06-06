@@ -9,7 +9,7 @@ export default {
 
     getProjectMemberList(projectId).then(res => {
       if (res.code === 0 && res.data) {
-        commit(types.MEMBER_LIST, res.data, projectId, true);
+        commit(types.MEMBER_LIST, res.data.records, projectId, true);
       }
       else {
         commit(types.MEMBER_LIST, [], projectId, false);

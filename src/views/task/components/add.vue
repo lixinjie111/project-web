@@ -1,32 +1,32 @@
 <template>
   <Modal v-bind="$attrs" title="创建任务" okText="确定" cancelText="取消" headeralgin="center" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
     <a-form-model slot="content" ref="userForm"  class="user-form" layout="vertical" :model="form" :rules="rules">
-      <a-form-model-item label="名称" prop="username">
-        <a-input v-model="form.title" placeholder="名称" />
+      <a-form-model-item label="名称" prop="taskName">
+        <a-input v-model="form.taskName" placeholder="名称" />
       </a-form-model-item>
 
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-model-item label="类型" prop="name">
-            <a-select v-model="form.type" placeholder="" :options="types" />
+          <a-form-model-item label="类型" prop="taskType">
+            <a-select v-model="form.taskType" placeholder="" :options="types" />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
           <a-form-model-item label="负责人" prop="incharge">
-            <UserSelect v-model="form.incharge" subtitle="负责人" />
+            <UserSelect v-model="form.incharge" subtitle="负责人" :options="memberList" />
           </a-form-model-item>
         </a-col>
       </a-row>
 
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-model-item label="开始日期" prop="begin_date">
-            <a-date-picker v-model="form.begin_date" placeholder="请选择开始日期" allowClear />
+          <a-form-model-item label="开始日期" prop="planBeginTime">
+            <a-date-picker v-model="form.planBeginTime" placeholder="请选择开始日期" allowClear />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
-          <a-form-model-item label="截止日期" prop="end_date">
-            <a-date-picker v-model="form.end_date" placeholder="请选择截止日期" allowClear />
+          <a-form-model-item label="截止日期" prop="planEndTime">
+            <a-date-picker v-model="form.planEndTime" placeholder="请选择截止日期" allowClear />
           </a-form-model-item>
         </a-col>
       </a-row>
@@ -34,7 +34,7 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-model-item label="参与人" prop="executorList">
-            <UserSelect v-model="form.executorList" multiple />
+            <UserSelect v-model="form.executorList" :options="memberList" multiple />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
@@ -44,8 +44,8 @@
         </a-col>
       </a-row>
 
-      <a-form-model-item label="任务描述" prop="desc">
-        <a-textarea v-model="form.desc" />
+      <a-form-model-item label="任务描述" prop="taskDescription">
+        <a-textarea v-model="form.taskDescription" />
       </a-form-model-item>
     </a-form-model>
   </Modal>
@@ -56,6 +56,8 @@
   import UserSelect from "@/components/business/UserSelect";
   import PrioritySelect from "@/components/business/PrioritySelect";
   import {createTask} from "@/api/task";
+  import {taskTypes} from "@/const/data";
+  import moment from "moment";
 
   export default {
     name: "TaskAdd",
@@ -65,24 +67,31 @@
       //   type: Boolean,
       //   default: false
       // },
+      projectId: {
+        type: Number
+      }
     },
     data() {
       return {
         form: {
-          incharge:[],
+          taskName: '',
+          taskType: 0,
+          incharge: null,
           participates:[],
           priority: 1,
         },
-        types: [
-          {
-            key: 1,
-            label: '开发',
-          },
-          {
-            key: 2,
-            label: '管理',
-          },
-        ],
+        types: taskTypes.map((label, key) => {
+          return {label, key}
+        }),
+        rules: {
+          taskName: [
+            {
+              required: true,
+              message: '请输入任务名',
+              trigger: 'blur'
+            }
+          ]
+        }
       }
     },
     methods: {
@@ -93,28 +102,21 @@
             console.log(data)
             console.log('submit!', this.form);
             // 接口提交成功 isShow
-            createTask({
-              "executorList": [
-                {
-                  "userId": 88888,
-                  "userName": "曹达隆"
-                }
-              ],
-              "masterList": [
-                {
-                  "userId": 88888,
-                  "userName": "曹达隆"
-                }
-              ],
-              "planBeginTime": "2020-10-30 12:12:12",
-              "planEndTime": "2020-10-30 12:12:12",
-              "priority": 0,
-              "projectId": 9393939,
-              "taskDescription": "bbbb",
-              "taskName": "这个是任务",
-              "taskType": 0
-            }).then(res => {
+            this.form.projectId = this.projectId;
+            if (this.form.incharge) {
+              this.form.masterList = [
+                this.form.incharge
+              ]
+            }
+            if (this.form.planBeginTime) {
+              this.form.planBeginTime = moment(this.form.planBeginTime).format('YYYY-MM-DD HH:mm:SS')
+            }
+            if (this.form.planEndTime) {
+              this.form.planEndTime = moment(this.form.planEndTime).format('YYYY-MM-DD HH:mm:SS')
+            }
+            createTask(this.form).then(res => {
               this.$emit('ok', this.form);
+              this.$refs.userForm.resetFields();
             }).catch(err => {});
           } else {
             return false;
@@ -127,6 +129,11 @@
         this.$emit('cancel');
       },
     },
+    computed: {
+      memberList() {
+        return this.$store.state.task.memberList;
+      }
+    }
   }
 </script>
 
