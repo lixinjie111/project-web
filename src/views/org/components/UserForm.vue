@@ -28,8 +28,8 @@
           <span>角色分组</span>
           <span class="second-title">(分组决定用户的权限列表)</span>
         </template>
-        <a-select v-model="form.roleList" mode="multiple" :default-value="form.roleList">
-          <a-select-option v-for="item in roleList" :key="item.roleId">{{ item.roleName }}</a-select-option>
+        <a-select v-model="form.roleList" mode="multiple" :default-value="form.roleList" :filter-option="handleFilterRole">
+          <a-select-option v-for="item in roleList" :key="item.roleName" :value="item.roleId">{{ item.roleName }}</a-select-option>
         </a-select>
       </a-form-model-item>
 
@@ -78,7 +78,7 @@ import {isInPermission} from '@/utils/common.js'
 export default {
   name: 'UserForm',
   components: {Modal},
-  props: ['isShow', 'modal', 'form', 'roleList', 'treeList'],
+  props: ['isShow', 'modal', 'roleList', 'treeList', 'form'],
   data() {
     return {
       radioStyle: {
@@ -112,6 +112,10 @@ export default {
   },
   methods: {
     isInPermission,
+    // 筛选下拉框
+    handleFilterRole(value, option){
+      return option?.key.indexOf(value) != -1;
+    },
     // 校验新增 编辑用户信息
     handleSubmit() {
       this.$refs.userForm.validate(async valid => {

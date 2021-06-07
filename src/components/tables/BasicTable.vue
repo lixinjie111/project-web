@@ -22,6 +22,7 @@
 
 <script>
     export default {
+        name: 'BasicTable',
         props: {
             setTableColumns: {
                 type: Array,

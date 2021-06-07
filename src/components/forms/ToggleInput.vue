@@ -28,6 +28,7 @@
       },
       handleEnd() {
         this.edit = false;
+        this.$emit('commit');
       },
     }
   }

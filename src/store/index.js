@@ -9,6 +9,7 @@ import createPersistedState from "vuex-persistedstate"
 // 模块
 import system from '@/store/system'
 import users from '@/store/users'
+import task from '@/store/task'
 
 Vue.use(Vuex)
 
@@ -26,7 +27,8 @@ export default new Vuex.Store({
   actions,
   modules: {
     system,
-    users
+    users,
+    task,
   },
   plugins: [persistedState]
 })

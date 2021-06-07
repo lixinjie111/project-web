@@ -94,7 +94,7 @@ export default {
     // 选中部门下子部门
     handleSelectSubDepart(nodeList){
       let departList = [...JSON.parse(JSON.stringify(nodeList)), ...Array.from({length: 10 - nodeList.length}).map(() => ({name: ''}))];
-      let list = nodeList && nodeList.length ? departList : this.emptyList;
+      let list = nodeList && nodeList.length ? departList : JSON.parse(JSON.stringify(this.emptyList));
       list.map(item => {
         item.deptId = item.id;
         delete item?.children

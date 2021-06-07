@@ -3,20 +3,20 @@
     <MenuNav>
       <div slot="nav-left" class="nav-left-title">
         <a class="back" @click="handleHome"><i class="iconfont iconshouye"></i>首页</a>
-        <a-select :options="projectList" class="proj-list" size="small"/>
+        <a-select :options="projectList" class="proj-list" size="small" v-model="projectId"/>
       </div>
     </MenuNav>
     <div class="header">
       <div class="left">
-        <a-radio-group default-value="a" size="large">
-          <a-radio-button value="a" class="all">
+        <a-radio-group default-value="a" size="large" @change="handleQueryFilter">
+          <a-radio-button value="all" class="all">
             全部
             <span>8</span>
           </a-radio-button>
-          <a-radio-button value="b">
+          <a-radio-button value="myTaskFlag">
             指派给我
           </a-radio-button>
-          <a-radio-button value="c">
+          <a-radio-button value="weeklyShow">
             在周报中显示
           </a-radio-button>
         </a-radio-group>
@@ -46,7 +46,7 @@
     </div>
 
     <!-- 列表 -->
-    <TreeTable :columns="tableColumns" :data-source="tableData" v-if="viewType===0"/>
+    <TreeTable :columns="tableColumns" :data-source="tableData" v-if="viewType===0" :current-page="page" :total="total" :page-size="pageSize" @pageChange="handlePageChange"/>
     <!-- 看板 -->
     <div class="board" v-else>
       <div class="group">
@@ -120,8 +120,8 @@
       </div>
 
     </div>
-    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" />
-    <TaskEdit :isShow="showEdit" @cancel="showEdit = false" @ok="handleEditClose" :value="tableData[0]" @create-child="handleCreate" />
+    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="projectId" />
+    <TaskEdit :isShow="showEdit" @cancel="showEdit = false" @ok="handleEditClose" :task-id="editTaskId" @create-child="handleCreate" :project-id="projectId" />
   </div>
 </template>
 
@@ -132,8 +132,9 @@
   import TaskAdd from "./components/add";
   import TaskEdit from "./components/edit";
   import draggable from 'vuedraggable';
-  import {getTaskList} from "@/api/task";
+  import {addProjectMember, deleteTask, getTaskList} from "@/api/task";
   import {taskTypes} from "@/const/data";
+  import {Modal} from 'x-intelligent-ui';
 
   export default {
     name: 'TaskHome',
@@ -141,12 +142,16 @@
     data() {
       return {
         page: 1,
+        pageSize: 2,
+        total: 0,
         projectList: [
           {
-            key: 1,
+            key: 9393939,
             label: '秀梅苯肼基材'
           }
         ],
+        projectId: 9393939,
+        editTaskId: 0,
         tableData: [],
         tableColumns: [
           // {
@@ -217,6 +222,27 @@
             title: '进度',
             scopedSlots: {
               customRender: 'progress'
+            }
+          },
+          {
+            dataIndex: 'type',
+            title: '操作',
+            customRender: (text, record, index) => {
+              return {
+                attrs:{},
+                props:{},
+                class:{},
+                style:{},
+                children: this.$createElement('div', [
+                    // this.$createElement('i', {
+                    //   'class': 'iconfont iconxiezuo',
+                    //   on: {click: () => this.handleEdit(record)}}, ''),
+                    this.$createElement('i', {
+                      'class': 'iconfont iconshanchu',
+                      on: {click: () => this.handleDelete(record)}}, ''),
+                  ]
+                )
+              }
             }
           },
         ],
@@ -295,8 +321,9 @@
           },
         ],
         showCreate: false,
-        showEdit: true,
+        showEdit: false,
         viewType: 0,
+        queryType: 'all',
         viewTypes: ['列表', '看板'],
       }
     },
@@ -358,12 +385,26 @@
     mounted() {
       this.getTableList();
       // getProjectList().then(res => {}).catch(e => {});
+      this.$store.dispatch('projectMemberList', this.projectId);
+      // addProjectMember(9393939, [
+      //     {
+      //       "userId": 125,
+      //       "userName": "武林人",
+      //       "userRole": "夫工"
+      //     },
+      //     {
+      //       "userId": 127,
+      //       "userName": "草木灰",
+      //       "userRole": "弄伤"
+      //     },
+      //   ])
     },
     methods: {
       getTableList() {
-        getTaskList(this.page, 20, 9393939).then(res => {
+        getTaskList(this.page, this.pageSize, this.projectId, this.queryType==='myTaskFlag', this.queryType==='weeklyShow').then(res => {
           if (res.code === 0 && res.data) {
             this.tableData = res.data.records;
+            this.total = res.data.total;
           }
         }).catch(err => {
           console.log(err)
@@ -377,17 +418,44 @@
         console.log('test')
         this.showCreate = true;
       },
-      handleEdit() {
+      handleEdit(record) {
+        this.editTaskId = record.id;
         this.showEdit = true;
+      },
+      handleDelete(record) {
+        let that = this;
+        Modal.confirm({
+          title: '提示',
+          content: `您确定要删除 ${record.taskName} 任务吗？`,
+          okText: '确认删除',
+          icon: 'none',
+          onOk() {
+            deleteTask(record.id).then(res => {
+              if (res.code === 0 && res.data) {
+                that.getTableList();
+              }
+            }).catch(err => {});
+          }
+        })
       },
       handleCreateOK(data) {
         this.showCreate = false;
+        this.getTableList();
       },
       handleEditClose() {
         this.showEdit = false;
+        this.getTableList();
       },
       handleHome() {
         this.$router.push('/mine/home');
+      },
+      handleQueryFilter(e) {
+        this.queryType = e.target.value;
+        this.getTableList();
+      },
+      handlePageChange(page) {
+        this.page = page;
+        this.getTableList();
       },
     }
   }
