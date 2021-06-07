@@ -76,14 +76,34 @@ export default {
                     field: 'remark',
                     minWidth: 220,
                     showOverflow: true,
-                    editRender: {name: 'input', enabled: isInPermission('business_projectdeliverable_edit'),  attrs: {type: 'text', placeholder: '请输入备注'}}
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectdeliverable_edit'),  
+                        attrs: {type: 'text', placeholder: '请输入备注'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectDeliverable(data);
+                            }
+                        }
+                    }
                 },
                 {
                     title: '验收情况',
                     field: 'acceptance',
                     minWidth: 220,
                     showOverflow: true,
-                    editRender: {name: 'input', enabled: isInPermission('business_projectdeliverable_edit'), attrs: {type: 'text', placeholder: '请输入验收情况'}}
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectdeliverable_edit'), 
+                        attrs: {type: 'text', placeholder: '请输入验收情况'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectDeliverable(data);
+                            }
+                        }
+                    }
                 },
                 {
                     title: '验收结论',
@@ -91,7 +111,6 @@ export default {
                     minWidth: 145,
                     slots: {
                         default:({row}) => {
-                            console.log('business_projectdeliverable_status', isInPermission('business_projectdeliverable_status'))
                             return [
                                 <Select type={isInPermission('business_projectdeliverable_status')} status={row.status} onSelected-status={(status) => this.handleChangeStatus(row, status)}></Select>
                             ]
@@ -114,9 +133,16 @@ export default {
             this.handleGetList()
         },
         // 修改状态
-        handleChangeStatus(row, status){
-            console.log(row, status)
-            row.status = status;
+        async handleChangeStatus(row, status){
+            try {
+                let {code} = await this.$api.report.handlePutDeliverableStatus(row.id, status);
+                if(code === 0) {
+                  row.status = status; 
+                  this.$message.success('修改验收结论成功！') 
+                }
+            } catch (error) {
+                console.log(error)    
+            }
         },
         // 查询列表
         async handleGetList(){
@@ -128,7 +154,17 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-
+        },
+        // 编辑月度交付物
+        async handlePutProjectDeliverable(data){
+            try {
+                let {code} = await this.$api.report.handlePutProjectDeliverable(data);
+                if(code === 0){
+                    this.$message.success('修改成功！')
+                }
+            }catch(error){
+                console.log(error)
+            }
         }
     },
     mounted() {

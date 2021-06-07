@@ -59,19 +59,43 @@ export default {
                     title: '月度工作计划描述',
                     field: 'description',
                     minWidth: 284,
-                    editRender: {name: 'input', enabled: isInPermission('business_projectmonth_edit'), attrs: {type: 'text', placeholder: '请输入月度工作计划描述'}}
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectmonth_edit'), 
+                        attrs: {type: 'text', placeholder: '请输入月度工作计划描述'},
+                    }
                 },
                 {
                     title: '月度交付物',
                     field: 'deliverable',
                     minWidth: 112,
-                    editRender: {name: 'input', enabled: isInPermission('business_projectmonth_edit'), attrs: {type: 'text', placeholder: '请输入月度交付物'}}
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectmonth_edit'), 
+                        attrs: {type: 'text', placeholder: '请输入月度交付物'}, 
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectMonth(data);
+                            }
+                        }
+                    }
                 },
                 {
                     title: '验收标准',
                     field: 'acceptanceCriteria',
                     minWidth: 112,
-                    editRender: {name: 'input', enabled: isInPermission('business_projectmonth_edit'), attrs: {type: 'text', placeholder: '请输入验收标准'}}
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectmonth_edit'), 
+                        attrs: {type: 'text', placeholder: '请输入验收标准'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectMonth(data);
+                            }
+                        }
+                    }
                 },
                 {
                     title: '任务开始日期',
@@ -124,7 +148,17 @@ export default {
                     field: 'remark',
                     minWidth: 240,
                     showOverflow: true,
-                    editRender: {name: 'input', attrs: {type: 'text', placeholder: '请输入备注'}}
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectmonth_edit'), 
+                        attrs: {type: 'text', placeholder: '请输入备注'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectMonth(data);
+                            }
+                        }
+                    }
                 },
                 {
                     title: '任务验收结论',
@@ -155,7 +189,6 @@ export default {
         },
         // 切换状态
         async handleChangeStatus(row, status){
-            console.log(row, status)
             try {
                 let {code} = await this.$api.report.handlePutMonthStatus(row.id, status);
                 if(code === 0){
@@ -175,6 +208,17 @@ export default {
                 }
             }catch(error) {
 
+            }
+        },
+        // 编辑月度计划
+        async handlePutProjectMonth(data){
+            try {
+                let {code} = await this.$api.report.handlePutProjectMonth(data);
+                if(code === 0){
+                    this.$message.success('修改成功！')
+                }
+            }catch(error){
+                console.log(error)
             }
         }
     },

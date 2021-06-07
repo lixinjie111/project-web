@@ -125,21 +125,51 @@
                         field: 'description',
                         minWidth: 120,
                         showOverflow: true,
-                        editRender: {name: 'input', enabled: isInPermission('business_projectweek_edit'),attrs: {type: 'text', placeholder: '请输入工作进展描述'}}
+                        editRender: {
+                            name: 'input', 
+                            enabled: isInPermission('business_projectweek_edit'),
+                            attrs: {type: 'text', placeholder: '请输入工作进展描述'},
+                            events: {
+                                blur: ({row, column}) => {
+                                    let data = {id: row.id, [column.property]: column.model.value}
+                                    column.model.update && this.handlePutProjectWeek(data);
+                                }
+                            }
+                        }
                     },
                     {
                         title: '下周工作计划',
                         field: 'nextWeekWork',
                         minWidth: 120,
                         showOverflow: true,
-                        editRender: {name: 'input', enabled: isInPermission('business_projectweek_edit'), attrs: {type: 'text', placeholder: '请输入下周工作计划'}}
+                        editRender: {
+                            name: 'input', 
+                            enabled: isInPermission('business_projectweek_edit'), 
+                            attrs: {type: 'text', placeholder: '请输入下周工作计划'},
+                            events: {
+                                blur: ({row, column}) => {
+                                    let data = {id: row.id, [column.property]: column.model.value}
+                                    column.model.update && this.handlePutProjectWeek(data);
+                                }
+                            }
+                        }
                     },
                     {
                         title: '备注',
                         field: 'remark',
                         minWidth: 120,
                         showOverflow: true,
-                        editRender: {name: 'input', enabled: isInPermission('business_projectweek_edit'), attrs: {type: 'text', placeholder: '请输入备注'}}
+                        editRender: {
+                            name: 'input', 
+                            enabled: isInPermission('business_projectweek_edit'), 
+                            attrs: {type: 'text', placeholder: '请输入备注'},
+                            events: {
+                                blur: ({row, column}) => {
+                                    let data = {id: row.id, [column.property]: column.model.value}
+                                    column.model.update && this.handlePutProjectWeek(data);
+                                }
+                            }
+                        }
                     },
                 ]
             }
@@ -156,6 +186,7 @@
                 // 查询table
                 this.handleGetList();
             },
+            // 查询table
             async handleGetList() {
                 try {
                     let {code, data} = await this.$api.report.handleGetWeekList(this.deptId);
@@ -164,6 +195,17 @@
                     }
                     console.log(data)
                 } catch (error) {
+                    console.log(error)
+                }
+            },
+            // 编辑工作进度
+            async handlePutProjectWeek(data){
+                try {
+                    let {code} = await this.$api.report.handlePutProjectWeek(data);
+                    if(code === 0){
+                        this.$message.success('修改成功！')
+                    }
+                }catch(error){
                     console.log(error)
                 }
             }

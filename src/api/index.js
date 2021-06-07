@@ -4,5 +4,6 @@ import * as user from './user'
 import * as org from './org'
 import * as product from './product'
 import * as report from './report'
+import * as statistics from './statistics'
 
-export {login, user,home,org,product, report}
+export {login, user,home,org,product, report, statistics}
