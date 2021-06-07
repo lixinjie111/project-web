@@ -193,24 +193,26 @@
             // 添加产品
             handleAdd() {
                this.showAddModal = true;
-               // this.form = {
-               //     productName: '',
-               //     productDescription: '',
-               //     productCode: '',
-               //     masterList: [],
-               //     publicFlag: 0,
-               //     projectList: []
-               // };
+               this.form = {
+                   productName: '',
+                   productDescription: '',
+                   productCode: '',
+                   masterList: [],
+                   publicFlag: 0,
+                   projectList: []
+               };
+               this.addModal.modalTitle = '添加产品';
             },
             // 编辑产品
             async handleEdit(item) {
                 this.showAddModal = true;
+                this.addModal.modalTitle = '编辑产品';
                 try {
                     let {code, data} = await this.$api.product.getProductDetail(item.id);
                     if(code === 0){
                         this.form = {
                             id: data.id,
-                            cancelRelIds:'',
+                            cancelRelIds: [],
                             productName: data.productName,
                             productDescription: data.productDescription,
                             productCode: data.productCode,

@@ -6,7 +6,7 @@
         </div>
         <div class="select-options" v-show="isShow" ref="selectOptions">
             <ul>
-                <li v-for="(item,index) in listData" :key="index" @click.stop="handleChangeItem(item)">
+                <li v-for="(item,index) in list" :key="index" @click.stop="handleChangeItem(item)">
                     <TextToolTip className="name" :content="item.name" :refName="'related-select-item' + index"></TextToolTip>
                     <i class="iconfont iconxiaoyan1" v-show="item.checked"></i>
                 </li>
@@ -22,23 +22,17 @@
         components: {TextToolTip},
         data() {
             return {
-                selectData: this.selectList,
-                listData: this.list,
                 isShow: false //下拉列表是否显示
             };
         },
         props: {
+            // 按钮标题
             title: {
                 type: String,
                 default: ''
             },
             // 列表数据
             list: {
-                type: Array,
-                default: () => []
-            },
-            // 选中列表
-            selectList: {
                 type: Array,
                 default: () => []
             }
@@ -54,30 +48,15 @@
                 }
             });
         },
-        watch: {
-            list: {
-                handler(newVal, oldVal) {
-                    //选中列表
-                    this.selectData = newVal.filter(function (item) {
-                        return item.checked == true;
-                    });
-                    //列表书库
-                    this.listData = newVal;
-                    // 给父组件传值
-                    this.$emit("change", this.selectData);
-                },
-                deep: true
-            }
-        },
         methods: {
             //控制下拉列表的显示隐藏
             handleShow() {
                 this.isShow = this.isShow ? false : true;
             },
+            // 切换下拉选项
             handleChangeItem(item) {
-                console.log(111);
-                console.log(item);
                 item.checked = item.checked ? false : true;
+                this.$emit("change", item);
             }
         }
     }
