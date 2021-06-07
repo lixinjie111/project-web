@@ -1,8 +1,10 @@
 <template>
-  <span :class="'status'+(parseInt(value) + 1)"><i class="iconfont" :class="icons[value]"></i>{{ statuses[value] }}</span>
+  <span :class="'status'+(parseInt(value) + 1)"><i class="iconfont" :class="icons[value]"></i>{{ taskStatuses[value] }}</span>
 </template>
 
 <script>
+  import {taskStatuses} from "@/const/data";
+
   export default {
     name: "Status",
     props: {
@@ -20,13 +22,7 @@
           'iconlishijilu',
           'iconyanqi',
         ],
-        statuses: [
-          '未开始',
-          '进行中',
-          '已完成',
-          '已延期',
-          '已搁置',
-        ],
+        taskStatuses
       }
     }
   }
