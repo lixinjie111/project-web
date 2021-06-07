@@ -115,6 +115,7 @@
                 total: 50, // 总数据条数
                 pageSize: 10, // 页面数据size
                 curPageNum: 1, // 当前页码
+                curStatus: 0, //当前产品状态
                 showAddModal: false,
                 addModal: {
                     modalTitle: '添加产品',
@@ -144,18 +145,18 @@
         methods: {
             resetList() {
                 this.getCount();
-                this.getList(0);
+                this.getList();
             },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
                 if(pageNum) this.curPageNum = pageNum;
-                this.getList(0);
+                this.getList();
             },
             // 切换当前页码
             handleChangePage(pageNum){
                 this.curPageNum = pageNum;
-                this.getList(0);
+                this.getList();
             },
             // 获取产品列表状态数量
             async getCount(){
@@ -174,9 +175,9 @@
                 }
             },
             // 获取产品列表
-            async getList(status){
+            async getList(){
                 try {
-                    let {code, data} = await this.$api.product.getProductList(this.curPageNum, this.pageSize, status);
+                    let {code, data} = await this.$api.product.getProductList(this.curPageNum, this.pageSize, this.curStatus);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;
@@ -188,7 +189,9 @@
             },
             // 切换产品状态
             handleChangeTab(status) {
-                this.getList(status);
+                this.curPageNum = 1;
+                this.curStatus = status;
+                this.getList();
             },
             // 添加产品
             handleAdd() {
