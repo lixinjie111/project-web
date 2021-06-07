@@ -1,37 +1,37 @@
 <template>
   <a-modal :visible="isShow" :width="980" :maskClosable="false" :footer="null" title="任务编辑" @cancel="handleCancel" centered>
       <div class="title-row">
-        <ToggleInput v-model="value.name" overClass="title">
-          <div>{{value.name}}
+        <ToggleInput v-model="form.taskName" overClass="title" @commit="saveData({taskName: form.taskName})">
+          <div>{{form.taskName}}
           </div>
         </ToggleInput>
-        <a-checkbox>在周报中显示</a-checkbox>
+        <a-checkbox :value="form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)">在周报中显示</a-checkbox>
       </div>
       <a-row :gutter="[16, 16]">
-        <a-col :span="6"><StatusSelect v-model="value.status"/></a-col>
-        <a-col :span="6"><!--<UserSelect :value="0"/>-->
-              <UserSelect v-model="value.incharge" subtitle="负责人" />
+        <a-col :span="6"><StatusSelect :value="form.status" @change="val => handleSave('status', val)"/></a-col>
+        <a-col :span="6"><!--<UserSelect :form="0"/>-->
+              <UserSelect :options="memberList" :value="form.incharge" @change="val => handleSave('incharge', val)" subtitle="负责人" />
         </a-col>
-<!--        <a-col :span="6"><PrioritySelect :value="value.priority"/></a-col>-->
+<!--        <a-col :span="6"><PrioritySelect :value="form.priority"/></a-col>-->
         <a-col :span="6">
-          <DateSelect title="计划开始" icon="iconrili" v-model="value.begin_date" />
+          <DateSelect title="计划开始" icon="iconrili" :value="form.planBeginTime" @change="val => handleSave('planBeginTime', val)" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="计划结束" icon="iconjihua" v-model="value.end_date" />
+          <DateSelect title="计划结束" icon="iconjihua" :value="form.planEndTime" @change="val => handleSave('planEndTime', val)" />
         </a-col>
       </a-row>
       <a-row :gutter="[16, 16]">
         <a-col :span="6">
-          <DateSelect title="实际开始" icon="iconrili" v-model="value.begin_date" />
+          <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @change="val => handleSave('actualBeginTime', val)" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="实际结束" icon="iconjihua" v-model="value.end_date" />
+          <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @change="val => handleSave('actualEndTime', val)" />
         </a-col>
         <a-col :span="6">
-          <HoursSelect title="预计工时" icon="iconmiaobiao" :value="value.hours"/>
+          <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
         </a-col>
         <a-col :span="6">
-          <HoursSelect title="实际工时" icon="iconzhexian" :value="value.used_hours"/>
+          <HoursSelect title="实际工时" icon="iconzhexian" :value="form.actualHour" @change="val => handleSave('actualHour', val)"/>
         </a-col>
       </a-row>
 
@@ -48,28 +48,27 @@
           <a-row :gutter="[16, 16]">
             <a-col span="8">智能营销方案整体设计</a-col>
             <a-col span="6">
-              <a-select style="width: 150px">
-                <a-select-option key="1">开发</a-select-option>
+              <a-select style="width: 150px" :value="form.taskType" :options="types" @change="val => handleSave('taskType', val)">
               </a-select>
             </a-col>
             <a-col span="10">
-              <PrioritySelect v-model="value.priority"/>
+              <PrioritySelect :value="form.priority" @change="val => handleSave('priority', val)"/>
             </a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
             <a-col span="8">参与人:</a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="8"><UserSelect v-model="value.participates" multiple/></a-col>
+            <a-col span="8"><UserSelect :options="memberList" :value="form.executorList" @change="val => handleSave('executorList', val)" multiple/></a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
             <a-col span="8">任务描述:</a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="24"><a-textarea v-model="value.desc" :autosize="{ minRows: 3, maxRows: 8 }"/></a-col>
+            <a-col span="24"><a-textarea v-model="form.taskDescription" :autosize="{ minRows: 3, maxRows: 8 }"/></a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="2"><a-button type="primary">保存</a-button></a-col>
+            <a-col span="2"><a-button type="primary" @click="saveDescription">保存</a-button></a-col>
             <a-col span="2"><a-button>取消</a-button></a-col>
           </a-row>
         </a-tab-pane>
@@ -131,6 +130,8 @@
   import MyIcon from "@/components/others/MyIcon";
   import FlatButton from "@/components/buttons/FlatButton";
   import ToggleInput from "@/components/forms/ToggleInput";
+  import {taskTypes} from "@/const/data";
+  import {getTaskDetail, saveTask} from "@/api/task";
 
   export default {
     name: "TaskEdit",
@@ -143,25 +144,35 @@
       value: {
         type: Object,
         default: {},
-      }
+      },
+      projectId: {
+        type: Number
+      },
+      taskId: {
+        type: Number
+      },
     },
     data() {
       return {
         form: {
-          incharge:[],
-          participates:[],
+          incharge: null,
+          executorList:[],
+          status: 1,
           priority: 1,
         },
-        types: [
-          {
-            key: 1,
-            label: '开发',
-          },
-          {
-            key: 2,
-            label: '管理',
-          },
-        ],
+        types: taskTypes.map((label, key) => {
+          return {label, key}
+        }),
+      }
+    },
+    watch: {
+      taskId() {
+        this.getDetail();
+      },
+    },
+    computed: {
+      memberList() {
+        return this.$store.state.task.memberList;
       }
     },
     methods: {
@@ -179,6 +190,15 @@
         });
       },
 
+      handleSave(key, value) {
+        this.form[key] = value;
+        if (key === 'incharge') {
+          this.saveData({masterList: [value]});
+          return;
+        }
+        this.saveData({[key]: value});
+      },
+
       // 取消新增、编辑用户信息
       handleCancel() {
         this.$emit('cancel');
@@ -186,6 +206,24 @@
       handleCreateChildTask() {
         this.$emit('create-child');
       },
+      saveData(data) {
+        data.id = this.taskId;
+        saveTask(data).then(res => {
+
+        }).catch(err => {});
+      },
+      getDetail() {
+        if (! this.taskId)
+          return;
+
+        getTaskDetail(this.taskId).then(res => {
+          if (res.code === 0 && res.data)
+            this.form = res.data;
+        }).catch(err => {});
+      },
+      saveDescription() {
+        this.saveData({taskDescription: this.form.taskDescription});
+      }
     },
   }
 </script>
@@ -213,6 +251,7 @@
       color: #242F57;
       line-height: 29px;
       margin-right: 8px;
+      min-width: 60px;
     }
   }
 </style>
