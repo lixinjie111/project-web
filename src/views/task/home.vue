@@ -3,7 +3,7 @@
     <MenuNav>
       <div slot="nav-left" class="nav-left-title">
         <a class="back" @click="handleHome"><i class="iconfont iconshouye"></i>首页</a>
-        <a-select :options="projectList" class="proj-list" size="small" v-model="projectId"/>
+        <a-select :options="projectList" class="proj-list" size="small" :value="projectId" @change="handleProjectChange"/>
       </div>
     </MenuNav>
     <div class="header">
@@ -56,7 +56,7 @@
             <div class="item" v-for="item in status0" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan">2021年04月16日 - 2021年04月18日</div>
+              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -70,7 +70,7 @@
             <div class="item" v-for="item in status1" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan">2021年04月16日 - 2021年04月18日</div>
+              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -84,7 +84,7 @@
             <div class="item" v-for="item in status2" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan">2021年04月16日 - 2021年04月18日</div>
+              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -98,30 +98,30 @@
             <div class="item" v-for="item in status3" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan">2021年04月16日 - 2021年04月18日</div>
+              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
             </div>
           </transition-group>
         </draggable>
         <a-button @click="handleCreate" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
-      <div class="group">
+<!--      <div class="group">
         <div class="name">已搁置</div>
         <draggable v-model="status4" group="site">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan">2021年04月16日 - 2021年04月18日</div>
+              <div class="plan">{{item.beginTime}} - {{item.endTime}}</div>
             </div>
           </transition-group>
         </draggable>
         <a-button @click="handleCreate" block><i class="iconfont iconjia"></i></a-button>
-      </div>
+      </div>-->
 
     </div>
     <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="projectId" />
-    <TaskEdit :isShow="showEdit" @cancel="showEdit = false" @ok="handleEditClose" :task-id="editTaskId" @create-child="handleCreate" :project-id="projectId" />
+    <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" @create-child="handleCreate" :project-id="projectId" />
   </div>
 </template>
 
@@ -132,9 +132,10 @@
   import TaskAdd from "./components/add";
   import TaskEdit from "./components/edit";
   import draggable from 'vuedraggable';
-  import {addProjectMember, deleteTask, getTaskList} from "@/api/task";
+  import {addProjectMember, changeTaskStatus, deleteTask, getProjectBoard, getTaskList} from "@/api/task";
   import {taskTypes} from "@/const/data";
   import {Modal} from 'x-intelligent-ui';
+  import moment from "moment";
 
   export default {
     name: 'TaskHome',
@@ -146,9 +147,13 @@
         total: 0,
         projectList: [
           {
+            key: 25,
+            label: 'test 25'
+          },
+          {
             key: 9393939,
             label: '秀梅苯肼基材'
-          }
+          },
         ],
         projectId: 9393939,
         editTaskId: 0,
@@ -218,7 +223,7 @@
             title: '工时/剩余',
           },
           {
-            dataIndex: 'status',
+            dataIndex: 'progress',
             title: '进度',
             scopedSlots: {
               customRender: 'progress'
@@ -246,80 +251,7 @@
             }
           },
         ],
-        boardData: [
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 1,
-            "taskExecutor": "张珊,王五",
-            "taskName": "从入门到放弃96从入门到放弃96从入门到放弃96",
-            status: 1
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 2,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 1
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 3,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 1
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 4,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 1
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 5,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 1
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 6,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 1
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 7,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 1
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 8,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 3
-          },
-          {
-            "beginTime": "2021/01/01",
-            "endTime": "2021/04/04",
-            "id": 9,
-            "taskExecutor": "张珊,王五",
-            "taskName": "任务名称",
-            status: 2
-          },
-        ],
+        boardData: [],
         showCreate: false,
         showEdit: false,
         viewType: 0,
@@ -338,17 +270,28 @@
         },
         set(val) {
           // console.log(val)
-          val.forEach(item => item.status = 0)
+          val.forEach(item => {
+            if (item.status !== 0) {
+              item.status = 0;
+              changeTaskStatus(item.id, item.status);
+            }
+          });
         }
       },
       status1: {
         get() {
           let st = this.boardData.filter(item => item.status===1)
+          console.log(st)
           return st;
         },
         set(val) {
           // console.log(val)
-          val.forEach(item => item.status = 1)
+          val.forEach(item => {
+            if (item.status !== 1) {
+              item.status = 1;
+              changeTaskStatus(item.id, item.status);
+            }
+          })
         }
       },
       status2: {
@@ -358,7 +301,12 @@
         },
         set(val) {
           // console.log(val)
-          val.forEach(item => item.status = 2)
+          val.forEach(item => {
+            if (item.status !== 2) {
+              item.status = 2;
+              changeTaskStatus(item.id, item.status);
+            }
+          })
         }
       },
       status3: {
@@ -368,10 +316,15 @@
         },
         set(val) {
           // console.log(val)
-          val.forEach(item => item.status = 3)
+          val.forEach(item => {
+            if (item.status !== 3) {
+              item.status = 3;
+              changeTaskStatus(item.id, item.status);
+            }
+          })
         }
       },
-      status4: {
+/*      status4: {
         get() {
           let st = this.boardData.filter(item => item.status===4)
           return st;
@@ -380,7 +333,7 @@
           // console.log(val)
           val.forEach(item => item.status = 4)
         }
-      },
+      },*/
     },
     mounted() {
       this.getTableList();
@@ -410,9 +363,40 @@
           console.log(err)
         })
       },
+      getBoardList() {
+        getProjectBoard(this.projectId, this.queryType==='myTaskFlag', this.queryType==='weeklyShow').then(res => {
+          if (res.code === 0 && res.data) {
+            let boardData = [];
+            res.data.forEach(item => {
+              if (item.kanbanList) {
+                item.kanbanList.forEach(kan => {
+                  kan.status = item.status;
+                  if (kan.beginTime)
+                    kan.beginTime = moment(kan.beginTime).format('YYYY年MM月DD日');
+                  if (kan.endTime)
+                    kan.endTime = moment(kan.endTime).format('YYYY年MM月DD日');
+                });
+                boardData = boardData.concat(item.kanbanList);
+              }
+            });
+            this.boardData = boardData;
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      loadCurrentList() {
+        if (this.viewType) {
+          this.getBoardList();
+        }
+        else {
+          this.getTableList();
+        }
+      },
       handleViewType(e) {
         // console.log('test', e)
         this.viewType = e.key;
+        this.loadCurrentList();
       },
       handleCreate() {
         console.log('test')
@@ -432,7 +416,7 @@
           onOk() {
             deleteTask(record.id).then(res => {
               if (res.code === 0 && res.data) {
-                that.getTableList();
+                that.loadCurrentList();
               }
             }).catch(err => {});
           }
@@ -440,22 +424,27 @@
       },
       handleCreateOK(data) {
         this.showCreate = false;
-        this.getTableList();
+        this.loadCurrentList();
       },
       handleEditClose() {
         this.showEdit = false;
-        this.getTableList();
+        this.loadCurrentList();
       },
       handleHome() {
         this.$router.push('/mine/home');
       },
       handleQueryFilter(e) {
         this.queryType = e.target.value;
-        this.getTableList();
+        this.loadCurrentList();
       },
       handlePageChange(page) {
         this.page = page;
-        this.getTableList();
+        this.loadCurrentList();
+      },
+      handleProjectChange(projectId) {
+        this.projectId = projectId;
+        this.loadCurrentList();
+        this.$store.dispatch('projectMemberList', this.projectId);
       },
     }
   }

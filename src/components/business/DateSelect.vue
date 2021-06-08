@@ -4,7 +4,7 @@
       <i class="iconfont" :class="icon"></i>
     </TwoValue>
       <template slot="content">
-        <a-calendar :fullscreen="false" @select="handleSelect" />
+        <a-calendar :fullscreen="false" @select="handleSelect" :value="mValue" />
       </template>
   </a-popover>
 </template>
@@ -15,26 +15,31 @@
 
   export default {
     name: "DateSelect",
-    props: ['title', 'icon'],
+    props: ['title', 'icon', 'value'],
     components: {TwoValue},
     data() {
       return {
-        date: null,
+        // date: null,
         visible: false,
       }
     },
     computed: {
       showDate() {
-        if (!this.date)
+        if (!this.value)
           return '----';
-        return moment(this.date).format('MM月DD日');
+        return moment(this.value).format('MM月DD日');
+      },
+      mValue() {
+        if (!this.value)
+          return null;
+        return moment(this.value);
       }
     },
     methods: {
       handleSelect(val) {
-        this.date = val;
+        // this.date = val;
         this.visible = false;
-        this.$emit('select', val);
+        this.$emit('select', val.toDate());
       }
     }
   }

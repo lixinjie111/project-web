@@ -1,12 +1,12 @@
 <template>
   <a-dropdown :trigger="['click']">
-    <TwoValue :title="statuses[value]" subtitle="当前状态">
+    <TwoValue :title="taskStatuses[value]" subtitle="当前状态">
       <span :class="'status'+(parseInt(value) + 1)">
         <i class="iconfont" :class="icons[value]"></i>
       </span>
     </TwoValue>
     <a-menu slot="overlay" @click="handleSelect">
-      <a-menu-item v-for="(prio,index) in statuses" :key="index">
+      <a-menu-item v-for="(prio,index) in taskStatuses" :key="index">
         <Status :value="index"/>
       </a-menu-item>
     </a-menu>
@@ -16,6 +16,7 @@
 <script>
   import TwoValue from "./TwoValue";
   import Status from "@/components/business/Status";
+  import {taskStatuses} from "@/const/data";
 
   export default {
     name: "StatusSelect",
@@ -32,13 +33,7 @@
           'iconlishijilu',
           'iconyanqi',
         ],
-        statuses: [
-          '未开始',
-          '进行中',
-          '已完成',
-          '已延期',
-          '已搁置',
-        ],
+        taskStatuses
       }
     },
     methods: {

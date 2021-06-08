@@ -11,6 +11,7 @@
 
 <script>
   import Priority from "./Priority";
+  import {taskPriorities} from "@/const/data";
 
   export default {
     name: "PrioritySelect",
@@ -20,11 +21,7 @@
     },
     data() {
       return {
-        prioritis: [
-          '高',
-          '中',
-          '低',
-        ],
+        prioritis: taskPriorities,
       }
     },
     methods: {
