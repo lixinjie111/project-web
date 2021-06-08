@@ -43,7 +43,7 @@
             </div>
         </div>
         <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
-            <AddForm ref="addForm" slot="content" :form="form"></AddForm>
+            <AddForm ref="addForm" slot="content" :form="form" :projectList="projectList"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showCloseModal" :title="closeModal.modalTitle" :okText="closeModal.okText" :cancelText="closeModal.cancelText" headeralgin="left" @modal-sure="handleCloseSubmit" @modal-cancel="handleCloseCancel">
             <closeForm ref="closeForm" slot="content"></closeForm>
@@ -129,6 +129,7 @@
                     okText:'关闭',
                     cancelText:'取消'
                 },
+                // 添加、编辑表单数据
                 form: {
                     productName: '',
                     productDescription: '',
@@ -136,32 +137,52 @@
                     masterList: [],
                     publicFlag: 0,
                     projectList: []
-                }
+                },
+                // 添加、编辑关联项目列表
+                projectList: []
             }
         },
         created() {
             this.resetList();
+            this.getProjectList();
         },
         methods: {
+            // 重置列表
             resetList() {
-                this.getCount();
-                this.getList();
+                this.getProductCount();
+                this.getProductList();
             },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
                 if(pageNum) this.curPageNum = pageNum;
-                this.getList();
+                this.getProductList();
             },
             // 切换当前页码
             handleChangePage(pageNum){
                 this.curPageNum = pageNum;
-                this.getList();
+                this.getProductList();
+            },
+            // 获取关联项目列表
+            async getProjectList() {
+                try {
+                    let {code, data} = await this.$api.product.getBindingProjectList();
+                    if (code === 0) {
+                        this.projectList = data.map(item => {
+                            return {
+                                ...item,
+                                checked: false
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             },
             // 获取产品列表状态数量
-            async getCount(){
+            async getProductCount(){
                 try {
-                    let {code, data} = await this.$api.product.getProductCount(this.curPageNum, this.pageSize);
+                    let {code, data} = await this.$api.product.getProductCount();
                     if(code === 0){
                         this.tabList = this.tabList.map((item) => {
                             let t = data.find((i) => {
@@ -175,7 +196,7 @@
                 }
             },
             // 获取产品列表
-            async getList(){
+            async getProductList(){
                 try {
                     let {code, data} = await this.$api.product.getProductList(this.curPageNum, this.pageSize, this.curStatus);
                     if(code === 0){
@@ -191,11 +212,10 @@
             handleChangeTab(status) {
                 this.curPageNum = 1;
                 this.curStatus = status;
-                this.getList();
+                this.getProductList();
             },
             // 添加产品
             handleAdd() {
-               this.showAddModal = true;
                this.form = {
                    productName: '',
                    productDescription: '',
@@ -204,12 +224,11 @@
                    publicFlag: 0,
                    projectList: []
                };
+               this.showAddModal = true;
                this.addModal.modalTitle = '添加产品';
             },
             // 编辑产品
             async handleEdit(item) {
-                this.showAddModal = true;
-                this.addModal.modalTitle = '编辑产品';
                 try {
                     let {code, data} = await this.$api.product.getProductDetail(item.id);
                     if(code === 0){
@@ -223,6 +242,8 @@
                             publicFlag: data.publicFlag,
                             projectList: data.relList
                         };
+                        this.showAddModal = true;
+                        this.addModal.modalTitle = '编辑产品';
                     }
                 }catch(error){
                     console.log(error)
@@ -285,7 +306,6 @@
                         return false;
                     }
                 });
-
             },
             // 添加、编辑产品取消
             handleAddCancel() {

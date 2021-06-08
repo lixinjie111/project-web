@@ -19,7 +19,7 @@
             <a-textarea v-model="form.productDescription" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入产品描述"/>
         </a-form-model-item>
         <a-form-model-item label="">
-            <RelatedSelect title="关联项目" :list="projectList" @change="handleChangeProject"></RelatedSelect>
+            <RelatedSelect title="关联项目" :list="checkedProjectList" @change="handleChangeProject"></RelatedSelect>
             <div class="form-related-list">
                 <div class="item" v-for="(item,index) in form.projectList" :key="index">
                     <TextToolTip className="left" :content="item.projectName" :refName="'related-item' + index"></TextToolTip>
@@ -48,6 +48,7 @@
     export default {
         name: "addForm",
         props: {
+            // 表单数据
             form: {
                 type: Object,
                 default: () => {
@@ -60,6 +61,11 @@
                         projectList: []
                     }
                 }
+            },
+            // 关联项目列表
+            projectList: {
+                type: Array,
+                default: () => []
             }
         },
         components: {UserSelect, TextToolTip, RelatedSelect},
@@ -75,42 +81,33 @@
                     height: '30px',
                     lineHeight: '30px',
                 },
-                projectList: []
+                checkedProjectList: JSON.parse(JSON.stringify(this.projectList))
             }
         },
-        created() {
-            this.getList();
+        created (){
+             if(this.form.id){ //编辑
+                 // 关联项目列表选中状态
+                 this.checkedProjectList = this.projectList.map(item => {
+                     // 匹配已选中的关联项目
+                     let checked = this.form.projectList && this.form.projectList.find(i => item.id == i.projectId);
+                     return {
+                         ...item,
+                         checked: checked ? true : false
+                     }
+                 });
+             }
         },
         methods: {
-            // 获取关联项目列表
-            async getList() {
-                try {
-                    let {code, data} = await this.$api.product.getBindingProjectList(this.curPageNum, this.pageSize);
-                    if (code === 0) {
-                        let projectList = this.form.projectList;
-                        this.projectList = data.map(item => {
-                            // 匹配选中已关联项目
-                            let checked = projectList && projectList.find(i => item.id == i.projectId);
-                            return {
-                                ...item,
-                                checked: checked ? true : false
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-            },
             // 取消关联项目
             handleCancelProject(item) {
                 // 取消已选关联列表
                 let index = this.form.projectList.findIndex(i => i.projectId == item.projectId);
                 this.form.projectList.splice(index, 1);
                 // 切换关联列表选中状态
-                this.projectList.forEach((t) => {
+                this.checkedProjectList.forEach((t) => {
                     if (t.id == item.projectId) {
                         t.checked = false;
-                        if(this.form.id && item.id) { //编辑
+                        if (this.form.id && item.id) { //编辑
                             // 添加删除的关联项目id
                             this.form.cancelRelIds.push(item.id);
                         }
@@ -119,14 +116,14 @@
             },
             // 切换关联项目
             handleChangeProject(item) {
-                if(item.checked){ //添加
+                if (item.checked) { //添加
                     this.form.projectList.push({
                         projectId: item.id,
                         projectName: item.name
                     });
-                }else{ //取消
+                } else { //取消
                     let index = this.form.projectList.findIndex(i => i.projectId == item.id);
-                    if(this.form.id && this.form.projectList[index].id) { //编辑
+                    if (this.form.id && this.form.projectList[index].id) { //编辑
                         // 添加删除的关联项目id
                         this.form.cancelRelIds.push(this.form.projectList[index].id);
                     }
