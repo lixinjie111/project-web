@@ -48,11 +48,11 @@
     },
     props: {
       columns: {
-        default: [],
+        default: () => [],
         type: Array,
       },
       dataSource: {
-        default: [],
+        default: () => [],
         type: Array,
       },
       currentPage: {

@@ -143,7 +143,7 @@
     data() {
       return {
         page: 1,
-        pageSize: 2,
+        pageSize: 10,
         total: 0,
         projectList: [
           {
@@ -189,7 +189,7 @@
             }
           },
           {
-            dataIndex: 'status',
+            dataIndex: 'priority',
             title: '优先级',
             scopedSlots: {
               customRender: 'priority'

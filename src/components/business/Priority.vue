@@ -1,5 +1,5 @@
 <template>
-  <span :class="'priority'+(parseInt(value))" @click="$emit('click')">{{ prioritis[value] }}</span>
+  <span :class="'priority'+(parseInt(value)+1)" @click="$emit('click')">{{ prioritis[value] }}</span>
 </template>
 
 <script>
