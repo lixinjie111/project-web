@@ -20,8 +20,7 @@
                 <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
                 <ListTable :columns="columns" :data="listData" class="mt-25">
                     <template slot="productName" slot-scope="data">
-                        <TextToolTip className="table-name" :content="data.row.productName"
-                                     :refName="'table-name' + data.row.index"></TextToolTip>
+                        <TextToolTip className="table-name" :content="data.row.productName" :refName="'table-name' + data.row.index"></TextToolTip>
                         <p class="table-num">{{data.row.productCode}}</p>
                     </template>
                     <div slot="closedTime" slot-scope="data" class="table-close-time">
@@ -112,7 +111,7 @@
                     },
                 ],
                 listData: [],
-                total: 50, // 总数据条数
+                total: 0, // 总数据条数
                 pageSize: 10, // 页面数据size
                 curPageNum: 1, // 当前页码
                 curStatus: 0, //当前产品状态
@@ -130,14 +129,7 @@
                     cancelText:'取消'
                 },
                 // 添加、编辑表单数据
-                form: {
-                    productName: '',
-                    productDescription: '',
-                    productCode: '',
-                    masterList: [],
-                    publicFlag: 0,
-                    projectList: []
-                },
+                form: {},
                 // 添加、编辑关联项目列表
                 projectList: []
             }
@@ -156,12 +148,12 @@
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
                 if(pageNum) this.curPageNum = pageNum;
-                this.getProductList();
+                this.resetList();
             },
             // 切换当前页码
             handleChangePage(pageNum){
                 this.curPageNum = pageNum;
-                this.getProductList();
+                this.resetList();
             },
             // 获取关联项目列表
             async getProjectList() {
@@ -212,11 +204,18 @@
             handleChangeTab(status) {
                 this.curPageNum = 1;
                 this.curStatus = status;
-                this.getProductList();
+                this.resetList();
             },
             // 添加产品
             handleAdd() {
-               this.form = {};
+               this.form = {
+                   productName: '',
+                   productDescription: '',
+                   productCode: '',
+                   masterList: [],
+                   publicFlag: 0,
+                   projectList: []
+               };
                this.showAddModal = true;
                this.addModal.modalTitle = '添加产品';
             },

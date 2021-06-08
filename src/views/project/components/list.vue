@@ -1,5 +1,6 @@
 <template>
     <div class="list-container">
+        {{page}}
         <ListTable :columns="columns" :data="list" class="mt-25" @jump="handelJump">
             <div slot="projectName" slot-scope="data" class="table-status">
                 <div class="table-status-bg" :style="'background:' + statusColor(data.row.status)"></div>
@@ -7,7 +8,7 @@
                              :refName="'table-name' + data.row.index"></TextToolTip>
                 <p class="table-status-text">
                     <span class="circle" :style="'background:' + statusColor(data.row.status)"></span>
-                    <span class="text" :style="'color:' + statusColor(data.row.status)">{{data.row.status}}</span>
+                    <span class="text" :style="'color:' + statusColor(data.row.status)">{{data.row.statusDesc}}</span>
                 </p>
             </div>
             <div slot="progress" slot-scope="data" class="table-progress">
@@ -134,7 +135,7 @@
                     modalTitle: '完成项目',
                     okText:'完成',
                     cancelText:'取消'
-                },
+                }
             }
         },
         methods: {
@@ -166,12 +167,12 @@
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = pageSize;
                 if (pageNum) this.curPageNum = pageNum;
-                this.$parent.getList();
+                this.$parent.resetList();
             },
             // 切换当前页码
             handleChangePage(pageNum) {
                 this.curPageNum = pageNum;
-                this.$parent.getList();
+                this.$parent.resetList();
             },
             // 开始项目
             handleStart(item) {
