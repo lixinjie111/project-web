@@ -216,14 +216,7 @@
             },
             // 添加产品
             handleAdd() {
-               this.form = {
-                   productName: '',
-                   productDescription: '',
-                   productCode: '',
-                   masterList: [],
-                   publicFlag: 0,
-                   projectList: []
-               };
+               this.form = {};
                this.showAddModal = true;
                this.addModal.modalTitle = '添加产品';
             },
@@ -232,16 +225,8 @@
                 try {
                     let {code, data} = await this.$api.product.getProductDetail(item.id);
                     if(code === 0){
-                        this.form = {
-                            id: data.id,
-                            cancelRelIds: [],
-                            productName: data.productName,
-                            productDescription: data.productDescription,
-                            productCode: data.productCode,
-                            masterList: data.masterList,
-                            publicFlag: data.publicFlag,
-                            projectList: data.relList
-                        };
+                        let {closedTime, remark, status, ...form} = data;
+                        this.form = {...form, cancelRelIds: []};
                         this.showAddModal = true;
                         this.addModal.modalTitle = '编辑产品';
                     }
