@@ -1,6 +1,5 @@
 <template>
     <div class="list-container">
-        {{page}}
         <ListTable :columns="columns" :data="list" class="mt-25" @jump="handelJump">
             <div slot="projectName" slot-scope="data" class="table-status">
                 <div class="table-status-bg" :style="'background:' + statusColor(data.row.status)"></div>
@@ -25,11 +24,7 @@
                 <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)"></IconToolTip>
             </div>
         </ListTable>
-        <Pagination v-if="total > pageSize"
-                    :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
-                    @pagination-change-pagesize="handleChangePageSize"
-                    @pagination-change-page="handleChangePage"></Pagination>
-
+        <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
         <Modal :isShow="showEditModal" :title="editModal.modalTitle" :okText="editModal.okText" :cancelText="editModal.cancelText" headeralgin="left" @modal-sure="handleEditSubmit" @modal-cancel="handleEditCancel">
             <AddForm slot="content"></AddForm>
         </Modal>
@@ -60,17 +55,10 @@
             list: {
                 type: Array,
                 default: () => []
-            },
-            page: {
-                type: Object,
-                default: () => {}
             }
         },
         data() {
             return {
-                total: this.page.total,
-                pageSize: this.page.pageSize,
-                curPageNum: this.page.curPageNum,
                 columns: [
                     {
                         slot: 'projectName',
@@ -160,19 +148,7 @@
                 }
             },
             handelJump(item) {
-                console.log(item);
-                this.$router.push('/task/home');
-            },
-            // 切换条目数量
-            handleChangePageSize(pageSize, pageNum) {
-                this.pageSize = pageSize;
-                if (pageNum) this.curPageNum = pageNum;
-                this.$parent.resetList();
-            },
-            // 切换当前页码
-            handleChangePage(pageNum) {
-                this.curPageNum = pageNum;
-                this.$parent.resetList();
+                this.$router.push({ path:'/task/home', query: {id: item.id} });
             },
             // 开始项目
             handleStart(item) {
@@ -242,7 +218,6 @@
                 this.showFinishModal = false;
             },
         }
-
     }
 </script>
 

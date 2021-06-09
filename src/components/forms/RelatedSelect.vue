@@ -5,12 +5,13 @@
             <span>{{title}}</span>
         </div>
         <div class="select-options" v-show="isShow" ref="selectOptions">
-            <ul>
+            <ul v-if="list.length">
                 <li v-for="(item,index) in list" :key="index" @click.stop="handleChangeItem(item)">
                     <TextToolTip className="name" :content="item.name" :refName="'related-select-item' + index"></TextToolTip>
                     <i class="iconfont iconxiaoyan1" v-show="item.checked"></i>
                 </li>
             </ul>
+            <div v-else class="no-data">暂无{{title}}</div>
         </div>
     </div>
 </template>
@@ -91,7 +92,7 @@
             left: 0;
             z-index: 10;
             width: 100%;
-            height: 200px;
+            max-height: 200px;
             overflow-y: auto;
             background: #FFF;
             border-radius: 4px;
@@ -123,6 +124,11 @@
                         background: #F4F7FC;
                     }
                 }
+            }
+
+            .no-data {
+                text-align: center;
+                color: #C6CBDE;
             }
         }
     }
