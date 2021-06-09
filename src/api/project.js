@@ -22,6 +22,8 @@ export function getProjectCount() {
 /**
  * 添加项目
  * @param {*} data表单对象
+ * @param {*} beginTime 开始日期
+ * @param {*} endTime 截止日期
  * @param {*} masterList 负责人列表
  * @param {*} projectCode 项目代码
  * @param {*} projectDescription 项目描述
@@ -38,7 +40,9 @@ export function addProject(data) {
  * 编辑项目
  * @param {*} data表单对象
  * @param {*} id 项目id
- * @param {*} cancelRelIds 已取消关联项目的关联id的List
+ * @param {*} cancelRelIds 已取消关联产品的关联id的List
+ * @param {*} beginTime 开始日期
+ * @param {*} endTime 截止日期
  * @param {*} masterList 负责人列表
  * @param {*} projectCode 项目代码
  * @param {*} projectDescription 项目描述
@@ -48,7 +52,7 @@ export function addProject(data) {
  * @returns
  */
 export function editProject(data) {
-    return httpaxios.put('/business/project', {data})
+    return httpaxios.put('/business/project/update', {data})
 }
 
 /**
@@ -68,7 +72,27 @@ export function delProject(id) {
 }
 
 /**
- * 关闭项目
+ * 开始项目
+ * @param {*} id 项目id
+ * @param {*} remark 备注
+ * @returns
+ */
+export function startProject(id, remark){
+    return httpaxios.put('/business/project/start', {data: {id, remark}})
+}
+
+/**
+ * 搁置项目
+ * @param {*} id 项目id
+ * @param {*} remark 备注
+ * @returns
+ */
+export function suspendProject(id, remark){
+    return httpaxios.put('/business/project/suspend', {data: {id, remark}})
+}
+
+/**
+ * 完成项目
  * @param {*} id 项目id
  * @param {*} remark 备注
  * @returns

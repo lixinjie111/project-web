@@ -30,8 +30,7 @@
                     </div>
                     <div slot="action" slot-scope="data" class="table-action">
                         <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
-                        <IconToolTip iconName="iconkaiguan" :disabled="true" content="已关闭" v-if="data.row.status"></IconToolTip>
-                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="handleClose(data.row)" v-else></IconToolTip>
+                        <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 1" :content="data.row.status ? '已关闭' : '关闭'" @action="handleClose(data.row)"></IconToolTip>
                         <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)"></IconToolTip>
                     </div>
                 </ListTable>
@@ -373,9 +372,11 @@
             }
 
             .table-action {
+                margin-left: -9px;
+
                 .icon-tooltip {
                     display: inline-block;
-                    margin-right: 18px;
+                    padding: 9px;
                 }
             }
         }

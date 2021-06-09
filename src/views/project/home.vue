@@ -18,7 +18,7 @@
             </ContentHeader>
             <div class="home-content">
                 <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
-                <ProjectList :list="listData"
+                <ProjectList :list="listData" :productList="productList"
                              :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                              @pagination-change-pagesize="handleChangePageSize"
                              @pagination-change-page="handleChangePage"></ProjectList>

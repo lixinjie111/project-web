@@ -8,6 +8,7 @@
                 <p class="table-status-text">
                     <span class="circle" :style="'background:' + statusColor(data.row.status)"></span>
                     <span class="text" :style="'color:' + statusColor(data.row.status)">{{data.row.statusDesc}}</span>
+                    <IconToolTip v-if="data.row.remark" class="table-tip" iconName="icontishi" :content="data.row.remark"></IconToolTip>
                 </p>
             </div>
             <div slot="progress" slot-scope="data" class="table-progress">
@@ -15,27 +16,28 @@
                 <a-progress :percent="data.row.progress" :strokeColor="statusColor(data.row.status)"/>
             </div>
             <div slot="action" slot-scope="data" class="table-action">
-                <IconToolTip iconName="iconbofang" content="开始" @action="handleStart(data.row)"></IconToolTip>
-                <!--<IconToolTip iconName="iconbofang" :disabled="true" content="开始"></IconToolTip>-->
+                <!--未开始的可以开始，搁置的不能搁置，完成的的不能完成、删除、搁置-->
+                <IconToolTip iconName="iconbofang" :disabled="data.row.status > 0" content="开始" @action="handleStart(data.row)"></IconToolTip>
                 <!--<IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay(data.row)"></IconToolTip>-->
-                <IconToolTip iconName="iconzanting" content="搁置" @action="handlePause(data.row)"></IconToolTip>
-                <IconToolTip iconName="iconkaiguan" content="完成" @action="handleFinish(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconzanting" :disabled="data.row.status == 2 || data.row.status == 4" content="搁置" @action="handlePause(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 2" content="完成" @action="handleFinish(data.row)"></IconToolTip>
+                <a-divider type="vertical" />
                 <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
-                <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconshanchu" :disabled="data.row.status == 2" content="删除" @action="handleDel(data.row)"></IconToolTip>
             </div>
         </ListTable>
         <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
         <Modal :isShow="showEditModal" :title="editModal.modalTitle" :okText="editModal.okText" :cancelText="editModal.cancelText" headeralgin="left" @modal-sure="handleEditSubmit" @modal-cancel="handleEditCancel">
-            <AddForm slot="content"></AddForm>
+            <AddForm ref="addForm" slot="content" :form="form" :productList="productList"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showStartModal" :title="startModal.modalTitle" :okText="startModal.okText" :cancelText="startModal.cancelText" headeralgin="left" @modal-sure="handleStartSubmit" @modal-cancel="handleStartCancel">
-            <RemarkForm slot="content" name="startForm"></RemarkForm>
+            <RemarkForm slot="content" name="startForm" ref="startForm"></RemarkForm>
         </Modal>
         <Modal :width="420" :isShow="showPauseModal" :title="pauseModal.modalTitle" :okText="pauseModal.okText" :cancelText="pauseModal.cancelText" headeralgin="left" @modal-sure="handlePauseSubmit" @modal-cancel="handlePauseCancel">
-            <RemarkForm slot="content" name="pauseForm"></RemarkForm>
+            <RemarkForm slot="content" name="pauseForm" ref="pauseForm"></RemarkForm>
         </Modal>
         <Modal :width="420" :isShow="showFinishModal" :title="finishModal.modalTitle" :okText="pauseModal.okText" :cancelText="finishModal.cancelText" headeralgin="left" @modal-sure="handleFinishSubmit" @modal-cancel="handleFinishCancel">
-            <RemarkForm slot="content" name="finishForm"></RemarkForm>
+            <RemarkForm slot="content" name="finishForm" ref="finishForm"></RemarkForm>
         </Modal>
     </div>
 </template>
@@ -47,12 +49,17 @@
     import Modal from '@/components/Modal.vue'
     import AddForm from "./addForm";
     import RemarkForm from "./remarkForm";
+    import {formatDate} from '@/utils/common.js'
 
     export default {
         name: "list",
         components: {RemarkForm, AddForm, Modal, IconToolTip, TextToolTip, ListTable},
         props: {
             list: {
+                type: Array,
+                default: () => []
+            },
+            productList: {
                 type: Array,
                 default: () => []
             }
@@ -123,7 +130,11 @@
                     modalTitle: '完成项目',
                     okText:'完成',
                     cancelText:'取消'
-                }
+                },
+                form: {},
+                startItem: {},
+                pauseItem: {},
+                finishItem: {},
             }
         },
         methods: {
@@ -153,6 +164,7 @@
             // 开始项目
             handleStart(item) {
                 this.showStartModal = true;
+                this.startItem = item;
             },
             // 延期项目
             // handleDelay(item) {
@@ -161,14 +173,24 @@
             // 搁置项目
             handlePause(item) {
                 this.showPauseModal = true;
+                this.pauseItem = item;
             },
             // 完成项目
             handleFinish(item) {
                 this.showFinishModal = true;
+                this.finishItem = item;
             },
             // 编辑项目
-            handleEdit(item) {
-                this.showEditModal = true;
+            async handleEdit(item) {
+                try {
+                    let {code, data} = await this.$api.project.getProjectDetail(item.id);
+                    if(code === 0){
+                        this.form = {...data, cancelRelIds: []};
+                        this.showEditModal = true;
+                    }
+                }catch(error){
+                    console.log(error)
+                }
             },
             // 删除项目
             handleDel(item) {
@@ -176,8 +198,18 @@
                     title: '提示',
                     message: `您确定要删除 ${item.projectName} 吗？`,
                     okText: '确认删除',
-                    onOk(){
-
+                    onOk: async () => {
+                        try {
+                            let {code} = await this.$api.project.delProject(item.id);
+                            if(code === 0){
+                                this.$message.success('删除成功！');
+                                this.$parent.resetList();
+                            }else{
+                                this.$message.error('删除失败！');
+                            }
+                        }catch(error){
+                            console.log(error)
+                        }
                     },
                     cancelText: '取消',
                     onCancel() {
@@ -186,37 +218,81 @@
                 });
             },
             // 编辑项目保存
-            handleEditSubmit() {
-                this.showEditModal = false;
+            async handleEditSubmit() {
+                this.$refs.addForm.$refs.addForm.validate(async (valid) => {
+                    if (valid) {
+                        let params = this.$refs.addForm.$refs.addForm.model;
+                        params.beginTime = formatDate(params.beginTime);
+                        params.endTime = formatDate(params.endTime,'end');
+                        let {code} = await this.$api.project.editProject(params);
+                        if(code === 0){
+                            this.$parent.resetList();
+                            this.showEditModal = false;
+                        }
+                    } else {
+                        console.log('提交失败!');
+                        return false;
+                    }
+                });
             },
             // 编辑项目取消
             handleEditCancel() {
                 this.showEditModal = false;
             },
             // 开始项目保存
-            handleStartSubmit() {
-                this.showStartModal = false;
+            async handleStartSubmit() {
+                try {
+                    let remark = this.$refs.startForm.$refs.startForm.model.remark;
+                    let {code} = await this.$api.project.startProject(this.startItem.id, remark);
+                    if(code === 0){
+                        this.$message.success('开始成功！');
+                        this.$parent.resetList();
+                        this.showStartModal = false;
+                    }
+                }catch(error){
+                    console.log(error);
+                }
             },
             // 开始项目取消
             handleStartCancel() {
                 this.showStartModal = false;
             },
             // 搁置项目保存
-            handlePauseSubmit() {
-                this.showPauseModal = false;
+            async handlePauseSubmit() {
+                try {
+                    let remark = this.$refs.pauseForm.$refs.pauseForm.model.remark;
+                    let {code} = await this.$api.project.suspendProject(this.pauseItem.id, remark);
+                    if(code === 0){
+                        this.$message.success('搁置成功！');
+                        this.$parent.resetList();
+                        this.showPauseModal = false;
+                    }
+                }catch(error){
+                    console.log(error);
+                }
             },
             // 搁置项目取消
             handlePauseCancel() {
                 this.showPauseModal = false;
             },
             // 完成项目保存
-            handleFinishSubmit() {
-                this.showFinishModal = false;
+            async handleFinishSubmit() {
+                try {
+                    let remark = this.$refs.finishForm.$refs.finishForm.model.remark;
+                    let {code} = await this.$api.project.closeProject(this.finishItem.id, remark);
+                    if(code === 0){
+                        this.$message.success('完成成功！');
+                        this.$parent.resetList();
+                        this.showFinishModal = false;
+                    }
+                }catch(error){
+                    console.log(error);
+                }
             },
             // 完成项目取消
             handleFinishCancel() {
                 this.showFinishModal = false;
-            },
+            }
         }
     }
 </script>
@@ -262,6 +338,12 @@
                     font-family: PingFangSC-Regular, PingFang SC;
                     font-weight: 400;
                 }
+
+                /deep/ .table-tip{
+                    display: inline-block;
+                    margin-left: 6px;
+                    vertical-align: -1px;
+                }
             }
         }
 
@@ -284,14 +366,15 @@
         }
 
         .table-action {
+            margin-left: -5px;
+
             .icon-tooltip {
                 display: inline-block;
-                margin-right: 10px;
+                padding: 5px;
             }
 
-            /deep/ .iconxiezuo {
-                padding-left: 8px;
-                border-left: 1px solid #EAEDF7;
+            /deep/ .ant-divider {
+                background: #EAEDF7;
             }
         }
     }
