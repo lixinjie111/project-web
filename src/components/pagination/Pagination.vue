@@ -43,6 +43,11 @@ export default {
       default: 10
     },
   },
+  watch: {
+    curPageNum(newVal) {
+      this.curPage = newVal;
+    }
+  },
   methods: {
     handleChangePageSize(value) {
       let reg = /每页(\s*)([0-9]*)/;

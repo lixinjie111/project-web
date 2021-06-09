@@ -5,7 +5,7 @@
     </TwoValue>
       <template slot="content">
         <div>{{title}}</div>
-        <a-input :value="hours" @input="handleSelect" ref="input">
+        <a-input :value="hours" @input="handleInput" ref="input">
           <template slot="suffix">
             小时
           </template>
@@ -30,11 +30,11 @@
     computed: {
     },
     methods: {
-      handleSelect(e) {
+      handleInput(e) {
         let val = e.target.value;
         this.hours = val;
         // this.visible = false;
-        this.$emit('select', val);
+        this.$emit('change', val);
       },
       handleShow(visible) {
         if (visible) {

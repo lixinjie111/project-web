@@ -3,6 +3,8 @@
 </template>
 
 <script>
+  import {taskPriorities} from "@/const/data";
+
   export default {
     name: "Priority",
     props: {
@@ -13,11 +15,7 @@
     },
     data() {
       return { // （0：低，1：中，2：高）
-        prioritis: [
-          '低',
-          '中',
-          '高',
-        ],
+        prioritis: taskPriorities,
       }
     }
   }

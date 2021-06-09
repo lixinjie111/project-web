@@ -21,12 +21,12 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-model-item label="开始日期" prop="planBeginTime">
-            <a-date-picker v-model="form.planBeginTime" placeholder="请选择开始日期" allowClear />
+            <a-date-picker :value="form.planBeginTime" @change="val => handleChange('planBeginTime', val)" placeholder="请选择开始日期" allowClear />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
           <a-form-model-item label="截止日期" prop="planEndTime">
-            <a-date-picker v-model="form.planEndTime" placeholder="请选择截止日期" allowClear />
+            <a-date-picker :value="form.planEndTime" @change="val => handleChange('planEndTime', val)" placeholder="请选择截止日期" allowClear />
           </a-form-model-item>
         </a-col>
       </a-row>
@@ -95,6 +95,17 @@
       }
     },
     methods: {
+      handleChange(key, val) {
+        debugger
+        if (key === 'planBeginTime' && this.form.planEndTime && val > this.form.planEndTime) {
+          return;
+        }
+        if (key === 'planEndTime' && this.form.planBeginTime && val < this.form.planBeginTime) {
+          return;
+        }
+        // this.form[key] = val.toDate();
+        this.$set(this, 'form', {...this.form, [key]: val});
+      },
       // 校验新增 编辑用户信息
       handleSubmit() {
         this.$refs.userForm.validate((valid, data) => {
@@ -109,10 +120,10 @@
               ]
             }
             if (this.form.planBeginTime) {
-              this.form.planBeginTime = moment(this.form.planBeginTime).format('YYYY-MM-DD HH:mm:SS')
+              this.form.planBeginTime = moment(this.form.planBeginTime).format('YYYY-MM-DD HH:mm:ss')
             }
             if (this.form.planEndTime) {
-              this.form.planEndTime = moment(this.form.planEndTime).format('YYYY-MM-DD HH:mm:SS')
+              this.form.planEndTime = moment(this.form.planEndTime).format('YYYY-MM-DD HH:mm:ss')
             }
             createTask(this.form).then(res => {
               this.$emit('ok', this.form);
@@ -132,7 +143,7 @@
     computed: {
       memberList() {
         return this.$store.state.task.memberList;
-      }
+      },
     }
   }
 </script>

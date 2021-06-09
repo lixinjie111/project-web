@@ -17,12 +17,12 @@
                 </div>
             </ContentHeader>
             <div class="home-content">
-                <BasicTabs :tabList="tabList"></BasicTabs>
+                <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
                 <ProjectList :list="listData" :page="pageInfo"></ProjectList>
             </div>
         </div>
         <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
-            <AddForm slot="content"></AddForm>
+            <AddForm ref="addForm" slot="content" :form="form" :productList="productList"></AddForm>
         </Modal>
     </div>
 </template>
@@ -31,6 +31,7 @@
     import ProjectList from "./components/list";
     import Modal from '@/components/Modal.vue'
     import AddForm from "./components/addForm";
+    import {formatDate} from '@/utils/common.js'
 
     export default {
         name: 'home',
@@ -40,57 +41,38 @@
                 tabList: [
                     {
                         name: '全部',
-                        total: 8
+                        status: 0,
+                        num: 5
                     },
                     {
                         name: '未开始',
-                        total: 10
+                        status: 0,
+                        num: 0
                     },
                     {
                         name: '进行中',
-                        total: 888
+                        status: 1,
+                        num: 0
                     },
                     {
                         name: '已延期',
-                        total: 10
+                        status: 3,
+                        num: 0
                     },
                     {
                         name: '已搁置',
-                        total: 888
+                        status: 4,
+                        num: 0
                     },
                     {
                         name: '已完成',
-                        total: 888
+                        status: 2,
+                        num: 0
                     }
                 ],
-                listData: [
-                    {
-                        endTime: "2021/05/14",
-                        id: 213423,
-                        progress: 90,
-                        projectMaster: "zhangsan,wanghu",
-                        projectName: "项目名称",
-                        restHour: 180,
-                        status: 1,
-                        statusDesc: "已延期",
-                        usedHour: 180,
-                        workHour: 180
-                    },
-                    {
-                        endTime: "2021/05/14",
-                        id: 213423,
-                        progress: 20.5,
-                        projectMaster: "zhangsan,wanghu",
-                        projectName: "项目名称",
-                        restHour: 180,
-                        status: 3,
-                        statusDesc: "已延期",
-                        usedHour: 180,
-                        workHour: 180
-                    }
-                ],
+                listData: [],
                 pageInfo: {
-                    total: 50, // 总数据条数
+                    total: 0, // 总数据条数
                     pageSize: 10, // 页面数据size
                     curPageNum: 1, // 当前页码
                 },
@@ -100,23 +82,112 @@
                     okText:'保存',
                     cancelText:'取消'
                 },
+                curStatus: 5,
+                form: {},
+                productList: []
             }
         },
+        created() {
+            this.resetList();
+            this.getProductList();
+        },
         methods: {
-            getList() {
-
+            // 重置列表
+            resetList() {
+                this.getProjectCount();
+                this.getProjectList();
             },
+            // 获取关联产品列表
+            async getProductList() {
+                try {
+                    let {code, data} = await this.$api.project.getBindingProductList();
+                    if (code === 0) {
+                        this.productList = data.map(item => {
+                            return {
+                                ...item,
+                                checked: false
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+            // 获取项目列表状态数量
+            async getProjectCount(){
+                try {
+                    let {code, data} = await this.$api.project.getProjectCount();
+                    if(code === 0){
+                        this.tabList = this.tabList.map((item) => {
+                            let t = data.find((i) => {
+                                return i.status == item.status;
+                            });
+                            return {...item, ...t};
+                        });
+                    }
+                }catch(error){
+                    console.log(error)
+                }
+            },
+            // 获取项目列表
+            async getProjectList(){
+                try {
+                    let {code, data} = await this.$api.project.getProjectList(this.pageInfo.curPageNum, this.pageInfo.pageSize, this.curStatus);
+                    if(code === 0){
+                        let {total, records} = data;
+                        this.pageInfo.total = total;
+                        this.listData = records;
+                    }
+                }catch(error){
+                    console.log(error)
+                }
+            },
+            // 切换产品状态
+            handleChangeTab(status) {
+                this.pageInfo.curPageNum = 1;
+                this.curStatus = status;
+                this.resetList();
+            },
+            // 添加项目
             handleAdd() {
+                this.form = {
+                    projectName: '',
+                    projectCode: '',
+                    beginTime: '',
+                    endTime: '',
+                    masterList: [],
+                    projectDescription: '',
+                    productList: [],
+                    publicFlag: 0
+                };
                 this.showAddModal = true;
             },
             // 添加项目保存
-            handleAddSubmit() {
-                this.showAddModal = false;
+            async handleAddSubmit() {
+                this.$refs.addForm.$refs.addForm.validate(async (valid) => {
+                    if (valid) {
+                        let params = this.$refs.addForm.$refs.addForm.model;
+                        params.beginTime = formatDate(params.beginTime);
+                        params.endTime = formatDate(params.endTime,'end');
+                        try {
+                            let {code} = await this.$api.project.addProject(params);
+                            if(code === 0){
+                                this.resetList();
+                                this.showAddModal = false;
+                            }
+                        }catch(error){
+                            console.log(error)
+                        }
+                    } else {
+                        console.log('提交失败!');
+                        return false;
+                    }
+                });
             },
             // 添加项目取消
             handleAddCancel() {
                 this.showAddModal = false;
-            },
+            }
         }
     }
 </script>

@@ -20,7 +20,7 @@ export function getProductCount() {
 }
 
 /**
- * 获取产品列表
+ * 添加产品
  * @param {*} data表单对象
  * @param {*} masterList 负责人列表
  * @param {*} productCode 产品代码
@@ -35,7 +35,7 @@ export function addProduct(data) {
 }
 
 /**
- * 获取产品列表
+ * 编辑产品
  * @param {*} data表单对象
  * @param {*} id 产品id
  * @param {*} cancelRelIds 已取消关联项目的关联id的List

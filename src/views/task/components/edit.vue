@@ -14,18 +14,18 @@
         </a-col>
 <!--        <a-col :span="6"><PrioritySelect :value="form.priority"/></a-col>-->
         <a-col :span="6">
-          <DateSelect title="计划开始" icon="iconrili" :value="form.planBeginTime" @change="val => handleSave('planBeginTime', val)" />
+          <DateSelect title="计划开始" icon="iconrili" :value="form.beginTime" @select="val => handleSave('beginTime', val)" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="计划结束" icon="iconjihua" :value="form.planEndTime" @change="val => handleSave('planEndTime', val)" />
+          <DateSelect title="计划结束" icon="iconjihua" :value="form.endTime" @select="val => handleSave('endTime', val)" />
         </a-col>
       </a-row>
       <a-row :gutter="[16, 16]">
         <a-col :span="6">
-          <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @change="val => handleSave('actualBeginTime', val)" />
+          <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @select="val => handleSave('actualBeginTime', val)" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @change="val => handleSave('actualEndTime', val)" />
+          <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @select="val => handleSave('actualEndTime', val)" />
         </a-col>
         <a-col :span="6">
           <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
@@ -132,6 +132,7 @@
   import ToggleInput from "@/components/forms/ToggleInput";
   import {taskTypes} from "@/const/data";
   import {getTaskDetail, saveTask} from "@/api/task";
+  import moment from "moment";
 
   export default {
     name: "TaskEdit",
@@ -176,22 +177,22 @@
       }
     },
     methods: {
-      // 校验新增 编辑用户信息
-      handleSubmit() {
-        this.$refs.userForm.validate((valid, data) => {
-          if (valid) {
-            console.log(data)
-            console.log('submit!', this.form);
-            // 接口提交成功 isShow
-            this.$emit('ok', this.form);
-          } else {
-            return false;
-          }
-        });
-      },
-
       handleSave(key, value) {
-        this.form[key] = value;
+        // console.log('handleSave', key, value)
+        // this.form[key] = value;
+        if (key === 'beginTime' && this.form.endTime && value < this.form.endTime) {
+          return;
+        }
+        if (key === 'endTime' && this.form.beginTime && value > this.form.beginTime) {
+          return;
+        }
+        if (key === 'actualBeginTime' && this.form.actualEndTime && value < this.form.actualEndTime) {
+          return;
+        }
+        if (key === 'actualEndTime' && this.form.actualBeginTime && value > this.form.actualBeginTime) {
+          return;
+        }
+        this.$set(this, 'form', {...this.form, [key]: value});
         if (key === 'incharge') {
           this.saveData({masterList: [value]});
           return;
@@ -199,7 +200,7 @@
         this.saveData({[key]: value});
       },
 
-      // 取消新增、编辑用户信息
+      // 关闭编辑用户信息
       handleCancel() {
         this.$emit('cancel');
       },
@@ -207,6 +208,11 @@
         this.$emit('create-child');
       },
       saveData(data) {
+        for (let key in data) {
+          if (data.hasOwnProperty(key) && key.indexOf('Time') > 0) {
+            data[key] = moment(data[key]).format('YYYY-MM-DD HH:mm:ss');
+          }
+        }
         data.id = this.taskId;
         saveTask(data).then(res => {
 
@@ -217,8 +223,10 @@
           return;
 
         getTaskDetail(this.taskId).then(res => {
-          if (res.code === 0 && res.data)
+          if (res.code === 0 && res.data) {
             this.form = res.data;
+            this.form.incharge = res.data.taskMaster[0];
+          }
         }).catch(err => {});
       },
       saveDescription() {

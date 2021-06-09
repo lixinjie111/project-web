@@ -19,16 +19,16 @@
             <a-textarea v-model="form.productDescription" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入产品描述"/>
         </a-form-model-item>
         <a-form-model-item label="">
-            <RelatedSelect title="关联项目" :list="projectList" :selectList="form.projectList" @change="handleChangeProject"></RelatedSelect>
-            <div class="form-related-list" v-for="(item,index) in form.projectList" :key="index">
-                <div class="item">
+            <RelatedSelect title="关联项目" :list="checkedProjectList" @change="handleChangeProject"></RelatedSelect>
+            <div class="form-related-list">
+                <div class="item" v-for="(item,index) in form.projectList" :key="index">
                     <TextToolTip className="left" :content="item.projectName" :refName="'related-item' + index"></TextToolTip>
                     <p @click="handleCancelProject(item)" class="right">取消关联<i class="iconfont iconlianjiezhongduan"></i></p>
                 </div>
             </div>
         </a-form-model-item>
         <a-form-model-item label="访问控制">
-            <a-radio-group v-model="form.publicFlag" @change="handleChangePublic">
+            <a-radio-group v-model="form.publicFlag">
                 <a-radio :style="radioStyle" :value="0">
                     公开(全部成员可访问)
                 </a-radio>
@@ -48,6 +48,7 @@
     export default {
         name: "addForm",
         props: {
+            // 表单数据
             form: {
                 type: Object,
                 default: () => {
@@ -60,6 +61,11 @@
                         projectList: []
                     }
                 }
+            },
+            // 关联项目列表
+            projectList: {
+                type: Array,
+                default: () => []
             }
         },
         components: {UserSelect, TextToolTip, RelatedSelect},
@@ -75,56 +81,54 @@
                     height: '30px',
                     lineHeight: '30px',
                 },
-                projectList: [],
-                cancelRelIds: []
+                checkedProjectList: JSON.parse(JSON.stringify(this.projectList))
             }
         },
-        created() {
-            this.getList();
+        created (){
+             if(this.form.id){ //编辑
+                 // 关联项目列表选中状态
+                 this.checkedProjectList = this.projectList.map(item => {
+                     // 匹配已选中的关联项目
+                     let checked = this.form.projectList && this.form.projectList.find(i => item.id == i.projectId);
+                     return {
+                         ...item,
+                         checked: checked ? true : false
+                     }
+                 });
+             }
         },
         methods: {
-            async getList() {
-                try {
-                    let {code, data} = await this.$api.product.getBindingProjectList(this.curPageNum, this.pageSize);
-                    if (code === 0) {
-                       let projectList = this.form.projectList;
-                        this.projectList = data.map(item => {
-                            let checked = projectList && projectList.find(i => item.id == i.id);
-                            return {
-                                ...item,
-                                checked: checked ? true : false
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-            },
-            handleChangePublic() {
-
-            },
+            // 取消关联项目
             handleCancelProject(item) {
-                console.log('ddd',item);
+                // 取消已选关联列表
                 let index = this.form.projectList.findIndex(i => i.projectId == item.projectId);
                 this.form.projectList.splice(index, 1);
-                this.projectList.forEach((t) => {
+                // 切换关联列表选中状态
+                this.checkedProjectList.forEach((t) => {
                     if (t.id == item.projectId) {
                         t.checked = false;
-                        this.cancelRelIds.push(item.id);
+                        if (this.form.id && item.id) { //编辑
+                            // 添加删除的关联项目id
+                            this.form.cancelRelIds.push(item.id);
+                        }
                     }
                 });
-                this.form.cancelRelIds = this.cancelRelIds.join(',');
-                console.log(this.form.cancelRelIds);
-                console.log(this.projectList);
             },
-            handleChangeProject(list) {
-                let projectList = list.map(item => {
-                    return {
+            // 切换关联项目
+            handleChangeProject(item) {
+                if (item.checked) { //添加
+                    this.form.projectList.push({
                         projectId: item.id,
                         projectName: item.name
+                    });
+                } else { //取消
+                    let index = this.form.projectList.findIndex(i => i.projectId == item.id);
+                    if (this.form.id && this.form.projectList[index].id) { //编辑
+                        // 添加删除的关联项目id
+                        this.form.cancelRelIds.push(this.form.projectList[index].id);
                     }
-                });
-                this.form.projectList = projectList;
+                    this.form.projectList.splice(index, 1);
+                }
             }
         }
     }
@@ -132,12 +136,14 @@
 
 <style scoped lang="scss">
     .form-related-list {
-        margin-top: 8px;
+        max-height: 100px;
+        overflow-y: auto;
 
         .item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 8px;
             padding: 0 12px;
             width: 100%;
             height: 40px;

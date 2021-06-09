@@ -2,7 +2,7 @@
     <div class="icon-tooltip" :class="className">
         <a-tooltip :destroyTooltipOnHide="true">
             <span slot="title">{{content}}</span>
-            <i :class="['iconfont', iconName, disabled ? 'disabled' : '']" @click="handleAction"></i>
+            <i :class="['iconfont', iconName, disabled ? 'disabled' : '']" @click.stop="handleAction"></i>
         </a-tooltip>
     </div>
 </template>
