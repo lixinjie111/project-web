@@ -14,6 +14,7 @@
       </div>
     </ContentHeader>
     <div class="table">
+      <UserSelectTree/>
       <a-table :data-source="dataSource" :columns="columns" />
     </div>
     <a-modal title="选择成员" v-model="showEdit">
@@ -25,9 +26,11 @@
 
 <script>
 
+  import UserSelectTree from "@/components/business/UserSelectTree";
+
   export default {
     name: "Member",
-    components: {},
+    components: {UserSelectTree},
     data() {
       return {
         showEdit: false,
