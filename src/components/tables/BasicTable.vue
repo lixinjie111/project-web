@@ -12,10 +12,12 @@
     <vxe-grid
         border
         resizable
+        ref="table"
         :row-class-name="rowClassName"
         :data="tableData"
         :tree-config ="treeConfig"
         :edit-config="{trigger: 'click', mode: 'cell'}"
+        :span-method="spanMethod"
         :columns="setTableColumns">
     </vxe-grid>
 </template>
@@ -42,10 +44,25 @@
             rowClassName: {
                 type: String | Function,
                 default: ''
+            },
+            spanMethod: {
+                type: Function,
+                default: null
             }
         },
         data() {
             return {}
+        },
+        watch: {
+            // 解决数据刷新 默认展开失效
+            tableData: {
+                handler(){
+                    if(this.treeConfig?.expandAll){
+                        this.$nextTick(() => this.$refs.table.setAllTreeExpand(true));
+                    }
+                },
+                deep: true
+            }
         }
     }
 </script>

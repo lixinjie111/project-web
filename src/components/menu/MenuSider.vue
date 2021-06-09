@@ -170,6 +170,7 @@ export default {
     .set-item {
       padding: 0 8px;
       line-height: 40px;
+      cursor: pointer;
       &:nth-child(n + 2){
         border-top: 1px solid #EAEDF7;
       }

@@ -54,7 +54,7 @@ export default {
       roleId: '', // 角色id
       breadcrumbList: [
         {name: '角色分组', icon: 'iconjiantouzuo', iconposition: 'before', path: '/org/role'},
-        {name: '项目经理', icon: 'iconsuoding', iconposition: 'after'},
+        {name: '', icon: 'iconsuoding', iconposition: 'after'},
       ],
       treeList:  [],
       checkedList: []
@@ -170,8 +170,6 @@ export default {
     },
     // 保存
     async handleSave(){
-      console.log(this.checkedList)
-      debugger
       try {
         let {code} = await this.$api.org.handlePutRoleMenu(this.roleId, this.checkedList?.join(','));
         if(code === 0){

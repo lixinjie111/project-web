@@ -141,8 +141,8 @@ export default {
     async handleSave(){
       try {
         let diff = this.allJoinUserIdList.filter(item=>!this.checkJoinList.some(ele=>ele===item));
-        console.log(diff, this.allJoinUserIdList, this.checkJoinList, this.allUnJoinUserIdList, this.checkUnJoinList)
-        debugger
+        // console.log(diff, this.allJoinUserIdList, this.checkJoinList, this.allUnJoinUserIdList, this.checkUnJoinList)
+
         let {code} = await this.$api.org.handlePostModifyUserRole(this.roleId, this.checkUnJoinList, diff);
         if(code === 0 ){
           this.$message.success('保存成功！');
