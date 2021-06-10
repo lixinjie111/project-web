@@ -20,8 +20,7 @@
                             v-model="form.beginTime"
                             :disabled-date="disabledStartDate"
                             format="YYYY-MM-DD"
-                            placeholder="请选择计划开始日期"
-                    />
+                            placeholder="请选择计划开始日期"/>
                 </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -31,13 +30,12 @@
                             v-model="form.endTime"
                             :disabled-date="disabledEndDate"
                             format="YYYY-MM-DD"
-                            placeholder="请选择计划截止日期"
-                    />
+                            placeholder="请选择计划截止日期"/>
                 </a-form-model-item>
             </a-col>
         </a-row>
         <a-form-model-item label="项目负责人">
-            <UserSelect v-model="form.masterList" multiple/>
+            <UserSelectTreeCircle :list="form.masterList" @change="handleChangeMasterList"/>
         </a-form-model-item>
         <a-form-model-item label="项目描述" prop="projectDescription">
             <a-textarea v-model="form.projectDescription" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入项目描述"/>
@@ -67,11 +65,11 @@
 <script>
     import RelatedSelect from "@/components/forms/RelatedSelect";
     import TextToolTip from "@/components/tooltip/TextToolTip";
-    import UserSelect from "@/components/business/UserSelect";
+    import UserSelectTreeCircle from "@/components/business/UserSelectTreeCircle";
 
     export default {
         name: "addForm",
-        components: {UserSelect, TextToolTip, RelatedSelect},
+        components: {UserSelectTreeCircle, TextToolTip, RelatedSelect},
         props: {
             // 表单数据
             form: {
@@ -169,6 +167,10 @@
                     }
                     this.form.productList.splice(index, 1);
                 }
+            },
+            // 选择项目负责人
+            handleChangeMasterList(list) {
+                this.form.masterList = list;
             }
         }
     }
