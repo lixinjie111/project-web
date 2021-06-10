@@ -69,7 +69,10 @@
       // },
       projectId: {
         type: Number
-      }
+      },
+      status: {
+        type: Number
+      },
     },
     data() {
       return {
@@ -78,7 +81,7 @@
           taskType: 0,
           incharge: null,
           participates:[],
-          priority: 1,
+          priority: 2,
         },
         types: taskTypes.map((label, key) => {
           return {label, key}
@@ -96,7 +99,6 @@
     },
     methods: {
       handleChange(key, val) {
-        debugger
         if (key === 'planBeginTime' && this.form.planEndTime && val > this.form.planEndTime) {
           return;
         }
@@ -125,8 +127,11 @@
             if (this.form.planEndTime) {
               this.form.planEndTime = moment(this.form.planEndTime).format('YYYY-MM-DD HH:mm:ss')
             }
-            createTask(this.form).then(res => {
-              this.$emit('ok', this.form);
+            let data = this.form;
+            if (this.status)
+              data = {...this.form, status: this.status};
+            createTask(data).then(res => {
+              this.$emit('ok', data);
               this.$refs.userForm.resetFields();
             }).catch(err => {});
           } else {
