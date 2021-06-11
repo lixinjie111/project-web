@@ -89,3 +89,25 @@ export function handlePutDeliverableStatus(id, status) {
 export function handlePutProjectDeliverable(data){
   return httpaxios.put('/business/projectDeliverable', {data})
 }
+
+
+/**
+ * 获取重点项目列表
+ */
+export function getKeyProjectList() {
+  return httpaxios.get('/business/projectVipWeek/list',{})
+}
+
+
+/**
+ * 修改重点项目信息
+ * @param {*} data
+ * {
+ *    "id": 1,
+ *    "remark": "备注"
+ * }
+ * @returns
+ */
+export function editKeyProject(data){
+  return httpaxios.put('/business/projectVipWeek', {data})
+}
