@@ -113,13 +113,19 @@
       }
     },
     props: {
-      value: Array || Object,
+      value: {
+        type: [Array, Object],
+        default: () => {return []}
+      },
       multiple: {
         default: false,
         type: Boolean,
       },
       subtitle: String,
-      options: Array,
+      options: {
+        type: Array,
+        default: () => {return []}
+      },
     },
     computed: {
       userList() {

@@ -2,7 +2,8 @@
     <div class="icon-tooltip" :class="className">
         <a-tooltip :destroyTooltipOnHide="true">
             <span slot="title">{{content}}</span>
-            <i :class="['iconfont', iconName, disabled ? 'disabled' : '']" @click.stop="handleAction"></i>
+            <i v-if="disabled" :class="['iconfont disabled', iconName]" @click.stop="handleDisabledAction"></i>
+            <i v-else :class="['iconfont', iconName]" @click.stop="handleAction"></i>
         </a-tooltip>
     </div>
 </template>
@@ -41,6 +42,9 @@
         methods: {
             handleAction() {
                 this.$emit('action');
+            },
+            handleDisabledAction() {
+
             }
         }
     }

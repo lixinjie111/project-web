@@ -22,10 +22,10 @@
       </a-row>
       <a-row :gutter="[16, 16]">
         <a-col :span="6">
-          <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @select="val => handleSave('actualBeginTime', val)" />
+          <DateSelect title="实际开始" icon="iconrili" :value="form.beginActualTime" @select="val => handleSave('beginActualTime', val)" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @select="val => handleSave('actualEndTime', val)" />
+          <DateSelect title="实际结束" icon="iconjihua" :value="form.endActualTime" @select="val => handleSave('endActualTime', val)" />
         </a-col>
         <a-col :span="6">
           <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
@@ -48,7 +48,7 @@
           <a-row :gutter="[16, 16]">
             <a-col span="8">智能营销方案整体设计</a-col>
             <a-col span="6">
-              <a-select style="width: 150px" :value="form.taskType" :options="types" @change="val => handleSave('taskType', val)">
+              <a-select style="width: 150px" :value="form.taskType" :options="types" size="small" @change="val => handleSave('taskType', val)">
               </a-select>
             </a-col>
             <a-col span="10">
@@ -65,19 +65,19 @@
             <a-col span="8">任务描述:</a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="24"><a-textarea v-model="form.taskDescription" :autosize="{ minRows: 3, maxRows: 8 }"/></a-col>
+            <a-col span="24"><a-textarea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }"/></a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
             <a-col span="2"><a-button type="primary" @click="saveDescription">保存</a-button></a-col>
             <a-col span="2"><a-button>取消</a-button></a-col>
           </a-row>
         </a-tab-pane>
-        <a-tab-pane key="2">
+        <a-tab-pane key="2" v-if="form.childrenList">
           <span slot="tab">
             <i class="iconfont iconzirenwu"></i>子任务
           </span>
           <a-row :gutter="[16, 16]">
-            <a-col span="20">共 0 个子任务</a-col>
+            <a-col span="20">共 {{form.childrenList.length}} 个子任务</a-col>
             <a-col span="4">
               <FlatButton @click="handleCreateChildTask">
                 添加子任务
@@ -85,6 +85,11 @@
               </FlatButton>
             </a-col>
           </a-row>
+          <div>
+            <div v-for="child in form.childrenList" :key="child.id">
+              <toggle-input>{{child.taskName}}</toggle-input>
+            </div>
+          </div>
           <div>
             <a-divider></a-divider>
           </div>
@@ -96,7 +101,7 @@
           <a-row :gutter="[16, 16]">
             <a-col span="20">共 0 个附件</a-col>
             <a-col span="4">
-              <FlatButton @click="handleCreate">
+              <FlatButton @click="handleUpload">
                 添加附件
                 <MyIcon slot="icon" name="iconjia" type="main"/>
               </FlatButton>
@@ -107,11 +112,11 @@
           </div>
         </a-tab-pane>
       </a-tabs>
-    <a-row :gutter="[16, 16]">
+    <a-row :gutter="[16, 16]" v-if="form.history">
       <a-col span="8"><i class="iconfont iconlishijilu"></i>历史记录</a-col>
       <a-divider></a-divider>
     </a-row>
-    <div>
+    <div v-if="form.history">
       1, 2021-04-01 上午09:15，由 谢东 创建
     </div>
   </a-modal>
@@ -180,16 +185,17 @@
       handleSave(key, value) {
         // console.log('handleSave', key, value)
         // this.form[key] = value;
-        if (key === 'beginTime' && this.form.endTime && value < this.form.endTime) {
+        let mValue = moment(value);
+        if (key === 'beginTime' && this.form.endTime && mValue.isAfter(this.form.endTime, 'day')) {
           return;
         }
-        if (key === 'endTime' && this.form.beginTime && value > this.form.beginTime) {
+        if (key === 'endTime' && this.form.beginTime && mValue.isBefore(this.form.beginTime, 'day')) {
           return;
         }
-        if (key === 'actualBeginTime' && this.form.actualEndTime && value < this.form.actualEndTime) {
+        if (key === 'beginActualTime' && this.form.endActualTime && mValue.isAfter(this.form.endActualTime, 'day')) {
           return;
         }
-        if (key === 'actualEndTime' && this.form.actualBeginTime && value > this.form.actualBeginTime) {
+        if (key === 'endActualTime' && this.form.beginActualTime && mValue.isBefore(this.form.beginActualTime, 'day')) {
           return;
         }
         this.$set(this, 'form', {...this.form, [key]: value});
@@ -210,7 +216,10 @@
       saveData(data) {
         for (let key in data) {
           if (data.hasOwnProperty(key) && key.indexOf('Time') > 0) {
-            data[key] = moment(data[key]).format('YYYY-MM-DD HH:mm:ss');
+            if (key.indexOf('begin') >= 0)
+              data[key] = moment(data[key]).format('YYYY-MM-DD 00:00:00');
+            else
+              data[key] = moment(data[key]).format('YYYY-MM-DD 23:59:59');
           }
         }
         data.id = this.taskId;
@@ -231,7 +240,9 @@
       },
       saveDescription() {
         this.saveData({taskDescription: this.form.taskDescription});
-      }
+      },
+      handleUpload() {
+      },
     },
   }
 </script>

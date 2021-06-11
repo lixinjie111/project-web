@@ -13,7 +13,7 @@
             </a-col>
         </a-row>
         <a-form-model-item label="产品负责人">
-            <UserSelect v-model="form.masterList" multiple/>
+            <UserSelectTreeCircle :list="form.masterList" @change="handleChangeMasterList"/>
         </a-form-model-item>
         <a-form-model-item label="产品描述" prop="productDescription">
             <a-textarea v-model="form.productDescription" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入产品描述"/>
@@ -43,7 +43,7 @@
 <script>
     import RelatedSelect from "@/components/forms/RelatedSelect";
     import TextToolTip from "@/components/tooltip/TextToolTip";
-    import UserSelect from "@/components/business/UserSelect";
+    import UserSelectTreeCircle from "@/components/business/UserSelectTreeCircle";
 
     export default {
         name: "addForm",
@@ -68,7 +68,7 @@
                 default: () => []
             }
         },
-        components: {UserSelect, TextToolTip, RelatedSelect},
+        components: {UserSelectTreeCircle, TextToolTip, RelatedSelect},
         data() {
             return {
                 rules: {
@@ -129,6 +129,10 @@
                     }
                     this.form.projectList.splice(index, 1);
                 }
+            },
+            // 选择产品负责人
+            handleChangeMasterList(list) {
+              this.form.masterList = list;
             }
         }
     }

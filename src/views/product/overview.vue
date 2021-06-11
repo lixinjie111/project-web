@@ -6,11 +6,11 @@
         <div class="product-overview-container">
             <ContentHeader type="title" title="产品">
                 <div slot="operation">
-                    <a-button class="export-btn mr-16">
+                    <a-button class="export-btn mr-16" v-if="isInPermission('business_product_view')">
                         <span class="iconfont icondaochu"></span>
                         导出
                     </a-button>
-                    <a-button type="primary" @click="handleAdd">
+                    <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_product_add')">
                         <span class="iconfont iconjia"></span>
                         添加产品
                     </a-button>
@@ -29,10 +29,9 @@
                         <IconToolTip v-if="data.row.remark" class="table-tip" iconName="icontishi" :content="data.row.remark"></IconToolTip>
                     </div>
                     <div slot="action" slot-scope="data" class="table-action">
-                        <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
-                        <IconToolTip iconName="iconkaiguan" :disabled="true" content="已关闭" v-if="data.row.status"></IconToolTip>
-                        <IconToolTip iconName="iconkaiguan" content="关闭" @action="handleClose(data.row)" v-else></IconToolTip>
-                        <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)"></IconToolTip>
+                        <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)" v-if="isInPermission('business_product_edit')"></IconToolTip>
+                        <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 1" :content="data.row.status ? '已关闭' : '关闭'" @action="handleClose(data.row)" v-if="isInPermission('business_project_close')"></IconToolTip>
+                        <IconToolTip iconName="iconshanchu" content="删除" @action="handleDel(data.row)" v-if="isInPermission('business_product_del')"></IconToolTip>
                     </div>
                 </ListTable>
                 <Pagination v-if="total > pageSize"
@@ -57,6 +56,7 @@
     import Modal from '@/components/Modal/Modal.vue'
     import AddForm from "./components/addForm";
     import closeForm from "./components/closeForm";
+    import {isInPermission} from '@/utils/common.js';
 
     export default {
         name: 'overview',
@@ -66,18 +66,15 @@
                 tabList: [
                     {
                         name: '未关闭',
-                        status: 0,
-                        num: 0
+                        status: 0
                     },
                     {
                         name: '关闭',
-                        status: 1,
-                        num: 0
+                        status: 1
                     },
                     {
                         name: '全部产品',
-                        status: 2,
-                        num: 0
+                        status: 2
                     }
                 ],
                 columns: [
@@ -139,6 +136,7 @@
             this.getProjectList();
         },
         methods: {
+            isInPermission,
             // 重置列表
             resetList() {
                 this.getProductCount();
@@ -376,9 +374,11 @@
             }
 
             .table-action {
+                margin-left: -9px;
+
                 .icon-tooltip {
                     display: inline-block;
-                    margin-right: 18px;
+                    padding: 9px;
                 }
             }
         }

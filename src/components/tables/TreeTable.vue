@@ -1,8 +1,8 @@
 <template>
+  <!--      :row-selection="rowSelection"-->
   <a-table
       bordered
       class="tree-table-wrapper"
-      :row-selection="rowSelection"
       :expandIconColumnIndex="2"
       :loading="loading"
       :data-source="dataSource"
@@ -48,11 +48,11 @@
     },
     props: {
       columns: {
-        default: [],
+        default: () => [],
         type: Array,
       },
       dataSource: {
-        default: [],
+        default: () => [],
         type: Array,
       },
       currentPage: {
