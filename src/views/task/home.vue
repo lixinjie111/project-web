@@ -9,15 +9,9 @@
     <div class="header">
       <div class="left">
         <a-radio-group default-value="a" size="large" @change="handleQueryFilter">
-          <a-radio-button value="all" class="all">
-            全部
-            <span>8</span>
-          </a-radio-button>
-          <a-radio-button value="myTaskFlag">
-            指派给我
-          </a-radio-button>
-          <a-radio-button value="weeklyShow">
-            在周报中显示
+          <a-radio-button class="all" v-for="item in tabList" :value="item.status" :key="item.status">
+            {{item.name}}
+            <span v-if="queryType===item.status">{{total}}</span>
           </a-radio-button>
         </a-radio-group>
       </div>
@@ -33,12 +27,12 @@
           </a-menu>
         </a-dropdown>
         <a-divider type="vertical" />
-        <FlatButton @click="handleCreate">
+        <FlatButton @click="handleCreate" v-if="canCreate">
           新建任务
           <MyIcon slot="icon" name="icontianjia" type="main"/>
         </FlatButton>
-        <a-divider type="vertical" />
-        <FlatButton>
+        <a-divider type="vertical" v-if="canCreate && canExport" />
+        <FlatButton v-if="canExport">
           导出
           <MyIcon slot="icon" name="icondaochu"/>
         </FlatButton>
@@ -60,7 +54,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate" block><i class="iconfont iconjia"></i></a-button>
+        <a-button @click="handleCreate(0)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
       <div class="group">
@@ -74,7 +68,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate" block><i class="iconfont iconjia"></i></a-button>
+        <a-button @click="handleCreate(1)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
       <div class="group">
@@ -88,7 +82,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate" block><i class="iconfont iconjia"></i></a-button>
+        <a-button @click="handleCreate(2)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
       <div class="group">
@@ -102,25 +96,25 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate" block><i class="iconfont iconjia"></i></a-button>
+        <a-button @click="handleCreate(3)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
-<!--      <div class="group">
+      <div class="group">
         <div class="name">已搁置</div>
         <draggable v-model="status4" group="site">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan">{{item.beginTime}} - {{item.endTime}}</div>
+              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate" block><i class="iconfont iconjia"></i></a-button>
-      </div>-->
+        <a-button @click="handleCreate(4)" block><i class="iconfont iconjia"></i></a-button>
+      </div>
 
     </div>
-    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="projectId" />
+    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="projectId" :status="curStatus" />
     <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" @create-child="handleCreate" :project-id="projectId" />
   </div>
 </template>
@@ -134,17 +128,48 @@
   import draggable from 'vuedraggable';
   import {addProjectMember, changeTaskStatus, deleteTask, getProjectBoard, getTaskList} from "@/api/task";
   import {taskTypes} from "@/const/data";
-  import {Modal} from 'x-intelligent-ui';
   import moment from "moment";
+  import BasicTabs from "@/components/tabs/BasicTabs";
+  import {isInPermission} from "@/utils/common";
 
   export default {
     name: 'TaskHome',
-    components: { TreeTable, FlatButton, MyIcon, TaskAdd, TaskEdit, draggable },
+    components: { TreeTable, FlatButton, MyIcon, TaskAdd, TaskEdit, draggable, BasicTabs },
     data() {
+      let canEdit = isInPermission('business_task_edit');
+      let canDelete = isInPermission('business_task_del');
+      let operation = [];
+      if (canEdit && canDelete) {
+        operation.push(          {
+            dataIndex: 'type',
+            title: '操作',
+            fixed: 'right',
+            customRender: (text, record, index) => {
+              let ops = [];
+              if (canEdit)
+                ops.push(this.$createElement('i', {
+                  'class': 'iconfont iconxiezuo',
+                  on: {click: () => this.handleEdit(record)}}, ''));
+              if (canDelete)
+                ops.push(this.$createElement('i', {
+                  'class': 'iconfont iconshanchu',
+                  on: {click: () => this.handleDelete(record)}}, ''));
+              return {
+                attrs:{},
+                props:{},
+                class:{},
+                style:{},
+                children: this.$createElement('div', ops)
+              }
+            }
+          },);
+      }
       return {
         page: 1,
         pageSize: 10,
         total: 0,
+        canCreate: isInPermission('business_task_add'),
+        canExport: isInPermission('business_task_view'),
         projectList: [
           {
             key: 25,
@@ -153,6 +178,20 @@
           {
             key: 9393939,
             label: '秀梅苯肼基材'
+          },
+        ],
+        tabList: [
+          {
+            name: '全部',
+            status: 'all'
+          },
+          {
+            name: '指派给我',
+            status: 'myTaskFlag'
+          },
+          {
+            name: '在周报中显示',
+            status: 'weeklyShow'
           },
         ],
         projectId: 9393939,
@@ -166,19 +205,21 @@
           {
             dataIndex: 'id',
             title: 'ID',
+            fixed: 'left',
           },
           {
             dataIndex: 'taskName',
             title: '任务名称',
+            fixed: 'left',
             treeNode: true,
             customRender: (text, record, index) => {
-              return {
+              return canEdit ? {
                 attrs:{},
                 props:{},
                 class:{},
                 style:{},
                 children: this.$createElement('a', {on: {click: () => this.handleEdit(record)}}, text)
-              }
+              } : text
             }
           },
           {
@@ -230,26 +271,22 @@
             }
           },
           {
-            dataIndex: 'type',
-            title: '操作',
-            customRender: (text, record, index) => {
-              return {
-                attrs:{},
-                props:{},
-                class:{},
-                style:{},
-                children: this.$createElement('div', [
-                    // this.$createElement('i', {
-                    //   'class': 'iconfont iconxiezuo',
-                    //   on: {click: () => this.handleEdit(record)}}, ''),
-                    this.$createElement('i', {
-                      'class': 'iconfont iconshanchu',
-                      on: {click: () => this.handleDelete(record)}}, ''),
-                  ]
-                )
-              }
-            }
+            dataIndex: 'beginTime',
+            title: '计划开始',
           },
+          {
+            dataIndex: 'beginTime',
+            title: '计划结束',
+          },
+          {
+            dataIndex: 'beginActualTime',
+            title: '实际开始',
+          },
+          {
+            dataIndex: 'endActualTime',
+            title: '实际结束',
+          },
+          ...operation
         ],
         boardData: [],
         showCreate: false,
@@ -257,6 +294,7 @@
         viewType: 0,
         queryType: 'all',
         viewTypes: ['列表', '看板'],
+        curStatus: 0, // 默认创建任务的状态
       }
     },
     props: {
@@ -395,11 +433,12 @@
       },
       handleViewType(e) {
         // console.log('test', e)
+        this.curStatus = 0;
         this.viewType = e.key;
         this.loadCurrentList();
       },
-      handleCreate() {
-        console.log('test')
+      handleCreate(status) {
+        this.curStatus = status;
         this.showCreate = true;
       },
       handleEdit(record) {
@@ -408,9 +447,9 @@
       },
       handleDelete(record) {
         let that = this;
-        Modal.confirm({
+        this.$confirms({
           title: '提示',
-          content: `您确定要删除 ${record.taskName} 任务吗？`,
+          message: `您确定要删除 ${record.taskName} 任务吗？`,
           okText: '确认删除',
           icon: 'none',
           onOk() {
@@ -431,9 +470,11 @@
         this.loadCurrentList();
       },
       handleHome() {
-        this.$router.push('/mine/home');
+        this.$router.push('/project/home');
       },
       handleQueryFilter(e) {
+        this.page = 1;
+        this.total = 0;
         this.queryType = e.target.value;
         this.loadCurrentList();
       },
@@ -504,6 +545,19 @@
         color: #242F57;
         margin-left: 4px;
       }
+    }
+  }
+
+  .tree-table-wrapper {
+    .iconfont {
+      cursor: pointer;
+    }
+    .iconxiezuo {
+      color: #1470FF;
+    }
+    .iconshanchu {
+      margin-left: 12px;
+      color: #FF4C60;
     }
   }
 
