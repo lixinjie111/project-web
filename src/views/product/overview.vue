@@ -311,19 +311,18 @@
             handleCloseCancel() {
                 this.showCloseModal = false;
             },
-            // 产品导出
-            async handleExport() {
+            // 导出产品excel
+            handleExport() {
                 try {
-                    let {code, data} = await this.$api.product.exportProduct(this.curStatus);
-                    if(code === 0){
-                        let blob = new Blob([data], {type: "application/vnd.ms-excel"});
+                    this.$api.product.exportProduct(this.curStatus).then((res)=>{
+                        let blob = new Blob([res], {type: "application/vnd.ms-excel"});
                         let url = window.URL.createObjectURL(blob);
                         let a = document.createElement("a");
                         a.href = url;
                         a.download = "导出表格.xlsx";
                         a.click();
                         window.URL.revokeObjectURL(url);
-                    }
+                    });
                 }catch(error){
                     console.log(error)
                 }
