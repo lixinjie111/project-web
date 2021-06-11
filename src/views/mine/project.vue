@@ -34,7 +34,7 @@
         methods:{
             // 重置列表
             resetList() {
-                this.getMineProjectList();
+                this.getMyProjectList();
             },
             // 切换条目数量
             handleChangePageSize(pageSize,pageNum) {
@@ -64,9 +64,9 @@
                 }
             },
             // 获取我的项目列表
-            async getMineProjectList(){
+            async getMyProjectList(){
                 try {
-                    let {code, data} = await this.$api.mine.getMineProjectList(this.curPageNum, this.pageSize);
+                    let {code, data} = await this.$api.mine.getMyProjectList(this.curPageNum, this.pageSize);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;
