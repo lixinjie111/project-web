@@ -7,14 +7,13 @@
            <DynamicList :list="list"
                         :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                         @pagination-change-pagesize="handleChangePageSize"
-                        @pagination-change-page="handleChangePage">
-           </DynamicList>
+                        @pagination-change-page="handleChangePage"/>
         </div>
     </div>
 </template>
 
 <script>
-    import DynamicList from '@/components/business/DynamicList'
+    import DynamicList from '@/components/others/DynamicList'
 
     export default {
         name: "dynamic",
