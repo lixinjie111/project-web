@@ -108,9 +108,7 @@
                         slots: {
                             default: ({row}) => {
                                 return [
-                                    <div class="table-time">
-                                        <span>{row.planTime}</span>
-                                    </div>
+                                    <span class="table-time">{row.planTime}</span>
                                 ]
                             }
                         }
@@ -272,15 +270,11 @@
         }
 
         .table-time {
-            .icon-tooltip {
-                margin-left: 5px;
-                display: inline-block;
-
-                /deep/ .iconzhuyi {
-                    color: #FF4C60;
-                    vertical-align: -1px;
-                }
-            }
+            display: block;
+            line-height: 24px;
+            text-align: center;
+            background: #F4F7FC;
+            border-radius: 2px;
         }
     }
 </style>
