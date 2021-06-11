@@ -6,5 +6,6 @@ import * as product from './product'
 import * as project from './project'
 import * as report from './report'
 import * as statistics from './statistics'
+import * as mine from './mine'
 
-export {login, user, home, org, product, project, report, statistics}
+export {login, user, home, org, product, project, report, statistics, mine}

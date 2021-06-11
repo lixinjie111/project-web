@@ -6,7 +6,7 @@
         <div class="product-overview-container">
             <ContentHeader type="title" title="产品">
                 <div slot="operation">
-                    <a-button class="export-btn mr-16" v-if="isInPermission('business_product_view')">
+                    <a-button class="export-btn mr-16" @click="handleExport" v-if="isInPermission('business_product_view')">
                         <span class="iconfont icondaochu"></span>
                         导出
                     </a-button>
@@ -310,6 +310,23 @@
             // 关闭产品取消
             handleCloseCancel() {
                 this.showCloseModal = false;
+            },
+            // 产品导出
+            async handleExport() {
+                try {
+                    let {code, data} = await this.$api.product.exportProduct(this.curStatus);
+                    if(code === 0){
+                        let blob = new Blob([data], {type: "application/vnd.ms-excel"});
+                        let url = window.URL.createObjectURL(blob);
+                        let a = document.createElement("a");
+                        a.href = url;
+                        a.download = "导出表格.xlsx";
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    }
+                }catch(error){
+                    console.log(error)
+                }
             }
         }
     }

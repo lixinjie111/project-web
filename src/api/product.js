@@ -85,3 +85,15 @@ export function closeProduct(id, remark){
 export function getProductDetail(id) {
     return httpaxios.get(`/business/product/${id}`, {})
 }
+
+/**
+ * 导出产品信息
+ * @param {*} status 状态
+ * @returns
+ */
+export function exportProduct(status) {
+    return httpaxios.get('/business/export/product', {
+        params: {status},
+        responseType: 'blob'
+    })
+}
