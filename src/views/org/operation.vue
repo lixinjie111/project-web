@@ -195,7 +195,7 @@ export default {
     overflow: auto;
     padding: 0 20px;
     width: 100%;
-    height: calc(100vh - 163px);
+    height: calc(100% - 163px);
     background: #fff;
     border-radius: 4px;
     border: 1px solid #EAEDF7;
@@ -243,7 +243,6 @@ export default {
     }
     .checkbox-item {
       width: 244px;
-      height: 54px;
       flex-shrink: 0;
       .expand {
         display: inline-block;

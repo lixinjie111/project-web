@@ -29,7 +29,7 @@
 <script>
     import BasicTabs from "@/components/tabs/BasicTabs";
     import ProjectList from "./components/list";
-    import Modal from '@/components/Modal.vue'
+    import Modal from '@/components/Modal/Modal.vue'
     import AddForm from "./components/addForm";
     import {formatDate} from '@/utils/common.js'
 

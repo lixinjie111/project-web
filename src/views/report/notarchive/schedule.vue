@@ -104,7 +104,7 @@
                     {
                         title: '时间计划',
                         field: 'planTime',
-                        width: 166,
+                        width: 265,
                         slots: {
                             default: ({row}) => {
                                 return [
@@ -118,12 +118,12 @@
                     {
                         title: '实际结束日期',
                         field: 'actualEndTime',
-                        minWidth: 120
+                        minWidth: 160
                     },
                     {
                         title: '工作进展描述',
                         field: 'description',
-                        minWidth: 120,
+                        minWidth: 150,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -140,7 +140,7 @@
                     {
                         title: '下周工作计划',
                         field: 'nextWeekWork',
-                        minWidth: 120,
+                        minWidth: 150,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -157,7 +157,7 @@
                     {
                         title: '备注',
                         field: 'remark',
-                        minWidth: 120,
+                        minWidth: 150,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -193,7 +193,6 @@
                     if(code === 0){
                         this.tableData = data;
                     }
-                    console.log(data)
                 } catch (error) {
                     console.log(error)
                 }

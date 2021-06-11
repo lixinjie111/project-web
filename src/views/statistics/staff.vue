@@ -10,7 +10,7 @@
       <div class="time">
         <span class="label">统计时段</span>
         <span class="time-picker">
-          <a-range-picker @change="handleChangeRange">
+          <a-range-picker format="YYYY/MM/DD" @change="handleChangeRange">
             <span class="iconfont iconrili calendar-picker-icon" slot="suffixIcon"></span>
           </a-range-picker>
         </span>
@@ -21,6 +21,7 @@
         :setTableColumns="setTableColumns" 
         :rowClassName="handleRowClassName" 
         :treeConfig="treeConfig"
+        :spanMethod="handleRowspanMethod"
     ></BasicTable>
     <!-- <NoData v-else></NoData> -->
   </div>
@@ -38,95 +39,28 @@ export default {
   data(){
     return {
         deptId: this.$store.state.users.userInfo.deptId,
-        startTime: '',
-        endTime: '',
-        treeConfig: {expandAll: true, showIcon: false, children: 'children'},
-        tableData: [
-            {
-                "children": [
-                    {
-                        "actualEndTime": "2021-06-02",
-                        "beginTime": "04/01",
-                        "endTime": "04/01",
-                        "id": 213423,
-                        "progress": "90%",
-                        "projectName": "项目名称",
-                        "remark": "备注",
-                        "status": 1,
-                        "statusDesc": "已延期",
-                        "children": [
-                            {
-                                "childrenList": [
-                                    {
-                                        "childrenList": [
-                                            {}
-                                        ],
-                                        "endTime": "2021-04-01",
-                                        "executorList": "111,222",
-                                        "id": 213423,
-                                        "masterList": "111,222",
-                                        "priority": 0,
-                                        "priorityDesc": 0,
-                                        "progress": "90%",
-                                        "restHour": 180,
-                                        "status": 0,
-                                        "statusDesc": 0,
-                                        "taskExecutor": "333,444",
-                                        "taskMaster": "111,222",
-                                        "taskName": "任务名称",
-                                        "taskType": 0,
-                                        "taskTypeDesc": 0,
-                                        "usedHour": 180,
-                                        "workHour": 180
-                                    }
-                                ],
-                                "endTime": "2021-04-01",
-                                "executorList": "111,222",
-                                "id": 213423,
-                                "masterList": "111,222",
-                                "priority": 0,
-                                "priorityDesc": 0,
-                                "progress": "90%",
-                                "restHour": 180,
-                                "status": 0,
-                                "statusDesc": 0,
-                                "taskExecutor": "333,444",
-                                "taskMaster": "111,222",
-                                "taskName": "任务名称",
-                                "taskType": 0,
-                                "taskTypeDesc": 0,
-                                "usedHour": 180,
-                                "workHour": 180
-                            }
-                        ]
-                    }
-                ],
-                "restHour": 20,
-                "usedHour": 20,
-                "userName": "陈思哲",
-                "workHour": 20
-            }
-        ],
+        startDate: '',
+        endDate: '',
+        treeConfig: {expandAll: true, showIcon: false, children: 'tasks'},
+        tableData: [],
         setTableColumns: [
             {
                 title: '人员',
                 field: 'userName',
+                treeNode: true,
                 minWidth: 280,
                 slots: {
-                    default: ({row, $seq, $rowIndex}) => {
-                        let result ={}
+                    default: ({row, $rowIndex}) => {
                         return [
-                            <div class="table-name">
+                            <div class={["table-name", row.isMerge ? 'textCenter':'']}>
+                                {!row.isMerge ? <span class={'status' + (parseInt(row.status) + 1)}></span>:null}
                                 {
                                     row.userName ?
-                                    <div>
-                                        <span class={'status' + (parseInt(row.status) + 1)}></span>
-                                        <div class="content-name">
-                                            <span class={[row?.children ? 'none' : 'index']}>{$seq ? `${$seq}.${$rowIndex + 1}` : $rowIndex + 1}</span>
-                                            <TextToolTip className="name" content={row.userName} refName={'table-name' + $rowIndex}></TextToolTip>
-                                        </div> 
-                                    </div> 
-                                    :
+                                        <TextToolTip className="name" content={row.userName} refName={'table-name' + $rowIndex}></TextToolTip>
+                                        :
+                                    row.isMerge ?
+                                        '合计工时'
+                                        :
                                     null 
                                 }
                             </div>
@@ -138,7 +72,14 @@ export default {
                 title: '工作任务',
                 field: 'projectName',
                 minWidth: 264,
-                showOverflow: true
+                showOverflow: true,
+                slots: {
+                    default: ({row}) => {
+                        return [
+                            <span>{row.projectName? row.projectName : row.taskName}</span>
+                        ]
+                    }
+                }
             },
             {
                 title: '优先级',
@@ -147,28 +88,47 @@ export default {
                 slots: {
                     default: ({row}) => {
                         return [
-                            <div>
+                            <span>
                                 {
-                                    row.priority ? 
+                                    row.hasOwnProperty('priority') && row.priority!== null ? 
                                     <Priority percent={row.priority} size="small"/>
                                     :
                                     null
                                 }
-                            </div>
+                            </span>
                         ]
                     }
                 }
             },
             {
                 title: '时间计划',
-                field: 'planTime',
-                minWidth: 166
+                field: 'beginTime',
+                minWidth: 166,
+                slots: {
+                    default: ({row}) => {
+                        return [
+                            <span>
+                                {
+                                    row.hasOwnProperty('beginTime') && row.beginTime !== null ? 
+                                    (row.hasOwnProperty('endTime') && row.endTime !== null ?
+                                    `${row.beginTime} - ${row.endTime}`
+                                    :
+                                    row.beginTime)
+                                    :
+                                    (row.hasOwnProperty('endTime') && row.endTime !== null ?
+                                    row.endTime
+                                    :
+                                    null)
+                                }
+                            </span>
+                        ]
+                    }
+                }
             },
             {
                 title: '工时/消耗',
                 field: 'usedHour',
                 minWidth: 95,
-                // formatter: ({cellValue}) => `${cellValue}%`
             },
             {
                 title: '工时/剩余',
@@ -187,7 +147,14 @@ export default {
                 slots: {
                     default: ({row}) => {
                         return [
-                            <Status value={row.status}></Status>
+                            <span>
+                                {
+                                    row.hasOwnProperty('status') && row.status !== null  ? 
+                                    <Status value={row.status}></Status>
+                                    :
+                                    null
+                                }
+                            </span>
                         ]
                     }
                 }
@@ -198,9 +165,18 @@ export default {
                 minWidth: 126,
                 slots: {
                     default: ({row}) => {
-                        row.progress = /(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress;
+                        if(row.hasOwnProperty('progress') &&  row.progress!== null) {
+                            row.progress = /(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress;
+                        }
                         return [
-                            <a-progress percent={Number(row.progress)} size="small"/>
+                            <span>
+                                {
+                                    row.hasOwnProperty('progress') && row.progress!== null ? 
+                                    <a-progress percent={Number(row.progress)} size="small"/>
+                                    :
+                                    null
+                                }
+                            </span>
                         ]
                     }
                 }
@@ -222,9 +198,23 @@ export default {
   methods: {
     // 修改row样式
     handleRowClassName(e){
-        let {children = []} = e?.row;
-        return children.length ? 'has-children' : '';
+        let {level, row} = e;
+        return !level && !row.isMerge? 'has-children' : '';
     },
+    // 合并表格
+    handleRowspanMethod({ row, _columnIndex, _rowIndex }){
+        if(row.isMerge){
+            let col = [1, 2, 3, 8, 9,10]
+            if (_columnIndex === 0) {
+                return {rowspan: _rowIndex,colspan: 4}
+            } else if (_columnIndex === 7){
+                return {rowspan: _rowIndex,colspan: 4}
+            } else if (col.includes(_columnIndex)) {
+                return { rowspan: 0, colspan: 0 }
+            }
+        }
+    },
+    // 导出接口
     handleExport() {
 
     },
@@ -232,22 +222,41 @@ export default {
     handleSetSelectedTree(deptId){
       this.deptId = deptId;
       // 查询table
-    //   this.handleGetList();
+      this.handleGetList();
     },
     // 切换查询周期
-    handleChangeRange(startTime, endTime){
-        console.log(startTime, endTime)
+    handleChangeRange(moments, dates){
+        let startDate = dates[0];
+        let endDate = dates[1];
+        let bool = this.startDate !== startDate || this.endDate !== endDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        bool && this.handleGetList();
+    },
+    // 预处理数据
+    handlePreData(data){
+        let result = [];
+        data?.map(item => { // 项目降级
+            let {userName, ...rest} = item;
+            item.projects[0].userName = userName;
+            let {restHour, usedHour, workHour} = rest;
+            result = [...result, ...item.projects, {restHour, usedHour, workHour, isMerge: true}];
+        });
+        return result;
     },
     async handleGetList(){
         try {
-            let {code, data} = await this.$api.statistics.handleGetUserTask({deptId: this.deptId, startTime: this.startTime, endTime: this.endTime})
+            let {code, data} = await this.$api.statistics.handleGetUserTask({deptId: this.deptId, startDate: this.startDate, endDate: this.endDate});
+            if(code === 0) {
+                this.$set(this, 'tableData', this.handlePreData(data));
+            }
         } catch (error) {
             console.log(error)
         }
     }
   },
   mounted(){
-    //   this.handleGetList()
+    this.handleGetList();
   }
 }
 </script>
@@ -257,7 +266,7 @@ export default {
   padding: 0 16px;
   .select-container {
     display: flex;
-    padding: 6px 0;
+    padding: 6px 0 14px 0;
     .time {
         .label {
             margin: 0 12px 0 24px;
@@ -283,5 +292,65 @@ export default {
         pointer-events: auto;
     }
   }
+  /deep/ .vxe-table--body {
+        .has-children {
+            background: #F6F8FF;
+        }
+    }
+
+    .table-name {
+        height: 40px;
+        line-height: 40px;
+
+        $bgColors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+        @each $bg in $bgColors {
+            $i: index($bgColors, $bg);
+            .status#{$i} {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 4px;
+                height: 40px;
+                background: nth($bgColors, $i);
+                line-height: 24px;
+            }
+        }
+        &.textCenter {
+            text-align: center;
+        }
+
+        .index {
+            position: absolute;
+            left: -1.5rem;
+            width: 1.5rem;
+            text-align: center;
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #97A0C3;
+            vertical-align: middle;
+        }
+        .none {
+            display: none;
+        }
+
+        .text-tooltip {
+            display: inline-block;
+            vertical-align: top;
+            width: 220px;
+        }
+    }
+
+    .table-time {
+        .icon-tooltip {
+            margin-left: 5px;
+            display: inline-block;
+
+            /deep/ .iconzhuyi {
+                color: #FF4C60;
+                vertical-align: -1px;
+            }
+        }
+    }
 }
 </style>

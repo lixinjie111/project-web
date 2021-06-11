@@ -73,7 +73,7 @@
   </Modal>
 </template>
 <script>
-import Modal from '@/components/Modal.vue'
+import Modal from '@/components/Modal/Modal.vue'
 import {isInPermission} from '@/utils/common.js'
 export default {
   name: 'UserForm',

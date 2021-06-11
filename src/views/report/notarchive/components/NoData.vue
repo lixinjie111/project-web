@@ -2,16 +2,23 @@
   <div class="no-data">
     <img src="@/assets/images/report/no-data.png" />
     <div class="title">本周周报暂未生成</div>
-    <a-button type="primary">更新生成时间</a-button>
-</div>
+    <a-button v-if="isInPermission('business_jobproject_add')" type="primary" @click="isShow = true;">更新生成时间</a-button>
+    <SetModal v-if="isShow" @modal-cancel="isShow = false"></SetModal>
+  </div>
 </template>
 <script>
+import {isInPermission} from '@/utils/common.js'
+import SetModal from './SetModal'
+
 export default {
   name: 'NoData',
+  components: {SetModal},
   data() {
-    return {}
+    return {
+      isShow: false
+    }
   },
-  methods: {}
+  methods: {isInPermission}
 }
 </script>
 <style lang="scss" scoped>

@@ -118,7 +118,7 @@
 </template>
 
 <script>
-  import Modal from '@/components/Modal.vue'
+  import Modal from '@/components/Modal/Modal.vue'
   import UserSelect from "@/components/business/UserSelect";
   import PrioritySelect from "@/components/business/PrioritySelect";
   import TwoValue from "@/components/business/TwoValue";

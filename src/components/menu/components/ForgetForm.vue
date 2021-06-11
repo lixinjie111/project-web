@@ -14,7 +14,7 @@
   </Modal>
 </template>
 <script>
-import Modal from '@/components/Modal.vue'
+import Modal from '@/components/Modal/Modal.vue'
 export default {
   name: 'ForgetForm',
   components: {Modal},

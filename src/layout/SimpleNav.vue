@@ -12,6 +12,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .layout {
-  height: 100vh;
+  height: 100%;
 }
 </style>
