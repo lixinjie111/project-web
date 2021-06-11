@@ -6,11 +6,11 @@
         <div class="project-home-container">
             <ContentHeader type="title" title="项目">
                 <div slot="operation">
-                    <a-button class="export-btn mr-16">
+                    <a-button class="export-btn mr-16" v-if="isInPermission('business_project_view')">
                         <span class="iconfont icondaochu"></span>
                         导出
                     </a-button>
-                    <a-button type="primary" @click="handleAdd">
+                    <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_project_add')">
                         <span class="iconfont iconjia"></span>
                         添加项目
                     </a-button>
@@ -35,6 +35,7 @@
     import Modal from '@/components/Modal.vue'
     import AddForm from "./components/addForm";
     import {formatDate} from '@/utils/common.js'
+    import {isInPermission} from '@/utils/common.js';
 
     export default {
         name: 'home',
@@ -87,6 +88,7 @@
             this.getProductList();
         },
         methods: {
+            isInPermission,
             // 重置列表
             resetList() {
                 this.getProjectCount();

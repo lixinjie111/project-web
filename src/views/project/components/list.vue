@@ -17,13 +17,13 @@
             </div>
             <div slot="action" slot-scope="data" class="table-action">
                 <!--未开始的可以开始，搁置的不能搁置，完成的的不能完成、删除、搁置-->
-                <IconToolTip iconName="iconbofang" :disabled="data.row.status > 0" content="开始" @action="handleStart(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconbofang" :disabled="data.row.status > 0" content="开始" @action="handleStart(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
                 <!--<IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay(data.row)"></IconToolTip>-->
-                <IconToolTip iconName="iconzanting" :disabled="data.row.status == 2 || data.row.status == 4" content="搁置" @action="handlePause(data.row)"></IconToolTip>
-                <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 2" content="完成" @action="handleFinish(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconzanting" :disabled="data.row.status == 2 || data.row.status == 4" content="搁置" @action="handlePause(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
+                <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 2" content="完成" @action="handleFinish(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
                 <a-divider type="vertical" />
-                <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
-                <IconToolTip iconName="iconshanchu" :disabled="data.row.status == 2" content="删除" @action="handleDel(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)" v-if="isInPermission('business_project_edit')"></IconToolTip>
+                <IconToolTip iconName="iconshanchu" :disabled="data.row.status == 2" content="删除" @action="handleDel(data.row)" v-if="isInPermission('business_project_del')"></IconToolTip>
             </div>
         </ListTable>
         <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
@@ -50,6 +50,7 @@
     import AddForm from "./addForm";
     import RemarkForm from "./remarkForm";
     import {formatDate} from '@/utils/common.js'
+    import {isInPermission} from '@/utils/common.js';
 
     export default {
         name: "list",
@@ -138,6 +139,7 @@
             }
         },
         methods: {
+            isInPermission,
             // 设置不同项目状态的颜色
             statusColor(status) {
                 switch (status) {
