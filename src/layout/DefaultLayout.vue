@@ -23,6 +23,7 @@ export default {
 .main-container{
     position: relative;
     display: flex;
+    height: 100%;
     // overflow: hidden;
     .sider-container{
         position: fixed;
@@ -37,9 +38,10 @@ export default {
         min-width: 1360px;
         width: calc(100vw - 80px);
         min-width: 1360px;
-        height: 100vh;
-        overflow-x: auto;
-        background: #F4F7FC;;
+        height: 100%;
+        max-height: 100%;
+        overflow: auto;
+        background: #F4F7FC;
     }
 }
 </style>

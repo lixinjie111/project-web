@@ -89,7 +89,59 @@ export function handlePutDeliverableStatus(id, status) {
 export function handlePutProjectDeliverable(data){
   return httpaxios.put('/business/projectDeliverable', {data})
 }
-
+/**
+ * 查询设置
+ * @returns
+ */
+export function handleGetSetList(){
+  return httpaxios.get('/business/jobProject/list', {})
+}
+/**
+ * 修改常规周报设置
+ * @param {*} data
+ * {
+ *    "hour": 10,
+ *    "id": 1,
+ *    "minute": 10,
+ *    "week": "MON"
+ *  }
+ * @returns
+ */
+export function handlePostRegular(data) {
+  return httpaxios.post('/business/jobProject/addWeek', {data})
+}
+/**
+ * 新增及修改自定义时间
+ * @param {*} data
+ * {
+ *    "dateTime": "2021-03-02 01:00:00",
+ *    "id": 1
+ * }
+ * @returns
+ */
+export function handlePostTime(data) {
+  return httpaxios.post('/business/jobProject/addTime', {data})
+}
+/**
+ * 删除自定义设置
+ * @param {*} jobId 设置id
+ * @returns
+ */
+export function handleDelSetTime(jobId){
+  return httpaxios.delete(`/business/jobProject/${jobId}`)
+}
+/**
+ * 已归档列表
+ * @param {*} params
+ * current 当前页码
+ * size 每页展示数量
+ * beginTime
+ * endTime
+ * @returns
+ */
+export function handleGetArchiveList(params){
+  return httpaxios.get('/business/archive/page', {params})
+}
 
 /**
  * 获取重点项目列表
@@ -97,7 +149,6 @@ export function handlePutProjectDeliverable(data){
 export function getKeyProjectList() {
   return httpaxios.get('/business/projectVipWeek/list',{})
 }
-
 
 /**
  * 修改重点项目信息

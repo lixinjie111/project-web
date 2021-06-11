@@ -7,28 +7,31 @@
                 </a-radio-group>
             </div>
             <div>
-                <FlatButton>
+                <FlatButton v-if="isInPermission('business_jobproject_add')" @click="handleSet">
                     设置
                     <MyIcon slot="icon" name="iconshezhi"/>
                 </FlatButton>
-                <a-divider type="vertical" />
-                <FlatButton>
+                <a-divider type="vertical" v-if="isInPermission('business_jobproject_add') && isInPermission('')"/>
+                <FlatButton v-if="isInPermission('')">
                     归档
                     <MyIcon slot="icon" name="iconwendangjiazi"/>
                 </FlatButton>
             </div>
         </div>
         <router-view></router-view>
+        <SetModal v-if="isShow" @modal-cancel="isShow = false"></SetModal>
     </div>
 </template>
 
 <script>
+    import {isInPermission} from '@/utils/common.js'
     import FlatButton from '@/components/buttons/FlatButton';
     import MyIcon from "@/components/others/MyIcon";
+    import SetModal from './notarchive/components/SetModal'
 
     export default {
         name: "notarchive",
-        components: { FlatButton, MyIcon},
+        components: { FlatButton, MyIcon, SetModal},
         data(){
             return {
                 val: '',
@@ -37,15 +40,20 @@
                     {name: '重点项目', type: 'project'},
                     {name: '月度计划', type: 'plan'},
                     {name: '月度交付物验收', type: 'deliverables'}
-                ]
+                ],
+                isShow: false
             }
         },
         methods: {
+            isInPermission,
             handelChange(e) {
                 this.$router.push({
                     path: `/report/notarchive/${e.target.value}`,
                     query: {}
                 })
+            },
+            handleSet(){
+                this.isShow = true;
             }
         },
         beforeRouteEnter(to, from, next) {

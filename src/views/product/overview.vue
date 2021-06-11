@@ -53,7 +53,7 @@
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
-    import Modal from '@/components/Modal.vue'
+    import Modal from '@/components/Modal/Modal.vue'
     import AddForm from "./components/addForm";
     import closeForm from "./components/closeForm";
     import {isInPermission} from '@/utils/common.js';

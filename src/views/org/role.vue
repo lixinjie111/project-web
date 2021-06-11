@@ -15,17 +15,17 @@
       <Pagination v-if="total > pageSize" :total="total" :curPageNum="curPageNum" :pageSize="pageSize" @pagination-change-pagesize="handleChangePageSize" @pagination-change-page="handleChangePage"></Pagination>
     </div>
     <Modal width="400" :isShow="isShowModal" :title="modalTitle" :okText="okText" :cancelText="cancelText" @modal-sure="handleSubmit" @modal-cancel="handleCancel">
-        <a-form-model slot="content" ref="roleForm" class="role-form" layout="vertical" :model="form" :rules="rules">
-          <a-form-model-item label="分组名称" prop="roleName">
-            <a-input v-model="form.roleName" placeholder="" />
-          </a-form-model-item>
-        </a-form-model>
-      </Modal>
+      <a-form-model slot="content" ref="roleForm" class="role-form" layout="vertical" :model="form" :rules="rules">
+        <a-form-model-item label="分组名称" prop="roleName">
+          <a-input v-model="form.roleName" placeholder="" />
+        </a-form-model-item>
+      </a-form-model>
+    </Modal>
   </div>
 </template>
 <script>
 import BasicTable from '@/components/tables/BasicTable.vue'
-import Modal from '@/components/Modal.vue'
+import Modal from '@/components/Modal/Modal.vue'
 import {isInPermission} from '@/utils/common.js'
 export default {
   name: 'roleorg',

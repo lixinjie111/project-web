@@ -46,7 +46,7 @@
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
-    import Modal from '@/components/Modal.vue'
+    import Modal from '@/components/Modal/Modal.vue'
     import AddForm from "./addForm";
     import RemarkForm from "./remarkForm";
     import {formatDate} from '@/utils/common.js'
