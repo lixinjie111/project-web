@@ -21,7 +21,7 @@
                 <!--<IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay(data.row)"></IconToolTip>-->
                 <IconToolTip iconName="iconzanting" :disabled="data.row.status == 2 || data.row.status == 4" content="搁置" @action="handlePause(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
                 <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 2" content="完成" @action="handleFinish(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
-                <a-divider type="vertical" />
+                <a-divider type="vertical" v-if="isInPermission('business_product_operate')"/>
                 <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)" v-if="isInPermission('business_project_edit')"></IconToolTip>
                 <IconToolTip iconName="iconshanchu" :disabled="data.row.status == 2" content="删除" @action="handleDel(data.row)" v-if="isInPermission('business_project_del')"></IconToolTip>
             </div>

@@ -59,7 +59,7 @@
                                 return [
                                     <div class="table-time">
                                         <span>{row.endTime}</span>
-                                        <IconToolTip iconName="iconzhuyi" content="已变更" v-if="{row.changeFlag}"></IconToolTip>
+                                        {row.changeFlag ? <IconToolTip iconName="iconzhuyi" content="已变更"></IconToolTip> : null}
                                     </div>
                                 ]
                             }
@@ -71,7 +71,7 @@
                         width: 120,
                         slots: {
                             default: ({row}) => {
-                                row.progress = /(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress;
+                                row.progress = Number(/(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress);
                                 return [
                                     <a-progress percent={row.progress} size="small"/>
                                 ]
@@ -114,7 +114,6 @@
             }
         },
         methods: {
-            isInPermission,
             async handleEdit(data) {
                 try {
                     let {code} = await this.$api.report.editKeyProject(data);
