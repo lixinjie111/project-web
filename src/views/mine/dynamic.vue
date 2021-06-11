@@ -32,7 +32,7 @@
         methods: {
             // 切换条目数量
             handleChangePageSize(pageSize,pageNum) {
-                this.pageSize = pageSize;
+                this.pageSize = Number(pageSize);
                 if (pageNum) this.curPageNum = pageNum;
                 this.getMyDynamicStates();
             },
