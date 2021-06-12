@@ -43,9 +43,9 @@
     <TreeTable :columns="tableColumns" :data-source="tableData" v-if="viewType===0" :current-page="page" :total="total" :page-size="pageSize" @pageChange="handlePageChange"/>
     <!-- 看板 -->
     <div class="board" v-else>
-      <div class="group">
+      <div class="group" :class="{droparea: dragging}">
         <div class="name">未开始</div>
-        <draggable v-model="status0" group="site">
+        <draggable v-model="status0" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status0" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
@@ -57,9 +57,9 @@
         <a-button @click="handleCreate(0)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
-      <div class="group">
+      <div class="group" :class="{droparea: dragging}">
         <div class="name">进行中</div>
-        <draggable v-model="status1" group="site">
+        <draggable v-model="status1" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status1" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
@@ -71,9 +71,9 @@
         <a-button @click="handleCreate(1)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
-      <div class="group">
+      <div class="group" :class="{droparea: dragging}">
         <div class="name">已完成</div>
-        <draggable v-model="status2" group="site">
+        <draggable v-model="status2" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status2" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
@@ -85,9 +85,9 @@
         <a-button @click="handleCreate(2)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
-      <div class="group">
+      <div class="group" :class="{droparea: dragging}">
         <div class="name">已延期</div>
-        <draggable v-model="status3" group="site">
+        <draggable v-model="status3" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status3" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
@@ -99,9 +99,9 @@
         <a-button @click="handleCreate(3)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
-      <div class="group">
+      <div class="group" :class="{droparea: dragging}">
         <div class="name">已搁置</div>
-        <draggable v-model="status4" group="site">
+        <draggable v-model="status4" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
@@ -126,7 +126,14 @@
   import TaskAdd from "./components/add";
   import TaskEdit from "./components/edit";
   import draggable from 'vuedraggable';
-  import {addProjectMember, changeTaskStatus, deleteTask, getProjectBoard, getTaskList} from "@/api/task";
+  import {
+    addProjectMember,
+    changeTaskStatus,
+    deleteTask,
+    getMyProjectList,
+    getProjectBoard,
+    getTaskList
+  } from "@/api/task";
   import {taskTypes} from "@/const/data";
   import moment from "moment";
   import BasicTabs from "@/components/tabs/BasicTabs";
@@ -164,6 +171,7 @@
             }
           },);
       }
+      let projectId = parseInt(this.$router.currentRoute.query.id)
       return {
         page: 1,
         pageSize: 10,
@@ -194,7 +202,7 @@
             status: 'weeklyShow'
           },
         ],
-        projectId: 9393939,
+        projectId,
         editTaskId: 0,
         tableData: [],
         tableColumns: [
@@ -275,7 +283,7 @@
             title: '计划开始',
           },
           {
-            dataIndex: 'beginTime',
+            dataIndex: 'endTime',
             title: '计划结束',
           },
           {
@@ -295,6 +303,7 @@
         queryType: 'all',
         viewTypes: ['列表', '看板'],
         curStatus: 0, // 默认创建任务的状态
+        dragging: false,  // 正在拖拽
       }
     },
     props: {
@@ -375,6 +384,7 @@
     },
     mounted() {
       this.getTableList();
+      this.loadMyProjectList();
       // getProjectList().then(res => {}).catch(e => {});
       this.$store.dispatch('projectMemberList', this.projectId);
       // addProjectMember(9393939, [
@@ -431,6 +441,18 @@
           this.getTableList();
         }
       },
+      loadMyProjectList() {
+        getMyProjectList().then(res => {
+          if (res.code === 0 && res.data) {
+            this.projectList = res.data.records.map(item => {
+              return {
+                key: item.id,
+                label: item.projectName,
+              }
+            })
+          }
+        }).catch(err => {});
+      },
       handleViewType(e) {
         // console.log('test', e)
         this.curStatus = 0;
@@ -486,6 +508,14 @@
         this.projectId = projectId;
         this.loadCurrentList();
         this.$store.dispatch('projectMemberList', this.projectId);
+      },
+      handleDragStart(e) {
+        // console.log('handleDragStart', e)
+        this.dragging = true;
+      },
+      handleDragEnd(e) {
+        // console.log('handleDragEnd', e)
+        this.dragging = false;
       },
     }
   }
@@ -564,6 +594,14 @@
   .board {
     display: flex;
     padding: 8px;
+
+    .droparea {
+      >div {
+        > span {
+          min-height: 118px;
+        }
+      }
+    }
     .group {
       margin: 8px;
       width: 264px;
@@ -572,7 +610,7 @@
           width: 100%;
           height: 100%;
           display: inline-block;
-          min-height: 118px;
+          margin-top: 12px;
         }
       }
       .name {

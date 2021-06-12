@@ -105,3 +105,12 @@ export function addProjectMember(projectId, arr) {
     data: arr
   })
 }
+
+export function getMyProjectList() {
+  return httpaxios.get('/business/project/myPage', {
+    params: {
+      current: 1,
+      size: 1000,
+    }
+  })
+}
