@@ -5,7 +5,7 @@
           <div>{{form.taskName}}
           </div>
         </ToggleInput>
-        <a-checkbox :value="form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)">在周报中显示</a-checkbox>
+        <a-checkbox :checked="form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)">在周报中显示</a-checkbox>
       </div>
       <a-row :gutter="[16, 16]">
         <a-col :span="6"><StatusSelect :value="form.status" @change="val => handleSave('status', val)"/></a-col>
@@ -77,7 +77,7 @@
             <i class="iconfont iconzirenwu"></i>子任务
           </span>
           <a-row :gutter="[16, 16]">
-            <a-col span="20">共 {{form.childrenList.length}} 个子任务</a-col>
+            <a-col span="20">共 {{childrenList.length}} 个子任务</a-col>
             <a-col span="4">
               <FlatButton @click="handleCreateChildTask">
                 添加子任务
@@ -86,8 +86,11 @@
             </a-col>
           </a-row>
           <div>
-            <div v-for="child in form.childrenList" :key="child.id">
-              <toggle-input>{{child.taskName}}</toggle-input>
+            <div v-for="child in childrenList" :key="child.id">
+              <a @click="handleEditChild(child)">{{child.taskName}}</a>
+            </div>
+            <div v-if="createChild">
+              <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
             </div>
           </div>
           <div>
@@ -136,7 +139,7 @@
   import FlatButton from "@/components/buttons/FlatButton";
   import ToggleInput from "@/components/forms/ToggleInput";
   import {taskTypes} from "@/const/data";
-  import {getTaskDetail, saveTask} from "@/api/task";
+  import {createChildTask, getTaskDetail, saveTask} from "@/api/task";
   import moment from "moment";
 
   export default {
@@ -169,6 +172,9 @@
         types: taskTypes.map((label, key) => {
           return {label, key}
         }),
+        createChild: false,
+        childTaskName: '',
+        childrenList: [],
       }
     },
     watch: {
@@ -211,7 +217,22 @@
         this.$emit('cancel');
       },
       handleCreateChildTask() {
-        this.$emit('create-child');
+        // this.$emit('create-child');
+        // this.form.childrenList.push({id: -1, taskName: ''});
+        this.childTaskName = '';
+        this.createChild = true;
+      },
+      handleEditChild(child) {
+        this.$emit('edit', child.id)
+      },
+      handleCreateChild() {
+        this.createChild = false;
+        createChildTask(this.projectId, this.taskId, this.childTaskName).then(res => {
+          if (res.code === 0 && res.data) {
+            this.childrenList.push({id: res.data, taskName: this.childTaskName});
+            // this.$set(this.form, 'childrenList', [...this.form.childrenList]);
+          }
+        }).catch(err => {});
       },
       saveData(data) {
         for (let key in data) {
@@ -235,6 +256,9 @@
           if (res.code === 0 && res.data) {
             this.form = res.data;
             this.form.incharge = res.data.taskMaster[0];
+            if (this.form.childrenList) {
+              this.childrenList = this.form.childrenList;
+            }
           }
         }).catch(err => {});
       },
