@@ -114,3 +114,12 @@ export function getMyProjectList() {
     }
   })
 }
+
+/**
+ * 通过id删除附件
+ * @param id
+ * @returns {*}
+ */
+export function deleteAttachment(id) {
+  return httpaxios.delete('/business/attachment/' + id)
+}

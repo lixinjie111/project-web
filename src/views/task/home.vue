@@ -115,7 +115,7 @@
 
     </div>
     <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="projectId" :status="curStatus" />
-    <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" @create-child="handleCreate" :project-id="projectId" />
+    <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" @create-child="handleCreate" :project-id="projectId" @editChild="handleEditChild" />
   </div>
 </template>
 
@@ -179,14 +179,14 @@
         canCreate: isInPermission('business_task_add'),
         canExport: isInPermission('business_task_view'),
         projectList: [
-          {
-            key: 25,
-            label: 'test 25'
-          },
-          {
-            key: 9393939,
-            label: '秀梅苯肼基材'
-          },
+          // {
+          //   key: 25,
+          //   label: 'test 25'
+          // },
+          // {
+          //   key: 9393939,
+          //   label: '秀梅苯肼基材'
+          // },
         ],
         tabList: [
           {
@@ -517,6 +517,13 @@
         // console.log('handleDragEnd', e)
         this.dragging = false;
       },
+      handleEditChild(taskId) {
+        this.showEdit = false;
+        this.$nextTick( () => {
+          this.showEdit = true;
+          this.editTaskId = taskId;
+        });
+      }
     }
   }
 </script>

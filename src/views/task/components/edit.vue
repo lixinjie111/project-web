@@ -1,5 +1,15 @@
 <template>
-  <a-modal :visible="isShow" :width="980" :maskClosable="false" :footer="null" title="任务编辑" @cancel="handleCancel" centered>
+  <a-modal :visible="isShow" :width="980" :maskClosable="false" :footer="null" @cancel="handleCancel" centered>
+    <template slot="title">
+      <i class="iconfont iconxiezuo"></i>
+      编辑任务
+      <span v-if="!this.form.childrenList">
+        <i class="iconfont iconyou2"></i>
+        <a @click="handleBackParent">返回上级</a>
+        <a-divider type="vertical" />
+        {{form.taskName}}
+      </span>
+    </template>
       <div class="title-row">
         <ToggleInput v-model="form.taskName" overClass="title" @commit="saveData({taskName: form.taskName})">
           <div>{{form.taskName}}
@@ -86,8 +96,12 @@
             </a-col>
           </a-row>
           <div>
-            <div v-for="child in childrenList" :key="child.id">
+            <div v-for="child in childrenList" :key="child.id" class="child-item">
               <a @click="handleEditChild(child)">{{child.taskName}}</a>
+              <div>
+                <i class="iconfont iconxiezuo" @click="handleEditChild(child)"></i>
+                <i class="iconfont iconshanchu" @click="handleDeleteChild(child)"></i>
+              </div>
             </div>
             <div v-if="createChild">
               <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
@@ -104,12 +118,34 @@
           <a-row :gutter="[16, 16]">
             <a-col span="20">共 0 个附件</a-col>
             <a-col span="4">
-              <FlatButton @click="handleUpload">
-                添加附件
-                <MyIcon slot="icon" name="iconjia" type="main"/>
-              </FlatButton>
+              <a-upload
+                  name="file"
+                  multiple
+                  :showUploadList="false"
+                  :action="uploadUrl"
+                  :headers="uploadHeaders"
+                  :data="uploadData"
+                  @change="handleUpload"
+                  :before-upload="handleBeforeUpload"
+              >
+                <FlatButton>
+                  添加附件
+                  <MyIcon slot="icon" name="iconjia" type="main"/>
+                </FlatButton>
+              </a-upload>
             </a-col>
           </a-row>
+          <div>
+            <div v-for="child in attachment" :key="child.id" class="child-item">
+              <a target="_blank" :href="`download?id=${child.id}`">{{child.name}}</a>
+              <div>
+                <i class="iconfont iconshanchu" @click="handleDeleteAttachment(child)"></i>
+              </div>
+            </div>
+            <div v-if="createChild">
+              <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
+            </div>
+          </div>
           <div>
             <a-divider></a-divider>
           </div>
@@ -139,8 +175,9 @@
   import FlatButton from "@/components/buttons/FlatButton";
   import ToggleInput from "@/components/forms/ToggleInput";
   import {taskTypes} from "@/const/data";
-  import {createChildTask, getTaskDetail, saveTask} from "@/api/task";
+  import {createChildTask, deleteAttachment, deleteTask, getTaskDetail, saveTask} from "@/api/task";
   import moment from "moment";
+  import { message } from 'x-intelligent-ui'
 
   export default {
     name: "TaskEdit",
@@ -175,6 +212,8 @@
         createChild: false,
         childTaskName: '',
         childrenList: [],
+        attachment: [{id: 1, name: '12312312.jpg'}],
+        uploadUrl: '/api/business/attachment/file/uploadAndSave',
       }
     },
     watch: {
@@ -185,7 +224,19 @@
     computed: {
       memberList() {
         return this.$store.state.task.memberList;
-      }
+      },
+      uploadData() {
+        return {
+          projectId: this.projectId,
+          taskId: this.taskId,
+        }
+      },
+      uploadHeaders() {
+        let token = this.$store.state.users.accessToken;
+        return {
+          Authorization: `Bearer ${token}`
+        }
+      },
     },
     methods: {
       handleSave(key, value) {
@@ -223,14 +274,27 @@
         this.createChild = true;
       },
       handleEditChild(child) {
-        this.$emit('edit', child.id)
+        this.$emit('editChild', child.id)
+      },
+      handleDeleteChild(child) {
+        deleteTask(child.id).then(res => {
+          if (res.code === 0 && res.data) {
+            this.childrenList.splice(this.childrenList.indexOf(child), 1);
+          }
+        }).catch(err => {})
+      },
+      handleDeleteAttachment(child) {
+        deleteAttachment(child.id).then(res => {
+          if (res.code === 0 && res.data) {
+            this.attachment.splice(this.attachment.indexOf(child), 1);
+          }
+        }).catch(err => {})
       },
       handleCreateChild() {
         this.createChild = false;
         createChildTask(this.projectId, this.taskId, this.childTaskName).then(res => {
           if (res.code === 0 && res.data) {
-            this.childrenList.push({id: res.data, taskName: this.childTaskName});
-            // this.$set(this.form, 'childrenList', [...this.form.childrenList]);
+            this.childrenList = this.childrenList.concat({id: res.data, taskName: this.childTaskName});
           }
         }).catch(err => {});
       },
@@ -255,9 +319,12 @@
         getTaskDetail(this.taskId).then(res => {
           if (res.code === 0 && res.data) {
             this.form = res.data;
-            this.form.incharge = res.data.taskMaster[0];
+            this.form.incharge = res.data.taskMaster ? res.data.taskMaster[0] : null;
             if (this.form.childrenList) {
               this.childrenList = this.form.childrenList;
+            }
+            if (this.form.attachment) {
+              this.attachment = this.form.attachment;
             }
           }
         }).catch(err => {});
@@ -265,8 +332,25 @@
       saveDescription() {
         this.saveData({taskDescription: this.form.taskDescription});
       },
-      handleUpload() {
+      handleUpload({file}) {
+        console.log(file)
+        if (file.status === 'done' && file.response.code === 0)
+          this.attachment = this.attachment.concat({id: file.response.data, name: file.name})
+        else if (file.status === 'error') {
+          message.error(file.name + '上传失败')
+        }
       },
+      handleBeforeUpload(file) {
+        console.log(file)
+        if (file.size > 100*1024*1024) {
+          message.error(file.name + '超过100M，不允许上传');
+          return false;
+        }
+        return true;
+      },
+      handleBackParent() {
+        this.$emit('parent');
+      }
     },
   }
 </script>
@@ -284,6 +368,21 @@
 .ant-tabs {
   width: 100%;
 }
+  .child-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    .iconfont {
+      margin-right: 12px;
+      cursor: pointer;
+    }
+    .iconxiezuo {
+      color: #1470FF;
+    }
+    .iconshanchu {
+      color: #FF4C60;
+    }
+  }
 </style>
 <style lang="scss">
   .title-row {
