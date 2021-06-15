@@ -1,9 +1,17 @@
 <template>
     <div class="project-list-container">
         <div class="header">重点项目</div>
-        <Collapse :title="item.title" v-for="(item,index) in list" :key="index">
-            <BasicTable :tableData="item.children" :setTableColumns="setTableColumns"></BasicTable>
-        </Collapse>
+        <template v-if="list.length">
+            <Collapse :title="item.title" v-for="(item,index) in list" :key="index">
+                <BasicTable :tableData="item.children" :setTableColumns="setTableColumns"></BasicTable>
+            </Collapse>
+        </template>
+        <template v-else>
+            <div class="no-data">
+                <img src="@/assets/images/report/no-data.png" />
+                <div class="title">暂无重点项目</div>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -183,6 +191,29 @@
                     color: #FF4C60;
                     vertical-align: -1px;
                 }
+            }
+        }
+
+        .no-data {
+            padding: 64px 0;
+            text-align: center;
+            background: #FFFFFF;
+            border-radius: 4px;
+            border: 1px solid #EAEDF7;
+
+            > img {
+                margin: 0 auto;
+                width: 102px;
+                height: 102px;
+            }
+
+            .title {
+                height: 50px;
+                font-size: 14px;
+                font-family: PingFangSC-Regular, PingFang SC;
+                font-weight: 400;
+                color: #7C88B1;
+                line-height: 50px;
             }
         }
     }
