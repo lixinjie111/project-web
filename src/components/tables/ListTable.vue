@@ -21,20 +21,18 @@
             </div>
         </template>
         <template v-else>
-            <div class="no-data">
-                <img src="@/assets/images/report/no-data.png" />
-                <div class="title">暂无数据</div>
-            </div>
+            <NoData title="暂无数据"></NoData>
         </template>
     </div>
 </template>
 
 <script>
     import TextToolTip from "../tooltip/TextToolTip";
+    import NoData from "../others/NoData";
 
     export default {
         name: "ListTable",
-        components: {TextToolTip},
+        components: {NoData, TextToolTip},
         props: {
             // 表格列名
             columns: {
@@ -103,29 +101,6 @@
                     padding-right: 0;
                     border-right: none;
                 }
-            }
-        }
-
-        .no-data {
-            padding: 64px 0;
-            text-align: center;
-            background: #FFFFFF;
-            border-radius: 4px;
-            border: 1px solid #EAEDF7;
-
-            > img {
-                margin: 0 auto;
-                width: 102px;
-                height: 102px;
-            }
-
-            .title {
-                height: 50px;
-                font-size: 14px;
-                font-family: PingFangSC-Regular, PingFang SC;
-                font-weight: 400;
-                color: #7C88B1;
-                line-height: 50px;
             }
         }
     }

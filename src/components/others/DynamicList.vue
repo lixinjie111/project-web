@@ -1,16 +1,23 @@
 <template>
     <div class="dynamic-list">
-        <div class="dynamic-item" v-for="(item,index) in list" :key="index">
-            <div class="time">{{item.createdTime}}</div>
-            <div class="info">{{item.userName}} {{item.log}}</div>
-        </div>
-        <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
+        <template v-if="list.length">
+            <div class="dynamic-item" v-for="(item,index) in list" :key="index">
+                <div class="time">{{item.createdTime}}</div>
+                <div class="info">{{item.userName}} {{item.log}}</div>
+            </div>
+            <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
+        </template>
+        <template v-else>
+            <NoData title="暂无动态"></NoData>
+        </template>
     </div>
 </template>
 
 <script>
+    import NoData from "./NoData";
     export default {
         name: "DynamicList",
+        components: {NoData},
         props: {
             list: {
                 type: Array,

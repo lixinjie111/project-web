@@ -7,10 +7,7 @@
             </Collapse>
         </template>
         <template v-else>
-            <div class="no-data">
-                <img src="@/assets/images/report/no-data.png" />
-                <div class="title">暂无重点项目</div>
-            </div>
+            <NoData title="暂无重点项目"></NoData>
         </template>
     </div>
 </template>
@@ -22,10 +19,11 @@
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import Collapse from "@/components/collapse/Collapse";
     import {isInPermission} from '@/utils/common.js';
+    import NoData from "@/components/others/NoData";
 
     export default {
         name: "project",
-        components: {Collapse, TextToolTip, IconToolTip, Status, BasicTable},
+        components: {NoData, Collapse, TextToolTip, IconToolTip, Status, BasicTable},
         props: {
             list: {
                 type: Array,
@@ -191,29 +189,6 @@
                     color: #FF4C60;
                     vertical-align: -1px;
                 }
-            }
-        }
-
-        .no-data {
-            padding: 64px 0;
-            text-align: center;
-            background: #FFFFFF;
-            border-radius: 4px;
-            border: 1px solid #EAEDF7;
-
-            > img {
-                margin: 0 auto;
-                width: 102px;
-                height: 102px;
-            }
-
-            .title {
-                height: 50px;
-                font-size: 14px;
-                font-family: PingFangSC-Regular, PingFang SC;
-                font-weight: 400;
-                color: #7C88B1;
-                line-height: 50px;
             }
         }
     }
