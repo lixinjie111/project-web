@@ -4,7 +4,7 @@
             <div slot="nav-left" class="nav-left-title">我的工作台</div>
         </MenuNav>
         <div class="mine-task-container">
-            project
+            task
         </div>
     </div>
 </template>

@@ -109,3 +109,15 @@ export function closeProject(id, remark){
 export function getProjectDetail(id) {
     return httpaxios.get(`/business/project/${id}`, {})
 }
+
+/**
+ * 导出产品信息
+ * @param {*} status 状态
+ * @returns
+ */
+export function exportProject(status) {
+    return httpaxios.get('/business/export/project', {
+        params: {status},
+        responseType: 'blob'
+    })
+}

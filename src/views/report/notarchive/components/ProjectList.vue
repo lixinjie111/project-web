@@ -1,9 +1,14 @@
 <template>
     <div class="project-list-container">
         <div class="header">重点项目</div>
-        <Collapse :title="item.title" v-for="(item,index) in list" :key="index">
-            <BasicTable :tableData="item.children" :setTableColumns="setTableColumns"></BasicTable>
-        </Collapse>
+        <template v-if="list.length">
+            <Collapse :title="item.title" v-for="(item,index) in list" :key="index">
+                <BasicTable :tableData="item.children" :setTableColumns="setTableColumns"></BasicTable>
+            </Collapse>
+        </template>
+        <template v-else>
+            <NoData title="暂无重点项目"></NoData>
+        </template>
     </div>
 </template>
 
@@ -14,10 +19,11 @@
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import Collapse from "@/components/collapse/Collapse";
     import {isInPermission} from '@/utils/common.js';
+    import NoData from "@/components/others/NoData";
 
     export default {
         name: "project",
-        components: {Collapse, TextToolTip, IconToolTip, Status, BasicTable},
+        components: {NoData, Collapse, TextToolTip, IconToolTip, Status, BasicTable},
         props: {
             list: {
                 type: Array,

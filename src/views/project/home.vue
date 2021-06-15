@@ -6,7 +6,7 @@
         <div class="project-home-container">
             <ContentHeader type="title" title="项目">
                 <div slot="operation">
-                    <a-button class="export-btn mr-16" v-if="isInPermission('business_project_view')">
+                    <a-button class="export-btn mr-16" @click="handleExport" v-if="isInPermission('business_project_view')">
                         <span class="iconfont icondaochu"></span>
                         导出
                     </a-button>
@@ -195,6 +195,22 @@
             // 添加项目取消
             handleAddCancel() {
                 this.showAddModal = false;
+            },
+            // 导出项目excel
+            handleExport() {
+                try {
+                    this.$api.project.exportProject(this.curStatus).then((res)=>{
+                        let blob = new Blob([res], {type: "application/vnd.ms-excel"});
+                        let url = window.URL.createObjectURL(blob);
+                        let a = document.createElement("a");
+                        a.href = url;
+                        a.download = "导出表格.xlsx";
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    });
+                }catch(error){
+                    console.log(error)
+                }
             }
         }
     }

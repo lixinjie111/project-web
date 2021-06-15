@@ -11,5 +11,6 @@ export default {
 <style lang="scss" scoped>
 .empty-layout {
   width: 100%;
+  overflow: hidden;
 }
 </style>
