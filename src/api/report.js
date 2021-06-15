@@ -162,3 +162,11 @@ export function getKeyProjectList() {
 export function editKeyProject(data){
   return httpaxios.put('/business/projectVipWeek', {data})
 }
+
+/**
+ * 获取项目设置列表
+ * @returns 
+ */
+export function handleGetVipWeekList(){
+  return httpaxios.get('/business/projectVipWeek/getAll')
+}

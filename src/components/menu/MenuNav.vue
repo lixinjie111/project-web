@@ -27,9 +27,12 @@ export default {
   },
   methods: {
     handleChangePage(index) {
-      this.$store.dispatch('activeNavMenu', this.navlist[index])
+      this.$store.dispatch('activeNavMenu', this.navlist[index]);
+      let {params, query} = this.$route;
       this.$router.push({
-        path: this.activeNavMenu.path
+        path: this.activeNavMenu.path,
+        params, 
+        query
       });
     }
   },

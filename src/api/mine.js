@@ -11,3 +11,12 @@ export function getMineProjectList(current, size) {
         params: {current, size}
     })
 }
+
+/**
+ * 修改用户密码
+ * @param {*} form 
+ * @returns 
+ */
+export function handlePutPassWord(form){
+    return httpaxios.put('/admin/user/edit/password', {data: form})
+}

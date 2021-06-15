@@ -17,7 +17,7 @@
         </template>
         <div class="menu-setup iconfont iconshezhi"></div>
       </a-popover>
-      <div class="menu-user"></div>
+      <div class="menu-user">{{username.substring(username.length-2, username.length)}}</div>
     </div>
     <ForgetForm :isShow="isShowModal" @closePwd="isShowModal = false"></ForgetForm>
   </div>
@@ -33,6 +33,7 @@ export default {
     return {
       visible: false,
       isShowModal: false,
+      username: this.$store.state.users.userInfo.username
     }
   },
   computed: {
@@ -101,7 +102,7 @@ export default {
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: white;
+      background: url('../../assets/images/logo.png') 100% / 100% no-repeat;
     }
   }
   .menu-list {
@@ -152,9 +153,16 @@ export default {
       margin: 25px auto 24px auto;
       width: 40px;
       height: 40px;
+      line-height: 38px;
+      text-align: center;
       border-radius: 50%;
-      background: white;
-      cursor: pointer;
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #FFFFFF;
+      background: #75B1FF;
+      border: 1px solid #FFF;
+      // cursor: pointer;
     }
   }
 }

@@ -66,7 +66,7 @@ export default {
                     slots: {
                         default: ({row}) => {
                             return [
-                                <span>{row.deliverableTitle}</span>
+                                <a class="table-report" href={row.deliverable}><span>{row.deliverableTitle}</span></a>
                             ]
                         }
                     }
@@ -199,16 +199,8 @@ export default {
             vertical-align: middle;
         }
     }
-    .table-time {
-        .icon-tooltip {
-            margin-left: 5px;
-            display: inline-block;
-
-            /deep/ .iconfont {
-                color: #FF4C60;
-                vertical-align: -1px;
-            }
-        }
+    .table-report {
+        color: #0064FF;
     }
 }
 </style>
