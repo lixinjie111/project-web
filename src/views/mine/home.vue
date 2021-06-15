@@ -4,7 +4,6 @@
             <div slot="nav-left" class="nav-left-title">我的工作台</div>
         </MenuNav>
         <div class="mine-home-container">
-<!--            我的重点项目接口未联调-->
             <ProjectList :list="tableData"></ProjectList>
         </div>
     </div>
@@ -22,13 +21,13 @@
             }
         },
         created() {
-            this.getKeyProjectList();
+            this.getMyKeyProjectList();
         },
         methods: {
             // 获取重点项目列表
-            async getKeyProjectList(){
+            async getMyKeyProjectList(){
                 try {
-                    let {code, data} = await this.$api.report.getKeyProjectList();
+                    let {code, data} = await this.$api.mine.getMyKeyProjectList();
                     if(code === 0){
                         this.tableData = data;
                     }

@@ -123,3 +123,25 @@ export function getMyProjectList() {
 export function deleteAttachment(id) {
   return httpaxios.delete('/business/attachment/' + id)
 }
+
+/**
+ * 获取项目文档列表
+ * @param {*} current 当前页码
+ * @param {*} size 页数
+ * @param {*} projectId 所属项目id
+ * @returns
+ */
+export function getProjectAttachmentList(current, size, projectId) {
+  return httpaxios.get('/business/attachment/page',{
+    params:  { current, size, projectId}
+  })
+}
+
+/**
+ * 删除项目
+ * @param {*} id
+ * @returns
+ */
+export function delProjectAttachment(id) {
+  return httpaxios.delete(`/business/attachment/${id}`,{})
+}
