@@ -56,7 +56,9 @@ export function createTask(data) {
  * @returns {*}
  */
 export function getTaskDetail(taskId) {
-  return httpaxios.get('/business/task/' + taskId)
+  return httpaxios.get('/business/task/detail', {
+    params: {id: taskId}
+  })
 }
 
 /**
@@ -144,4 +146,18 @@ export function getProjectAttachmentList(current, size, projectId) {
  */
 export function delProjectAttachment(id) {
   return httpaxios.delete(`/business/attachment/${id}`,{})
+}
+
+/**
+ * 导出任务列表
+ * @param projectId
+ * @param myTaskFlag
+ * @param weeklyShow
+ * @returns {*}
+ */
+export function exportTask(projectId, myTaskFlag=false, weeklyShow=false) {
+  return httpaxios.get('/business/export/task',{
+    params: {projectId, myTaskFlag, weeklyShow},
+    responseType: 'blob'
+  })
 }

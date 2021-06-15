@@ -24,18 +24,18 @@
         </a-col>
 <!--        <a-col :span="6"><PrioritySelect :value="form.priority"/></a-col>-->
         <a-col :span="6">
-          <DateSelect title="计划开始" icon="iconrili" :value="form.beginTime" @select="val => handleSave('beginTime', val)" />
+          <DateSelect title="计划开始" icon="iconrili" :value="form.planBeginTime" @select="val => handleSave('planBeginTime', val)" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="计划结束" icon="iconjihua" :value="form.endTime" @select="val => handleSave('endTime', val)" />
+          <DateSelect title="计划结束" icon="iconjihua" :value="form.planEndTime" @select="val => handleSave('planEndTime', val)" />
         </a-col>
       </a-row>
       <a-row :gutter="[16, 16]">
         <a-col :span="6">
-          <DateSelect title="实际开始" icon="iconrili" :value="form.beginActualTime" @select="val => handleSave('beginActualTime', val)" />
+          <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @select="val => handleSave('actualBeginTime', val)" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="实际结束" icon="iconjihua" :value="form.endActualTime" @select="val => handleSave('endActualTime', val)" />
+          <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @select="val => handleSave('actualEndTime', val)" />
         </a-col>
         <a-col :span="6">
           <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
@@ -229,6 +229,7 @@
         return {
           projectId: this.projectId,
           taskId: this.taskId,
+          type: 'attachment',
         }
       },
       uploadHeaders() {
@@ -243,16 +244,16 @@
         // console.log('handleSave', key, value)
         // this.form[key] = value;
         let mValue = moment(value);
-        if (key === 'beginTime' && this.form.endTime && mValue.isAfter(this.form.endTime, 'day')) {
+        if (key === 'planBeginTime' && this.form.planEndTime && mValue.isAfter(this.form.planEndTime, 'day')) {
           return;
         }
-        if (key === 'endTime' && this.form.beginTime && mValue.isBefore(this.form.beginTime, 'day')) {
+        if (key === 'planEndTime' && this.form.planBeginTime && mValue.isBefore(this.form.planBeginTime, 'day')) {
           return;
         }
-        if (key === 'beginActualTime' && this.form.endActualTime && mValue.isAfter(this.form.endActualTime, 'day')) {
+        if (key === 'actualBeginTime' && this.form.actualEndTime && mValue.isAfter(this.form.actualEndTime, 'day')) {
           return;
         }
-        if (key === 'endActualTime' && this.form.beginActualTime && mValue.isBefore(this.form.beginActualTime, 'day')) {
+        if (key === 'actualEndTime' && this.form.actualBeginTime && mValue.isBefore(this.form.actualBeginTime, 'day')) {
           return;
         }
         this.$set(this, 'form', {...this.form, [key]: value});

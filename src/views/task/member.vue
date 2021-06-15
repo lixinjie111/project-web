@@ -1,10 +1,6 @@
 <template>
 <div>
-  <MenuNav>
-    <div slot="nav-left" class="nav-left-title">
-      这里写样式
-    </div>
-  </MenuNav>
+  <TaskMenu @change="handleProjectChange" />
   <div class="container">
     <ContentHeader type="title" title="项目成员">
       <div slot="operation">
@@ -27,12 +23,15 @@
 <script>
 
   import UserSelectTree from "@/components/business/UserSelectTree";
+  import TaskMenu from "./components/menu";
 
   export default {
     name: "Member",
-    components: {UserSelectTree},
+    components: {UserSelectTree, TaskMenu},
     data() {
+      let projectId = parseInt(this.$router.currentRoute.query.id)
       return {
+        projectId,
         showEdit: false,
         dataSource: [
           {
@@ -109,6 +108,11 @@
       },
       handleDelete(record) {
         this.dataSource.splice(this.dataSource.indexOf(record), 1);
+      },
+      handleProjectChange(projectId) {
+        this.projectId = projectId;
+        this.loadCurrentList();
+        this.$store.dispatch('projectMemberList', this.projectId);
       },
     }
   }
