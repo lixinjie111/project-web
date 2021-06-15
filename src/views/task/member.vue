@@ -10,12 +10,8 @@
       </div>
     </ContentHeader>
     <div class="table">
-      <UserSelectTree/>
       <a-table :data-source="memberList" :columns="columns" />
     </div>
-    <a-modal title="选择成员" v-model="showEdit">
-      <a-table />
-    </a-modal>
   </div>
 </div>
 </template>
@@ -33,10 +29,26 @@
       return {
         projectId,
         showEdit: false,
+        showAdd: false,
         columns: [
           {
             dataIndex: 'userName',
             title: '姓名',
+            customRender: (text, record, index) => {
+              if (this.showEdit && record.id === this.editId) {
+                return {
+                  attrs: {},
+                  props: {},
+                  class: {},
+                  style: {},
+                  children: this.$createElement(UserSelectTree, {
+                    on: {select: (e) => this.handleRowChange(record, e)}
+                  }, '')
+                }
+              }
+              else
+                return text;
+            }
           },
           {
             dataIndex: 'userRole',
@@ -77,23 +89,31 @@
     },
     computed: {
       memberList() {
+        if (this.showAdd)
+          return [{id: -1}];
         return this.$store.state.task.memberList;
       },
     },
     methods: {
       handleAddEditUser() {
+        this.showAdd = true;
         this.showEdit = true;
+        this.editId = -1;
       },
       handleEdit(record) {
+        this.showAdd = false;
         this.showEdit = true;
+        this.editId = record.id;
       },
       handleDelete(record) {
         this.dataSource.splice(this.dataSource.indexOf(record), 1);
       },
       handleProjectChange(projectId) {
         this.projectId = projectId;
-        this.loadCurrentList();
         this.$store.dispatch('projectMemberList', this.projectId);
+      },
+      handleRowChange(record, e) {
+        console.log(record, e)
       },
     }
   }
