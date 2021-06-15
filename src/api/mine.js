@@ -31,3 +31,12 @@ export function getMyDynamicStates(current, size) {
 export function getMyKeyProjectList() {
     return httpaxios.get('/business/projectVipWeek/list/my',{})
 }
+
+/**
+ * 修改用户密码
+ * @param {*} form
+ * @returns
+ */
+export function handlePutPassWord(form){
+    return httpaxios.put('/admin/user/edit/password', {data: form})
+}

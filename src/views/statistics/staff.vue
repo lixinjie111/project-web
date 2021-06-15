@@ -16,14 +16,13 @@
         </span>
     </div>
     </div>
-    <BasicTable v-if="tableData.length" 
+    <BasicTable
         :tableData="tableData" 
         :setTableColumns="setTableColumns" 
         :rowClassName="handleRowClassName" 
         :treeConfig="treeConfig"
         :spanMethod="handleRowspanMethod"
     ></BasicTable>
-    <!-- <NoData v-else></NoData> -->
   </div>
 </template>
 
@@ -107,7 +106,7 @@ export default {
                 slots: {
                     default: ({row}) => {
                         return [
-                            <span>
+                            <span class="plan-time">
                                 {
                                     row.hasOwnProperty('beginTime') && row.beginTime !== null ? 
                                     (row.hasOwnProperty('endTime') && row.endTime !== null ?
@@ -351,6 +350,13 @@ export default {
                 vertical-align: -1px;
             }
         }
+    }
+    .plan-time {
+        display: block;
+        line-height: 24px;
+        text-align: center;
+        background: #F4F7FC;
+        border-radius: 2px;
     }
 }
 </style>

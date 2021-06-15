@@ -45,11 +45,7 @@ export default {
       form: {
         username: "",
         password: "",
-      },
-      rules: {
-        // username: [{ required: true, message: '请输入用户名/手机号', trigger: 'blur' }],
-        // password: [{ required: true, message: '请输入密码', trigger: 'change' }],
-      },
+      }
     };
   },
   methods: {

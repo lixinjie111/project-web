@@ -29,7 +29,6 @@ vueRouter.beforeEach((to, from, next) => {
     } else if((to.meta?.isAuth || to.path === '/') && store.state.users.accessToken ){
         setStoreMenu(to, next);
     } else {
-        console.log(to)
         next({ path: '/login', replace: true })
     }
 })

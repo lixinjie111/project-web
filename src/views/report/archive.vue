@@ -25,7 +25,7 @@ export default {
   data(){
       return {
         total: null, // 总数据条数
-        pageSize: 1, // 页面数据size
+        pageSize: 10, // 页面数据size
         curPageNum: 1, // 当前页码
 
         beginTime: '',
@@ -35,7 +35,7 @@ export default {
         // 配置表格各字段
         setTableColumns: [
             {title: ' ', type: 'seq', width: 50},
-            {title: '周报周期', field: 'updatedTime', showOverflow: true,
+            {title: '周报周期', field: 'updatedTime', width: 400,showOverflow: true,
                 slots: {
                     default: ({row}) => {
                         return [
@@ -44,8 +44,8 @@ export default {
                     }
                 }
             },
-            {title: '归档日期', field: 'archiveTime', width: '340'},
-            {title: '操作', width: '110',
+            {title: '归档日期', field: 'archiveTime'},
+            {title: '操作', width: '90',
                 visible: isInPermission('sys_role_edit') || isInPermission('sys_role_del'),
                 slots: {
                     default: ({row}) => {
@@ -134,6 +134,9 @@ export default {
   }
   .operations {
       color: #999;
+      a {
+          color: #999;
+      }
   }
 }
 </style>
