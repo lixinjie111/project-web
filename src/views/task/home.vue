@@ -123,10 +123,8 @@
   import TaskMenu from "./components/menu";
   import draggable from 'vuedraggable';
   import {
-    addProjectMember,
     changeTaskStatus,
     deleteTask, exportTask,
-    getMyProjectList,
     getProjectBoard,
     getTaskList
   } from "@/api/task";
@@ -457,7 +455,7 @@
         let that = this;
         this.$confirms({
           title: '提示',
-          message: `您确定要删除 ${record.taskName} 任务吗？`,
+          message: `您确定要删除任务 ${record.taskName} 吗？`,
           okText: '确认删除',
           icon: 'none',
           onOk() {

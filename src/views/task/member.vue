@@ -11,7 +11,7 @@
     </ContentHeader>
     <div class="table">
       <UserSelectTree/>
-      <a-table :data-source="dataSource" :columns="columns" />
+      <a-table :data-source="memberList" :columns="columns" />
     </div>
     <a-modal title="选择成员" v-model="showEdit">
       <a-table />
@@ -33,42 +33,13 @@
       return {
         projectId,
         showEdit: false,
-        dataSource: [
-          {
-            "beginTime": "2021/05/14",
-            "endTime": "2021/05/14",
-            "id": 213423,
-            "projectCode": "dsfds",
-            "projectDescription": "项目描述",
-            "projectName": "项目名称",
-            "publicFlag": 0,
-          },
-          {
-            "beginTime": "2021/05/14",
-            "endTime": "2021/05/14",
-            "id": 12312,
-            "projectCode": "dsfds",
-            "projectDescription": "项目描述",
-            "projectName": "项目名称",
-            "publicFlag": 0,
-          },
-          {
-            "beginTime": "2021/05/14",
-            "endTime": "2021/05/14",
-            "id": 1234,
-            "projectCode": "dsfds",
-            "projectDescription": "项目描述",
-            "projectName": "项目名称",
-            "publicFlag": 0,
-          },
-        ],
         columns: [
           {
-            dataIndex: 'projectName',
+            dataIndex: 'userName',
             title: '姓名',
           },
           {
-            dataIndex: 'projectCode',
+            dataIndex: 'userRole',
             title: '角色',
           },
           {
@@ -80,17 +51,19 @@
             title: '操作',
             customRender: (text, record, index) => {
               return {
-                attrs:{},
-                props:{},
-                class:{},
-                style:{},
+                attrs: {},
+                props: {},
+                class: {},
+                style: {},
                 children: this.$createElement('div', [
                   this.$createElement('i', {
-                  'class': 'iconfont iconxiezuo',
-                  on: {click: () => this.handleEdit(record)}}, ''),
+                    'class': 'iconfont iconxiezuo',
+                    on: {click: () => this.handleEdit(record)}
+                  }, ''),
                   this.$createElement('i', {
-                  'class': 'iconfont iconshanchu',
-                  on: {click: () => this.handleDelete(record)}}, ''),
+                    'class': 'iconfont iconshanchu',
+                    on: {click: () => this.handleDelete(record)}
+                  }, ''),
                   ]
                 )
               }
@@ -98,6 +71,14 @@
           },
         ]
       }
+    },
+    mounted() {
+      this.$store.dispatch('projectMemberList', this.projectId);
+    },
+    computed: {
+      memberList() {
+        return this.$store.state.task.memberList;
+      },
     },
     methods: {
       handleAddEditUser() {

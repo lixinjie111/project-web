@@ -212,7 +212,7 @@
         createChild: false,
         childTaskName: '',
         childrenList: [],
-        attachment: [{id: 1, name: '12312312.jpg'}],
+        attachment: [],
         uploadUrl: '/api/business/attachment/file/uploadAndSave',
       }
     },
@@ -278,18 +278,38 @@
         this.$emit('editChild', child.id)
       },
       handleDeleteChild(child) {
-        deleteTask(child.id).then(res => {
-          if (res.code === 0 && res.data) {
-            this.childrenList.splice(this.childrenList.indexOf(child), 1);
+        let that = this;
+        this.$confirms({
+          title: '提示',
+          message: `您确定要删除子任务 ${child.taskName} 吗？`,
+          okText: '确认删除',
+          icon: 'none',
+          onOk() {
+            deleteTask(child.id).then(res => {
+              if (res.code === 0 && res.data) {
+                that.childrenList.splice(that.childrenList.indexOf(child), 1);
+              }
+            }).catch(err => {
+            })
           }
-        }).catch(err => {})
+        });
       },
       handleDeleteAttachment(child) {
-        deleteAttachment(child.id).then(res => {
-          if (res.code === 0 && res.data) {
-            this.attachment.splice(this.attachment.indexOf(child), 1);
+        let that = this;
+        this.$confirms({
+          title: '提示',
+          message: `您确定要删除附件 ${child.name} 吗？`,
+          okText: '确认删除',
+          icon: 'none',
+          onOk() {
+            deleteAttachment(child.id).then(res => {
+              if (res.code === 0 && res.data) {
+                this.attachment.splice(this.attachment.indexOf(child), 1);
+              }
+            }).catch(err => {
+            })
           }
-        }).catch(err => {})
+        });
       },
       handleCreateChild() {
         this.createChild = false;

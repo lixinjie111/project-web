@@ -1,7 +1,6 @@
 <template>
   <a-tree-select
       @select="handleSelect"
-      show-search
       style="width: 100%"
       :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
       :placeholder="placeholder"
@@ -43,10 +42,10 @@
       }
     },
     props: {
-      // value: {
-      //   type: [Array, Object],
-      //   default: () => {return []}
-      // },
+      value: {
+        type: [Array, Object],
+        default: () => {return []}
+      },
       // multiple: {
       //   default: false,
       //   type: Boolean,
