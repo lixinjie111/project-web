@@ -1,5 +1,5 @@
 <template>
-  <a-modal :visible="isShow" :width="980" :maskClosable="false" :footer="null" @cancel="handleCancel" centered>
+  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" centered>
     <template slot="title">
       <i class="iconfont iconxiezuo"></i>
       编辑任务
@@ -10,6 +10,7 @@
         {{form.taskName}}
       </span>
     </template>
+    <template  slot="content">
       <div class="title-row">
         <ToggleInput v-model="form.taskName" overClass="title" @commit="saveData({taskName: form.taskName})">
           <div>{{form.taskName}}
@@ -158,11 +159,12 @@
     <div v-if="form.history">
       1, 2021-04-01 上午09:15，由 谢东 创建
     </div>
-  </a-modal>
+    </template>
+  </ModalNoFooter>
 </template>
 
 <script>
-  import Modal from '@/components/Modal/Modal.vue'
+  import ModalNoFooter from '@/components/Modal/ModalNoFooter.vue'
   import UserSelect from "@/components/business/UserSelect";
   import PrioritySelect from "@/components/business/PrioritySelect";
   import TwoValue from "@/components/business/TwoValue";
@@ -181,7 +183,7 @@
 
   export default {
     name: "TaskEdit",
-    components: {ATextarea, Modal, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput },
+    components: {ATextarea, ModalNoFooter, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput },
     props: {
       isShow: {
         type: Boolean,

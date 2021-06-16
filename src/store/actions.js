@@ -4,7 +4,6 @@ import * as api from '@/api/index'
 export default {
   initDeptTree ({state, commit}, refresh) {
     return new Promise(async (resolve, reject) => {
-      debugger
       if(!state.deptTree.length || refresh) {
         let {code, data} = await api.org.getDeptTree();
         if(code == 0){

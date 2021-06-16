@@ -1,6 +1,6 @@
 <template>
     <div class="notarchive-deliverables-container">
-        <Header title="月度计划" date="2021/04/01 - 2021/04/30" @selected-tree="handleSetSelectedTree"></Header>
+        <Header title="月度计划" :date="`${startTime} - ${endTime}`" @selected-tree="handleSetSelectedTree"></Header>
         <div class="table-content">
             <BasicTable v-if="tableData.length" 
                 :tableData="tableData" 
@@ -27,6 +27,8 @@ export default {
     components: {Header, TextToolTip, Select, BasicTable, NoData},
     data() {
         return {
+            startTime: '',
+            endTime: '',
             deptId: this.$store.state.users.userInfo.deptId,
             tableData: [],
             treeConfig: {expandAll: true, showIcon: false, children: 'children'},
@@ -149,7 +151,11 @@ export default {
             try {
                 let {code, data} = await this.$api.report.handleGetDeliverableList(this.deptId);
                 if(code === 0) {
-                    this.tableData = data;
+                    let {archiveId, startTime, endTime, list} = data;
+                    this.startTime = startTime;
+                    this.endTime = endTime;
+                    this.tableData = list;
+                    this.$store.dispatch('initArchiveId', archiveId);
                 }
             } catch (error) {
                 console.log(error)

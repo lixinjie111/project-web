@@ -1,6 +1,6 @@
 <template>
     <div class="notarchive-schedule-container">
-        <Header title="本周工作进度" date="2021/04/06 - 2021/04/06" @selected-tree="handleSetSelectedTree"></Header>
+        <Header title="本周工作进度" :date="`${startTime} - ${endTime}`" @selected-tree="handleSetSelectedTree"></Header>
         <div class="table-content">
             <BasicTable v-if="tableData.length" 
                 :tableData="tableData" 
@@ -29,6 +29,8 @@
         components: {Header, TextToolTip, IconToolTip, Status, Priority, BasicTable, NoData},
         data() {
             return {
+                startTime: '',
+                endTime: '',
                 deptId: this.$store.state.users.userInfo.deptId,
                 tableData: [],
                 setTableColumns: [
@@ -189,7 +191,11 @@
                 try {
                     let {code, data} = await this.$api.report.handleGetWeekList(this.deptId);
                     if(code === 0){
-                        this.tableData = data;
+                        let {archiveId, startTime, endTime, list} = data;
+                        this.startTime = startTime;
+                        this.endTime = endTime;
+                        this.tableData = list;
+                        this.$store.dispatch('initArchiveId', archiveId);
                     }
                 } catch (error) {
                     console.log(error)

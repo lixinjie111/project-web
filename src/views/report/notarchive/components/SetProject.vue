@@ -7,7 +7,7 @@
           <div class="list-title">{{item.title}}</div>
           <div class="level-1">
             <div class="list-item" v-for="(ele, idx) in item.children" :key="index-idx">
-              <a-checkbox :default-checked="ele.checked" :value="ele" @change="(e) => ele.checked = !ele.checked">{{ele.title}}</a-checkbox>
+              <a-checkbox :default-checked="ele.flag === '1'" :value="ele.projectId" @change="(e) => ele.flag = ele.flag === '0' ? '1' : '0'">{{ele.title}}</a-checkbox>
             </div>
           </div>
         </div>
@@ -33,10 +33,6 @@ export default {
       try {
         let {code, data} = await this.$api.report.handleGetVipWeekList();
         if(code === 0) {
-          data.map(item => {
-            item.checked = false;
-            item.children.map(ele=>ele.checked = false)
-          })
           this.list = data;
         }
       } catch (error) {
@@ -57,10 +53,10 @@ export default {
     },
     handleData(list, checkList) {
       list.map(item => {
-        item.checked = item.children?.findIndex(item => item.checked) > -1 ? true : false;
-        item.checked && checkList.push(...item.children.filter(ele => ele.checked && delete ele.children));
+        item.flag = item.children?.findIndex(item => item.flag === '1') > -1 ? '1' : '0';
+        item.flag === '1' && checkList.push(...item.children.filter(ele => ele.flag && delete ele.children));
         delete item.children;
-        item.checked && checkList.push(item);
+        item.flag === '1' && checkList.push(item);
       });
       return checkList;
     }

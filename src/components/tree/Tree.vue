@@ -1,11 +1,4 @@
 <template>
-  <!-- <a-tree show-line :default-expanded-keys="[]" @select="onSelect">
-    <a-icon slot="switcherIcon" type="down" />
-    <a-tree-node switcherIcon="down" key="0-0" title="parent 1 parent 1 parent 1 parent 1 parent 1 parent 1 parent 1 parent 1 ">
-      
-    </a-tree-node>
-    <a-tree-node key="0-1" title="leaf" />
-  </a-tree> -->
   <div class="tree">
     <a-tree show-line :blockNode="true" :default-selected-keys="defaultSelectedKeys" :default-expanded-keys="defaultExpandKeys" :treeData="treeData" @select="onSelect">
       <template slot="custom" slot-scope="item">
@@ -120,8 +113,6 @@ export default {
       overflow: hidden;
       // 修改树结构合起的icon
       &.ant-tree-switcher_close{
-        // background:url('//assets.2dfire.com/frontend/b415e20fc703838e5a028437366ff22a.png') no-repeat;
-        // background-size:contain;
         &:before {
           display: inline-block;
           color: #97A0C3;
@@ -139,9 +130,6 @@ export default {
       }
       // 修改树结构展开的icon
       &.ant-tree-switcher_open{
-        // background: #fff;
-        // background:url('//assets.2dfire.com/frontend/568ca02f82eee05829d276881363c22a.png') no-repeat;
-        // background-size:contain;
         &:before{
           display: inline-block;
           color: #97A0C3;

@@ -24,7 +24,9 @@
                 try {
                     let {code, data} = await this.$api.report.getKeyProjectList();
                     if(code === 0){
-                        this.tableData = data;
+                        let {archiveId, list} = data;
+                        this.tableData = list;
+                        this.$store.dispatch('initArchiveId', archiveId);
                     }
                 }catch(error){
                     console.log(error)

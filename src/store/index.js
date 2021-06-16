@@ -10,6 +10,7 @@ import createPersistedState from "vuex-persistedstate"
 import system from '@/store/system'
 import users from '@/store/users'
 import task from '@/store/task'
+import report from '@/store/report'
 
 Vue.use(Vuex)
 
@@ -31,6 +32,7 @@ export default new Vuex.Store({
     system,
     users,
     task,
+    report,
   },
   plugins: [persistedState]
 })
