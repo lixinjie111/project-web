@@ -43,10 +43,14 @@ export default {
         console.log(error);
       }
     },
-    handleSaveProject() {
+    async handleSaveProject() {
       try {
         let data = this.handleData(this.list, []); 
-
+        let {code} = await this.$api.report.handlePostVipWeek(data);
+        if(code === 0){
+          this.$message.success('重点项目设置成功！');
+          this.$emit('modal-cancel');
+        }
       } catch (error) {
         console.log(error)
       }
@@ -54,7 +58,9 @@ export default {
     handleData(list, checkList) {
       list.map(item => {
         item.checked = item.children?.findIndex(item => item.checked) > -1 ? true : false;
-        item.checked && checkList.push(item, ...item.children.filter(item => item.checked));
+        item.checked && checkList.push(...item.children.filter(ele => ele.checked && delete ele.children));
+        delete item.children;
+        item.checked && checkList.push(item);
       });
       return checkList;
     }

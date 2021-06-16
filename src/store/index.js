@@ -18,7 +18,9 @@ const persistedState = createPersistedState({
 })
 
 
-const state = {}
+const state = {
+  deptTree: [], // 部门树
+}
 
 export default new Vuex.Store({
   namespaced: true,

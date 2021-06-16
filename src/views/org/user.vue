@@ -102,12 +102,11 @@ export default {
     },
 
     // 查询部门树
-    async handleGetDepartTree(){
+    handleGetDepartTree(){
       try {
-        let {code, data, msg} = await this.$api.org.getDeptTree();
-        if(code === 0){
-          this.treeList = data;
-        }
+        this.$store.dispatch('initDeptTree').then(() => {
+          this.$set(this, 'treeList', this.$store.state.deptTree);
+        })
       }catch(error){
         console.log(error);
       }
