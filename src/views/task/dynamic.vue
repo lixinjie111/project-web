@@ -1,5 +1,6 @@
 <template>
     <div class="dynamic-container">
+        <TaskMenu @change="handleProjectChange"/>
         <div class="dynamic-title">
             <ContentHeader type="title" title="项目动态"></ContentHeader>
         </div>
@@ -14,10 +15,11 @@
 
 <script>
     import DynamicList from '@/components/others/DynamicList'
+    import TaskMenu from "./components/menu";
 
     export default {
         name: "dynamic",
-        components: {DynamicList},
+        components: {TaskMenu, DynamicList},
         data() {
             return {
                 list: [],
@@ -30,6 +32,9 @@
             this.getMyDynamicStates();
         },
         methods: {
+            handleProjectChange() {
+
+            },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
                 this.pageSize = Number(pageSize);
