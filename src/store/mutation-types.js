@@ -1,0 +1,1 @@
+export const INIT_DEPT_TREE = 'INIT_DEPT_TREE'

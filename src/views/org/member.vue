@@ -87,14 +87,13 @@ export default {
       departIds.length && this.handleGetDeptRoleList(departIds[0])
     },
     // 请求部门树
-    async handleGetDeptTree() {
+    handleGetDeptTree() {
       try{
-        let {code, data} = await this.$api.org.getDeptTree();
-        if(code === 0) {
-          this.treeList = data;
+        this.$store.dispatch('initDeptTree').then(() => {
+          this.$set(this, 'treeList', this.$store.state.deptTree);
           this.handleGetDeptRoleList(this.treeList?.[0].id);
           this.defaultSelectedKeys = [this.treeList?.[0].id]
-        }
+        })
       }catch(err){
         console.log(err)
       }

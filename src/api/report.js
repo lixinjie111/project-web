@@ -170,3 +170,12 @@ export function editKeyProject(data){
 export function handleGetVipWeekList(){
   return httpaxios.get('/business/projectVipWeek/getAll')
 }
+
+/**
+ * 设置重点项目
+ * @param {*} data 
+ * @returns 
+ */
+export function handlePostVipWeek(data) {
+  return httpaxios.post('/business/projectVipWeek', {data: {list: data}})
+}

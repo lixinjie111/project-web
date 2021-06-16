@@ -32,12 +32,11 @@ export default {
   },
   methods: {
     // 查询部门树
-    async handleGetDepartTree(){
+    handleGetDepartTree(){
       try {
-        let {code, data} = await this.$api.org.getDeptTree();
-        if(code === 0){
-            this.$set(this, 'treeList', this.handleData(data));
-        }
+        this.$store.dispatch('initDeptTree').then(() => {
+          this.$set(this, 'treeList', this.handleData(this.$store.state.deptTree));
+        })
       }catch(error){
         console.log(error);
       }

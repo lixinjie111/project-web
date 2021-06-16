@@ -59,14 +59,12 @@ export default {
   methods: {
     isInPermission,
     // 查询部门树
-    async handleGetDepartTree(){
+    handleGetDepartTree(refresh){
       try {
-        let {code, data} = await this.$api.org.getDeptTree();
-        if(code === 0){
-          this.treeList = data;
-          console.log(this.parentId)
+        this.$store.dispatch('initDeptTree', refresh).then(() => {
+          this.$set(this, 'treeList', this.$store.state.deptTree);
           this.handleGetDepartUsers(this.parentId ? [this.parentId] : '');
-        }
+        });
       }catch(error){
         console.log(error);
       }
@@ -136,7 +134,7 @@ export default {
             let {code} = await this.$api.org.handleDeleteAdminDept(depart.id);
             if(code === 0) {
               if(depart.id == this.parentId) this.parentId = 0;
-              this.handleGetDepartTree(); // 有先后顺序 （依赖parentId)
+              this.handleGetDepartTree(true); // 有先后顺序 （依赖parentId)
               this.$message.success('删除成功！');
             }
           }catch(error){
@@ -156,7 +154,7 @@ export default {
         let {code} = await this.$api.org.handlePostAdminDept(data);
         if(code === 0) {
           this.$message.success('保存成功！');
-          this.handleGetDepartTree();
+          this.handleGetDepartTree(true);
         }
       }catch(error){
         console.log(error)
