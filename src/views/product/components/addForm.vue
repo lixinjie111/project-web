@@ -156,7 +156,7 @@
             border-radius: 4px;
 
             /deep/ .left {
-                width: 450px;
+                width: 400px;
                 font-size: 14px;
                 font-family: PingFangSC-Regular, PingFang SC;
                 font-weight: 400;

@@ -140,6 +140,19 @@ export function getProjectAttachmentList(current, size, projectId) {
 }
 
 /**
+ * 获取项目动态列表
+ * @param {*} current 当前页码
+ * @param {*} size 页数
+ * @param {*} id 所属项目id
+ * @returns
+ */
+export function getProjectDynamicList(current,size,id) {
+  return httpaxios.get(`/business/project/${id}/dynamicStates`,{
+    params:  { current, size}
+  })
+}
+
+/**
  * 删除项目
  * @param {*} id
  * @returns

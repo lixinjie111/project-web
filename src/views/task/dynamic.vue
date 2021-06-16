@@ -31,9 +31,14 @@
         created() {
             this.getMyDynamicStates();
         },
+        computed: {
+            projectId() {
+                return parseInt(this.$route.query.id)
+            }
+        },
         methods: {
             handleProjectChange() {
-
+                this.getMyDynamicStates();
             },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
@@ -49,7 +54,7 @@
             // 获取我的动态列表
             async getMyDynamicStates() {
                 try {
-                    let {code, data} = await this.$api.mine.getMyDynamicStates(this.curPageNum, this.pageSize);
+                    let {code, data} = await this.$api.task.getProjectDynamicList(this.curPageNum, this.pageSize,this.projectId);
                     if (code === 0) {
                         let {total, records} = data;
                         this.total = total;
