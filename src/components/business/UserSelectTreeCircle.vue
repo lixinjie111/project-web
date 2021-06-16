@@ -6,6 +6,7 @@
             <CircleButton></CircleButton>
             <div slot="content" class="tree-list">
                 <a-tree v-if="treeList.length"
+                        show-line
                         multiple
                         :load-data="onLoadData"
                         :tree-data="treeList"
@@ -49,7 +50,7 @@
         },
         created() {
             this.handleGetDepartTree();
-            this.userList.forEach((item)=>{
+            this.userList && this.userList.forEach((item)=>{
                 this.selectedKeys.push('user-' + item.userId);
             });
         },
@@ -78,7 +79,7 @@
             handleSelect(selectedKeys, e) {
                 let selectUser = e.node.dataRef;
                 this.showPopup = false;
-                let index = this.userList.findIndex(i => i.userId == selectUser.userId);
+                let index = this.userList ? this.userList.findIndex(i => i.userId == selectUser.userId) : -1;
                 if (index < 0) {
                     this.userList.push({
                         userName: selectUser.name,
@@ -133,6 +134,68 @@
         width: 160px;
         max-height: 300px;
         overflow: auto;
+
+        /deep/ .ant-tree li {
+            // 修改选中背景颜色
+            .ant-tree-node-content-wrapper{
+                height: 22px;
+                line-height: 22px;
+                .ant-tree-node-selected {
+                    background: #F0F8FF;
+                }
+            }
+            span.ant-tree-switcher{
+                width:12px;
+                height:12px;
+                margin: 4px;
+                line-height: 16px;
+                overflow: hidden;
+                // 修改树结构合起的icon
+                &.ant-tree-switcher_close{
+                    &:before {
+                        display: inline-block;
+                        color: #97A0C3;
+                        font-family: "iconfont" !important;
+                        font-size: 16px;
+                        font-style: normal;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        content: '\e653;';
+                        background: #fff;
+                    }
+                    i{
+                        display: none;
+                    }
+                }
+                // 修改树结构展开的icon
+                &.ant-tree-switcher_open{
+                    &:before{
+                        display: inline-block;
+                        color: #97A0C3;
+                        font-family: "iconfont" !important;
+                        font-size: 16px;
+                        font-style: normal;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        content: '\e651';
+                        background: #fff;
+                    }
+                    i{
+                        display: none;
+                    }
+                }
+                &.ant-tree-switcher-noop {
+                    width: 6px;
+                    height: 6px;
+                    margin: 8px;
+                    border-radius: 50%;
+                    background: #C6CBDE;
+                    i{
+                        display: none;
+                    }
+                }
+            }
+        }
     }
 
     .user-icon {
