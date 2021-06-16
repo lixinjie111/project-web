@@ -1,11 +1,6 @@
 <template>
   <div class="task-home">
-    <MenuNav>
-      <div slot="nav-left" class="nav-left-title">
-        <a class="back" @click="handleHome"><i class="iconfont iconshouye"></i>首页</a>
-        <a-select :options="projectList" class="proj-list" size="small" :value="projectId" @change="handleProjectChange"/>
-      </div>
-    </MenuNav>
+    <TaskMenu @change="handleProjectChange" />
     <div class="header">
       <div class="left">
         <a-radio-group default-value="a" size="large" @change="handleQueryFilter">
@@ -32,7 +27,7 @@
           <MyIcon slot="icon" name="icontianjia" type="main"/>
         </FlatButton>
         <a-divider type="vertical" v-if="canCreate && canExport" />
-        <FlatButton v-if="canExport">
+        <FlatButton v-if="canExport" @click="handleExport">
           导出
           <MyIcon slot="icon" name="icondaochu"/>
         </FlatButton>
@@ -50,7 +45,7 @@
             <div class="item" v-for="item in status0" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
+              <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -64,7 +59,7 @@
             <div class="item" v-for="item in status1" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
+              <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -78,7 +73,7 @@
             <div class="item" v-for="item in status2" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
+              <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -92,7 +87,7 @@
             <div class="item" v-for="item in status3" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
+              <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -106,7 +101,7 @@
             <div class="item" v-for="item in status4" :key="item.id">
               <div class="title" @click="handleEdit">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
-              <div class="plan" v-if="item.beginTime || item.endTime">{{item.beginTime}} - {{item.endTime}}</div>
+              <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
           </transition-group>
         </draggable>
@@ -125,12 +120,11 @@
   import MyIcon from "@/components/others/MyIcon";
   import TaskAdd from "./components/add";
   import TaskEdit from "./components/edit";
+  import TaskMenu from "./components/menu";
   import draggable from 'vuedraggable';
   import {
-    addProjectMember,
     changeTaskStatus,
-    deleteTask,
-    getMyProjectList,
+    deleteTask, exportTask,
     getProjectBoard,
     getTaskList
   } from "@/api/task";
@@ -141,7 +135,7 @@
 
   export default {
     name: 'TaskHome',
-    components: { TreeTable, FlatButton, MyIcon, TaskAdd, TaskEdit, draggable, BasicTabs },
+    components: { TreeTable, FlatButton, MyIcon, TaskAdd, TaskEdit, draggable, BasicTabs, TaskMenu },
     data() {
       let canEdit = isInPermission('business_task_edit');
       let canDelete = isInPermission('business_task_del');
@@ -178,16 +172,6 @@
         total: 0,
         canCreate: isInPermission('business_task_add'),
         canExport: isInPermission('business_task_view'),
-        projectList: [
-          // {
-          //   key: 25,
-          //   label: 'test 25'
-          // },
-          // {
-          //   key: 9393939,
-          //   label: '秀梅苯肼基材'
-          // },
-        ],
         tabList: [
           {
             name: '全部',
@@ -219,6 +203,7 @@
             dataIndex: 'taskName',
             title: '任务名称',
             fixed: 'left',
+            width: 200,
             treeNode: true,
             customRender: (text, record, index) => {
               return canEdit ? {
@@ -274,24 +259,25 @@
           {
             dataIndex: 'progress',
             title: '进度',
+            width: 120,
             scopedSlots: {
               customRender: 'progress'
             }
           },
           {
-            dataIndex: 'beginTime',
+            dataIndex: 'planBeginTime',
             title: '计划开始',
           },
           {
-            dataIndex: 'endTime',
+            dataIndex: 'planEndTime',
             title: '计划结束',
           },
           {
-            dataIndex: 'beginActualTime',
+            dataIndex: 'actualBeginTime',
             title: '实际开始',
           },
           {
-            dataIndex: 'endActualTime',
+            dataIndex: 'actualEndTime',
             title: '实际结束',
           },
           ...operation
@@ -371,20 +357,25 @@
           })
         }
       },
-/*      status4: {
+      status4: {
         get() {
           let st = this.boardData.filter(item => item.status===4)
           return st;
         },
         set(val) {
           // console.log(val)
-          val.forEach(item => item.status = 4)
+          val.forEach(item => {
+            if (item.status !== 4) {
+              item.status = 4;
+              changeTaskStatus(item.id, item.status);
+            }
+          })
         }
-      },*/
+      },
     },
     mounted() {
       this.getTableList();
-      this.loadMyProjectList();
+      // this.loadMyProjectList();
       // getProjectList().then(res => {}).catch(e => {});
       this.$store.dispatch('projectMemberList', this.projectId);
       // addProjectMember(9393939, [
@@ -419,10 +410,10 @@
               if (item.kanbanList) {
                 item.kanbanList.forEach(kan => {
                   kan.status = item.status;
-                  if (kan.beginTime)
-                    kan.beginTime = moment(kan.beginTime).format('YYYY年MM月DD日');
-                  if (kan.endTime)
-                    kan.endTime = moment(kan.endTime).format('YYYY年MM月DD日');
+                  if (kan.planBeginTime)
+                    kan.planBeginTime = moment(kan.planBeginTime).format('YYYY年MM月DD日');
+                  if (kan.planEndTime)
+                    kan.planEndTime = moment(kan.planEndTime).format('YYYY年MM月DD日');
                 });
                 boardData = boardData.concat(item.kanbanList);
               }
@@ -441,17 +432,10 @@
           this.getTableList();
         }
       },
-      loadMyProjectList() {
-        getMyProjectList().then(res => {
-          if (res.code === 0 && res.data) {
-            this.projectList = res.data.records.map(item => {
-              return {
-                key: item.id,
-                label: item.projectName,
-              }
-            })
-          }
-        }).catch(err => {});
+      handleProjectChange(projectId) {
+        this.projectId = projectId;
+        this.loadCurrentList();
+        this.$store.dispatch('projectMemberList', this.projectId);
       },
       handleViewType(e) {
         // console.log('test', e)
@@ -471,7 +455,7 @@
         let that = this;
         this.$confirms({
           title: '提示',
-          message: `您确定要删除 ${record.taskName} 任务吗？`,
+          message: `您确定要删除任务 ${record.taskName} 吗？`,
           okText: '确认删除',
           icon: 'none',
           onOk() {
@@ -491,9 +475,6 @@
         this.showEdit = false;
         this.loadCurrentList();
       },
-      handleHome() {
-        this.$router.push('/project/home');
-      },
       handleQueryFilter(e) {
         this.page = 1;
         this.total = 0;
@@ -503,11 +484,6 @@
       handlePageChange(page) {
         this.page = page;
         this.loadCurrentList();
-      },
-      handleProjectChange(projectId) {
-        this.projectId = projectId;
-        this.loadCurrentList();
-        this.$store.dispatch('projectMemberList', this.projectId);
       },
       handleDragStart(e) {
         // console.log('handleDragStart', e)
@@ -523,7 +499,23 @@
           this.showEdit = true;
           this.editTaskId = taskId;
         });
-      }
+      },
+      // 导出任务excel
+      handleExport() {
+        try {
+          exportTask(this.projectId, this.queryType==='myTaskFlag', this.queryType==='weeklyShow').then((res)=>{
+            let blob = new Blob([res], {type: "application/vnd.ms-excel"});
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = "导出任务.xlsx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+          });
+        }catch(error){
+          console.log(error)
+        }
+      },
     }
   }
 </script>
@@ -531,28 +523,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .task-home {
-  .back {
-    width: 68px;
-    height: 32px;
-    background: #F4F7FC;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 400;
-    color: #242F57;
-    line-height: 24px;
-    padding: 4px;
-    margin: 9px 12px 0 16px;
-
-    .iconfont {
-      margin-right: 4px;
-    }
-  }
-  .proj-list {
-    min-width: 236px;
-    height: 32px;
-    background: #F4F7FC;
-    border-radius: 8px;
-  }
 
   .header {
     background-color: white;

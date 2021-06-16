@@ -1,5 +1,5 @@
 <template>
-  <a-popover trigger="click" v-model="visible" placement="bottomLeft">
+  <a-popover trigger="click" v-model="visible" placement="bottomLeft" overlayClassName="date-pop">
     <TwoValue :title="showDate" :subtitle="title" class="btn">
       <i class="iconfont" :class="icon"></i>
     </TwoValue>
@@ -49,4 +49,10 @@
 .btn {
   cursor: default;
 }
+</style>
+
+<style>
+  .date-pop {
+    width: 290px;
+  }
 </style>

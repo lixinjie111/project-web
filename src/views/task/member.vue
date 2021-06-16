@@ -1,10 +1,6 @@
 <template>
 <div>
-  <MenuNav>
-    <div slot="nav-left" class="nav-left-title">
-      这里写样式
-    </div>
-  </MenuNav>
+  <TaskMenu @change="handleProjectChange" />
   <div class="container">
     <ContentHeader type="title" title="项目成员">
       <div slot="operation">
@@ -14,12 +10,8 @@
       </div>
     </ContentHeader>
     <div class="table">
-      <UserSelectTree/>
-      <a-table :data-source="dataSource" :columns="columns" />
+      <a-table :data-source="memberList" :columns="columns" />
     </div>
-    <a-modal title="选择成员" v-model="showEdit">
-      <a-table />
-    </a-modal>
   </div>
 </div>
 </template>
@@ -27,49 +19,39 @@
 <script>
 
   import UserSelectTree from "@/components/business/UserSelectTree";
+  import TaskMenu from "./components/menu";
 
   export default {
     name: "Member",
-    components: {UserSelectTree},
+    components: {UserSelectTree, TaskMenu},
     data() {
+      let projectId = parseInt(this.$router.currentRoute.query.id)
       return {
+        projectId,
         showEdit: false,
-        dataSource: [
-          {
-            "beginTime": "2021/05/14",
-            "endTime": "2021/05/14",
-            "id": 213423,
-            "projectCode": "dsfds",
-            "projectDescription": "项目描述",
-            "projectName": "项目名称",
-            "publicFlag": 0,
-          },
-          {
-            "beginTime": "2021/05/14",
-            "endTime": "2021/05/14",
-            "id": 12312,
-            "projectCode": "dsfds",
-            "projectDescription": "项目描述",
-            "projectName": "项目名称",
-            "publicFlag": 0,
-          },
-          {
-            "beginTime": "2021/05/14",
-            "endTime": "2021/05/14",
-            "id": 1234,
-            "projectCode": "dsfds",
-            "projectDescription": "项目描述",
-            "projectName": "项目名称",
-            "publicFlag": 0,
-          },
-        ],
+        showAdd: false,
         columns: [
           {
-            dataIndex: 'projectName',
+            dataIndex: 'userName',
             title: '姓名',
+            customRender: (text, record, index) => {
+              if (this.showEdit && record.id === this.editId) {
+                return {
+                  attrs: {},
+                  props: {},
+                  class: {},
+                  style: {},
+                  children: this.$createElement(UserSelectTree, {
+                    on: {select: (e) => this.handleRowChange(record, e)}
+                  }, '')
+                }
+              }
+              else
+                return text;
+            }
           },
           {
-            dataIndex: 'projectCode',
+            dataIndex: 'userRole',
             title: '角色',
           },
           {
@@ -81,17 +63,19 @@
             title: '操作',
             customRender: (text, record, index) => {
               return {
-                attrs:{},
-                props:{},
-                class:{},
-                style:{},
+                attrs: {},
+                props: {},
+                class: {},
+                style: {},
                 children: this.$createElement('div', [
                   this.$createElement('i', {
-                  'class': 'iconfont iconxiezuo',
-                  on: {click: () => this.handleEdit(record)}}, ''),
+                    'class': 'iconfont iconxiezuo',
+                    on: {click: () => this.handleEdit(record)}
+                  }, ''),
                   this.$createElement('i', {
-                  'class': 'iconfont iconshanchu',
-                  on: {click: () => this.handleDelete(record)}}, ''),
+                    'class': 'iconfont iconshanchu',
+                    on: {click: () => this.handleDelete(record)}
+                  }, ''),
                   ]
                 )
               }
@@ -100,15 +84,36 @@
         ]
       }
     },
+    mounted() {
+      this.$store.dispatch('projectMemberList', this.projectId);
+    },
+    computed: {
+      memberList() {
+        if (this.showAdd)
+          return [{id: -1}];
+        return this.$store.state.task.memberList;
+      },
+    },
     methods: {
       handleAddEditUser() {
+        this.showAdd = true;
         this.showEdit = true;
+        this.editId = -1;
       },
       handleEdit(record) {
+        this.showAdd = false;
         this.showEdit = true;
+        this.editId = record.id;
       },
       handleDelete(record) {
         this.dataSource.splice(this.dataSource.indexOf(record), 1);
+      },
+      handleProjectChange(projectId) {
+        this.projectId = projectId;
+        this.$store.dispatch('projectMemberList', this.projectId);
+      },
+      handleRowChange(record, e) {
+        console.log(record, e)
       },
     }
   }
