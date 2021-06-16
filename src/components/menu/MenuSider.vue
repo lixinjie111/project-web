@@ -5,7 +5,9 @@
     </div>
     <ul class="menu-list">
       <li :class="['menu-item', item.id === activeFirstMenu.id ? 'active' : '']" v-for="(item, index) in firstMenu" :key="index" @click="handleChangePage(index)">
-        <i class="menu-icon"></i>
+        <i class="menu-icon">
+          <img :src="item.icon"/>
+        </i>
         <span>{{item.name}}</span>
       </li>
     </ul>
@@ -122,10 +124,17 @@ export default {
       }
       
       .menu-icon {
+        margin: 0 2px;
         display: inline-block;
         width: 24px;
         height: 24px;
-        background: #fff;
+        text-align: center;
+        img {
+          padding: 2px 0;
+          margin: 0 2px;
+          width: 20px;
+          text-align: center;
+        }
       }
       >span {
         display: block;

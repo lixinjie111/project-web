@@ -306,7 +306,7 @@ export default {
             $i: index($bgColors, $bg);
             .status#{$i} {
                 position: absolute;
-                left: 0px;
+                left: -8px;
                 top: 0px;
                 width: 4px;
                 height: 40px;
