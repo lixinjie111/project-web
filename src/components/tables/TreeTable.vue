@@ -3,12 +3,13 @@
   <a-table
       bordered
       class="tree-table-wrapper"
-      :expandIconColumnIndex="2"
+      :expandIconColumnIndex="1"
       :loading="loading"
       :data-source="dataSource"
       rowKey="id"
       :columns="columns"
       :pagination="{current: currentPage, pageSize: pageSize, total: total}"
+      children-column-name="childrenList"
       @change="handlePage">
     <template slot="status" slot-scope="text">
       <Status :value="text"/>
