@@ -1,5 +1,6 @@
 <template>
     <div class="archive-container">
+        <TaskMenu @change="handleProjectChange"/>
         <div class="archive-title">
             <ContentHeader type="title" title="附件库"></ContentHeader>
         </div>
@@ -11,16 +12,16 @@
 </template>
 <script>
     import BasicTable from '@/components/tables/BasicTable.vue'
+    import TaskMenu from "./components/menu";
 
     export default {
         name: 'archive',
-        components: {BasicTable},
+        components: {TaskMenu, BasicTable},
         data() {
             return {
                 total: null, // 总数据条数
                 pageSize: 10, // 页面数据size
                 curPageNum: 1, // 当前页码
-                projectId: 25,
                 tableData: [],
                 setTableColumns: [
                     {
@@ -66,7 +67,7 @@
                             default: ({row}) => {
                                 return [
                                     <div class="operations">
-                                        <a href={row.link} download><span class="iconfont iconxiazai"></span></a>
+                                        <a href={row.link} download target="_blank"><span class="iconfont iconxiazai"></span></a>
                                         <span class="iconfont iconshanchu" onClick={() => this.handleDel(row)}></span>
                                     </div>
                                 ]
@@ -79,7 +80,15 @@
         created() {
             this.getAttachmentList();
         },
+        computed: {
+            projectId() {
+                return parseInt(this.$route.query.id)
+            }
+        },
         methods: {
+            handleProjectChange() {
+                this.getAttachmentList();
+            },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
                 console.log(pageSize)
@@ -135,14 +144,20 @@
 </script>
 <style lang="scss" scoped>
     .archive-container {
-        padding: 0 24px;
+        .archive-title {
+            padding: 0 24px;
+        }
 
         .archive-content {
-            .operations {
-                color: #999;
+            padding: 0 24px;
 
-                .iconxiazai {
-                    margin-right: 12px;
+            .operations {
+                .iconfont {
+                    color: #999;
+
+                    &.iconxiazai {
+                        margin-right: 12px;
+                    }
                 }
             }
         }
