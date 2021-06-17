@@ -44,10 +44,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .nav-container {
+  position: fixed;
+  top: 0;
   display: flex;
   width: calc(100vw - 80px);
   min-width: 1360px;
   background: #fff;
+  z-index: 1000;
   .nav-left, .nav-right {
     width: 440px;
     height: 51px;
@@ -59,6 +62,9 @@ export default {
       padding: 0 24px;
       line-height: 51px;
       font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #242F57;
     }
   }
   .nav-list {

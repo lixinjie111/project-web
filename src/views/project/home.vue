@@ -1,8 +1,5 @@
 <template>
     <div class="layout">
-        <MenuNav>
-            <div slot="nav-left" class="nav-left-title">首页</div>
-        </MenuNav>
         <div class="project-home-container">
             <ContentHeader type="title" title="项目">
                 <div slot="operation">

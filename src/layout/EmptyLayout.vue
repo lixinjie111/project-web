@@ -1,6 +1,6 @@
 <template>
 <div class="empty-layout">
-  <router-view></router-view>
+  <router-view class="content"></router-view>
 </div>
 </template>
 <script>
@@ -10,6 +10,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .empty-layout {
+  margin-top: 51px;
   width: 100%;
   overflow: hidden;
 }

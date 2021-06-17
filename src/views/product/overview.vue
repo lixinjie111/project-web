@@ -1,8 +1,5 @@
 <template>
     <div class="layout">
-        <MenuNav>
-            <div slot="nav-left" class="nav-left-title">概览</div>
-        </MenuNav>
         <div class="product-overview-container">
             <ContentHeader type="title" title="产品">
                 <div slot="operation">

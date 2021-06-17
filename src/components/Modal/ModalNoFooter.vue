@@ -3,10 +3,13 @@
     :body-style="bodyStyle"
     :width="Number(width)" :closable="closable" :centered="true" :destroyOnClose="true"
     :footer="null" @cancel="handleCancel">
+    <div slot="closeIcon" class="iconfont iconshanchu_xiao"></div>
+
     <div slot="title" class="modal-header">
       <div v-if="title" :class="headeralgin">{{title}}</div>
       <slot name="title"></slot>
     </div>
+    
     <slot name="content"></slot>
   </a-modal>
 </template>
@@ -46,6 +49,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.iconfont {
+  font-size: 20px;
+  color: #636E95;
+}
 .modal-header {
   > div {
     font-size: 16px;

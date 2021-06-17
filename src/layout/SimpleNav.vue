@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <HeaderNav></HeaderNav>
-    <router-view></router-view>
+    <router-view class="content"></router-view>
   </div>
 </template>
 <script>
@@ -12,6 +12,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .layout {
-  height: 100%;
+  margin-top: 51px;
+  height: calc(100% - 51px);
 }
 </style>

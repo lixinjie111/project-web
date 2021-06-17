@@ -100,8 +100,8 @@ export default {
       // },
        rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          // { min: 3, max: 5, message: '用户名长度3 到 5', trigger: 'blur' },
+          { required: true, message: '请输入数字、字母组合用户名', trigger: 'blur' },
+          { pattern: /[A-Za-z0-9]{1,30}/, message: '用户名最多30位数字、字母组合', trigger: 'blur' },
         ],
         realName: [
           { required: true, message: '请输入真实姓名', trigger: 'blur' },

@@ -34,6 +34,7 @@ export default {
         z-index: 100;
     }
     .layout-container{
+        position: relative;
         margin-left: 80px;
         min-width: 1360px;
         width: calc(100vw - 80px);
