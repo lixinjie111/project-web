@@ -274,6 +274,7 @@ export default {
     border-radius: 4px;
     border: 1px solid #EAEDF7;
     .userorg-table {
+      overflow: auto;
       &.no-pagination {
         height: 100%;
       }
