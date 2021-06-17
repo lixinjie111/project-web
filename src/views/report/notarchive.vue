@@ -89,13 +89,19 @@
                 // vm 就是当前组件的实例相当于上面的 this，所以在 next 方法里你就可以把 vm 当 this 来用了。
                 if(reg.test(to.path)) {
                     vm.val = RegExp.$3;
-                    vm.$router.push(to.path)
                 }else {
                     vm.val = vm.tab[0].type;
-                    vm.$router.push(`${to.path}/${vm.val}`)
+                    vm.$router.replace(`${to.path}/${vm.val}`)
                 }
             });
-            
+        },
+        beforeRouteUpdate(to, from, next){
+            if(to.path === '/report/notarchive'){
+                this.val = this.tab[0].type;
+                next(`${to.path}/${this.val}`)
+            }else{
+                next()
+            }
         }
     }
 </script>
