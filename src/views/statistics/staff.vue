@@ -48,6 +48,7 @@ export default {
                 field: 'userName',
                 treeNode: true,
                 minWidth: 280,
+                fixed: 'left',
                 slots: {
                     default: ({row, $rowIndex}) => {
                         return [

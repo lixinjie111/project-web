@@ -11,8 +11,8 @@
                     设置
                     <MyIcon slot="icon" name="iconshezhi"/>
                 </FlatButton>
-                <a-divider type="vertical" v-if="isInPermission('business_jobproject_add') && isInPermission('')"/>
-                <FlatButton v-if="isInPermission('')">
+                <a-divider type="vertical" v-if="isInPermission('business_jobproject_add') && isInPermission('business_weekreport_archive')"/>
+                <FlatButton v-if="isInPermission('business_weekreport_archive') && archiveId" @click="handleArchive">
                     归档
                     <MyIcon slot="icon" name="iconwendangjiazi"/>
                 </FlatButton>
@@ -41,7 +41,8 @@
                     {name: '月度计划', type: 'plan'},
                     {name: '月度交付物验收', type: 'deliverables'}
                 ],
-                isShow: false
+                isShow: false,
+                archiveId: this.$store.state.report.archiveId, // 归档id
             }
         },
         methods: {
@@ -54,6 +55,29 @@
             },
             handleSet(){
                 this.isShow = true;
+            },
+            handleArchive(){
+                this.$nextTick(() => {
+                    this.$confirms({
+                        title: '提示',
+                        message: `归档后周报内容不支持修改，您确定要归档吗？`,
+                        okText: '确认',
+                        onOk: async () => {
+                            try {
+                                let {code} = await this.$api.report.handlePostExecute(this.archiveId);
+                                if(code === 0) {
+                                    this.$message.success('归档成功！');
+                                }
+                                
+                            }catch(error){
+                                console.log(error)
+                            }
+                        },
+                        cancelText: '取消',
+                        onCancel() {
+                        }
+                    });
+                });
             }
         },
         beforeRouteEnter(to, from, next) {

@@ -1,9 +1,10 @@
 <template>
   <div class="nav-container">
     <div class="nav-left">
+      <div class="title"  v-if="navlist.length === 1">{{navlist[0].name}}</div>
       <slot name="nav-left"></slot>
     </div>
-    <ul class="nav-list">
+    <ul class="nav-list" v-if="navlist.length > 1">
       <li :class='["nav-item", item.path === activeNavMenu.path ? "active" : ""]' v-for="(item, index) in navlist" :key="index" @click="handleChangePage(index)">
         <span>{{item.name}}</span>
       </li>
@@ -51,6 +52,14 @@ export default {
     width: 440px;
     height: 51px;
     background: #fff;
+  }
+  .nav-left {
+    display: flex;
+    .title {
+      padding: 0 24px;
+      line-height: 51px;
+      font-size: 14px;
+    }
   }
   .nav-list {
     flex: 1;

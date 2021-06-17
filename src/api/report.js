@@ -179,3 +179,11 @@ export function handleGetVipWeekList(){
 export function handlePostVipWeek(data) {
   return httpaxios.post('/business/projectVipWeek', {data: {list: data}})
 }
+/**
+ * 设置归档
+ * @param {*} id 归档id
+ * @returns 
+ */
+export function handlePostExecute(id){
+  return httpaxios.post('/business/archive/execute', {data: {id}})
+}

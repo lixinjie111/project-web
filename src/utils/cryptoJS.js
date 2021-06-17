@@ -14,7 +14,6 @@ export function encryptByAES (strEncrypt, aesSecretKey, padding, mode = 'CBC', p
     mode: CryptoJS.mode[mode],
     padding: CryptoJS.pad[paddingType]
   });
-  console.log(strEncrypt, aesSecretKey, padding, mode, paddingType, aesEncrypt.toString())
   return aesEncrypt.toString();
 }
 /**

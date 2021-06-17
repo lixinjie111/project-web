@@ -61,7 +61,8 @@ export default {
           slots: {
             // 使用 JSX 渲染
             default: ({ row }) => {
-              let status = !Number(row.lockFlag); // 锁定标记：0 正常 9 已锁定
+              let status = !!Number(row.lockFlag); // 锁定标记：0 正常 9 已锁定
+              // console.log(status, row.lockFlag)
               return [
                 <a-switch size='small' v-model={status} onClick={() => this.changeSwitch(row)}></a-switch>
               ]
@@ -149,7 +150,7 @@ export default {
       try {
         let {code, data} = await this.$api.org.handlePutLockUser(row.userId, row.lockFlag === '0' ? 9 : 0);
         if(code === 0) {
-          this.$message.success('冻结成功！');
+          this.$message.success(row.lockFlag === '0' ? '冻结成功！' : '解冻成功！');
           this.handleGetUserList();
         }
       }catch(error){

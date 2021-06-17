@@ -39,6 +39,7 @@ export default {
                     field: 'title',
                     treeNode: true,
                     minWidth: 358,
+                    fixed: 'left',
                     slots: {
                         default: ({row, $rowIndex, $seq}) => {
                             return [
@@ -207,10 +208,10 @@ export default {
                 let {code, data} = await this.$api.report.handleGetMonthList(this.deptId);
                 if(code === 0) {
                     let {archiveId, startTime, endTime, list} = data;
-                    this.startTime = startTime;
-                    this.endTime = endTime;
-                    this.tableData = list;
-                    this.$store.dispatch('initArchiveId', archiveId);
+                    this.startTime = startTime || '';
+                    this.endTime = endTime || '';
+                    this.tableData = list || [];
+                    this.$store.dispatch('initArchiveId', archiveId || '');
                 }
             }catch(error) {
 

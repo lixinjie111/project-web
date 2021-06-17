@@ -1,10 +1,10 @@
-import Empty from '@/layout/EmptyLayout.vue'
+import Simple from '@/layout/SimpleNav.vue'
 import Home from '@/views/project/home.vue'
 
 export default {
   name: '项目',
   path: '',
-  component: Empty,
+  component: Simple,
   meta: {
     isAuth: true
   },

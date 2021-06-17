@@ -1,10 +1,10 @@
-import Empty from '@/layout/EmptyLayout.vue'
+import Simple from '@/layout/SimpleNav.vue'
 import Overview from '@/views/product/overview.vue'
 
 export default {
   name: '产品',
   path: '',
-  component: Empty,
+  component: Simple,
   meta: {
     isAuth: true
   },
