@@ -70,6 +70,10 @@
             }
         }
 
+        .collapse-content {
+            cursor: default;
+        }
+
         .fade-enter-active {
             transition: all .2s ease;
         }
