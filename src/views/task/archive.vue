@@ -13,6 +13,7 @@
 <script>
     import BasicTable from '@/components/tables/BasicTable.vue'
     import TaskMenu from "./components/menu";
+    import {isInPermission} from '@/utils/common.js';
 
     export default {
         name: 'archive',
@@ -69,6 +70,7 @@
                                     <div class="operations">
                                         <a href={row.link} download target="_blank"><span class="iconfont iconxiazai"></span></a>
                                         <span class="iconfont iconshanchu" onClick={() => this.handleDel(row)}></span>
+                                        {isInPermission('business_attachment_del') ? <span className="iconfont iconshanchu" onClick={() => this.handleDel(row)}></span> : null}
                                     </div>
                                 ]
                             }
