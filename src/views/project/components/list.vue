@@ -86,12 +86,12 @@
                     },
                     {
                         title: '工时/预计',
-                        key: 'workHour',
+                        key: 'planHour',
                         width: '10%'
                     },
                     {
                         title: '工时/消耗',
-                        key: 'usedHour',
+                        key: 'actualHour',
                         width: '10%'
                     },
                     {

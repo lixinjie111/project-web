@@ -38,15 +38,16 @@
                     {
                         title: '项目名称',
                         field: 'projectName',
-                        width: 280,
+                        width: 300,
                         slots: {
                             default: ({row, rowIndex}) => {
                                 return [
                                     <div class="table-name">
                                         <span class={'status' + (parseInt(row.status) + 1)}></span>
-                                        <span class="index">{rowIndex + 1}</span>
+                                        <TextToolTip className="index" content={rowIndex + 1 + ''}
+                                                     refName={'index' + rowIndex}></TextToolTip>
                                         <TextToolTip className="name" content={row.title}
-                                                     refName={'table-name' + rowIndex}></TextToolTip>
+                                                     refName={'name' + rowIndex}></TextToolTip>
                                     </div>
                                 ]
                             }
@@ -136,6 +137,8 @@
 
 <style scoped lang="scss">
     .project-list-container {
+        padding-bottom: 4px;
+
         .header {
             height: 44px;
             line-height: 44px;
@@ -163,20 +166,22 @@
                     line-height: 24px;
                 }
             }
-
-            .index {
-                margin: 0 16px;
-                font-size: 14px;
-                font-family: PingFangSC-Regular, PingFang SC;
-                font-weight: 400;
-                color: #97A0C3;
-                vertical-align: middle;
-            }
-
             .text-tooltip {
                 display: inline-block;
                 vertical-align: top;
-                width: 220px;
+
+                /deep/ .index {
+                    max-width: 48px;
+                    margin: 0 16px 0 12px;
+                    font-size: 14px;
+                    font-family: PingFangSC-Regular, PingFang SC;
+                    font-weight: 400;
+                    color: #97A0C3;
+                }
+
+                /deep/ .name {
+                    width: 200px;
+                }
             }
         }
 
