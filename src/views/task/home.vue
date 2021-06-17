@@ -3,7 +3,7 @@
     <TaskMenu @change="handleProjectChange" />
     <div class="header">
       <div class="left">
-        <a-radio-group default-value="a" size="large" @change="handleQueryFilter">
+        <a-radio-group default-value="all" size="large" @change="handleQueryFilter">
           <a-radio-button class="all" v-for="item in tabList" :value="item.status" :key="item.status">
             {{item.name}}
             <span v-if="queryType===item.status">{{total}}</span>
@@ -43,7 +43,7 @@
         <draggable v-model="status0" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status0" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -57,7 +57,7 @@
         <draggable v-model="status1" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status1" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -71,7 +71,7 @@
         <draggable v-model="status2" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status2" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -85,7 +85,7 @@
         <draggable v-model="status3" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status3" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -99,7 +99,7 @@
         <draggable v-model="status4" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -110,7 +110,7 @@
 
     </div>
     <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="projectId" :status="curStatus" />
-    <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" @create-child="handleCreate" :project-id="projectId" @editChild="handleEditChild" />
+    <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" :parent-id="parentTaskId" @create-child="handleCreate" :project-id="projectId" @editChild="handleEditChild" @back="handleBackParent" />
   </div>
 </template>
 
@@ -188,6 +188,7 @@
         ],
         projectId,
         editTaskId: 0,
+        parentTaskId: 0,  // 编辑子节点时，的父节点ID
         tableData: [],
         tableColumns: [
           // {
@@ -397,6 +398,20 @@
           if (res.code === 0 && res.data) {
             this.tableData = res.data.records;
             this.total = res.data.total;
+            this.tableData.forEach(item => {
+              if (item.childrenList) {
+                if (item.childrenList.length === 0)
+                  delete item.childrenList;
+                else {
+                  item.childrenList.forEach(child => {
+                    child.isChild = true;
+                    child.parentId = item.id;
+                    if (child.childrenList && child.childrenList.length === 0)
+                        delete child.childrenList;
+                    }); // end 2
+                }
+              }
+            }) // end 1
           }
         }).catch(err => {
           console.log(err)
@@ -449,6 +464,7 @@
       },
       handleEdit(record) {
         this.editTaskId = record.id;
+        this.parentTaskId = record.parentId;
         this.showEdit = true;
       },
       handleDelete(record) {
@@ -493,11 +509,20 @@
         // console.log('handleDragEnd', e)
         this.dragging = false;
       },
-      handleEditChild(taskId) {
+      handleEditChild(taskId, parentId) {
         this.showEdit = false;
         this.$nextTick( () => {
           this.showEdit = true;
           this.editTaskId = taskId;
+          this.parentTaskId = parentId;
+        });
+      },
+      handleBackParent() {
+        this.showEdit = false;
+        this.$nextTick( () => {
+          this.showEdit = true;
+          this.editTaskId = this.parentTaskId;
+          this.parentTaskId = 0;
         });
       },
       // 导出任务excel

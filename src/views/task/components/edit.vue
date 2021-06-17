@@ -3,7 +3,7 @@
     <template slot="title">
       <i class="iconfont iconxiezuo"></i>
       编辑任务
-      <span v-if="!this.form.childrenList">
+      <span v-if="parentId">
         <i class="iconfont iconyou2"></i>
         <a @click="handleBackParent">返回上级</a>
         <a-divider type="vertical" />
@@ -16,7 +16,7 @@
           <div>{{form.taskName}}
           </div>
         </ToggleInput>
-        <a-checkbox :checked="form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)">在周报中显示</a-checkbox>
+        <a-checkbox :checked="!!form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)" v-if="!parentId">在周报中显示</a-checkbox>
       </div>
       <a-row :gutter="[16, 16]">
         <a-col :span="6"><StatusSelect :value="form.status" @change="val => handleSave('status', val)"/></a-col>
@@ -39,7 +39,7 @@
           <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @select="val => handleSave('actualEndTime', val)" />
         </a-col>
         <a-col :span="6">
-          <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
+          <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.workHour" @change="val => handleSave('workHour', val)"/>
         </a-col>
         <a-col :span="6">
           <HoursSelect title="实际工时" icon="iconzhexian" :value="form.actualHour" @change="val => handleSave('actualHour', val)"/>
@@ -76,14 +76,12 @@
             <a-col span="8">任务描述:</a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="24"><a-textarea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }"/></a-col>
-          </a-row>
-          <a-row :gutter="[16, 16]">
-            <a-col span="2"><a-button type="primary" @click="saveDescription">保存</a-button></a-col>
-            <a-col span="2"><a-button>取消</a-button></a-col>
+            <a-col span="24">
+              <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
+            </a-col>
           </a-row>
         </a-tab-pane>
-        <a-tab-pane key="2" v-if="form.childrenList">
+        <a-tab-pane key="2" v-if="!parentId">
           <span slot="tab">
             <i class="iconfont iconzirenwu"></i>子任务
           </span>
@@ -138,7 +136,7 @@
           </a-row>
           <div>
             <div v-for="child in attachment" :key="child.id" class="child-item">
-              <a target="_blank" :href="`download?id=${child.id}`">{{child.name}}</a>
+              <a target="_blank" :href="child.link">{{child.name}}</a>
               <div>
                 <i class="iconfont iconshanchu" @click="handleDeleteAttachment(child)"></i>
               </div>
@@ -172,7 +170,6 @@
   import HoursSelect from "@/components/business/HoursSelect";
   import DateSelect from "@/components/business/DateSelect";
   import StatusSelect from "@/components/business/StatusSelect";
-  import ATextarea from "x-intelligent-ui/es/input/TextArea";
   import MyIcon from "@/components/others/MyIcon";
   import FlatButton from "@/components/buttons/FlatButton";
   import ToggleInput from "@/components/forms/ToggleInput";
@@ -180,18 +177,24 @@
   import {createChildTask, deleteAttachment, deleteTask, getTaskDetail, saveTask} from "@/api/task";
   import moment from "moment";
   import { message } from 'x-intelligent-ui'
+  import ToggleArea from "@/components/forms/ToggleArea";
 
   export default {
     name: "TaskEdit",
-    components: {ATextarea, ModalNoFooter, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput },
+    components: {ModalNoFooter, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput, ToggleArea },
     props: {
       isShow: {
         type: Boolean,
         default: false
       },
+      // 如果是子任务，则父节点不为0
+      parentId: {
+        type: Number,
+        default: 0
+      },
       value: {
         type: Object,
-        default: {},
+        default: () => {return {}},
       },
       projectId: {
         type: Number
@@ -277,7 +280,7 @@
         this.createChild = true;
       },
       handleEditChild(child) {
-        this.$emit('editChild', child.id)
+        this.$emit('editChild', child.id, this.taskId)
       },
       handleDeleteChild(child) {
         let that = this;
@@ -358,7 +361,7 @@
       handleUpload({file}) {
         console.log(file)
         if (file.status === 'done' && file.response.code === 0)
-          this.attachment = this.attachment.concat({id: file.response.data, name: file.name})
+          this.attachment = this.attachment.concat({id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name})
         else if (file.status === 'error') {
           message.error(file.name + '上传失败')
         }
@@ -372,7 +375,7 @@
         return true;
       },
       handleBackParent() {
-        this.$emit('parent');
+        this.$emit('back');
       }
     },
   }
@@ -395,6 +398,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    line-height: 36px;
     .iconfont {
       margin-right: 12px;
       cursor: pointer;
@@ -418,5 +422,12 @@
       margin-right: 8px;
       min-width: 60px;
     }
+  }
+  .toggle-desc {
+    min-height: 24px;
+    white-space: pre;
+    max-height: 220px;
+    overflow: hidden auto;
+    line-height: 22px;
   }
 </style>
