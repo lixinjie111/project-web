@@ -226,6 +226,7 @@ export default {
     border-radius: 4px;
     border: 1px solid #EAEDF7;
     .role-table {
+      overflow: auto;
       &.no-pagination {
         height: 100%;
       }
