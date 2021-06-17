@@ -43,7 +43,7 @@
         <draggable v-model="status0" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status0" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -57,7 +57,7 @@
         <draggable v-model="status1" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status1" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -71,7 +71,7 @@
         <draggable v-model="status2" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status2" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -85,7 +85,7 @@
         <draggable v-model="status3" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status3" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>
@@ -99,7 +99,7 @@
         <draggable v-model="status4" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
-              <div class="title" @click="handleEdit">{{item.taskName}}</div>
+              <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
               <div class="incharge">{{item.taskExecutor}}</div>
               <div class="plan" v-if="item.planBeginTime || item.planEndTime">{{item.planBeginTime}} - {{item.planEndTime}}</div>
             </div>

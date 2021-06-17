@@ -16,7 +16,7 @@
           <div>{{form.taskName}}
           </div>
         </ToggleInput>
-        <a-checkbox :checked="form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)" v-if="!parentId">在周报中显示</a-checkbox>
+        <a-checkbox :checked="!!form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)" v-if="!parentId">在周报中显示</a-checkbox>
       </div>
       <a-row :gutter="[16, 16]">
         <a-col :span="6"><StatusSelect :value="form.status" @change="val => handleSave('status', val)"/></a-col>
@@ -76,11 +76,9 @@
             <a-col span="8">任务描述:</a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="24"><a-textarea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }"/></a-col>
-          </a-row>
-          <a-row :gutter="[16, 16]">
-            <a-col span="2"><a-button type="primary" @click="saveDescription">保存</a-button></a-col>
-            <a-col span="2"><a-button>取消</a-button></a-col>
+            <a-col span="24">
+              <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
+            </a-col>
           </a-row>
         </a-tab-pane>
         <a-tab-pane key="2" v-if="!parentId">
@@ -138,7 +136,7 @@
           </a-row>
           <div>
             <div v-for="child in attachment" :key="child.id" class="child-item">
-              <a target="_blank" :href="child.url">{{child.name}}</a>
+              <a target="_blank" :href="child.link">{{child.name}}</a>
               <div>
                 <i class="iconfont iconshanchu" @click="handleDeleteAttachment(child)"></i>
               </div>
@@ -172,7 +170,6 @@
   import HoursSelect from "@/components/business/HoursSelect";
   import DateSelect from "@/components/business/DateSelect";
   import StatusSelect from "@/components/business/StatusSelect";
-  import ATextarea from "x-intelligent-ui/es/input/TextArea";
   import MyIcon from "@/components/others/MyIcon";
   import FlatButton from "@/components/buttons/FlatButton";
   import ToggleInput from "@/components/forms/ToggleInput";
@@ -180,10 +177,11 @@
   import {createChildTask, deleteAttachment, deleteTask, getTaskDetail, saveTask} from "@/api/task";
   import moment from "moment";
   import { message } from 'x-intelligent-ui'
+  import ToggleArea from "@/components/forms/ToggleArea";
 
   export default {
     name: "TaskEdit",
-    components: {ATextarea, ModalNoFooter, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput },
+    components: {ModalNoFooter, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput, ToggleArea },
     props: {
       isShow: {
         type: Boolean,
@@ -196,7 +194,7 @@
       },
       value: {
         type: Object,
-        default: {},
+        default: () => {return {}},
       },
       projectId: {
         type: Number
@@ -363,7 +361,7 @@
       handleUpload({file}) {
         console.log(file)
         if (file.status === 'done' && file.response.code === 0)
-          this.attachment = this.attachment.concat({id: file.response.data.attachmentId, url: file.response.data.filePath, name: file.name})
+          this.attachment = this.attachment.concat({id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name})
         else if (file.status === 'error') {
           message.error(file.name + '上传失败')
         }
@@ -424,5 +422,12 @@
       margin-right: 8px;
       min-width: 60px;
     }
+  }
+  .toggle-desc {
+    min-height: 24px;
+    white-space: pre;
+    max-height: 220px;
+    overflow: hidden auto;
+    line-height: 22px;
   }
 </style>
