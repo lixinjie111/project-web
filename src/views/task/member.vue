@@ -27,20 +27,22 @@
   import {isInPermission} from "@/utils/common";
   import BasicTable from "@/components/tables/BasicTable";
   import NoData from "@/components/others/NoData";
-  import {addProjectMember} from "@/api/task";
+  import {addProjectMember, deleteProjectMember, getProjectMemberList, saveProjectMember} from "@/api/task";
 
   export default {
     name: "Member",
     components: {UserSelectTree, TaskMenu, BasicTable, NoData},
     data() {
       let projectId = parseInt(this.$router.currentRoute.query.id);
-      let canAdd = isInPermission('business_member_edit');
+      let canAdd = isInPermission('business_member_add');
+      let canEdit = isInPermission('business_member_edit');
       let canDelete = isInPermission('business_member_del');
       return {
         projectId,
         showEdit: false,
         showAdd: false,
         canAdd,
+        tableData: [],
         columns: [
           {
             title: '姓名',
@@ -49,70 +51,69 @@
             showOverflow: true,
             slots: {
               default: ({row}) => {
-                if (this.showAdd)
+                if (this.showAdd && row.id === -1)
                 return [
-                  <UserSelectTree on-select={e => this.handleRowChange(row, e)} />
+                  <UserSelectTree on-select={e => this.handleRowChange(row, e, 'userName')} />
               ]
                 else
                   return row.userName
               }
             },
-            // editRender: {
-            //   // name: 'UserSelectTree',
-            //   name: 'input',
-            //   enabled: isInPermission('business_member_add'),
-            //   // attrs: {type: 'text', placeholder: '请输入下周工作计划'},
-            //   events: {
-            //     change: (record, e) => this.handleRowChange(record, e),
-            //     select: (record, e) => this.handleRowChange(record, e)
-            //   }
-            // }
           },
           {
             field: 'userRole',
             title: '角色',
+            editRender: {
+              name: 'input',
+              enabled: canEdit,
+              // attrs: {type: 'text', placeholder: '请输入下周工作计划'},
+              events: {
+                blur: ({row}, e) => this.handleRowChange(row, e, 'userRole'),
+              }
+            }
           },
           {
-            field: 'beginTime',
+            field: 'createdTime',
             title: '加入日期',
           },
           {
             field: 'type',
             title: '操作',
-            customRender: (text, record, index) => {
-              return {
-                attrs: {},
-                props: {},
-                class: {},
-                style: {},
-                children: this.$createElement('div', [
-                  this.$createElement('i', {
-                    'class': 'iconfont iconxiezuo',
-                    on: {click: () => this.handleEdit(record)}
-                  }, ''),
-                  this.$createElement('i', {
-                    'class': 'iconfont iconshanchu',
-                    on: {click: () => this.handleDelete(record)}
-                  }, ''),
-                  ]
-                )
+            slots: {
+              default: ({row}) => {
+                let operation = [];
+                // if (canEdit)
+                //   operation.push(<i class="iconfont iconxiezuo" on-click={e => this.handleEdit(row)} />)
+                if (canDelete)
+                  operation.push(<i class="iconfont iconshanchu" on-click={e => this.handleDelete(row)} />)
+
+                return operation;
               }
-            }
+            },
           },
         ]
       }
     },
     mounted() {
-      this.$store.dispatch('projectMemberList', this.projectId);
+      this.loadMemberList();
     },
     computed: {
       memberList() {
         if (this.showAdd)
-          return [{id: -1}];
-        return this.$store.state.task.memberList;
+          return this.tableData.concat({id: -1});
+        return this.tableData;
       },
     },
     methods: {
+      loadMemberList() {
+        getProjectMemberList(this.projectId).then(res => {
+          if (res.code === 0 && res.data) {
+            this.tableData = res.data.records;
+          }
+        }).catch(err => {
+          this.tableData = [];
+        });
+      },
       handleAddEditUser() {
         this.showAdd = true;
         this.showEdit = true;
@@ -124,26 +125,60 @@
         this.editId = record.id;
       },
       handleDelete(record) {
-        this.dataSource.splice(this.dataSource.indexOf(record), 1);
+        if (record.id === -1) {
+          this.showAdd = false;
+        }
+        else {
+          let that = this;
+          this.$confirms({
+            title: '提示',
+            message: `您确定要删除成员 ${record.userName} 吗？`,
+            okText: '确认删除',
+            icon: 'none',
+            onOk() {
+              deleteProjectMember(record.id).then(res => {
+                if (res.code === 0 && res.data) {
+                  that.$message.success('删除成功');
+                  // this.tableData.splice(this.tableData.indexOf(record), 1);
+                  that.loadMemberList();
+                }
+              })
+            },
+            onCancel() {}
+          })
+        }
       },
       handleProjectChange(projectId) {
         this.projectId = projectId;
-        this.$store.dispatch('projectMemberList', this.projectId);
+        this.loadMemberList();
       },
-      handleRowChange(record, data) {
-        console.log(record, data);
-        addProjectMember({
-          projectId: this.projectId,
-          userId: data.userId,
-          userName: data.userName,
-          userRole: data.roleName,
-        }).then(res => {
-          if (res.code === 0 && res.data) {
-            this.showAdd = false;
-            this.showEdit = false;
-            this.$store.dispatch('projectMemberList', this.projectId);
+      handleRowChange(row, data, field) {
+        // console.log(row, data);
+        // 新增
+        if (row.id === -1) {
+          if (field === 'userName') {
+            addProjectMember({
+              projectId: this.projectId,
+              userId: data.userId,
+              userName: data.userName,
+              userRole: data.roleName,
+            }).then(res => {
+              if (res.code === 0 && res.data) {
+                this.showAdd = false;
+                this.showEdit = false;
+                this.loadMemberList();
+              }
+            }).catch(err => {
+            })
           }
-        }).catch(err => {})
+        }
+        else if (row[field] !== data.target.value) {
+          saveProjectMember({...row, [field]: data.target.value}).then(res => {
+            if (res.code === 0 && res.data) {
+              this.$message.success('修改成功');
+            }
+          }).catch(err => {});
+        }
       },
     }
   }
