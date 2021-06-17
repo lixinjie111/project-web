@@ -100,11 +100,9 @@ export function changeTaskStatus(id, status) {
   return httpaxios.put(`/business/task/changeStatus/${id}/${status}`)
 }
 
-export function addProjectMember(projectId, arr) {
-  arr.forEach(item => item.projectId = projectId);
-
-  return httpaxios.post('/business/member', {
-    data: arr
+export function addProjectMember(data) {
+  return httpaxios.post('/business/member/add', {
+    data: [data]
   })
 }
 

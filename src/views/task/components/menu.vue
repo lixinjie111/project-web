@@ -35,7 +35,8 @@
       handleProjectChange(projectId) {
         this.projectId = projectId;
         this.$router.push(this.$route.path + '?id=' + projectId);
-        this.$emit('change', projectId);
+        let proj = this.projectList.find(item => item.key === projectId);
+        this.$emit('change', projectId, proj.label);
       },
       handleHome() {
         this.$router.push('/project/home');
@@ -48,7 +49,10 @@
                 key: item.id,
                 label: item.projectName,
               }
-            })
+            });
+
+            let proj = this.projectList.find(item => item.key === this.projectId);
+            this.$emit('change', this.projectId, proj.label);
           }
         }).catch(err => {});
       },

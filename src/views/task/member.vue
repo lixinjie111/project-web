@@ -4,13 +4,17 @@
   <div class="container">
     <ContentHeader type="title" title="项目成员">
       <div slot="operation">
-        <a-button type="primary" @click="handleAddEditUser">
+        <a-button type="primary" @click="handleAddEditUser" v-if="canAdd">
           <i class="iconfont iconjia"></i>
           添加项目成员</a-button>
       </div>
     </ContentHeader>
     <div class="table">
-      <a-table :data-source="memberList" :columns="columns" />
+      <BasicTable v-if="memberList.length"
+                  :tableData="memberList"
+                  :setTableColumns="columns"
+      ></BasicTable>
+      <NoData v-else></NoData>
     </div>
   </div>
 </div>
@@ -20,46 +24,60 @@
 
   import UserSelectTree from "@/components/business/UserSelectTree";
   import TaskMenu from "./components/menu";
+  import {isInPermission} from "@/utils/common";
+  import BasicTable from "@/components/tables/BasicTable";
+  import NoData from "@/components/others/NoData";
+  import {addProjectMember} from "@/api/task";
 
   export default {
     name: "Member",
-    components: {UserSelectTree, TaskMenu},
+    components: {UserSelectTree, TaskMenu, BasicTable, NoData},
     data() {
-      let projectId = parseInt(this.$router.currentRoute.query.id)
+      let projectId = parseInt(this.$router.currentRoute.query.id);
+      let canAdd = isInPermission('business_member_edit');
+      let canDelete = isInPermission('business_member_del');
       return {
         projectId,
         showEdit: false,
         showAdd: false,
+        canAdd,
         columns: [
           {
-            dataIndex: 'userName',
             title: '姓名',
-            customRender: (text, record, index) => {
-              if (this.showEdit && record.id === this.editId) {
-                return {
-                  attrs: {},
-                  props: {},
-                  class: {},
-                  style: {},
-                  children: this.$createElement(UserSelectTree, {
-                    on: {select: (e) => this.handleRowChange(record, e)}
-                  }, '')
-                }
+            field: 'userName',
+            minWidth: 150,
+            showOverflow: true,
+            slots: {
+              default: ({row}) => {
+                if (this.showAdd)
+                return [
+                  <UserSelectTree on-select={e => this.handleRowChange(row, e)} />
+              ]
+                else
+                  return row.userName
               }
-              else
-                return text;
-            }
+            },
+            // editRender: {
+            //   // name: 'UserSelectTree',
+            //   name: 'input',
+            //   enabled: isInPermission('business_member_add'),
+            //   // attrs: {type: 'text', placeholder: '请输入下周工作计划'},
+            //   events: {
+            //     change: (record, e) => this.handleRowChange(record, e),
+            //     select: (record, e) => this.handleRowChange(record, e)
+            //   }
+            // }
           },
           {
-            dataIndex: 'userRole',
+            field: 'userRole',
             title: '角色',
           },
           {
-            dataIndex: 'beginTime',
+            field: 'beginTime',
             title: '加入日期',
           },
           {
-            dataIndex: 'type',
+            field: 'type',
             title: '操作',
             customRender: (text, record, index) => {
               return {
@@ -112,8 +130,20 @@
         this.projectId = projectId;
         this.$store.dispatch('projectMemberList', this.projectId);
       },
-      handleRowChange(record, e) {
-        console.log(record, e)
+      handleRowChange(record, data) {
+        console.log(record, data);
+        addProjectMember({
+          projectId: this.projectId,
+          userId: data.userId,
+          userName: data.userName,
+          userRole: data.roleName,
+        }).then(res => {
+          if (res.code === 0 && res.data) {
+            this.showAdd = false;
+            this.showEdit = false;
+            this.$store.dispatch('projectMemberList', this.projectId);
+          }
+        }).catch(err => {})
       },
     }
   }
