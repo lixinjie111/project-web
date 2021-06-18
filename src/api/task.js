@@ -100,12 +100,35 @@ export function changeTaskStatus(id, status) {
   return httpaxios.put(`/business/task/changeStatus/${id}/${status}`)
 }
 
-export function addProjectMember(projectId, arr) {
-  arr.forEach(item => item.projectId = projectId);
-
-  return httpaxios.post('/business/member', {
-    data: arr
+/**
+ * 新增项目成员
+ * @param data
+ * @returns {*}
+ */
+export function addProjectMember(data) {
+  return httpaxios.post('/business/member/add', {
+    data: [data]
   })
+}
+
+/**
+ * 修改项目成员信息
+ * @param data
+ * @returns {*}
+ */
+export function saveProjectMember(data) {
+  return httpaxios.put('/business/member', {
+    data: data
+  })
+}
+
+/**
+ * 通过id删除团队成员
+ * @param id
+ * @returns {*}
+ */
+export function deleteProjectMember(id) {
+  return httpaxios.delete('/business/member/' + id, {})
 }
 
 export function getMyProjectList() {

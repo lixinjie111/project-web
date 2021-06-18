@@ -39,7 +39,7 @@
           <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @select="val => handleSave('actualEndTime', val)" />
         </a-col>
         <a-col :span="6">
-          <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.workHour" @change="val => handleSave('workHour', val)"/>
+          <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
         </a-col>
         <a-col :span="6">
           <HoursSelect title="实际工时" icon="iconzhexian" :value="form.actualHour" @change="val => handleSave('actualHour', val)"/>

@@ -36,7 +36,7 @@
         <Modal :width="420" :isShow="showPauseModal" :title="pauseModal.modalTitle" :okText="pauseModal.okText" :cancelText="pauseModal.cancelText" headeralgin="left" @modal-sure="handlePauseSubmit" @modal-cancel="handlePauseCancel">
             <RemarkForm slot="content" name="pauseForm" ref="pauseForm"></RemarkForm>
         </Modal>
-        <Modal :width="420" :isShow="showFinishModal" :title="finishModal.modalTitle" :okText="pauseModal.okText" :cancelText="finishModal.cancelText" headeralgin="left" @modal-sure="handleFinishSubmit" @modal-cancel="handleFinishCancel">
+        <Modal :width="420" :isShow="showFinishModal" :title="finishModal.modalTitle" :okText="finishModal.okText" :cancelText="finishModal.cancelText" headeralgin="left" @modal-sure="handleFinishSubmit" @modal-cancel="handleFinishCancel">
             <RemarkForm slot="content" name="finishForm" ref="finishForm"></RemarkForm>
         </Modal>
     </div>
