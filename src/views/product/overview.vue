@@ -54,6 +54,7 @@
     import AddForm from "./components/addForm";
     import closeForm from "./components/closeForm";
     import {isInPermission} from '@/utils/common.js';
+    import moment from "moment";
 
     export default {
         name: 'overview',
@@ -316,7 +317,7 @@
                         let url = window.URL.createObjectURL(blob);
                         let a = document.createElement("a");
                         a.href = url;
-                        a.download = "导出表格.xlsx";
+                        a.download = `产品列表${ moment().format('YYYYMMDD')}.xlsx`;
                         a.click();
                         window.URL.revokeObjectURL(url);
                     });

@@ -77,8 +77,8 @@
 
     </div>
 
-    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="projectId" :status="curStatus" />
-    <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" :parent-id="parentTaskId" @create-child="handleCreate" :project-id="projectId" @editChild="handleEditChild" @back="handleBackParent" />
+    <TaskAdd :isShow="showCreate" @cancel="showCreate = false" @ok="handleCreateOK" :project-id="curProjectId" :status="curStatus" />
+    <TaskEdit :isShow="showEdit" @cancel="handleEditClose" :task-id="editTaskId" :parent-id="parentTaskId" @create-child="handleCreate" :project-id="curProjectId" @editChild="handleEditChild" @back="handleBackParent" />
   </div>
 </template>
 
@@ -124,6 +124,7 @@
         },);
       }
       return {
+        curProjectId: this.projectId || 0,
         editTaskId: 0,
         parentTaskId: 0,  // 编辑子节点时，的父节点ID
         tableColumns: [
@@ -226,6 +227,10 @@
       }
     },
     props: {
+      enterType: {
+        type: String,
+        default: ''
+      },
       projectId: Number,
       tableData: Array,
       page: Number,
@@ -335,6 +340,10 @@
         this.editTaskId = record.id;
         this.parentTaskId = record.parentId;
         this.showEdit = true;
+        // 我的任务编辑的时候,需要获取projectId
+        if (this.enterType=='mine') {
+          this.curProjectId = record.projectId;
+        }
       },
       handleDelete(record) {
         let that = this;

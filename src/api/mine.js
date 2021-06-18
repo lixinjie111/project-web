@@ -40,3 +40,16 @@ export function getMyKeyProjectList() {
 export function handlePutPassWord(form){
     return httpaxios.put('/admin/user/edit/password', {data: form})
 }
+
+
+/**
+ * 获取我的任务列表
+ * @param {*} current 当前页码
+ * @param {*} size 页数
+ * @returns
+ */
+export function getMyTaskList(current, size) {
+    return httpaxios.get('/business/task/myPage', {
+        params: {current, size}
+    })
+}
