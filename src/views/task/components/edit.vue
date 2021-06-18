@@ -115,8 +115,9 @@
             <i class="iconfont iconlianjie"></i>附件
           </span>
           <a-row :gutter="[16, 16]">
-            <a-col span="20">共 0 个附件</a-col>
-            <a-col span="4">
+            <a-col span="20" v-if="form.attachment">共 1 个附件</a-col>
+            <a-col span="20" v-else>共 0 个附件</a-col>
+            <a-col span="4" v-if="!form.attachment">
               <a-upload
                   name="file"
                   multiple
@@ -135,10 +136,10 @@
             </a-col>
           </a-row>
           <div>
-            <div v-for="child in attachment" :key="child.id" class="child-item">
-              <a target="_blank" :href="child.link">{{child.name}}</a>
+            <div v-if="form.attachment" class="child-item">
+              <a target="_blank" :href="form.attachment.link">{{form.attachment.name}}</a>
               <div>
-                <i class="iconfont iconshanchu" @click="handleDeleteAttachment(child)"></i>
+                <i class="iconfont iconshanchu" @click="handleDeleteAttachment"></i>
               </div>
             </div>
             <div v-if="createChild">
@@ -217,7 +218,6 @@
         createChild: false,
         childTaskName: '',
         childrenList: [],
-        attachment: [],
         uploadUrl: '/api/business/attachment/file/uploadAndSave',
       }
     },
@@ -299,21 +299,23 @@
           }
         });
       },
-      handleDeleteAttachment(child) {
+      handleDeleteAttachment() {
         let that = this;
         this.$confirms({
           title: '提示',
-          message: `您确定要删除附件 ${child.name} 吗？`,
+          message: `您确定要删除附件 ${this.form.attachment.name} 吗？`,
           okText: '确认删除',
           icon: 'none',
           onOk() {
-            deleteAttachment(child.id).then(res => {
+            deleteAttachment(that.form.attachment.id).then(res => {
               if (res.code === 0 && res.data) {
-                this.attachment.splice(this.attachment.indexOf(child), 1);
+                // that.form.attachment = null;
+                that.saveData({attachment: null});
               }
             }).catch(err => {
             })
-          }
+          },
+          onCancel() {}
         });
       },
       handleCreateChild() {
@@ -349,9 +351,6 @@
             if (this.form.childrenList) {
               this.childrenList = this.form.childrenList;
             }
-            if (this.form.attachment) {
-              this.attachment = this.form.attachment;
-            }
           }
         }).catch(err => {});
       },
@@ -361,7 +360,8 @@
       handleUpload({file}) {
         console.log(file)
         if (file.status === 'done' && file.response.code === 0)
-          this.attachment = this.attachment.concat({id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name})
+          // this.form.attachment = {id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name};
+          this.handleSave('attachment', {id: parseInt(file.response.data.attachmentId), link: file.response.data.filePath, name: file.name, size: file.size, projectId: this.projectId, taskId: this.taskId, attchmentType: file.type});
         else if (file.status === 'error') {
           message.error(file.name + '上传失败')
         }
