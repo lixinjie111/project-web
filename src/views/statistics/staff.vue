@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import DeptTree from '@/components/tree/DeptTree.vue'
 import BasicTable from "@/components/tables/BasicTable";
 import Status from "@/components/business/Status";
@@ -127,7 +128,7 @@ export default {
             },
             {
                 title: '工时/消耗',
-                field: 'usedHour',
+                field: 'actualHour',
                 minWidth: 95,
             },
             {
@@ -137,7 +138,7 @@ export default {
             },
             {
                 title: '总工时',
-                field: 'workHour',
+                field: 'planHour',
                 minWidth: 86,
             },
             {
@@ -204,7 +205,7 @@ export default {
     // 合并表格
     handleRowspanMethod({ row, _columnIndex, _rowIndex }){
         if(row.isMerge){
-            let col = [1, 2, 3, 8, 9,10]
+            let col = [1, 2, 3, 8, 9, 10]
             if (_columnIndex === 0) {
                 return {rowspan: _rowIndex,colspan: 4}
             } else if (_columnIndex === 7){
@@ -216,7 +217,20 @@ export default {
     },
     // 导出接口
     handleExport() {
-
+        try {
+            let {deptId, startDate, endDate} = this;
+            this.$api.statistics.handleExportStaff({deptId, startDate, endDate}).then((res)=>{
+                let blob = new Blob([res], {type: "application/vnd.ms-excel"});
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = `人员任务统计${moment(new Date()).format('YYYYMMDD')}.xlsx`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+        }catch(error){
+            console.log(error)
+        }
     },
     // 修改部门
     handleSetSelectedTree(deptId){
@@ -239,8 +253,8 @@ export default {
         data?.map(item => { // 项目降级
             let {userName, ...rest} = item;
             item.projects[0].userName = userName;
-            let {restHour, usedHour, workHour} = rest;
-            result = [...result, ...item.projects, {restHour, usedHour, workHour, isMerge: true}];
+            let {restHour, planHour, actualHour} = rest;
+            result = [...result, ...item.projects, {restHour, planHour, actualHour, isMerge: true}];
         });
         return result;
     },

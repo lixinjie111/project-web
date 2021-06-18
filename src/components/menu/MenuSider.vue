@@ -35,7 +35,7 @@ export default {
     return {
       visible: false,
       isShowModal: false,
-      username: this.$store.state.users.userInfo.username
+      username: this.$store.state.users.userInfo.realName
     }
   },
   computed: {

@@ -7,13 +7,14 @@
       <div class="login-title">欢迎登录项目管理平台</div>
       <a-form-model ref="loginForm" :model="form" class="login-form" @submit="handleValidate">
         <a-form-model-item>
-          <a-input v-model="form.username" placeholder="用户名/手机号" />
+          <a-input class="username" :value="form.username" v-model="form.username" placeholder="用户名/手机号" />
         </a-form-model-item>
         <a-form-model-item>
-          <a-input-password v-model="form.password" placeholder="密码" />
+          <a-input-password class="pwd" :value="form.password" v-model="form.password" placeholder="密码" />
           <!-- <span class="login-form-forgot" @click="handleGotoPage">忘记密码？</span> -->
         </a-form-model-item>
         <a-form-model-item>
+          <div class="error">{{errorMsg}}</div>
           <a-button
             type="primary"
             block
@@ -38,22 +39,26 @@
 import Verify from '@/components/verifition/Verify.vue'
 import {encryptByAES} from '@/utils/cryptoJS'
 export default {
-  name: "login",
+  name: 'login',
   components: {Verify},
   data() {
     return {
       form: {
-        username: "",
-        password: "",
-      }
+        username: '',
+        password: '',
+      },
+      errorMsg: ''
     };
   },
   methods: {
-    // handleGotoPage() {
-    //     this.$router.push({
-    //         path: '/forgetpwd'
-    //     })
-    // },
+    // 验证账号密码是否为空
+    VerificationForm() {
+        if (this.form.username && this.form.password) {
+          this.loginFormButton = false // 可点击
+        } else {
+          this.loginFormButton = true // 禁用
+        }
+   },
     handleValidate(e) {
       e.preventDefault();
       this.$refs.loginForm.validate(valid => {
@@ -72,7 +77,12 @@ export default {
         this.$store.dispatch('setUserInfo', response.user_info);
         
         Promise.all([this.$store.dispatch('initTopMenu'), this.$store.dispatch('initPermission')]).then(() => { // 查询菜单成功跳转
-          this.$router.push({ path: '/' });
+          let {topMenu} = this.$store.state.system;
+          if(topMenu?.length){
+            this.$router.push({ path: '/' });
+          }else{
+            this.errorMsg='该账号尚未分配角色，请联系管理员分配角色！'
+          }
         }).catch(error => {
           this.$message.error('未获取到菜单')
         })
@@ -80,8 +90,7 @@ export default {
         console.log(error)
       })
     }
-  },
-  mounted() {},
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -121,6 +130,11 @@ export default {
       }
       .ant-input-affix-wrapper .ant-input:not(:last-child) {
         height: 40px;
+      }
+      .error {
+        font-size: 12px;
+        color: #FF4C60;
+        text-align: center;
       }
       .ant-btn {
         height: 40px;

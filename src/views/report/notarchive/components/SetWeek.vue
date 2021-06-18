@@ -22,7 +22,7 @@
       <div class="custom-time-item" v-for="(item, index) in list" :key="index">
         <a-date-picker v-model="item.dateTime" :allowClear="false" :show-time="showTime" format="YYYY/MM/DD HH:mm" value-format="YYYY-MM-DD HH:mm:ss"  @openChange="(status) => !status && handleAddTime(item)"/>
         <span class="iconfont icontianjia" @click="handlePlus(index+1)"></span>
-        <span class="iconfont iconjianshao" @click="handleDel(index, item.id)"></span>
+        <span class="iconfont iconjianshao" v-if="list.length > 1" @click="handleDel(index, item.id)"></span>
       </div>
     </div>
   </div>
@@ -67,7 +67,7 @@ export default {
         let {code, data} = await this.$api.report.handleGetSetList();
         if(code === 0) {
           let {dateTime, week} = data;
-          this.list = dateTime;
+          this.list = dateTime?.length ? dateTime : [{dateTime: null}];
           this.regular = week;
           this.regularTime = moment(`${this.regular.hour}:${this.regular.minute}`, 'HH:mm');
         }

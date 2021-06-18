@@ -59,7 +59,19 @@ export default {
                 {
                     title: '验收标准',
                     field: 'checkStandard',
-                    minWidth: 88
+                    minWidth: 128,
+                    showOverflow: true,
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectdeliverable_edit'),  
+                        attrs: {type: 'text', placeholder: '请输入验收标准'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectDeliverable(data);
+                            }
+                        }
+                    }
                 },
                 {
                     title: '月度交付物',
