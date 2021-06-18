@@ -21,12 +21,12 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-model-item label="开始日期" prop="planBeginTime">
-            <a-date-picker :value="form.planBeginTime" @change="val => handleChange('planBeginTime', val)" placeholder="请选择开始日期" allowClear />
+            <a-date-picker :value="form.planBeginTime" :inputReadOnly="true" @change="val => handleChange('planBeginTime', val)" placeholder="请选择开始日期" allowClear />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
           <a-form-model-item label="截止日期" prop="planEndTime">
-            <a-date-picker :value="form.planEndTime" @change="val => handleChange('planEndTime', val)" placeholder="请选择截止日期" allowClear />
+            <a-date-picker :value="form.planEndTime" :inputReadOnly="true" @change="val => handleChange('planEndTime', val)" placeholder="请选择截止日期" allowClear />
           </a-form-model-item>
         </a-col>
       </a-row>

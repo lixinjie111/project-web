@@ -10,7 +10,7 @@
       <div class="time">
         <span class="label">统计时段</span>
         <span class="time-picker">
-          <a-range-picker format="YYYY/MM/DD" @change="handleChangeRange">
+          <a-range-picker format="YYYY/MM/DD" :inputReadOnly="true" @change="handleChangeRange">
             <span class="iconfont iconrili calendar-picker-icon" slot="suffixIcon"></span>
           </a-range-picker>
         </span>

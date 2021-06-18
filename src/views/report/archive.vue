@@ -3,8 +3,8 @@
         <div class="header">
             <span class="title">已归档的周报</span>
             <span class="date">
-                <!-- <a-date-picker v-model="dateTime" :allowClear="false" format="YYYY/MM/DD HH:mm" value-format="YYYY-MM-DD HH:mm"  @openChange="(status) => !status && handleGetList()"/> -->
-                <a-range-picker format="YYYY-MM-DD" @change="handleChangeRange">
+                <!-- <a-date-picker v-model="dateTime" :inputReadOnly="true" :allowClear="false" format="YYYY/MM/DD HH:mm" value-format="YYYY-MM-DD HH:mm"  @openChange="(status) => !status && handleGetList()"/> -->
+                <a-range-picker :inputReadOnly="true" format="YYYY-MM-DD" @change="handleChangeRange">
                     <span class="iconfont iconrili calendar-picker-icon" slot="suffixIcon"></span>
                 </a-range-picker>
             </span>

@@ -2,7 +2,7 @@
   <a-modal :visible="isShow"
     :width="Number(width)" :closable="closable" :centered="true" :destroyOnClose="true"
     @ok="handleOk" @cancel="handleCancel">
-    <div slot="closeIcon" class="iconfont iconshanchu_xiao"></div>
+    <div slot="closeIcon" class="iconfont iconguanbi"></div>
 
     <div slot="title" class="modal-header">
       <div v-if="title" :class="headeralgin">{{title}}</div>
@@ -70,7 +70,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .iconfont {
-  font-size: 20px;
+  font-size: 16px;
   color: #636E95;
 }
 .modal-header {

@@ -19,6 +19,7 @@
                             style="width: 100%"
                             v-model="form.beginTime"
                             :disabled-date="disabledStartDate"
+                            :inputReadOnly="true"
                             format="YYYY-MM-DD"
                             placeholder="请选择计划开始日期"/>
                 </a-form-model-item>
@@ -29,6 +30,7 @@
                             style="width: 100%"
                             v-model="form.endTime"
                             :disabled-date="disabledEndDate"
+                            :inputReadOnly="true"
                             format="YYYY-MM-DD"
                             placeholder="请选择计划截止日期"/>
                 </a-form-model-item>

@@ -90,6 +90,9 @@ export default {
       }
       .list-item {
         line-height: 46px;
+        /deep/ .ant-checkbox + span {
+          color: #636E95;
+        }
       }
     }
     

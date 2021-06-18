@@ -4,11 +4,11 @@
       <div class="label">常规</div>
       <div class="regular-select">
         <a-select class="select" v-model="regular.week" :default-value="regular.week" @change="handleModRegular">
+          <span slot="suffixIcon" class="iconfont iconxia"></span>
           <a-select-option v-for="item in weekList" :key="item.code" :value="item.code">{{ item.desc }}</a-select-option>
         </a-select>
         <a-time-picker class="time-picker" :allowClear="false" 
           v-model="regularTime"
-          
           format="HH:mm" 
           value-format="HH:mm"
           :popupStyle="{width: '112px'}" 
@@ -20,7 +20,7 @@
     <div class="custom">
       <div class="label">自定义</div>
       <div class="custom-time-item" v-for="(item, index) in list" :key="index">
-        <a-date-picker v-model="item.dateTime" :allowClear="false" :show-time="showTime" format="YYYY/MM/DD HH:mm" value-format="YYYY-MM-DD HH:mm:ss"  @openChange="(status) => !status && handleAddTime(item)"/>
+        <a-date-picker v-model="item.dateTime" :allowClear="false" :show-time="showTime" :inputReadOnly="true" format="YYYY/MM/DD HH:mm" value-format="YYYY-MM-DD HH:mm:ss"  @openChange="(status) => !status && handleAddTime(item)"/>
         <span class="iconfont icontianjia" @click="handlePlus(index+1)"></span>
         <span class="iconfont iconjianshao" v-if="list.length > 1" @click="handleDel(index, item.id)"></span>
       </div>
@@ -141,6 +141,9 @@ export default {
   padding: 24px;
   height: 100%;
   overflow: auto;
+  /deep/ .ant-select-selection, /deep/ .ant-time-picker-input, /deep/ .ant-input {
+    border: 1px solid #97A0C3;
+  }
   .label {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;

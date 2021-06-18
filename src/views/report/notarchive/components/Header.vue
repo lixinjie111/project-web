@@ -52,6 +52,9 @@ export default {
       border-right: 1px solid #EAEDF7;
     }
   }
+  .date {
+    color: #7C88B1;
+  }
 }
 
 .select-container {

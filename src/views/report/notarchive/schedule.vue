@@ -6,7 +6,7 @@
                 :tableData="tableData" 
                 :setTableColumns="setTableColumns" 
                 :rowClassName="handleRowClassName" 
-                :treeConfig="{children: 'children', iconOpen: 'iconfont iconxia2', iconClose: 'iconfont iconyou2'}"
+                :treeConfig="{children: 'children', iconOpen: 'tree-icon iconfont iconxia2', iconClose: 'tree-icon iconfont iconyou2'}"
             ></BasicTable>
             <NoData v-else></NoData>
         </div>
@@ -231,13 +231,17 @@
             .has-children {
                 background: #F6F8FF;
             }
+            .tree-icon {
+                line-height: 14px;
+                font-size: 16px;
+            }
         }
 
         .table-name {
             height: 40px;
             line-height: 40px;
 
-            $bgColors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+            $bgColors: #7C88B1, #FE774B, #08BD6C, #FF4C60, black;
             @each $bg in $bgColors {
                 $i: index($bgColors, $bg);
                 .status#{$i} {
