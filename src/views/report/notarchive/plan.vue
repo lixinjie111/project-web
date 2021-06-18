@@ -251,14 +251,17 @@ export default {
 
         .index {
             position: absolute;
-            left: -1.5rem;
-            width: 1.5rem;
+            left: -2rem;
+            width: 2rem;
             text-align: center;
             font-size: 14px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
             color: #97A0C3;
             vertical-align: middle;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
     .table-time {
