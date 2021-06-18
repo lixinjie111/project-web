@@ -339,7 +339,8 @@
     }
 
     .product-overview-container {
-        margin: 16px 24px 24px 24px;
+        margin: 0 24px;
+        padding-bottom: 24px;
 
         .mr-16 {
             margin-right: 16px;

@@ -224,7 +224,8 @@
     }
 
     .project-home-container {
-        margin: 16px 24px 24px 24px;
+        margin: 0 24px;
+        padding-bottom: 24px;
 
         .export-btn {
             margin-right: 16px;
