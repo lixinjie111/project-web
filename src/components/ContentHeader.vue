@@ -45,7 +45,7 @@ export default {
     justify-content: flex-start;
     align-items: center;
     .title {
-      font-size: 16px;
+      font-size: 20px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 500;
       color: #242F57;

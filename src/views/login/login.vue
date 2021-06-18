@@ -47,18 +47,13 @@ export default {
         username: '',
         password: '',
       },
-      errorMsg: ''
+      errorMsg: '',
+      rules: [
+        
+      ]
     };
   },
   methods: {
-    // 验证账号密码是否为空
-    VerificationForm() {
-        if (this.form.username && this.form.password) {
-          this.loginFormButton = false // 可点击
-        } else {
-          this.loginFormButton = true // 禁用
-        }
-   },
     handleValidate(e) {
       e.preventDefault();
       this.$refs.loginForm.validate(valid => {

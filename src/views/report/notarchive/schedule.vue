@@ -68,7 +68,7 @@
                         slots: {
                             default: ({row}) => {
                                 return [
-                                    <Priority percent={row.priority} size="small"/>
+                                    row.priority >= 0 && row.priority <= 2 ?  <Priority percent={row.priority} size="small"/> : <span class="no-priority">无</span>
                                 ]
                             }
                         }
@@ -282,6 +282,9 @@
             text-align: center;
             background: #F4F7FC;
             border-radius: 2px;
+        }
+        .no-priority {
+            color: #97A0C3;
         }
     }
 </style>
