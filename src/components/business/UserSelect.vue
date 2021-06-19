@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserIcon v-if="multiple" :value="item.userName" :key="item.userId" v-for="(item, index) in userList" closable @close="handleDelete(index)"/>
+    <UserIcon v-if="multiple" :value="item.userName" :key="item.userId" v-for="(item, index) in userList" closable @close="handleDelete(index)" class="margin"/>
     <a-popover trigger="click" placement="bottomLeft" overlay-class-name="user-sel-popover" v-model="showPopup">
       <template v-if="multiple">
         <CircleButton></CircleButton>
@@ -41,7 +41,6 @@
     data() {
       return {
         mode: 'user', // user/add
-        userKeys: [],
         users: [],
         replaceFields: {
           key: 'userId',
@@ -130,6 +129,12 @@
     computed: {
       userList() {
         return this.value || this.users;
+      },
+      userKeys() {
+        if (Array.isArray(this.userList))
+        return this.userList.map(item => item.userId)
+        else
+          return [this.userList.userId]
       }
     },
     methods: {
@@ -179,6 +184,11 @@
   }
 </script>
 
+<style lang="scss" scoped>
+  .margin {
+    margin-right: 6px;
+  }
+</style>
 <style lang="scss">
 .user-sel-popover {
   .ant-popover-inner-content {

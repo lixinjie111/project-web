@@ -25,18 +25,18 @@
         </a-col>
 <!--        <a-col :span="6"><PrioritySelect :value="form.priority"/></a-col>-->
         <a-col :span="6">
-          <DateSelect title="计划开始" icon="iconrili" :value="form.planBeginTime" @select="val => handleSave('planBeginTime', val)" />
+          <DateSelect title="计划开始" icon="iconrili" :value="form.planBeginTime" @select="val => handleSave('planBeginTime', val)" :range="{end: form.planEndTime}" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="计划结束" icon="iconjihua" :value="form.planEndTime" @select="val => handleSave('planEndTime', val)" />
+          <DateSelect title="计划结束" icon="iconjihua" :value="form.planEndTime" @select="val => handleSave('planEndTime', val)" :range="{begin: form.planBeginTime}" />
         </a-col>
       </a-row>
       <a-row :gutter="[16, 16]">
         <a-col :span="6">
-          <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @select="val => handleSave('actualBeginTime', val)" />
+          <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @select="val => handleSave('actualBeginTime', val)" :range="{end: form.actualEndTime}" />
         </a-col>
         <a-col :span="6">
-          <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @select="val => handleSave('actualEndTime', val)" />
+          <DateSelect title="实际结束" icon="iconjihua" :value="form.actualEndTime" @select="val => handleSave('actualEndTime', val)" :range="{begin: form.actualBeginTime}" />
         </a-col>
         <a-col :span="6">
           <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
@@ -70,7 +70,7 @@
             <a-col span="8">参与人:</a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
-            <a-col span="8"><UserSelect :options="memberList" :value="form.executorList" @change="val => handleSave('executorList', val)" multiple/></a-col>
+            <a-col span="24"><UserSelect :options="memberList" :value="form.taskExecutor" @change="val => handleSave('taskExecutor', val)" multiple/></a-col>
           </a-row>
           <a-row :gutter="[16, 16]">
             <a-col span="8">任务描述:</a-col>
@@ -208,7 +208,7 @@
       return {
         form: {
           incharge: null,
-          executorList:[],
+          taskExecutor:[],
           status: 1,
           priority: 1,
         },

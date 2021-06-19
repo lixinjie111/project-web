@@ -1,12 +1,9 @@
 <template>
-  <a-popover trigger="click" v-model="visible" placement="bottomLeft" overlayClassName="date-pop">
+  <a-date-picker :value="mValue" @change="handleSelect" :disabledDate="disabledDate">
     <TwoValue :title="showDate" :subtitle="title" class="btn">
       <i class="iconfont" :class="icon"></i>
     </TwoValue>
-      <template slot="content">
-        <a-calendar :fullscreen="false" @select="handleSelect" :value="mValue" />
-      </template>
-  </a-popover>
+  </a-date-picker>
 </template>
 
 <script>
@@ -15,12 +12,12 @@
 
   export default {
     name: "DateSelect",
-    props: ['title', 'icon', 'value'],
+    props: ['title', 'icon', 'value', 'range'], // range: {begin, end}
     components: {TwoValue},
     data() {
       return {
         // date: null,
-        visible: false,
+        // visible: false,
       }
     },
     computed: {
@@ -38,8 +35,17 @@
     methods: {
       handleSelect(val) {
         // this.date = val;
-        this.visible = false;
+        // this.visible = false;
         this.$emit('select', val.toDate());
+      },
+      disabledDate(val) {
+        if (this.range) {
+          if (this.range.begin)
+            return val.isBefore(this.range.begin, 'day');
+          else if (this.range.end)
+            return val.isAfter(this.range.end, 'day');
+        }
+        return false;
       }
     }
   }
