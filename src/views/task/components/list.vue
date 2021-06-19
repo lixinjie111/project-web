@@ -91,6 +91,9 @@
   import {isInPermission} from "@/utils/common";
   import {changeTaskStatus, deleteTask} from "@/api/task";
 
+  const widthDate = 120;
+  const widthStatus = 90;
+
   export default {
     name: "TaskList",
     components: { TreeTable, TaskAdd, TaskEdit, draggable },
@@ -103,6 +106,7 @@
           dataIndex: 'type',
           title: '操作',
           fixed: 'right',
+          width: widthStatus,
           customRender: (text, record, index) => {
             let ops = [];
             if (canEdit)
@@ -136,26 +140,30 @@
             dataIndex: 'id',
             title: 'ID',
             fixed: 'left',
+            width: 60,
           },
           {
             dataIndex: 'taskName',
             title: '任务名称',
             fixed: 'left',
-            width: 200,
+            width: 240,
             treeNode: true,
-            customRender: (text, record, index) => {
-              return canEdit ? {
-                attrs:{},
-                props:{},
-                class:{},
-                style:{},
-                children: this.$createElement('a', {on: {click: () => this.handleEdit(record)}}, text)
-              } : text
-            }
+            ellipsis: true,
+            // customRender: (text, record, index) => {
+            //   return canEdit ? {
+            //     attrs:{},
+            //     props:{},
+            //     class:{},
+            //     style:{},
+            //     children: this.$createElement('a', {on: {click: () => this.handleEdit(record)}}, text)
+            //   } : text
+            // }
           },
           {
             dataIndex: 'status',
             title: '状态',
+            width: widthStatus + 10,
+            align: 'center',
             scopedSlots: {
               customRender: 'status'
             }
@@ -163,6 +171,8 @@
           {
             dataIndex: 'priority',
             title: '优先级',
+            width: widthStatus,
+            align: 'center',
             scopedSlots: {
               customRender: 'priority'
             }
@@ -170,34 +180,42 @@
           {
             dataIndex: 'taskType',
             title: '任务类型',
+            width: widthStatus,
             customRender(text) {
               return taskTypes[text];
             }
           },
           {
             dataIndex: 'taskMaster',
+            width: widthStatus,
+            ellipsis: true,
             title: '负责人',
           },
           {
             dataIndex: 'taskExecutor',
             title: '执行者',
+            ellipsis: true,
+            width: widthDate,
           },
           {
             dataIndex: 'planHour',
             title: '工时/预计',
+            width: widthStatus,
           },
           {
-            dataIndex: 'usedHour',
+            dataIndex: 'actualHour',
             title: '工时/消耗',
+            width: widthStatus,
           },
           {
             dataIndex: 'restHour',
             title: '工时/剩余',
+            width: widthStatus,
           },
           {
             dataIndex: 'progress',
             title: '进度',
-            width: 120,
+            width: widthStatus,
             scopedSlots: {
               customRender: 'progress'
             }
@@ -205,18 +223,22 @@
           {
             dataIndex: 'planBeginTime',
             title: '计划开始',
+            width: widthDate,
           },
           {
             dataIndex: 'planEndTime',
             title: '计划结束',
+            width: widthDate,
           },
           {
             dataIndex: 'actualBeginTime',
             title: '实际开始',
+            width: widthDate,
           },
           {
             dataIndex: 'actualEndTime',
             title: '实际结束',
+            width: widthDate,
           },
           ...operation
         ],
@@ -257,26 +279,20 @@
         set(val) {
           // console.log(val)
           val.forEach(item => {
-            if (item.status !== 0) {
-              item.status = 0;
-              changeTaskStatus(item.id, item.status);
-            }
+            this.updateStatus(item, 0);
           });
         }
       },
       status1: {
         get() {
           let st = this.boardData.filter(item => item.status===1)
-          console.log(st)
+          // console.log(st)
           return st;
         },
         set(val) {
           // console.log(val)
           val.forEach(item => {
-            if (item.status !== 1) {
-              item.status = 1;
-              changeTaskStatus(item.id, item.status);
-            }
+            this.updateStatus(item, 1);
           })
         }
       },
@@ -288,10 +304,7 @@
         set(val) {
           // console.log(val)
           val.forEach(item => {
-            if (item.status !== 2) {
-              item.status = 2;
-              changeTaskStatus(item.id, item.status);
-            }
+            this.updateStatus(item, 2);
           })
         }
       },
@@ -303,10 +316,7 @@
         set(val) {
           // console.log(val)
           val.forEach(item => {
-            if (item.status !== 3) {
-              item.status = 3;
-              changeTaskStatus(item.id, item.status);
-            }
+            this.updateStatus(item, 3);
           })
         }
       },
@@ -316,12 +326,8 @@
           return st;
         },
         set(val) {
-          // console.log(val)
           val.forEach(item => {
-            if (item.status !== 4) {
-              item.status = 4;
-              changeTaskStatus(item.id, item.status);
-            }
+            this.updateStatus(item, 4);
           })
         }
       },
@@ -332,6 +338,18 @@
       },
     },
     methods: {
+      updateStatus(item, newStatus) {
+        if (item.status !== newStatus) {
+          let oldStatus = item.status;
+          item.status = newStatus;
+          changeTaskStatus(item.id, newStatus).then(res => {
+            // if (res.code !== 0)
+            //   item.status = oldStatus;
+          }).catch(err => {
+            item.status = oldStatus
+          });
+        }
+      },
       handleCreate(status) {
         this.curStatus = status;
         this.showCreate = true;

@@ -13,6 +13,7 @@
       <BasicTable v-if="memberList.length"
                   :tableData="memberList"
                   :setTableColumns="columns"
+                  ref="myTable"
       ></BasicTable>
       <NoData v-else></NoData>
     </div>
@@ -37,61 +38,66 @@
       let canAdd = isInPermission('business_member_add');
       let canEdit = isInPermission('business_member_edit');
       let canDelete = isInPermission('business_member_del');
+
+      let columns = [
+        {
+          title: '姓名',
+          field: 'userName',
+          minWidth: 150,
+          showOverflow: true,
+          slots: {
+            default: ({row}) => {
+              if (this.showAdd && row.id === -1)
+                return [
+                  <UserSelectTree on-select={e => this.handleRowChange(row, e, 'userName')} />
+            ]
+            else
+              return row.userName
+            }
+          },
+        },
+        {
+          field: 'userRole',
+          title: '角色',
+          editRender: {
+            name: 'input',
+            enabled: canEdit,
+            // attrs: {type: 'text', placeholder: '请输入下周工作计划'},
+            events: {
+              blur: ({row}, e) => this.handleRowChange(row, e, 'userRole'),
+            }
+          }
+        },
+        {
+          field: 'createdTime',
+          title: '加入日期',
+        }
+      ];
+      if (canDelete) {
+        columns.push({
+          field: 'type',
+            title: '操作',
+          slots: {
+        default: ({row}) => {
+            let operation = [];
+            // if (canEdit)
+            //   operation.push(<i class="iconfont iconxiezuo" on-click={e => this.handleEdit(row)} />)
+            if (canDelete)
+              operation.push(<i class="iconfont iconshanchu" on-click={e => this.handleDelete(row)} />)
+
+            return operation;
+          }
+        },
+        })
+      }
+
       return {
         projectId,
-        showEdit: false,
+        // showEdit: false,
         showAdd: false,
         canAdd,
         tableData: [],
-        columns: [
-          {
-            title: '姓名',
-            field: 'userName',
-            minWidth: 150,
-            showOverflow: true,
-            slots: {
-              default: ({row}) => {
-                if (this.showAdd && row.id === -1)
-                return [
-                  <UserSelectTree on-select={e => this.handleRowChange(row, e, 'userName')} />
-              ]
-                else
-                  return row.userName
-              }
-            },
-          },
-          {
-            field: 'userRole',
-            title: '角色',
-            editRender: {
-              name: 'input',
-              enabled: canEdit,
-              // attrs: {type: 'text', placeholder: '请输入下周工作计划'},
-              events: {
-                blur: ({row}, e) => this.handleRowChange(row, e, 'userRole'),
-              }
-            }
-          },
-          {
-            field: 'createdTime',
-            title: '加入日期',
-          },
-          {
-            field: 'type',
-            title: '操作',
-            slots: {
-              default: ({row}) => {
-                let operation = [];
-                // if (canEdit)
-                //   operation.push(<i class="iconfont iconxiezuo" on-click={e => this.handleEdit(row)} />)
-                if (canDelete)
-                  operation.push(<i class="iconfont iconshanchu" on-click={e => this.handleDelete(row)} />)
-
-                return operation;
-              }
-            },
-          },
-        ]
+        columns
       }
     },
     mounted() {
@@ -115,13 +121,20 @@
         });
       },
       handleAddEditUser() {
+        if (this.showAdd) {
+          this.$message.warn('你有一个未完成的添加成员');
+          return;
+        }
         this.showAdd = true;
-        this.showEdit = true;
+        // this.showEdit = true;
         this.editId = -1;
+        this.$nextTick( () => {
+          this.$refs.myTable.$el.scrollIntoView(false);
+        });
       },
       handleEdit(record) {
         this.showAdd = false;
-        this.showEdit = true;
+        // this.showEdit = true;
         this.editId = record.id;
       },
       handleDelete(record) {
@@ -165,7 +178,7 @@
             }).then(res => {
               if (res.code === 0 && res.data) {
                 this.showAdd = false;
-                this.showEdit = false;
+                // this.showEdit = false;
                 this.loadMemberList();
               }
             }).catch(err => {
@@ -198,7 +211,8 @@
     cursor: pointer;
   }
   .iconshanchu {
-    margin-left: 16px;
+    /*margin-left: 16px;*/
+    color: #FF4C60;
   }
 }
 </style>

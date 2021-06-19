@@ -12,7 +12,7 @@
     </template>
     <template  slot="content">
       <div class="title-row">
-        <ToggleInput v-model="form.taskName" overClass="title" @commit="saveData({taskName: form.taskName})">
+        <ToggleInput v-model="form.taskName" overClass="title" @commit="saveData({taskName: form.taskName})" :max-length="50">
           <div>{{form.taskName}}
           </div>
         </ToggleInput>
@@ -261,12 +261,18 @@
         if (key === 'actualEndTime' && this.form.actualBeginTime && mValue.isBefore(this.form.actualBeginTime, 'day')) {
           return;
         }
+        let oldStatus;
+        if (key === 'status')
+          oldStatus = this.form.status;
         this.$set(this, 'form', {...this.form, [key]: value});
         if (key === 'incharge') {
           this.saveData({masterList: [value]});
           return;
         }
-        this.saveData({[key]: value});
+        this.saveData({[key]: value}, () => {
+          if (key === 'status')
+            this.form.status = oldStatus;
+        });
       },
 
       // 关闭编辑用户信息
@@ -309,7 +315,7 @@
           onOk() {
             deleteAttachment(that.form.attachment.id).then(res => {
               if (res.code === 0 && res.data) {
-                // that.form.attachment = null;
+                that.form.attachment = null;
                 that.saveData({attachment: null});
               }
             }).catch(err => {
@@ -326,7 +332,7 @@
           }
         }).catch(err => {});
       },
-      saveData(data) {
+      saveData(data, failCallback) {
         for (let key in data) {
           if (data.hasOwnProperty(key) && key.indexOf('Time') > 0) {
             if (key.indexOf('begin') >= 0)
@@ -337,8 +343,9 @@
         }
         data.id = this.taskId;
         saveTask(data).then(res => {
-
-        }).catch(err => {});
+        }).catch(err => {
+          failCallback && failCallback();
+        });
       },
       getDetail() {
         if (! this.taskId)
@@ -421,6 +428,15 @@
       line-height: 29px;
       margin-right: 8px;
       min-width: 60px;
+      max-width: 800px;
+      >div {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      >input {
+        width: 500px;
+      }
     }
   }
   .toggle-desc {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <UserIcon v-if="multiple" :value="item.userName" :key="item.userId" v-for="(item, index) in userList" closable @close="handleDelete(index)"/>
-    <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
+    <a-popover trigger="click" placement="bottomLeft" overlay-class-name="user-sel-popover" v-model="showPopup">
       <template v-if="multiple">
         <CircleButton></CircleButton>
       </template>
@@ -179,6 +179,11 @@
   }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.user-sel-popover {
+  .ant-popover-inner-content {
+    max-height: 350px;
+    overflow-y: auto;
+  }
+}
 </style>
