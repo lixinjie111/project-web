@@ -31,7 +31,7 @@
           'iconshijian',
           'iconxiaoyan',
           'iconlishijilu',
-          'iconyanqi',
+          'iconzanting',
         ],
         taskStatuses
       }
@@ -47,18 +47,22 @@
 
 <style lang="scss" scoped>
 .two-v {
-  $colors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+  $colors: #242F57, #FE774B, #08BD6C, #FF4C60, #EDBA1D;
   @each $color in $colors {
     $i: index($colors, $color);
     .status#{$i} {
       display: inline-block;
-      width: 24px;
-      height: 24px;
-      border-radius: 2px;
+      width: 36px;
+      height: 36px;
+      /*border-radius: 2px;*/
       color: $color;
       text-align: center;
-      line-height: 24px;
+      line-height: 36px;
       cursor: default;
+
+      .iconfont {
+        font-size: 36px;
+      }
     }
   }
 }

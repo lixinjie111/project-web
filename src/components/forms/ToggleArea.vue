@@ -7,7 +7,7 @@
       <template slot="title">点击即可编辑</template>
     </a-tooltip>
     <div v-if="edit"><a-textarea v-bind="$attrs" @change="handleChange" :value="value"/></div>
-    <a-row :gutter="[16, 16]" v-if="edit">
+    <a-row :gutter="[16, 16]" v-if="edit" class="margin">
       <a-col span="2"><a-button type="primary" @click="handleSave">保存</a-button></a-col>
       <a-col span="2"><a-button @click="handleCancel">取消</a-button></a-col>
     </a-row>
@@ -45,4 +45,7 @@
 </script>
 
 <style lang="scss" scoped>
+  .margin {
+    padding-top: 16px;
+  }
 </style>

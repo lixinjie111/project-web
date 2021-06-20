@@ -1,5 +1,5 @@
 <template>
-  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" body-style="padding-top: 10px" centered>
+  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" :body-style="{paddingTop: '10px'}" centered>
     <template slot="title">
       <i class="iconfont iconxiezuo"></i>
       编辑任务
@@ -46,46 +46,52 @@
         </a-col>
       </a-row>
 
-      <a-tabs>
+      <a-tabs class="task-edit-tabs">
         <a-tab-pane key="1">
           <span slot="tab">
             <i class="iconfont icondagangshitu"></i>任务信息
           </span>
-          <a-row :gutter="[16, 16]">
-            <a-col span="8">所属项目:</a-col>
-            <a-col span="6">任务类型:</a-col>
-            <a-col span="10">优先级:</a-col>
-          </a-row>
-          <a-row :gutter="[16, 16]">
-            <a-col span="8">智能营销方案整体设计</a-col>
-            <a-col span="6">
-              <a-select style="width: 150px" :value="form.taskType" :options="types" size="small" @change="val => handleSave('taskType', val)">
-              </a-select>
-            </a-col>
-            <a-col span="10">
-              <PrioritySelect :value="form.priority" @change="val => handleSave('priority', val)"/>
-            </a-col>
-          </a-row>
-          <a-row :gutter="[16, 16]">
-            <a-col span="8">参与人:</a-col>
-          </a-row>
-          <a-row :gutter="[16, 16]">
-            <a-col span="24"><UserSelect :options="memberList" :value="form.taskExecutor" @change="val => handleSave('taskExecutor', val)" multiple/></a-col>
-          </a-row>
-          <a-row :gutter="[16, 16]">
-            <a-col span="8">任务描述:</a-col>
-          </a-row>
-          <a-row :gutter="[16, 16]">
-            <a-col span="24">
-              <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
-            </a-col>
-          </a-row>
+          <div class="block">
+            <a-row :gutter="[16, 4]">
+              <a-col span="8" class="prj-title">所属项目:</a-col>
+              <a-col span="6" class="prj-title">任务类型:</a-col>
+              <a-col span="10" class="prj-title">优先级:</a-col>
+            </a-row>
+            <a-row :gutter="[16, 4]">
+              <a-col span="8">{{form.projectName}}</a-col>
+              <a-col span="6">
+                <a-select style="width: 150px" :value="form.taskType" :options="types" size="small" @change="val => handleSave('taskType', val)">
+                </a-select>
+              </a-col>
+              <a-col span="10">
+                <PrioritySelect :value="form.priority" @change="val => handleSave('priority', val)"/>
+              </a-col>
+            </a-row>
+          </div>
+          <div class="block">
+            <a-row :gutter="[16, 8]">
+              <a-col span="8">参与人:</a-col>
+            </a-row>
+            <a-row :gutter="[16, 8]">
+              <a-col span="24"><UserSelect :options="memberList" :value="form.taskExecutor" @change="val => handleSave('taskExecutor', val)" multiple/></a-col>
+            </a-row>
+          </div>
+          <div class="block">
+            <a-row :gutter="[16, 4]">
+              <a-col span="8">任务描述:</a-col>
+            </a-row>
+            <a-row :gutter="[16, 4]">
+              <a-col span="24">
+                <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
+              </a-col>
+            </a-row>
+          </div>
         </a-tab-pane>
         <a-tab-pane key="2" v-if="!parentId">
           <span slot="tab">
             <i class="iconfont iconzirenwu"></i>子任务
           </span>
-          <a-row :gutter="[16, 16]">
+          <a-row :gutter="[16, 4]">
             <a-col span="20">共 {{childrenList.length}} 个子任务</a-col>
             <a-col span="4">
               <FlatButton @click="handleCreateChildTask">
@@ -114,7 +120,7 @@
           <span slot="tab">
             <i class="iconfont iconlianjie"></i>附件
           </span>
-          <a-row :gutter="[16, 16]">
+          <a-row :gutter="[16, 4]">
             <a-col span="20" v-if="form.attachment">共 1 个附件</a-col>
             <a-col span="20" v-else>共 0 个附件</a-col>
             <a-col span="4" v-if="!form.attachment">
@@ -151,7 +157,7 @@
           </div>
         </a-tab-pane>
       </a-tabs>
-    <a-row :gutter="[16, 16]" v-if="form.history">
+    <a-row :gutter="[16, 4]" v-if="form.history">
       <a-col span="8"><i class="iconfont iconlishijilu"></i>历史记录</a-col>
       <a-divider></a-divider>
     </a-row>
@@ -405,6 +411,10 @@
 .ant-tabs {
   width: 100%;
 }
+.block {
+  width: 100%;
+  margin-bottom: 24px;
+}
   .child-item {
     display: flex;
     justify-content: space-between;
@@ -420,6 +430,10 @@
     .iconshanchu {
       color: #FF4C60;
     }
+  }
+
+  .prj-title {
+    color: #636E95;
   }
 </style>
 <style lang="scss">
@@ -449,5 +463,10 @@
     max-height: 220px;
     overflow: hidden auto;
     line-height: 22px;
+  }
+  .task-edit-tabs {
+    .ant-tabs-nav .ant-tabs-tab {
+      padding-left: 0;
+    }
   }
 </style>
