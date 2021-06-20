@@ -37,4 +37,7 @@
   border-radius: 16px;
   text-align: center;
 }
+  .iconfont {
+    color: #7C88B1;
+  }
 </style>

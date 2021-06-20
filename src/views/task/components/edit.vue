@@ -1,5 +1,5 @@
 <template>
-  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" centered>
+  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" body-style="padding-top: 10px" centered>
     <template slot="title">
       <i class="iconfont iconxiezuo"></i>
       编辑任务
@@ -396,6 +396,10 @@
     display: flex;
     height: 50px;
     align-items: center;
+
+    .ant-checkbox-wrapper {
+      color: #636E95;
+    }
   }
 
 .ant-tabs {
