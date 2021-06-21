@@ -56,6 +56,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '@/assets/css/variables.scss';
 .select {
   .btn {
     display: inline-block;
@@ -72,7 +73,7 @@ export default {
       }
     }
   }
-  $colors: #0064FF, #08BD6C, #FE774B, #97A0C3, #97A0C2, #FF4C60;
+  $colors: $acceptance-font;
   @each $clr in $colors {
     $i: index($colors, $clr);
     .status#{$i} {

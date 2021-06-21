@@ -3,6 +3,7 @@
     <div class="menu">
       <span class="title" v-if="type === 'title'">{{title}}</span>
       <Breadcrumb v-if="type === 'breadcrumb'" :breadcrumbList="breadcrumbList"></Breadcrumb>
+      <slot name="left"></slot>
     </div>
     <div class="operation">
       <slot name="operation"></slot>

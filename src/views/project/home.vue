@@ -2,19 +2,21 @@
     <div class="layout">
         <div class="project-home-container">
             <ContentHeader type="title" title="项目">
+                <div class="header-left" slot="left">
+                   <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                </div>
                 <div slot="operation">
-                    <a-button class="export-btn mr-16" @click="handleExport" v-if="isInPermission('business_project_view')">
+                    <a-button size="large" class="export-btn" @click="handleExport" v-if="isInPermission('business_project_view')">
                         <span class="iconfont icondaochu"></span>
                         导出
                     </a-button>
-                    <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_project_add')">
+                    <a-button size="large" type="primary" @click="handleAdd" v-if="isInPermission('business_project_add')">
                         <span class="iconfont iconjia"></span>
                         添加项目
                     </a-button>
                 </div>
             </ContentHeader>
             <div class="home-content">
-                <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
                 <ProjectList :list="listData" :productList="productList"
                              :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                              @pagination-change-pagesize="handleChangePageSize"
@@ -226,6 +228,10 @@
     .project-home-container {
         margin: 0 24px;
         padding-bottom: 24px;
+
+        .header-left {
+            margin-left: 32px;
+        }
 
         .export-btn {
             margin-right: 16px;

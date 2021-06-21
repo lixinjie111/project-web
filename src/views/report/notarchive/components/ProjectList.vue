@@ -17,13 +17,14 @@
     import Status from "@/components/business/Status";
     import IconToolTip from "@/components/tooltip/IconToolTip";
     import TextToolTip from "@/components/tooltip/TextToolTip";
+    import Progress from "@/components/business/Progress";
     import Collapse from "@/components/collapse/Collapse";
     import {isInPermission} from '@/utils/common.js';
     import NoData from "@/components/others/NoData";
 
     export default {
         name: "project",
-        components: {NoData, Collapse, TextToolTip, IconToolTip, Status, BasicTable},
+        components: {NoData, Collapse, TextToolTip, IconToolTip, Status, Progress, BasicTable},
         props: {
             list: {
                 type: Array,
@@ -80,7 +81,7 @@
                             default: ({row}) => {
                                 row.progress = Number(/(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress);
                                 return [
-                                    <a-progress percent={row.progress} size="small"/>
+                                    <Progress percent={Number(row.progress)} status={row.status}/>
                                 ]
                             }
                         }
@@ -136,6 +137,7 @@
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/css/variables.scss';
     .project-list-container {
         padding-bottom: 4px;
 
@@ -152,8 +154,7 @@
             height: 40px;
             line-height: 40px;
             position: relative;
-
-            $bgColors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+            $bgColors: $status-font;
             @each $bg in $bgColors {
                 $i: index($bgColors, $bg);
                 .status#{$i} {

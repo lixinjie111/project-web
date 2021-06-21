@@ -187,7 +187,7 @@
                 &.ant-tree-switcher-noop {
                     width: 6px;
                     height: 6px;
-                    margin: 8px;
+                    margin: 8px 9px;
                     border-radius: 50%;
                     background: #C6CBDE;
                     i{

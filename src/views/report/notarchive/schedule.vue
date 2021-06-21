@@ -3,10 +3,11 @@
         <Header title="本周工作进度" :date="`${startTime} - ${endTime}`" @selected-tree="handleSetSelectedTree"></Header>
         <div class="table-content">
             <BasicTable v-if="tableData.length" 
+                rowId="id"
                 :tableData="tableData" 
                 :setTableColumns="setTableColumns" 
                 :rowClassName="handleRowClassName" 
-                :treeConfig="{children: 'children', iconOpen: 'tree-icon iconfont iconxia2', iconClose: 'tree-icon iconfont iconyou2'}"
+                :treeConfig="{children: 'children', expandRowKeys: expandRowKeys, iconOpen: 'tree-icon iconfont iconxia2', iconClose: 'tree-icon iconfont iconyou2'}"
             ></BasicTable>
             <NoData v-else></NoData>
         </div>
@@ -20,19 +21,21 @@
     import IconToolTip from "@/components/tooltip/IconToolTip";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import Priority from "@/components/business/Priority";
+    import Progress from "@/components/business/Progress"
     import NoData from './components/NoData';
 
     import {isInPermission} from '@/utils/common.js'
 
     export default {
         name: "schedule",
-        components: {Header, TextToolTip, IconToolTip, Status, Priority, BasicTable, NoData},
+        components: {Header, TextToolTip, IconToolTip, Status, Priority, BasicTable, Progress, NoData},
         data() {
             return {
                 startTime: '',
                 endTime: '',
                 deptId: this.$store.state.users.userInfo.deptId,
                 tableData: [],
+                expandRowKeys: [],
                 setTableColumns: [
                     {
                         title: '工作任务',
@@ -87,7 +90,8 @@
                             default: ({row}) => {
                                 row.progress = /(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress;
                                 return [
-                                    <a-progress percent={Number(row.progress)} size="small"/>
+                                    // <a-progress percent={Number(row.progress)} size="small"/>
+                                    <Progress percent={Number(row.progress)} status={row.status}/>
                                 ]
                             }
                         }
@@ -197,6 +201,8 @@
                         this.endTime = endTime || '';
                         this.tableData = list || [];
                         this.$store.dispatch('initArchiveId', archiveId || '');
+                        this.expandRowKeys = [];
+                        this.tableData?.map(item=>this.expandRowKeys.push(item.id));
                     }
                 } catch (error) {
                     console.log(error)
@@ -224,6 +230,7 @@
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/css/variables.scss';
     .notarchive-schedule-container {
         padding: 0 16px;
 
@@ -241,7 +248,8 @@
             height: 40px;
             line-height: 40px;
 
-            $bgColors: #7C88B1, #FE774B, #08BD6C, #FF4C60, black;
+            // $bgColors: #7C88B1, #FE774B, #08BD6C, #FF4C60, black;
+            $bgColors: $status-font;
             @each $bg in $bgColors {
                 $i: index($bgColors, $bg);
                 .status#{$i} {

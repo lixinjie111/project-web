@@ -2,23 +2,25 @@
     <div class="layout">
         <div class="product-overview-container">
             <ContentHeader type="title" title="产品">
+                <div class="header-left" slot="left">
+                    <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                </div>
                 <div slot="operation">
-                    <a-button class="export-btn mr-16" @click="handleExport" v-if="isInPermission('business_product_view')">
-                        <span class="iconfont icondaochu"></span>
+                    <a-button size="large" class="export-btn" @click="handleExport" v-if="isInPermission('business_product_view')">
+                        <i class="iconfont icondaochu"></i>
                         导出
                     </a-button>
-                    <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_product_add')">
-                        <span class="iconfont iconjia"></span>
+                    <a-button size="large"  type="primary" @click="handleAdd" v-if="isInPermission('business_product_add')">
+                        <i class="iconfont iconjia"></i>
                         添加产品
                     </a-button>
                 </div>
             </ContentHeader>
             <div class="overview-content">
-                <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
-                <ListTable :columns="columns" :data="listData" class="mt-25">
+                <ListTable :columns="columns" :data="listData">
                     <template slot="productName" slot-scope="data">
                         <TextToolTip className="table-name" :content="data.row.productName" :refName="'table-name' + data.row.index"></TextToolTip>
-                        <p class="table-num">{{data.row.productCode}}</p>
+                        <TextToolTip className="table-num" :content="data.row.productCode" :refName="'table-num' + data.row.index"></TextToolTip>
                     </template>
                     <div slot="closedTime" slot-scope="data" class="table-close-time">
                         <p class="table-name">{{data.row.closedTime || '-'}}</p>
@@ -82,23 +84,23 @@
                     },
                     {
                         slot: 'productName',
-                        width: '25%',
+                        width: '30%',
                         ellipsis: true
                     },
                     {
                         title: '产品负责人',
                         key: 'productMaster',
-                        width: '23%',
+                        width: '22%',
                         ellipsis: true
                     },
                     {
                         title: '创建时间',
                         key: 'createdTime',
-                        width: '20%'
+                        width: '18%'
                     },
                     {
                         slot: 'closedTime',
-                        width: '20%'
+                        width: '18%'
                     },
                     {
                         slot: 'action',
@@ -342,15 +344,12 @@
         margin: 0 24px;
         padding-bottom: 24px;
 
-        .mr-16 {
-            margin-right: 16px;
-        }
-
-        .mt-25 {
-            margin-top: 25px;
+        .header-left {
+            margin-left: 32px;
         }
 
         .export-btn {
+            margin-right: 16px;
             color: #636E95;
             background-color: transparent;
             border-color: #C6CBDE;
@@ -364,11 +363,12 @@
                 color: #242F57;
             }
 
-            .table-num {
+            /deep/ .table-num {
                 font-size: 12px;
                 font-family: PingFangSC-Regular, PingFang SC;
                 font-weight: 400;
                 color: #0064FF;
+                height: 20px;
             }
 
             .table-title {
@@ -389,11 +389,16 @@
             }
 
             .table-action {
-                margin-left: -9px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
                 .icon-tooltip {
                     display: inline-block;
-                    padding: 9px;
+
+                    /deep/ > i {
+                        padding: 9px;
+                    }
                 }
             }
         }

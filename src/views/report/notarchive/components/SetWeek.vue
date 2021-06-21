@@ -4,7 +4,6 @@
       <div class="label">常规</div>
       <div class="regular-select">
         <a-select class="select" v-model="regular.week" :default-value="regular.week" @change="handleModRegular">
-          <span slot="suffixIcon" class="iconfont iconxia"></span>
           <a-select-option v-for="item in weekList" :key="item.code" :value="item.code">{{ item.desc }}</a-select-option>
         </a-select>
         <a-time-picker class="time-picker" :allowClear="false" 
@@ -154,6 +153,30 @@ export default {
   .regular{
     .regular-select {
       margin-top: 8px;
+      // 修改箭头样式
+      /deep/ .ant-select{
+        .ant-select-arrow {
+          &:before{
+            display: inline-block;
+            content: '\e638';
+            font-size: 16px;
+            font-family: "iconfont" !important;
+            color: #97A0C3;
+            transition: all 500ms;
+          }
+          i {
+            display: none;
+          }
+        }
+        &.ant-select-open {
+          .ant-select-arrow {
+            &:before{
+              transform: rotate(180deg);
+              transition: all 500ms;
+            }
+          }
+        }
+      }
       .select {
         width: 140px;
         margin-right: 15px;

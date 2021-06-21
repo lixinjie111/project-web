@@ -1,0 +1,48 @@
+// 0-未开始 1-进行中 2-已完成 3-已延期 4-已搁置
+$status-font-0: #7C88B1;
+$status-bg-0: #F4F7FD;
+$status-font-1: #FE774C;
+$status-bg-1: #FFE6DE;
+$status-font-2: #0ABD6B;
+$status-bg-2: #D8F3E7;
+$status-font-3: #FF4C5F;
+$status-bg-3: #FEDFE1;
+$status-font-4: #EDBA1E;
+$status-bg-4: #FEF5D9;
+
+// 999：默认，0：低，1：中，2：高
+$priority-bg: #FFFFFF;
+$priority-font-0: #1BCEC3;
+$priority-font-1: #2373FF;
+$priority-font-2: #FF4C5F;
+
+// 1: '待验收' 2: '已通过' 3: '已延期' 4:'已取消' 5: '不匹配' 6: '未通过'
+$acceptance-font-0: #0064FF;
+$acceptance-font-1: #08BD6C;
+$acceptance-font-2: #FE774B;
+$acceptance-font-3: #97A0C3;
+$acceptance-font-4: #97A0C2;
+$acceptance-font-5: #FF4C60;
+
+
+$status-font: $status-font-0 $status-font-1 $status-font-2 $status-font-3 $status-font-4;
+$status-bg: $status-bg-0 $status-bg-1 $status-bg-2 $status-bg-3 $status-bg-4;
+
+$priority-font: $priority-font-0 $priority-font-1 $priority-font-2;
+
+$acceptance-font: $acceptance-font-0 $acceptance-font-1 $acceptance-font-2 $acceptance-font-3 $acceptance-font-4 $acceptance-font-5;
+
+:export {
+  statusFont0: $status-font-0;
+  statusBg0: $status-bg-0;
+  statusFont1: $status-font-1;
+  statusBg1: $status-bg-1;
+  statusFont2: $status-font-2;
+  statusBg2: $status-bg-2;
+  statusFont3: $status-font-3;
+  statusBg3: $status-bg-3;
+  statusFont4: $status-font-4;
+  statusBg4: $status-bg-4;
+  statusFont: $status-font;
+  statusBg: $status-bg;
+}

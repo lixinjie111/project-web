@@ -2,7 +2,7 @@
   <div class="role-container">
     <ContentHeader type="title" title="角色分组">
       <div slot="operation">
-        <a-button v-if="isInPermission('sys_role_add')" type="primary" @click="handleAddEditRole('add')">
+        <a-button size="large" v-if="isInPermission('sys_role_add')" type="primary" @click="handleAddEditRole('add')">
           <span class="iconfont iconjia"></span>
           添加角色分组
         </a-button>

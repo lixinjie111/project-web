@@ -2,7 +2,10 @@
   <div class="userorg-container">
     <ContentHeader type="title" title="用户管理">
       <div slot="operation">
-        <a-button v-if="isInPermission('sys_user_add')" type="primary" @click="handleAddEditUser('add')">添加用户</a-button>
+        <a-button size="large" v-if="isInPermission('sys_user_add')" type="primary" @click="handleAddEditUser('add')">
+          <span class="iconfont iconjia"></span>
+          添加用户
+        </a-button>
       </div>
     </ContentHeader>
     <div class="userorg-content">
@@ -265,6 +268,7 @@ export default {
       line-height: 40px;
       background: #2373FF;
       border-radius: 4px;
+      cursor: pointer;
     }
   }
   .userorg-right {

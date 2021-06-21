@@ -2,7 +2,7 @@
   <div class="statistics-staff-container">
     <ContentHeader type="title" title="人员任务统计">
       <div slot="operation">
-        <a-button type="primary" @click="handleExport">导出</a-button>
+        <a-button size="large" type="primary" @click="handleExport">导出</a-button>
       </div>
     </ContentHeader>
     <div class="select-container">
@@ -33,9 +33,10 @@ import BasicTable from "@/components/tables/BasicTable";
 import Status from "@/components/business/Status";
 import TextToolTip from "@/components/tooltip/TextToolTip";
 import Priority from "@/components/business/Priority";
+import Progress from "@/components/business/Progress"
 export default {
   name: "staff",
-  components: {DeptTree, BasicTable, Status, TextToolTip, Priority},
+  components: {DeptTree, BasicTable, Status, TextToolTip, Priority, Progress},
   data(){
     return {
         deptId: this.$store.state.users.userInfo.deptId,
@@ -173,7 +174,7 @@ export default {
                             <span>
                                 {
                                     row.hasOwnProperty('progress') && row.progress!== null ? 
-                                    <a-progress percent={Number(row.progress)} size="small"/>
+                                    <Progress percent={Number(row.progress)} status={row.status}/>
                                     :
                                     null
                                 }
@@ -276,6 +277,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/css/variables.scss';
 .statistics-staff-container {
   padding: 0 16px;
   .select-container {
@@ -316,7 +318,8 @@ export default {
         height: 40px;
         line-height: 40px;
 
-        $bgColors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+        // $bgColors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+        $bgColors: $status-font;
         @each $bg in $bgColors {
             $i: index($bgColors, $bg);
             .status#{$i} {

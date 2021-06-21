@@ -28,13 +28,17 @@ export default {
       },
       rules: {
         oldPassword: [
-          {required: true, message: '请输入登录密码', trigger: 'blur'}
+          {required: true, message: '请输入登录密码', trigger: 'blur'},
+          { pattern: /^[0-9]{6,8}$/, message: '6-8位数字和字母的组合', trigger: 'blur' }
         ],
         newPassword: [
           {
             validator: (rule, value, callback) => {
+              let reg = /^[0-9]{6,8}$/;
               if (value === '') {
                 callback(new Error('请输入新密码'));
+              } else if (!reg.test(value)) {
+                callback(new Error('6-8位数字和字母的组合'));
               } else {
                 if (this.form.confirmPassword !== '') {
                   this.$refs.forgetForm.validateField('confirmPassword');

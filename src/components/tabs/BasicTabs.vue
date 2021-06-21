@@ -2,7 +2,6 @@
     <div class="basic-tabs-container">
         <div class="tabs-content">
             <div class="item" v-for="(item,index) in tabList" :key="index" :class="tabActive == index + 1 ? 'active' : ''" @click="changeTab(index+1,item.status)">{{item.name}}<span v-show="tabActive == index + 1">{{item.num}}</span></div>
-            <div class="line"></div>
         </div>
     </div>
 </template>
@@ -54,15 +53,6 @@
         .tabs-content {
             position: relative;
 
-            .line {
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 1px;
-                background: #EAEDF7;
-            }
-
             .item {
                 position: relative;
                 z-index: 10;
@@ -80,7 +70,6 @@
                 &.active {
                     padding: 14px 0;
                     color: #0064FF;
-                    border-bottom: 2px solid #0064FF;
                 }
 
                 > span {
