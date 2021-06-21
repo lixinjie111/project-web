@@ -62,7 +62,7 @@
 
 <style lang="scss" scoped>
   .proj-list {
-    min-width: 236px;
+    width: 300px;
     height: 32px;
     background: #F4F7FC;
     border-radius: 8px;

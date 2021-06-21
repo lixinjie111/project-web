@@ -1,7 +1,7 @@
 <template>
   <div class="icon" :class="'size'+size">
     {{showName}}
-    <i class="iconfont iconjianshao" @click="$emit('close')" v-if="closable"></i>
+    <i class="iconfont iconshanchu_xiao" @click="$emit('close')" v-if="closable"></i>
   </div>
 </template>
 
@@ -53,13 +53,14 @@
   .iconfont {
     width: 14px;
     height: 14px;
+    font-size: 12px;
     background: #EAEDF7;
     border: 1px solid #FFFFFF;
     color: #333333;
     border-radius: 7px;
     position: absolute;
-    right: -2px;
-    top: -2px;
+    right: -4px;
+    top: -4px;
     cursor: pointer;
     display: flex;
     justify-content: center;

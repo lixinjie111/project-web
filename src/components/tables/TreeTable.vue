@@ -1,35 +1,40 @@
 <template>
   <!--      :row-selection="rowSelection"-->
-  <a-table
-      bordered
-      class="tree-table-wrapper"
-      :expandIconColumnIndex="1"
-      :loading="loading"
-      :data-source="dataSource"
-      rowKey="id"
-      :columns="columns"
-      :pagination="{current: currentPage, pageSize: pageSize, total: total}"
-      children-column-name="childrenList"
-      @change="handlePage">
-    <template slot="status" slot-scope="text">
-      <Status :value="text"/>
-    </template>
-    <template slot="priority" slot-scope="text">
-      <Priority :value="text"/>
-    </template>
-    <template slot="progress" slot-scope="text">
-      <a-progress :percent="parseInt(text)" size="small"/>
-    </template>
-  </a-table>
+  <div class="tree-table-wrapper">
+    <a-table
+        bordered
+        :expandIconColumnIndex="1"
+        :loading="loading"
+        :data-source="dataSource"
+        rowKey="id"
+        :columns="columns"
+        :pagination="false"
+        children-column-name="childrenList"
+        v-if="dataSource.length"
+        :scroll="{x: scrollWidth}">
+      <template slot="status" slot-scope="text">
+        <Status :value="text"/>
+      </template>
+      <template slot="priority" slot-scope="text">
+        <Priority :value="text"/>
+      </template>
+      <template slot="progress" slot-scope="text">
+        <a-progress :percent="parseInt(text)" size="small"/>
+      </template>
+    </a-table>
+    <NoData v-else></NoData>
+    <Pagination v-bind="{curPageNum: currentPage, pageSize: pageSize, total: total}" @pagination-change-page="handlePage" v-if="total > pageSize"></Pagination>
+  </div>
 </template>
 
 <script>
   import Status from "@/components/business/Status";
   import Priority from "@/components/business/Priority";
+  import NoData from "@/components/others/NoData";
 
   export default {
     name: "TreeTable",
-    components: {Status, Priority},
+    components: {Status, Priority, NoData},
     data() {
       return {
         loading: false,
@@ -66,9 +71,14 @@
         type: Number
       },
     },
+    computed: {
+      scrollWidth() {
+        return this.columns.reduce((sum, col) => sum + col.width);
+      }
+    },
     methods: {
       handlePage(page) {
-        this.$emit('pageChange', page.current);
+        this.$emit('pageChange', page);
       }
     }
   }
@@ -77,7 +87,7 @@
 <style scoped>
   .tree-table-wrapper {
     margin: 16px;
-    background-color: white;
+    /*background-color: white;*/
   }
 </style>
 
@@ -86,6 +96,10 @@
   .tree-table-wrapper {
     /*border: $border;*/
     border-radius: 2px;
+
+    .ant-table {
+      background-color: white;
+    }
 
     .ant-table-thead {
       height: 48px;
@@ -115,6 +129,12 @@
           border-bottom: $border;
           border-right: $border;
         }
+      }
+    }
+
+    .ant-table-fixed-left {
+      .ant-table-fixed {
+        width: 300px;
       }
     }
   }

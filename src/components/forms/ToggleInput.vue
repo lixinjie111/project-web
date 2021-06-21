@@ -6,7 +6,7 @@
       </div>
       <template slot="title">点击即可编辑</template>
     </a-tooltip>
-    <a-input :value="value" v-show="edit" @input="handleChange" @blur="handleEnd" @pressEnter="handleEnd" placeholder="输入任务名称" :class="overClass" />
+    <a-input :value="value" v-show="edit" v-bind="$attrs" @input="handleChange" @blur="handleEnd" @pressEnter="handleEnd" placeholder="输入任务名称" :class="overClass" />
   </div>
 </template>
 
