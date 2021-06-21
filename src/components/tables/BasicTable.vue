@@ -3,6 +3,7 @@
         border
         resizable
         ref="table"
+        :row-id="rowId"
         :row-class-name="rowClassName"
         :data="tableData"
         :tree-config ="treeConfig"
@@ -16,6 +17,11 @@
     export default {
         name: 'BasicTable',
         props: {
+            rowId: { // 某些功能依赖
+                type: String,
+                required: false,
+                default: null
+            },
             setTableColumns: {
                 type: Array,
                 required: true,

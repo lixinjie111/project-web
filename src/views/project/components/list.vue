@@ -13,7 +13,8 @@
             </div>
             <div slot="progress" slot-scope="data" class="table-progress">
                 <div class="table-progress-text">{{data.row.progress}}%</div>
-                <a-progress :percent="data.row.progress" :strokeColor="statusColor(data.row.status)"/>
+                <!-- <a-progress :percent="data.row.progress" :strokeColor="statusColor(data.row.status)"/> -->
+                <Progress :percent="Number(data.row.progress)" :status="data.row.status"/>
             </div>
             <div slot="action" slot-scope="data" class="table-action">
                 <!--未开始的可以开始，搁置的不能搁置，完成的的不能完成、删除、搁置-->
@@ -46,6 +47,7 @@
     import ListTable from "@/components/tables/ListTable";
     import TextToolTip from "@/components/tooltip/TextToolTip";
     import IconToolTip from "@/components/tooltip/IconToolTip";
+    import Progress from "@/components/business/Progress"
     import Modal from '@/components/Modal/Modal.vue'
     import AddForm from "./addForm";
     import RemarkForm from "./remarkForm";
@@ -54,7 +56,7 @@
 
     export default {
         name: "list",
-        components: {RemarkForm, AddForm, Modal, IconToolTip, TextToolTip, ListTable},
+        components: {RemarkForm, AddForm, Modal, IconToolTip, TextToolTip, ListTable, Progress},
         props: {
             list: {
                 type: Array,

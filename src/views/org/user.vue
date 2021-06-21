@@ -265,6 +265,7 @@ export default {
       line-height: 40px;
       background: #2373FF;
       border-radius: 4px;
+      cursor: pointer;
     }
   }
   .userorg-right {

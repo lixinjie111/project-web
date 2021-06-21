@@ -18,8 +18,9 @@
       <template slot="priority" slot-scope="text">
         <Priority :value="text"/>
       </template>
-      <template slot="progress" slot-scope="text">
-        <a-progress :percent="parseInt(text)" size="small"/>
+      <template slot="progress" slot-scope="text, record">
+        <!-- <a-progress :percent="parseInt(text)" size="small"/> -->
+        <Progress :percent="Number(text)" :status="record.status"/>
       </template>
     </a-table>
     <NoData v-else></NoData>
@@ -30,11 +31,12 @@
 <script>
   import Status from "@/components/business/Status";
   import Priority from "@/components/business/Priority";
+  import Progress from "@/components/business/Progress";
   import NoData from "@/components/others/NoData";
 
   export default {
     name: "TreeTable",
-    components: {Status, Priority, NoData},
+    components: {Status, Priority, Progress, NoData},
     data() {
       return {
         loading: false,

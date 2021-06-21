@@ -22,17 +22,17 @@
 </script>
 
 <style lang="scss" scoped>
-  $bgColors: #DFF8F6, #D3E3FF, #FEDFE1;
-  $colors: #1DCEC3, #2373FF, #FF4C60;
-  @each $bg in $bgColors {
-    $i: index($bgColors, $bg);
+@import '@/assets/css/variables.scss';
+  $colors: $priority-font;
+  @each $color in $colors {
+    $i: index($colors, $color);
     .priority#{$i} {
       display: inline-block;
       width: 36px;
       height: 24px;
       border-radius: 2px;
-      border: 1px solid $bg;
-      color: nth($colors, $i);
+      border: 1px solid $color;
+      color: $color;
       text-align: center;
       line-height: 24px;
       cursor: default;
