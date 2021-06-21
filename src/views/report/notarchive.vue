@@ -67,8 +67,12 @@
                                 let {code} = await this.$api.report.handlePostExecute(this.archiveId);
                                 if(code === 0) {
                                     this.$message.success('归档成功！');
+                                    this.$router.push({
+                                        path: this.$route.path,
+                                        query: this.$route.query,
+                                        params: this.$route.params
+                                    });
                                 }
-                                
                             }catch(error){
                                 console.log(error)
                             }

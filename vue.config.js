@@ -22,9 +22,18 @@ module.exports = {
       }
     }
   },
+  css: {
+    requireModuleExtension: true,
+    sourceMap: true,
+    loaderOptions: {
+      scss: {
+        // data: `@import "@/assets/css/variables.scss";`,
+        // prependData: `@import "@/assets/css/variables.scss";`,
+        // additionalData: `@import "@/assets/css/variables.scss";`
+      }
+    }
+  },
   devServer: {
-    // proxy:"https://dev-teamapi.yzmetax.com", //开发环境的跨域问题解决，后端springboot服务ip 和 端口
-    // port: 8080
       proxy: {
       '/api': {
         target: 'https://dev-teamapi.yzmetax.com', // 目标代理接口地址

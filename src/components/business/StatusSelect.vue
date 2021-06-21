@@ -46,8 +46,10 @@
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/css/variables.scss';
 .two-v {
-  $colors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+  // $colors: #242F57, #FE774B, #08BD6C, #FF4C60, black;
+  $colors: $status-font;
   @each $color in $colors {
     $i: index($colors, $color);
     .status#{$i} {
