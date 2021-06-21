@@ -1,5 +1,5 @@
 <template>
-  <a-dropdown :trigger="['click']">
+  <a-dropdown :trigger="['click']" overlay-class-name="status-menu">
     <TwoValue :title="taskStatuses[value]" subtitle="当前状态">
       <span :class="'status'+(parseInt(value) + 1)">
         <i class="iconfont" :class="icons[value]"></i>
@@ -71,4 +71,11 @@
 .row {
   margin: 6px 0;
 }
+</style>
+<style lang="scss">
+  .status-menu {
+    .ant-dropdown-menu {
+      padding: 6px;
+    }
+  }
 </style>
