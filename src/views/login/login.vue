@@ -5,11 +5,11 @@
     </div>
     <div class="login-content">
       <div class="login-title">欢迎登录项目管理平台</div>
-      <a-form-model ref="loginForm" :model="form" class="login-form" @submit="handleValidate">
-        <a-form-model-item>
+      <a-form-model ref="loginForm" class="login-form" :model="form" :rules="rules" @submit="handleValidate">
+        <a-form-model-item prop="username">
           <a-input class="username" :value="form.username" v-model="form.username" placeholder="用户名/手机号" />
         </a-form-model-item>
-        <a-form-model-item>
+        <a-form-model-item prop="password">
           <a-input-password class="pwd" :value="form.password" v-model="form.password" placeholder="密码" />
           <!-- <span class="login-form-forgot" @click="handleGotoPage">忘记密码？</span> -->
         </a-form-model-item>
@@ -18,10 +18,9 @@
           <a-button
             type="primary"
             block
-            :class="form.username === '' || form.password === '' ? 'btn-disabled' : ''"
             html-type="submit"
-            >登录</a-button
-          >
+            >登录</a-button>
+            <!-- :class="form.username === '' || form.password === '' ? 'btn-disabled' : ''" -->
         </a-form-model-item>
       </a-form-model>
       <!-- <Verify 
@@ -48,9 +47,15 @@ export default {
         password: '',
       },
       errorMsg: '',
-      rules: [
-        
-      ]
+      rules: {
+        username: [
+          {required: true, message: '请输入用户名/手机号', trigger: 'change'},
+        ],
+        password: [
+          {required: true, message: '请输入登录密码', trigger: 'change'},
+          {pattern: /^[0-9]{6,8}$/, message: '6-8位数字和字母的组合', trigger: 'change'}
+        ],
+      }
     };
   },
   methods: {
@@ -64,26 +69,32 @@ export default {
         }
       });
     },
-    async handleSubmit(){
-      let pwd = encryptByAES(this.form.password, 'yuanzhi2teamwork', 'yuanzhi2teamwork');
-      this.$api.login.handleGetToken(this.form.username, pwd).then(response => {
-        this.$store.dispatch('setAccessToken', response.access_token)
-        this.$store.dispatch('setRefreshToken', response.refresh_token)
-        this.$store.dispatch('setUserInfo', response.user_info);
-        
-        Promise.all([this.$store.dispatch('initTopMenu'), this.$store.dispatch('initPermission')]).then(() => { // 查询菜单成功跳转
-          let {topMenu} = this.$store.state.system;
-          if(topMenu?.length){
-            this.$router.push({ path: '/' });
-          }else{
-            this.errorMsg='该账号尚未分配角色，请联系管理员分配角色！'
-          }
-        }).catch(error => {
-          this.$message.error('未获取到菜单')
-        })
-      }).catch(error => {
-        console.log(error)
-      })
+    handleSubmit(){
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          let pwd = encryptByAES(this.form.password, 'yuanzhi2teamwork', 'yuanzhi2teamwork');
+          this.$api.login.handleGetToken(this.form.username, pwd).then(response => {
+            this.$store.dispatch('setAccessToken', response.access_token)
+            this.$store.dispatch('setRefreshToken', response.refresh_token)
+            this.$store.dispatch('setUserInfo', response.user_info);
+            
+            Promise.all([this.$store.dispatch('initTopMenu'), this.$store.dispatch('initPermission')]).then(() => { // 查询菜单成功跳转
+              let {topMenu} = this.$store.state.system;
+              if(topMenu?.length){
+                this.$router.push({ path: '/' });
+              }else{
+                this.errorMsg='该账号尚未分配角色，请联系管理员分配角色！'
+              }
+            }).catch(error => {
+              this.$message.error('未获取到菜单')
+            })
+          }).catch(error => {
+            console.log(error)
+          });
+        } else {
+          return false;
+        }
+      });
     }
   }
 };

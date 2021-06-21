@@ -82,5 +82,29 @@ export default {
       height: 32px;
       line-height: 32px;
     }
+    // 修改箭头样式
+      /deep/ .ant-select{
+        .ant-select-arrow {
+          &:before{
+            display: inline-block;
+            content: '\e638';
+            font-size: 16px;
+            font-family: "iconfont" !important;
+            color: #97A0C3;
+            transition: all 500ms;
+          }
+          i {
+            display: none;
+          }
+        }
+        &.ant-select-open {
+          .ant-select-arrow {
+            &:before{
+              transform: rotate(180deg);
+              transition: all 500ms;
+            }
+          }
+        }
+      }
   }
 </style>
