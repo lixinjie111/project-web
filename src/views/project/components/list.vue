@@ -2,18 +2,17 @@
     <div class="list-container">
         <ListTable :columns="columns" :data="list" @jump="handelJump">
             <div slot="projectName" slot-scope="data" class="table-status">
-                <div class="table-status-bg" :style="'background:' + statusColor(data.row.status)"></div>
+                <div class="table-status-bg" :style="'background:' + styles[`statusFont${data.row.status}`]"></div>
                 <TextToolTip className="table-name" :content="data.row.projectName"
                              :refName="'table-name' + data.row.index"></TextToolTip>
                 <p class="table-status-text">
-                    <span class="circle" :style="'background:' + statusColor(data.row.status)"></span>
-                    <span class="text" :style="'color:' + statusColor(data.row.status)">{{data.row.statusDesc}}</span>
+                    <span class="circle" :style="'background:' + styles[`statusFont${data.row.status}`]"></span>
+                    <span class="text" :style="'color:' + styles[`statusFont${data.row.status}`]">{{data.row.statusDesc}}</span>
                     <IconToolTip v-if="data.row.remark" class="table-tip" iconName="icontishi" :content="data.row.remark"></IconToolTip>
                 </p>
             </div>
             <div slot="progress" slot-scope="data" class="table-progress">
                 <div class="table-progress-text">{{data.row.progress}}%</div>
-                <!-- <a-progress :percent="data.row.progress" :strokeColor="statusColor(data.row.status)"/> -->
                 <Progress :percent="Number(data.row.progress)" :status="data.row.status"/>
             </div>
             <div slot="action" slot-scope="data" class="table-action">
@@ -53,6 +52,7 @@
     import RemarkForm from "./remarkForm";
     import {formatDate} from '@/utils/common.js'
     import {isInPermission} from '@/utils/common.js';
+    import styles from '@/assets/css/variables.scss'
 
     export default {
         name: "list",
@@ -69,6 +69,7 @@
         },
         data() {
             return {
+                styles,
                 columns: [
                     {
                         slot: 'projectName',
@@ -142,26 +143,6 @@
         },
         methods: {
             isInPermission,
-            // 设置不同项目状态的颜色
-            statusColor(status) {
-                switch (status) {
-                    // 0：未开始，1：进行中，2：已完成，3：已延期，4：已搁置
-                    case 0: //未开始
-                        return '#1DCEC3';
-                        break;
-                    case 1: //进行中
-                        return '#0064FF';
-                        break;
-                    case 2: //已完成
-                        return '#7C88B1';
-                        break;
-                    case 3: //已延期
-                        return '#FF4C60';
-                        break;
-                    default:  //已搁置
-                        return '#F9AD69';
-                }
-            },
             handelJump(item) {
                 this.$router.push({ path:'/task/home', query: {id: item.id} });
             },

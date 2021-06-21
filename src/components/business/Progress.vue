@@ -1,5 +1,5 @@
 <template>
-  <a-progress :percent="percent" :strokeColor="styles[`statusFont${this.status}`]" :size="size"/>
+  <a-progress :percent="percent" :strokeColor="styles[`statusFont${status}`]" :size="size"/>
 </template>
 <script>
 import styles from '@/assets/css/variables.scss'

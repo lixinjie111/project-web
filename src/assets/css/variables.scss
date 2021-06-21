@@ -1,14 +1,14 @@
-// 0-未开始 1-进行中 2-已完成 3-已搁置 4-已挂起
+// 0-未开始 1-进行中 2-已完成 3-已延期 4-已搁置
 $status-font-0: #7C88B1;
 $status-bg-0: #F4F7FD;
 $status-font-1: #FE774C;
 $status-bg-1: #FFE6DE;
 $status-font-2: #0ABD6B;
 $status-bg-2: #D8F3E7;
-$status-font-3: #EDBA1E;
-$status-bg-3: #FEF5D9;
-$status-font-4: #FF4C5F;
-$status-bg-4: #FEDFE1;
+$status-font-3: #FF4C5F;
+$status-bg-3: #FEDFE1;
+$status-font-4: #EDBA1E;
+$status-bg-4: #FEF5D9;
 
 // 999：默认，0：低，1：中，2：高
 $priority-bg: #FFFFFF;
