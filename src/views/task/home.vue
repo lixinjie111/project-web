@@ -183,8 +183,12 @@
         this.queryType = e.target.value;
         this.loadCurrentList();
       },
-      handlePageChange(page) {
+      handlePageChange(page, size) {
         this.page = page;
+        if (size !== this.pageSize) {
+          this.pageSize = size;
+          this.page = 1;
+        }
         this.loadCurrentList();
       },
       // 导出任务excel

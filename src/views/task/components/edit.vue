@@ -73,7 +73,7 @@
               <a-col span="8">参与人:</a-col>
             </a-row>
             <a-row :gutter="[16, 8]">
-              <a-col span="24"><UserSelect :options="memberList" :value="form.taskExecutor" @change="val => handleSave('taskExecutor', val)" multiple/></a-col>
+              <a-col span="24"><UserSelect :options="memberList" :value="form.executorList" @change="val => handleSave('executorList', val)" multiple/></a-col>
             </a-row>
           </div>
           <div class="block">
@@ -214,7 +214,7 @@
       return {
         form: {
           incharge: null,
-          taskExecutor:[],
+          executorList:[],
           status: 1,
           priority: 1,
         },
@@ -322,7 +322,7 @@
             deleteAttachment(that.form.attachment.id).then(res => {
               if (res.code === 0 && res.data) {
                 that.form.attachment = null;
-                that.saveData({attachment: null});
+                that.saveData({attachments: 0});
               }
             }).catch(err => {
             })
@@ -360,7 +360,7 @@
         getTaskDetail(this.taskId).then(res => {
           if (res.code === 0 && res.data) {
             this.form = res.data;
-            this.form.incharge = res.data.taskMaster ? res.data.taskMaster[0] : null;
+            this.form.incharge = res.data.masterList ? res.data.masterList[0] : null;
             if (this.form.childrenList) {
               this.childrenList = this.form.childrenList;
             }
@@ -372,9 +372,10 @@
       },
       handleUpload({file}) {
         console.log(file)
-        if (file.status === 'done' && file.response.code === 0)
-          // this.form.attachment = {id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name};
-          this.handleSave('attachment', {id: parseInt(file.response.data.attachmentId), link: file.response.data.filePath, name: file.name, size: file.size, projectId: this.projectId, taskId: this.taskId, attchmentType: file.type});
+        if (file.status === 'done' && file.response.code === 0) {
+          this.form.attachment = {id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name};
+          this.saveData({attachments: parseInt(file.response.data.attachmentId)});
+        }
         else if (file.status === 'error') {
           message.error(file.name + '上传失败')
         }
