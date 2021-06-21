@@ -31,7 +31,7 @@
           'iconshijian',
           'iconxiaoyan',
           'iconlishijilu',
-          'iconyanqi',
+          'iconzanting',
         ],
         taskStatuses
       }
@@ -54,15 +54,19 @@
     $i: index($colors, $color);
     .status#{$i} {
       display: inline-block;
-      width: 24px;
-      height: 24px;
-      border-radius: 2px;
+      width: 36px;
+      height: 36px;
+      /*border-radius: 2px;*/
       color: $color;
       text-align: center;
-      line-height: 24px;
+      line-height: 36px;
       cursor: default;
+
+      .iconfont {
+        font-size: 36px;
     }
   }
+}
 }
 .row {
   margin: 6px 0;
