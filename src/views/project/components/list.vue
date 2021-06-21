@@ -1,6 +1,6 @@
 <template>
     <div class="list-container">
-        <ListTable :columns="columns" :data="list" class="mt-25" @jump="handelJump">
+        <ListTable :columns="columns" :data="list" @jump="handelJump">
             <div slot="projectName" slot-scope="data" class="table-status">
                 <div class="table-status-bg" :style="'background:' + statusColor(data.row.status)"></div>
                 <TextToolTip className="table-name" :content="data.row.projectName"
@@ -70,7 +70,7 @@
                 columns: [
                     {
                         slot: 'projectName',
-                        width: '16%',
+                        width: '17%',
                         ellipsis: true
                     },
                     {
@@ -105,7 +105,7 @@
                     },
                     {
                         slot: 'action',
-                        width: '16'
+                        width: '15%'
                     }
                 ],
                 showEditModal: false,
@@ -301,10 +301,14 @@
 
 <style scoped lang="scss">
     .list-container {
-        margin-top: 25px;
+        /deep/ .item-tr {
+            .item-td {
+                cursor: pointer;
 
-        /deep/ .item-td {
-            cursor: pointer;
+                &:first-child {
+                    border-right: 1px solid #EAEDF7;
+                }
+            }
         }
 
         .table-status {
@@ -368,11 +372,16 @@
         }
 
         .table-action {
-            margin-left: -5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             .icon-tooltip {
                 display: inline-block;
-                padding: 5px;
+
+                /deep/ > i {
+                    padding: 6px;
+                }
             }
 
             /deep/ .ant-divider {

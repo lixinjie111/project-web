@@ -2,7 +2,7 @@
   <div class="statistics-staff-container">
     <ContentHeader type="title" title="人员任务统计">
       <div slot="operation">
-        <a-button type="primary" @click="handleExport">导出</a-button>
+        <a-button size="large" type="primary" @click="handleExport">导出</a-button>
       </div>
     </ContentHeader>
     <div class="select-container">
