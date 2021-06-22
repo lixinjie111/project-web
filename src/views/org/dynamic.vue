@@ -57,7 +57,7 @@ export default {
   overflow: hidden;
   .dynamic-content {
     margin: 16px 24px 24px 24px;
-    padding: 24px;
+    padding: 24px 24px 10px 24px;
     background: #fff;
     border-radius: 4px;
     box-shadow: 0px 0px 8px 0px rgba(124, 136, 177, 0.12);
