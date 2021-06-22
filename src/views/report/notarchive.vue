@@ -11,7 +11,7 @@
                     设置
                     <MyIcon slot="icon" name="iconshezhi"/>
                 </FlatButton>
-                <a-divider type="vertical" v-if="isInPermission('business_jobproject_add') && isInPermission('business_weekreport_archive')"/>
+                <a-divider type="vertical" v-if="isInPermission('business_jobproject_add') && isInPermission('business_weekreport_archive') && archiveId"/>
                 <FlatButton v-if="isInPermission('business_weekreport_archive') && archiveId" @click="handleArchive">
                     归档
                     <MyIcon slot="icon" name="iconwendangjiazi"/>
