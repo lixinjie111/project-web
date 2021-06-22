@@ -54,7 +54,8 @@
                 })
             },
             handleSet(){
-                this.isShow = true;
+                // this.isShow = true;
+                this.handleArchive()
             },
             handleArchive(){
                 this.$nextTick(() => {
@@ -67,11 +68,7 @@
                                 let {code} = await this.$api.report.handlePostExecute(this.archiveId);
                                 if(code === 0) {
                                     this.$message.success('归档成功！');
-                                    this.$router.push({
-                                        path: this.$route.path,
-                                        query: this.$route.query,
-                                        params: this.$route.params
-                                    });
+                                    this.$router.go(0);
                                 }
                             }catch(error){
                                 console.log(error)
