@@ -101,7 +101,7 @@
           if (! user.children)
             users.push(user);
         })
-        this.userKeys = e;
+        // this.userKeys = e;
         this.users = users;
         this.$emit('change', users)
         this.$emit('input', users)

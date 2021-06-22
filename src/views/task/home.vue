@@ -6,7 +6,7 @@
         <a-radio-group default-value="all" size="large" @change="handleQueryFilter">
           <a-radio-button class="all" v-for="item in tabList" :value="item.status" :key="item.status">
             {{item.name}}
-            <span v-if="queryType===item.status">{{total}}</span>
+            <span v-if="queryType===item.status && total">{{total}}</span>
           </a-radio-button>
         </a-radio-group>
       </div>
@@ -23,7 +23,7 @@
         </a-dropdown>
         <a-divider type="vertical" />
         <FlatButton @click="handleCreate" v-if="canCreate">
-          新建任务
+          创建任务
           <MyIcon slot="icon" name="icontianjia" type="main"/>
         </FlatButton>
         <a-divider type="vertical" v-if="canCreate && canExport" />
@@ -72,7 +72,7 @@
             status: 'myTaskFlag'
           },
           {
-            name: '在周报中显示',
+            name: '周报显示',
             status: 'weeklyShow'
           },
         ],
