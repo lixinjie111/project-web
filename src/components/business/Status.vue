@@ -20,7 +20,7 @@
           'iconshijian',
           'iconxiaoyan',
           'iconlishijilu',
-          'iconyanqi',
+          'iconzanting',
         ],
         taskStatuses
       }

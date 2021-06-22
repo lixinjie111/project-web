@@ -11,9 +11,9 @@
         </a-radio-group>
       </div>
       <div>
-        <a-dropdown :trigger="['click']">
+        <a-dropdown :trigger="['click']" overlay-class-name="type-menus" v-model="showTypeMenu">
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-            {{ viewTypes[viewType] }} <a-icon type="down" />
+            {{ viewTypes[viewType] }} <i class="iconfont iconxia" :class="{upicon: showTypeMenu}"></i>
           </a>
           <a-menu slot="overlay" @click="handleViewType">
             <a-menu-item :key="index" v-for="(item, index) in viewTypes">
@@ -81,6 +81,7 @@
         tableData: [],
         boardData: [],
         viewType: 0,
+        showTypeMenu: false,
         queryType: 'all',
         viewTypes: ['列表', '看板'],
         canCreate: isInPermission('business_task_add'),
@@ -183,8 +184,12 @@
         this.queryType = e.target.value;
         this.loadCurrentList();
       },
-      handlePageChange(page) {
+      handlePageChange(page, size) {
         this.page = page;
+        if (size !== this.pageSize) {
+          this.pageSize = size;
+          this.page = 1;
+        }
         this.loadCurrentList();
       },
       // 导出任务excel
@@ -223,6 +228,14 @@
     padding: 0 8px;
     margin-bottom: 16px;
 
+    .iconfont {
+      transition: .2s;
+      display: inline-block;
+    }
+    .upicon {
+      transform: rotate(180deg);
+    }
+
     .left {
       display: flex;
       align-items: center;
@@ -245,6 +258,13 @@
 }
 </style>
 <style lang="scss">
+  .type-menus {
+    padding-top: 9px;
+    .ant-dropdown-menu {
+      padding: 6px;
+      width: 120px;
+    }
+  }
   .task-home {
     .ant-select-selection--single {
       height: 32px;

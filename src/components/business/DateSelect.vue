@@ -1,6 +1,6 @@
 <template>
-  <a-date-picker :value="mValue" @change="handleSelect" :disabledDate="disabledDate">
-    <TwoValue :title="showDate" :subtitle="title" class="btn">
+  <a-date-picker :value="mValue" @change="handleSelect" :disabledDate="disabledDate" v-bind="$attrs">
+    <TwoValue :title="showDate" :subtitle="title" class="btn" v-if="!original">
       <i class="iconfont" :class="icon"></i>
     </TwoValue>
   </a-date-picker>
@@ -12,7 +12,7 @@
 
   export default {
     name: "DateSelect",
-    props: ['title', 'icon', 'value', 'range'], // range: {begin, end}
+    props: ['title', 'icon', 'value', 'range', 'original'], // range: {begin, end}   original: 使用原生的日期选择控件
     components: {TwoValue},
     data() {
       return {
@@ -57,8 +57,31 @@
 }
 </style>
 
-<style>
+<style lang="scss">
   .date-pop {
     width: 290px;
+  }
+  .btn {
+    .icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #EAEDF7;
+      border-radius: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+    }
+    &:hover {
+      .icon {
+        border-color: #0064FF;
+      }
+      .iconfont {
+        color: #0064FF;
+      }
+    }
+    .iconfont {
+      color: #C6CBDE;
+    }
   }
 </style>

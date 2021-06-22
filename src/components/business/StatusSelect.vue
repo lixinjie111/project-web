@@ -1,5 +1,5 @@
 <template>
-  <a-dropdown :trigger="['click']">
+  <a-dropdown :trigger="['click']" overlay-class-name="status-menu">
     <TwoValue :title="taskStatuses[value]" subtitle="当前状态">
       <span :class="'status'+(parseInt(value) + 1)">
         <i class="iconfont" :class="icons[value]"></i>
@@ -31,7 +31,7 @@
           'iconshijian',
           'iconxiaoyan',
           'iconlishijilu',
-          'iconyanqi',
+          'iconzanting',
         ],
         taskStatuses
       }
@@ -54,17 +54,28 @@
     $i: index($colors, $color);
     .status#{$i} {
       display: inline-block;
-      width: 24px;
-      height: 24px;
-      border-radius: 2px;
+      width: 36px;
+      height: 36px;
+      /*border-radius: 2px;*/
       color: $color;
       text-align: center;
-      line-height: 24px;
+      line-height: 36px;
       cursor: default;
+
+      .iconfont {
+        font-size: 36px;
     }
   }
+}
 }
 .row {
   margin: 6px 0;
 }
+</style>
+<style lang="scss">
+  .status-menu {
+    .ant-dropdown-menu {
+      padding: 6px;
+    }
+  }
 </style>

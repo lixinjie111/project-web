@@ -1,5 +1,5 @@
 <template>
-  <a-dropdown :trigger="['click']">
+  <a-dropdown :trigger="['click']" overlay-class-name="priority-menu">
     <Priority :value="value"/>
     <a-menu slot="overlay" @click="handleSelect">
       <a-menu-item v-for="(prio,index) in prioritis" :key="index">
@@ -37,4 +37,12 @@
 .row {
   margin: 6px 0;
 }
+</style>
+<style lang="scss">
+  .priority-menu {
+    .ant-dropdown-menu {
+      padding: 6px;
+      width: 120px;
+    }
+  }
 </style>

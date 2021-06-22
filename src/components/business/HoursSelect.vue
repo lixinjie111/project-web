@@ -1,5 +1,5 @@
 <template>
-  <a-popover trigger="click" v-model="visible" placement="bottomLeft" @visible-change="handleShow">
+  <a-popover trigger="click" v-model="visible" placement="bottomLeft" @visible-change="handleShow" overlay-class-name="hours-pop">
     <TwoValue :title="showValue + '小时'" :subtitle="title" class="btn">
       <i class="iconfont" :class="icon"></i>
     </TwoValue>
@@ -62,4 +62,11 @@
 .btn {
   cursor: default;
 }
+</style>
+<style lang="scss">
+  .hours-pop {
+    .ant-popover-inner-content {
+      padding: 24px;
+    }
+  }
 </style>

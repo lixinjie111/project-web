@@ -132,7 +132,7 @@ export function deleteProjectMember(id) {
 }
 
 export function getMyProjectList() {
-  return httpaxios.get('/business/project/myPage', {
+  return httpaxios.get('/business/project/page', {
     params: {
       current: 1,
       size: 1000,
