@@ -54,8 +54,7 @@
                 })
             },
             handleSet(){
-                // this.isShow = true;
-                this.handleArchive()
+                this.isShow = true;
             },
             handleArchive(){
                 this.$nextTick(() => {
