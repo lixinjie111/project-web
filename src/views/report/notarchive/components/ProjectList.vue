@@ -1,6 +1,6 @@
 <template>
     <div class="project-list-container">
-        <div class="header">重点项目</div>
+        <div class="list-header">重点项目</div>
         <template v-if="list.length">
             <Collapse :title="item.title" v-for="(item,index) in list" :key="index">
                 <BasicTable :tableData="item.children" :setTableColumns="setTableColumns"></BasicTable>
@@ -140,8 +140,8 @@
 @import '@/assets/css/variables.scss';
     .project-list-container {
 
-        .header {
-            margin-left: 8px;
+        .list-header {
+            margin: 0 0 8px 8px;
             height: 44px;
             line-height: 44px;
             font-size: 20px;

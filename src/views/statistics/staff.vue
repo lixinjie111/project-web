@@ -2,7 +2,7 @@
   <div class="statistics-staff-container">
     <ContentHeader type="title" title="人员任务统计">
       <div slot="operation">
-        <a-button size="large" type="primary" @click="handleExport">导出</a-button>
+        <a-button type="primary" @click="handleExport">导出</a-button>
       </div>
     </ContentHeader>
     <div class="select-container">
@@ -17,9 +17,9 @@
     </div>
     </div>
     <BasicTable
-        :tableData="tableData" 
-        :setTableColumns="setTableColumns" 
-        :rowClassName="handleRowClassName" 
+        :tableData="tableData"
+        :setTableColumns="setTableColumns"
+        :rowClassName="handleRowClassName"
         :treeConfig="treeConfig"
         :spanMethod="handleRowspanMethod"
     ></BasicTable>
@@ -63,7 +63,7 @@ export default {
                                     row.isMerge ?
                                         '合计工时'
                                         :
-                                    null 
+                                    null
                                 }
                             </div>
                         ]
@@ -92,7 +92,7 @@ export default {
                         return [
                             <span>
                                 {
-                                    row.hasOwnProperty('priority') && row.priority!== null ? 
+                                    row.hasOwnProperty('priority') && row.priority!== null ?
                                     <Priority value={row.priority} size="small"/>
                                     :
                                     null
@@ -111,7 +111,7 @@ export default {
                         return [
                             <span class="plan-time">
                                 {
-                                    row.hasOwnProperty('beginTime') && row.beginTime !== null ? 
+                                    row.hasOwnProperty('beginTime') && row.beginTime !== null ?
                                     (row.hasOwnProperty('endTime') && row.endTime !== null ?
                                     `${row.beginTime} - ${row.endTime}`
                                     :
@@ -151,7 +151,7 @@ export default {
                         return [
                             <span>
                                 {
-                                    row.hasOwnProperty('status') && row.status !== null  ? 
+                                    row.hasOwnProperty('status') && row.status !== null  ?
                                     <Status value={row.status}></Status>
                                     :
                                     null
@@ -173,7 +173,7 @@ export default {
                         return [
                             <span>
                                 {
-                                    row.hasOwnProperty('progress') && row.progress!== null ? 
+                                    row.hasOwnProperty('progress') && row.progress!== null ?
                                     <Progress percent={Number(row.progress)} status={row.status}/>
                                     :
                                     null

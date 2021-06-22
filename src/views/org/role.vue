@@ -2,7 +2,7 @@
   <div class="role-container">
     <ContentHeader type="title" title="角色分组">
       <div slot="operation">
-        <a-button size="large" v-if="isInPermission('sys_role_add')" type="primary" @click="handleAddEditRole('add')">
+        <a-button v-if="isInPermission('sys_role_add')" type="primary" @click="handleAddEditRole('add')">
           <span class="iconfont iconjia"></span>
           添加角色分组
         </a-button>
@@ -40,7 +40,7 @@ export default {
       setTableColumns: [
         {title: '编号', type: 'seq', width: 50},
         {title: '分组名称', field: 'roleName', showOverflow: true,},
-        {title: '维护', width: '340', 
+        {title: '维护', width: '340',
           visible: isInPermission('sys_user_batch_role') || isInPermission('sys_role_perm'),
           slots: {
             // 使用 JSX 渲染
@@ -48,7 +48,7 @@ export default {
               return [
                 <div class="permission">
                   {
-                    isInPermission('sys_user_batch_role') ? 
+                    isInPermission('sys_user_batch_role') ?
                     (<a-button onClick={() => this.handlePermission('role', row)}>
                       <span class="iconfont iconrenyuan"></span>
                       <span>组员管理</span>
@@ -57,7 +57,7 @@ export default {
                     null
                   }
                   {
-                    isInPermission('sys_role_perm') ? 
+                    isInPermission('sys_role_perm') ?
                     (<a-button onClick={() => this.handlePermission('operation', row)}>
                       <span class="iconfont iconsuoding"></span>
                       <span>操作权限</span>
@@ -94,7 +94,7 @@ export default {
         },
       ],
       tableData: [],
-      
+
       // modal相关数据
       isShowModal: false,
       modalTitle: '',
@@ -136,9 +136,9 @@ export default {
       }catch(error){
         console.log(error)
       }
-      
+
     },
-    // 维护 type: 组员管理 role, 操作权限 operation, 数据权限 data 
+    // 维护 type: 组员管理 role, 操作权限 operation, 数据权限 data
     handlePermission(type, role) {
       console.log(type, role);
       if(type==='role'){
@@ -155,7 +155,7 @@ export default {
     },
     // 新增、编辑角色
     handleAddEditRole(type, role) {
-      
+
       if(type === 'add'){
         this.modalTitle = '添加权限分组';
         this.okText = '创建并继续配置';

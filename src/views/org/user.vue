@@ -2,7 +2,7 @@
   <div class="userorg-container">
     <ContentHeader type="title" title="用户管理">
       <div slot="operation">
-        <a-button size="large" v-if="isInPermission('sys_user_add')" type="primary" @click="handleAddEditUser('add')">
+        <a-button v-if="isInPermission('sys_user_add')" type="primary" @click="handleAddEditUser('add')">
           <span class="iconfont iconjia"></span>
           添加用户
         </a-button>
@@ -88,11 +88,11 @@ export default {
       tableData: [],
 
       roleList: [], // 角色列表
-      
+
       isShowModal: false, // 编辑 新增modal
       modal: {
         modalTitle: '新增用户', // modal title
-        cancelText: '取消', 
+        cancelText: '取消',
         okText: '保存'
       },
       form: {}
@@ -115,7 +115,7 @@ export default {
         console.log(error);
       }
     },
-    
+
     // 查询部门人员列表
     async handleGetUserList() {
       try {
@@ -163,8 +163,8 @@ export default {
 
     // 新增、编辑用户条目
     handleAddEditUser(type, row) {
-      let reset = type == 'add' ? 
-        {userId: '', username: '', realName: '', deptId: '', password: '', phone: '', position: '', roleList: [], gender: 0} 
+      let reset = type == 'add' ?
+        {userId: '', username: '', realName: '', deptId: '', password: '', phone: '', position: '', roleList: [], gender: 0}
         : {userId: row.userId, username: row.username, realName: row.realName, deptId: row.deptId, password: '', phone: row.phone, position: row.position, roleList: row.roleList.map(item => item.roleId), gender: row.gender};
       this.$set(this, 'form', reset);
 
@@ -182,7 +182,7 @@ export default {
       }catch(error){
         console.log(error)
       }
-    }, 
+    },
 
     // 关闭弹窗刷新列表
     handleRefresh() {
@@ -222,7 +222,7 @@ export default {
 <style lang="scss" scoped>
 .userorg-container{
   margin: 16px 24px 24px 24px;
-  
+
   .userorg-content {
     display: flex;
   }

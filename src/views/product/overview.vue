@@ -6,11 +6,11 @@
                     <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
-                    <a-button size="large" class="export-btn" @click="handleExport" v-if="isInPermission('business_product_view')">
+                    <a-button class="export-btn" @click="handleExport" v-if="isInPermission('business_product_view')">
                         <i class="iconfont icondaochu"></i>
                         导出
                     </a-button>
-                    <a-button size="large"  type="primary" @click="handleAdd" v-if="isInPermission('business_product_add')">
+                    <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_product_add')">
                         <i class="iconfont iconjia"></i>
                         添加产品
                     </a-button>

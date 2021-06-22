@@ -4,7 +4,7 @@
   <div class="container">
     <ContentHeader type="title" title="项目成员">
       <div slot="operation">
-        <a-button size="large" type="primary" @click="handleAddEditUser" v-if="canAdd">
+        <a-button type="primary" @click="handleAddEditUser" v-if="canAdd">
           <i class="iconfont iconjia"></i>
           添加项目成员</a-button>
       </div>
