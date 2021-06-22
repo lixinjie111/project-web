@@ -5,9 +5,8 @@
         <div class="modal-header">
           <h4 class="modal-title">{{title}}</h4>
           <a-button ghost type="link" class="close" data-dismiss="modal" aria-label="Close" @click="close()">
-            <a-icon type="close"></a-icon>
+            <span class="iconfont iconguanbi"></span>
           </a-button>
-          
         </div>
         <div class="modal-body">
           <template v-if="!dangerouslyUseHTMLString">{{ message }}</template>
@@ -145,9 +144,8 @@
             width: 20px;
             height: 20px;
             padding: 0;
-            .anticon {
-              height: 20px;
-              font-size: 18px;
+            .iconfont {
+              font-size: 16px;
               color: #636E95;
             }
           }

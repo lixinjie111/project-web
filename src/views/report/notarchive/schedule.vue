@@ -71,7 +71,7 @@
                         slots: {
                             default: ({row}) => {
                                 return [
-                                    row.priority >= 0 && row.priority <= 2 ?  <Priority percent={row.priority} size="small"/> : <span class="no-priority">无</span>
+                                    row.priority >= 0 && row.priority <= 2 ?  <Priority value={row.priority} size="small"/> : <span class="no-priority">无</span>
                                 ]
                             }
                         }

@@ -21,12 +21,12 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-model-item label="开始日期" prop="planBeginTime">
-            <a-date-picker :value="form.planBeginTime" :inputReadOnly="true" @change="val => handleChange('planBeginTime', val)" placeholder="请选择开始日期" allowClear />
+            <DateSelect :value="form.planBeginTime" :inputReadOnly="true" :range="{end: form.planEndTime}" @select="val => handleChange('planBeginTime', val)" placeholder="请选择开始日期" :original="true" allowClear />
           </a-form-model-item>
         </a-col>
         <a-col :span="12">
           <a-form-model-item label="截止日期" prop="planEndTime">
-            <a-date-picker :value="form.planEndTime" :inputReadOnly="true" @change="val => handleChange('planEndTime', val)" placeholder="请选择截止日期" allowClear />
+            <DateSelect :value="form.planEndTime" :inputReadOnly="true" :range="{begin: form.planBeginTime}" @select="val => handleChange('planEndTime', val)" placeholder="请选择截止日期" :original="true" allowClear />
           </a-form-model-item>
         </a-col>
       </a-row>
@@ -58,10 +58,11 @@
   import {createTask} from "@/api/task";
   import {taskTypes} from "@/const/data";
   import moment from "moment";
+  import DateSelect from "@/components/business/DateSelect";
 
   export default {
     name: "TaskAdd",
-    components: { Modal, UserSelect, PrioritySelect },
+    components: { Modal, UserSelect, PrioritySelect, DateSelect },
     props: {
       // isShow: {
       //   type: Boolean,
@@ -132,7 +133,14 @@
               data = {...this.form, status: this.status};
             createTask(data).then(res => {
               this.$emit('ok', data);
-              this.$refs.userForm.resetFields();
+              this.form = {
+                taskName: '',
+                taskType: 0,
+                incharge: null,
+                participates:[],
+                priority: 2,
+              };
+              // this.$refs.userForm.resetFields();
             }).catch(err => {});
           } else {
             return false;

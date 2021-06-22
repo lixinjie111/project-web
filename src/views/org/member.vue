@@ -34,6 +34,7 @@
           </a-checkbox-group>
           <div class="line"></div>
         </div>
+        <div class="no-data" v-if="!joinUsers.length && !unJoinUsers.length">{{defaultSelectedKeys.length ? '该部门下暂无人员' : '请选择待配置部门'}}</div>
       </div>
     </div>
   </div>
@@ -84,14 +85,15 @@ export default {
     },
     // 选中部门信息
     handleGetDepartUsers(departIds){
-      departIds.length && this.handleGetDeptRoleList(departIds[0])
+      this.defaultSelectedKeys = departIds.length ? departIds : [];
+      this.handleGetDeptRoleList();
     },
     // 请求部门树
     handleGetDeptTree() {
       try{
         this.$store.dispatch('initDeptTree').then(() => {
           this.$set(this, 'treeList', this.$store.state.deptTree);
-          this.handleGetDeptRoleList(this.treeList?.[0].id);
+          this.handleGetDeptRoleList();
           this.defaultSelectedKeys = [this.treeList?.[0].id]
         })
       }catch(err){
@@ -99,25 +101,30 @@ export default {
       }
     },
     // 请求部门 分组成员列表
-    async handleGetDeptRoleList (deptId){
+    async handleGetDeptRoleList (){
       try{
-        let {code, data, msg} = await this.$api.org.handleGetDeptRoleList(this.roleId, deptId);
+        if(!this.defaultSelectedKeys?.length){
+          this.handleData()
+          return false;
+        }
+        let {code, data} = await this.$api.org.handleGetDeptRoleList(this.roleId, this.defaultSelectedKeys?.[0]);
         if(code === 0){
-          this.indeterminateJoin = false; // 已加入 全选
-          this.checkAllJoin = true;
-          this.joinUsers = data.joinUsers;
-          this.indeterminateUnJoin = false; // 未加入 全选
-          this.checkAllUnJoin = false;
-          this.unJoinUsers = data.unJoinUsers;
-          this.allJoinUserIdList = this.handleAllUserIds(this.joinUsers);
-          this.checkJoinList = this.allJoinUserIdList;
-          this.allUnJoinUserIdList = this.handleAllUserIds(this.unJoinUsers);
-        }else{
-          this.$message.error(msg)
+          this.handleData(data);
         }
       }catch(err){
         console.log(err)
       }
+    },
+    handleData(data){
+      this.indeterminateJoin = false; // 已加入 全选
+      this.checkAllJoin = true;
+      this.joinUsers = data?.joinUsers || [];
+      this.indeterminateUnJoin = false; // 未加入 全选
+      this.checkAllUnJoin = false;
+      this.unJoinUsers = data?.unJoinUsers || [];
+      this.allJoinUserIdList = this.handleAllUserIds(this.joinUsers);
+      this.checkJoinList = this.allJoinUserIdList;
+      this.allUnJoinUserIdList = this.handleAllUserIds(this.unJoinUsers);
     },
     // 遍历所有分组用户id
     handleAllUserIds(data){
@@ -145,6 +152,7 @@ export default {
         let {code} = await this.$api.org.handlePostModifyUserRole(this.roleId, this.checkUnJoinList, diff);
         if(code === 0 ){
           this.$message.success('保存成功！');
+          this.handleGetDeptRoleList()
         } 
       }catch(err) {
         console.log(err)
@@ -213,6 +221,7 @@ export default {
       height: calc(100vh - 163px);
       background: #fff;
       border-radius: 4px;
+      overflow: auto;
       .member-join{
         padding: 12px 0 8px 0;
         .line {
@@ -253,6 +262,11 @@ export default {
             text-overflow: ellipsis;
           }
         }
+      }
+
+      .no-data{
+        margin: 30%;
+        text-align: center;
       }
     }
   }

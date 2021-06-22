@@ -11,7 +11,7 @@
                     设置
                     <MyIcon slot="icon" name="iconshezhi"/>
                 </FlatButton>
-                <a-divider type="vertical" v-if="isInPermission('business_jobproject_add') && isInPermission('business_weekreport_archive')"/>
+                <a-divider type="vertical" v-if="isInPermission('business_jobproject_add') && isInPermission('business_weekreport_archive') && archiveId"/>
                 <FlatButton v-if="isInPermission('business_weekreport_archive') && archiveId" @click="handleArchive">
                     归档
                     <MyIcon slot="icon" name="iconwendangjiazi"/>
@@ -67,11 +67,7 @@
                                 let {code} = await this.$api.report.handlePostExecute(this.archiveId);
                                 if(code === 0) {
                                     this.$message.success('归档成功！');
-                                    this.$router.push({
-                                        path: this.$route.path,
-                                        query: this.$route.query,
-                                        params: this.$route.params
-                                    });
+                                    this.$router.go(0);
                                 }
                             }catch(error){
                                 console.log(error)

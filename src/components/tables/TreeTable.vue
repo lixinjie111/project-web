@@ -24,7 +24,7 @@
       </template>
     </a-table>
     <NoData v-else></NoData>
-    <Pagination v-bind="{curPageNum: currentPage, pageSize: pageSize, total: total}" @pagination-change-page="handlePage" v-if="total > pageSize"></Pagination>
+    <Pagination v-bind="{curPageNum: currentPage, pageSize: pageSize, total: total}" @pagination-change-page="handlePage" @pagination-change-pagesize="handlePageSize" v-if="total > pageSize"></Pagination>
   </div>
 </template>
 
@@ -80,8 +80,11 @@
     },
     methods: {
       handlePage(page) {
-        this.$emit('pageChange', page);
-      }
+        this.$emit('pageChange', page, this.pageSize);
+      },
+      handlePageSize(size) {
+        this.$emit('pageChange', this.currentPage, size);
+      },
     }
   }
 </script>

@@ -93,7 +93,7 @@ export default {
                             <span>
                                 {
                                     row.hasOwnProperty('priority') && row.priority!== null ? 
-                                    <Priority percent={row.priority} size="small"/>
+                                    <Priority value={row.priority} size="small"/>
                                     :
                                     null
                                 }

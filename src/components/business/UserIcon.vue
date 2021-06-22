@@ -56,7 +56,7 @@
     font-size: 12px;
     background: #EAEDF7;
     border: 1px solid #FFFFFF;
-    color: #333333;
+    color: #7C88B1;
     border-radius: 7px;
     position: absolute;
     right: -4px;

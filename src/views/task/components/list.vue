@@ -388,8 +388,8 @@
         this.showEdit = false;
         this.$emit('change');
       },
-      handlePageChange(page) {
-        this.$emit('pageChange', page);
+      handlePageChange(page, size) {
+        this.$emit('pageChange', page, size);
       },
       handleDragStart(e) {
         // console.log('handleDragStart', e)

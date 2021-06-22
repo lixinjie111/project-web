@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-align">
     <UserIcon v-if="multiple" :value="item.userName" :key="item.userId" v-for="(item, index) in userList" closable @close="handleDelete(index)" class="margin"/>
     <a-popover trigger="click" placement="bottomLeft" overlay-class-name="user-sel-popover" v-model="showPopup">
       <template v-if="multiple">
@@ -18,7 +18,7 @@
         </TwoValue>
       </template>
       <template slot="content">
-        <a-tree v-if="treeList.length" :tree-data="options || treeList" :replaceFields="replaceFields"
+        <a-tree v-if="(options || treeList).length" :tree-data="options || treeList" :replaceFields="replaceFields"
                 :checkedKeys="userKeys"
                 @select="handleSelect"
               @check="handleChange"
@@ -49,63 +49,6 @@
           children: 'children',
         },
         treeList: [
-          {
-            "userId":"992307132",
-            // "value": "万科集团",
-            "userName":"万科集团",
-            "scopedSlots":{
-              "userName":"custom"
-            },
-          },
-          {
-            "userId":"99230713",
-            // "value": "万科集团",
-            "userName":"万科集团",
-            // ⚠️重点这这里⚠️每一条数据上都添加scopedSlots属性
-            "scopedSlots":{
-              "userName":"custom"
-            },
-            "children":[
-              {
-                "userId":"99230992",
-                // "value": "华东区域",
-                "userName":"华东区域",
-                "scopedSlots":{
-                  "userName":"custom"
-                },
-                "children":[
-                  {
-                    "userId":"99230112",
-                    "userName":"杭州万科",
-                    "scopedSlots":{
-                      "userName":"custom"
-                    },
-                  }
-                ],
-              },
-              {
-                "userId":"99230993",
-                "userName":"华南区域",
-                "scopedSlots":{
-                  "userName":"custom"
-                },
-              },
-              {
-                "userId":"99231020",
-                "userName":"华北区域",
-                "scopedSlots":{
-                  "userName":"custom"
-                },
-              }
-            ],
-          },
-          {
-            "userId":"9923071314",
-            "userName":"万科集团",
-            "scopedSlots":{
-              "userName":"custom"
-            },
-          }
         ],
         autoExpandParent: true,
         showPopup: false,
@@ -187,6 +130,10 @@
 <style lang="scss" scoped>
   .margin {
     margin-right: 6px;
+  }
+  .user-align {
+    display: flex;
+    align-items: flex-end;
   }
 </style>
 <style lang="scss">
