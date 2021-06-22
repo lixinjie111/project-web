@@ -10,7 +10,7 @@
           <a-input class="username" :value="form.username" v-model="form.username" placeholder="用户名/手机号" />
         </a-form-model-item>
         <a-form-model-item prop="password">
-          <a-input-password class="pwd" :value="form.password" v-model="form.password" placeholder="密码" />
+          <a-input-password class="pwd" :value="form.password" v-model="form.password"  placeholder="6-8位数字和字母的组合" />
           <!-- <span class="login-form-forgot" @click="handleGotoPage">忘记密码？</span> -->
         </a-form-model-item>
         <a-form-model-item>
@@ -53,7 +53,7 @@ export default {
         ],
         password: [
           {required: true, message: '请输入登录密码', trigger: 'change'},
-          {pattern: /^[0-9]{6,8}$/, message: '6-8位数字和字母的组合', trigger: 'change'}
+          // {pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,8}$/, message: '6-8位数字和字母的组合', trigger: 'change'}
         ],
       }
     };

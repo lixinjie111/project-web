@@ -54,7 +54,7 @@ export default {
     handleData(list, checkList) {
       list.map(item => {
         item.flag = item.children?.findIndex(item => item.flag === '1') > -1 ? '1' : '0';
-        item.flag === '1' && checkList.push(...item.children.filter(ele => ele.flag && delete ele.children));
+        item.flag === '1' && checkList.push(...item.children.filter(ele => ele.flag==='1' && delete ele.children));
         delete item.children;
         item.flag === '1' && checkList.push(item);
       });

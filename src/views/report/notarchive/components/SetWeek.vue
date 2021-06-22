@@ -17,7 +17,10 @@
       </div>
     </div>
     <div class="custom">
-      <div class="label">自定义</div>
+      <div class="label">
+        自定义
+        <span>（适用于节假日周报生成日期变更）</span>
+      </div>
       <div class="custom-time-item" v-for="(item, index) in list" :key="index">
         <a-date-picker v-model="item.dateTime" :allowClear="false" :show-time="showTime" :inputReadOnly="true" format="YYYY/MM/DD HH:mm" value-format="YYYY-MM-DD HH:mm:ss"  @openChange="(status) => !status && handleAddTime(item)"/>
         <span class="iconfont icontianjia" @click="handlePlus(index+1)"></span>
@@ -149,6 +152,14 @@ export default {
       font-weight: 400;
       color: #7C88B1;
       line-height: 20px;
+      span {
+        padding: 2px 0;
+        font-size: 12px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #97A0C3;
+        line-height: 20px;
+      }
     }
   .regular{
     .regular-select {

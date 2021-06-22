@@ -128,7 +128,7 @@
         .modal-header {
           padding: 20px 24px;
           position: relative;
-          border-bottom: 2px solid #EAEDF7;
+          border-bottom: 1px solid #EAEDF7;
           .modal-title {
             margin-right: 20px;
             line-height: 16px;

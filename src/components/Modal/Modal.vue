@@ -14,7 +14,7 @@
     
     <div slot="footer" class="footer">
       <a-button class="back" type="link" @click="handleCancel">{{cancelText}}</a-button>
-      <a-button class="submit" type="primary" @click="handleOk">{{okText}}</a-button>
+      <a-button class="submit" type="primary" @click="handleOk"><span>{{okText}}</span></a-button>
     </div>
   </a-modal>
 </template>

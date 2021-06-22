@@ -4818,7 +4818,7 @@ textarea.ant-input {
 }
 .ant-btn-two-chinese-chars > *:not(.anticon) {
     margin-right: -0.34em;
-    letter-spacing: 0.34em;
+    /* letter-spacing: 0.34em; */
 }
 .ant-btn-block {
     width: 100%;

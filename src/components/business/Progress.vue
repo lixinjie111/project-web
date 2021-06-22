@@ -1,5 +1,5 @@
 <template>
-  <a-progress :percent="percent" :strokeColor="styles[`statusFont${status}`]" :size="size"/>
+  <a-progress :class="[`statusFont${status}`]" :percent="percent" :strokeColor="styles[`statusFont${status}`]" :size="size" :format="percent => `${percent}%`" />
 </template>
 <script>
 import styles from '@/assets/css/variables.scss'
@@ -28,3 +28,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+/deep/ .ant-progress-status-success .ant-progress-text, /deep/ .ant-progress-text {
+  color: rgba(0, 0, 0, 0.45);
+}
+</style>
