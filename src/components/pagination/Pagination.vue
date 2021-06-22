@@ -12,7 +12,7 @@
   >
   </a-pagination>
 </div>
-  
+
 </template>
 <script>
 export default {
@@ -29,7 +29,7 @@ export default {
       default: 1
     },
     pageSizeOptions: {
-      type: Array, 
+      type: Array,
       required: false,
       default: () => [10, 20, 30, 40, 50]
     },
@@ -73,6 +73,7 @@ export default {
   margin: 10px 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   /deep/ .ant-pagination {
     .ant-pagination-prev , .ant-pagination-next {
       .ant-pagination-item-link {
