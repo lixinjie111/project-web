@@ -74,20 +74,20 @@
 
             &.placement--top {
                 .vxe-table--tooltip-arrow {
-                    border-top-color: rgba(36, 47, 87, 0.8) !important;
+                    border-top-color: rgba(36, 47, 87, 0.6) !important;
 
                     &:before {
-                        border-top-color: rgba(36, 47, 87, 0.8) !important;
+                        border-top-color: rgba(36, 47, 87, 0.6) !important;
                     }
                 }
             }
 
             &.placement--bottom {
                 .vxe-table--tooltip-arrow {
-                    border-bottom-color: rgba(36, 47, 87, 0.8) !important;
+                    border-bottom-color: rgba(36, 47, 87, 0.6) !important;
 
                     &:before {
-                        border-bottom-color: rgba(36, 47, 87, 0.8) !important;
+                        border-bottom-color: rgba(36, 47, 87, 0.6) !important;
                     }
                 }
             }

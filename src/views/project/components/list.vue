@@ -300,7 +300,7 @@
             .table-status-bg {
                 position: absolute;
                 left: -24px;
-                top: -26px;
+                top: -24px;
                 width: 4px;
                 height: 96px;
                 border-radius: 4px 0 0 4px;
@@ -314,6 +314,9 @@
             }
 
             .table-status-text {
+                height: 24px;
+                line-height: 24px;
+
                 .circle {
                     display: inline-block;
                     width: 8px;
@@ -323,7 +326,7 @@
 
                 .text {
                     margin-left: 4px;
-                    font-size: 12px;
+                    font-size: 14px;
                     font-family: PingFangSC-Regular, PingFang SC;
                     font-weight: 400;
                 }

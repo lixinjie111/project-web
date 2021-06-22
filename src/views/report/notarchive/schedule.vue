@@ -232,8 +232,6 @@
 <style scoped lang="scss">
 @import '@/assets/css/variables.scss';
     .notarchive-schedule-container {
-        padding: 0 16px;
-
         /deep/ .vxe-table--body {
             .has-children {
                 background: #F6F8FF;

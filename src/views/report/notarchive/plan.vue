@@ -238,7 +238,6 @@ export default {
 
 <style scoped lang="scss">
 .notarchive-plan-container {
-    padding: 0 16px;
     /deep/ .vxe-table--body {
         .has-children {
             background: #F6F8FF;

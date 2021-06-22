@@ -37,9 +37,9 @@ export default {
 <style lang="scss" scoped>
 .content-header {
   display: flex;
-  height: 64px;
-  margin-bottom: 8px;
-  
+  height: 74px;
+  padding: 24px 0 8px;
+
   .menu {
     display: flex;
     flex: 1;

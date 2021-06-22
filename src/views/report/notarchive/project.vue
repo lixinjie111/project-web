@@ -35,9 +35,3 @@
         }
     }
 </script>
-
-<style scoped lang="scss">
-    .notarchive-project-container {
-        padding: 0 24px;
-    }
-</style>

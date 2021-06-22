@@ -1,11 +1,11 @@
 <template>
     <div class="notarchive-deliverables-container">
-        <Header title="月度计划" :date="`${startTime} - ${endTime}`" @selected-tree="handleSetSelectedTree"></Header>
+        <Header title="月度交付物验收" :date="`${startTime} - ${endTime}`" @selected-tree="handleSetSelectedTree"></Header>
         <div class="table-content">
-            <BasicTable v-if="tableData.length" 
-                :tableData="tableData" 
-                :setTableColumns="setTableColumns" 
-                :rowClassName="handleRowClassName" 
+            <BasicTable v-if="tableData.length"
+                :tableData="tableData"
+                :setTableColumns="setTableColumns"
+                :rowClassName="handleRowClassName"
                 :treeConfig="treeConfig"
             ></BasicTable>
             <NoData v-else></NoData>
@@ -62,8 +62,8 @@ export default {
                     minWidth: 128,
                     showOverflow: true,
                     editRender: {
-                        name: 'input', 
-                        enabled: isInPermission('business_projectdeliverable_edit'),  
+                        name: 'input',
+                        enabled: isInPermission('business_projectdeliverable_edit'),
                         attrs: {type: 'text', placeholder: '请输入验收标准'},
                         events: {
                             blur: ({row, column}) => {
@@ -91,8 +91,8 @@ export default {
                     minWidth: 220,
                     showOverflow: true,
                     editRender: {
-                        name: 'input', 
-                        enabled: isInPermission('business_projectdeliverable_edit'),  
+                        name: 'input',
+                        enabled: isInPermission('business_projectdeliverable_edit'),
                         attrs: {type: 'text', placeholder: '请输入备注'},
                         events: {
                             blur: ({row, column}) => {
@@ -108,8 +108,8 @@ export default {
                     minWidth: 220,
                     showOverflow: true,
                     editRender: {
-                        name: 'input', 
-                        enabled: isInPermission('business_projectdeliverable_edit'), 
+                        name: 'input',
+                        enabled: isInPermission('business_projectdeliverable_edit'),
                         attrs: {type: 'text', placeholder: '请输入验收情况'},
                         events: {
                             blur: ({row, column}) => {
@@ -151,11 +151,11 @@ export default {
             try {
                 let {code} = await this.$api.report.handlePutDeliverableStatus(row.id, status);
                 if(code === 0) {
-                  row.status = status; 
-                  this.$message.success('修改验收结论成功！') 
+                  row.status = status;
+                  this.$message.success('修改验收结论成功！')
                 }
             } catch (error) {
-                console.log(error)    
+                console.log(error)
             }
         },
         // 查询列表
@@ -194,7 +194,6 @@ export default {
 
 <style scoped lang="scss">
 .notarchive-deliverables-container {
-    padding: 0 16px;
     /deep/ .vxe-table--body {
         .has-children {
             background: #F6F8FF;

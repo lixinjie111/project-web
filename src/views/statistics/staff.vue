@@ -279,10 +279,11 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/css/variables.scss';
 .statistics-staff-container {
-  padding: 0 16px;
+  padding: 0 16px 24px;
+
   .select-container {
     display: flex;
-    padding: 6px 0 14px 0;
+    padding: 6px 8px 14px;
     .time {
         .label {
             margin: 0 12px 0 24px;

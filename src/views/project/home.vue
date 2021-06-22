@@ -1,7 +1,7 @@
 <template>
     <div class="layout">
         <div class="project-home-container">
-            <ContentHeader type="title" title="项目">
+            <ContentHeader class="home-header" type="title" title="项目">
                 <div class="header-left" slot="left">
                    <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
                 </div>
@@ -216,28 +216,22 @@
     }
 </script>
 <style lang="scss" scoped>
-    .nav-left-title {
-        padding: 0 24px;
-        line-height: 51px;
-        font-size: 14px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #242F57;
-    }
-
     .project-home-container {
-        margin: 0 24px;
-        padding-bottom: 24px;
+        padding: 0 16px 24px;
 
-        .header-left {
-            margin-left: 32px;
-        }
+        .home-header {
+            margin-left: 8px;
 
-        .export-btn {
-            margin-right: 16px;
-            color: #636E95;
-            background-color: transparent;
-            border-color: #C6CBDE;
+            .header-left {
+                margin-left: 32px;
+            }
+
+            .export-btn {
+                margin-right: 16px;
+                color: #636E95;
+                background-color: transparent;
+                border-color: #C6CBDE;
+            }
         }
     }
 </style>

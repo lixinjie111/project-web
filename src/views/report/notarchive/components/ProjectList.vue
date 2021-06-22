@@ -139,15 +139,21 @@
 <style scoped lang="scss">
 @import '@/assets/css/variables.scss';
     .project-list-container {
-        padding-bottom: 4px;
 
         .header {
+            margin-left: 8px;
             height: 44px;
             line-height: 44px;
             font-size: 20px;
             font-family: PingFangSC-Medium, PingFang SC;
             font-weight: 500;
             color: #242F57;
+        }
+
+        .collapse-container {
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
 
         .table-name {

@@ -18,7 +18,7 @@
                 </FlatButton>
             </div>
         </div>
-        <router-view></router-view>
+        <router-view class="child-content"></router-view>
         <SetModal v-if="isShow" @modal-cancel="isShow = false"></SetModal>
     </div>
 </template>
@@ -121,12 +121,15 @@
             border-top: 1px solid #EAEDF7;
             border-bottom: 1px solid #EAEDF7;
             padding: 0 8px;
-            margin-bottom: 16px;
 
             .left {
                 display: flex;
                 align-items: center;
             }
+        }
+
+        .child-content {
+            padding: 24px 16px;
         }
     }
 </style>
