@@ -17,29 +17,24 @@
                 </div>
             </ContentHeader>
             <div class="home-content">
-                <ProjectList :list="listData" :productList="productList"
+                <ProjectList ref="projectList" :list="listData" :productList="productList"
                              :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                              @pagination-change-pagesize="handleChangePageSize"
                              @pagination-change-page="handleChangePage"></ProjectList>
             </div>
         </div>
-        <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
-            <AddForm ref="addForm" slot="content" :form="form" :productList="productList"></AddForm>
-        </Modal>
     </div>
 </template>
 <script>
     import BasicTabs from "@/components/tabs/BasicTabs";
     import ProjectList from "./components/list";
     import Modal from '@/components/Modal/Modal.vue'
-    import AddForm from "./components/addForm";
-    import {formatDate} from '@/utils/common.js'
     import {isInPermission} from '@/utils/common.js';
     import moment from "moment";
 
     export default {
         name: 'home',
-        components: {AddForm, Modal, ProjectList, BasicTabs},
+        components: {Modal, ProjectList, BasicTabs},
         data() {
             return {
                 tabList: [
@@ -72,14 +67,7 @@
                 total: 0, // 总数据条数
                 pageSize: 10, // 页面数据size
                 curPageNum: 1, // 当前页码
-                showAddModal: false,
-                addModal: {
-                    modalTitle: '添加项目',
-                    okText:'保存',
-                    cancelText:'取消'
-                },
                 curStatus: 5,
-                form: {},
                 productList: []
             }
         },
@@ -158,43 +146,7 @@
             },
             // 添加项目
             handleAdd() {
-                this.form = {
-                    projectName: '',
-                    projectCode: '',
-                    beginTime: '',
-                    endTime: '',
-                    masterList: [],
-                    projectDescription: '',
-                    productList: [],
-                    publicFlag: 0
-                };
-                this.showAddModal = true;
-            },
-            // 添加项目保存
-            async handleAddSubmit() {
-                this.$refs.addForm.$refs.addForm.validate(async (valid) => {
-                    if (valid) {
-                        let params = this.$refs.addForm.$refs.addForm.model;
-                        params.beginTime = formatDate(params.beginTime);
-                        params.endTime = formatDate(params.endTime,'end');
-                        try {
-                            let {code} = await this.$api.project.addProject(params);
-                            if(code === 0){
-                                this.resetList();
-                                this.showAddModal = false;
-                            }
-                        }catch(error){
-                            console.log(error)
-                        }
-                    } else {
-                        console.log('提交失败!');
-                        return false;
-                    }
-                });
-            },
-            // 添加项目取消
-            handleAddCancel() {
-                this.showAddModal = false;
+                this.$refs.projectList.handleAdd();
             },
             // 导出项目excel
             handleExport() {

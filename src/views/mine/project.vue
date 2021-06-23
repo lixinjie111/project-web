@@ -4,7 +4,18 @@
             <div slot="nav-left" class="nav-left-title">我的工作台</div>
         </MenuNav>
         <div class="mine-project-container">
-            <ProjectList :list="listData" :productList="productList"
+            <ContentHeader class="mine-project-header" type="title" title="我的项目">
+                <div class="header-left" slot="left">
+                    <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                </div>
+                <div slot="operation">
+                    <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_project_add')">
+                        <span class="iconfont iconjia"></span>
+                        添加项目
+                    </a-button>
+                </div>
+            </ContentHeader>
+            <ProjectList ref="projectList" :list="listData" :productList="productList"
                          :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                          @pagination-change-pagesize="handleChangePageSize"
                          @pagination-change-page="handleChangePage"></ProjectList>
@@ -14,12 +25,32 @@
 
 <script>
     import ProjectList from "@/views/project/components/list";
+    import BasicTabs from "@/components/tabs/BasicTabs";
+    import {isInPermission} from '@/utils/common.js';
 
     export default {
         name: "project",
-        components: {ProjectList},
+        components: {BasicTabs, ProjectList},
         data() {
             return {
+                tabList: [
+                    {
+                        name: '我的全部项目',
+                        status: 5
+                    },
+                    {
+                        name: '我创建的',
+                        status: 0
+                    },
+                    {
+                        name: '我负责的',
+                        status: 1
+                    },
+                    {
+                        name: '我参与的',
+                        status: 3
+                    }
+                ],
                 listData: [],
                 total: 0, // 总数据条数
                 pageSize: 10, // 页面数据size
@@ -32,6 +63,7 @@
             this.getProductList();
         },
         methods:{
+            isInPermission,
             // 重置列表
             resetList() {
                 this.getMyProjectList();
@@ -46,6 +78,13 @@
             handleChangePage(pageNum) {
                 this.curPageNum = pageNum;
                 this.resetList();
+            },
+            handleChangeTab() {
+
+            },
+            // 添加项目
+            handleAdd() {
+                this.$refs.projectList.handleAdd();
             },
             // 获取关联产品列表
             async getProductList() {
@@ -91,6 +130,10 @@
     }
 
     .mine-project-container {
-        padding: 24px;
+        padding: 0 16px;
+
+        .mine-project-header {
+            margin-left: 8px;
+        }
     }
 </style>

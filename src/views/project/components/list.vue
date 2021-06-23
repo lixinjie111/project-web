@@ -27,7 +27,7 @@
             </div>
         </ListTable>
         <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
-        <Modal :isShow="showEditModal" :title="editModal.modalTitle" :okText="editModal.okText" :cancelText="editModal.cancelText" headeralgin="left" @modal-sure="handleEditSubmit" @modal-cancel="handleEditCancel">
+        <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
             <AddForm ref="addForm" slot="content" :form="form" :productList="productList"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showStartModal" :title="startModal.modalTitle" :okText="startModal.okText" :cancelText="startModal.cancelText" headeralgin="left" @modal-sure="handleStartSubmit" @modal-cancel="handleStartCancel">
@@ -88,17 +88,17 @@
                         width: '12%'
                     },
                     {
-                        title: '工时/预计',
+                        title: '预计工时',
                         key: 'planHour',
                         width: '10%'
                     },
                     {
-                        title: '工时/消耗',
+                        title: '消耗工时',
                         key: 'actualHour',
                         width: '10%'
                     },
                     {
-                        title: '工时/剩余',
+                        title: '剩余工时',
                         key: 'restHour',
                         width: '10%'
                     },
@@ -111,9 +111,9 @@
                         width: '15%'
                     }
                 ],
-                showEditModal: false,
-                editModal: {
-                    modalTitle: '编辑项目',
+                showAddModal: false,
+                addModal: {
+                    modalTitle: '添加项目',
                     okText:'保存',
                     cancelText:'取消'
                 },
@@ -146,6 +146,21 @@
             handelJump(item) {
                 this.$router.push({ path:'/task/home', query: {id: item.id} });
             },
+            // 添加项目
+            handleAdd() {
+                this.form = {
+                    projectName: '',
+                    projectCode: '',
+                    beginTime: null,
+                    endTime: null,
+                    masterList: [],
+                    projectDescription: '',
+                    productList: [],
+                    publicFlag: 0
+                };
+                this.showAddModal = true;
+                this.addModal.modalTitle = '添加项目';
+            },
             // 开始项目
             handleStart(item) {
                 this.showStartModal = true;
@@ -171,7 +186,8 @@
                     let {code, data} = await this.$api.project.getProjectDetail(item.id);
                     if(code === 0){
                         this.form = {...data, cancelRelIds: []};
-                        this.showEditModal = true;
+                        this.showAddModal = true;
+                        this.addModal.modalTitle = '编辑项目';
                     }
                 }catch(error){
                     console.log(error)
@@ -202,17 +218,29 @@
                     }
                 });
             },
-            // 编辑项目保存
-            async handleEditSubmit() {
+            // 添加、编辑项目保存
+            async handleAddSubmit() {
                 this.$refs.addForm.$refs.addForm.validate(async (valid) => {
                     if (valid) {
                         let params = this.$refs.addForm.$refs.addForm.model;
                         params.beginTime = formatDate(params.beginTime);
                         params.endTime = formatDate(params.endTime,'end');
-                        let {code} = await this.$api.project.editProject(params);
-                        if(code === 0){
-                            this.$parent.resetList();
-                            this.showEditModal = false;
+                        try {
+                            if(params.id) { //编辑
+                                let {code} = await this.$api.project.editProject(params);
+                                if(code === 0){
+                                    this.$parent.resetList();
+                                    this.showAddModal = false;
+                                }
+                            }else{ //添加
+                                let {code} = await this.$api.project.addProject(params);
+                                if(code === 0){
+                                    this.$parent.resetList();
+                                    this.showAddModal = false;
+                                }
+                            }
+                        }catch(error){
+                            console.log(error)
                         }
                     } else {
                         console.log('提交失败!');
@@ -220,9 +248,9 @@
                     }
                 });
             },
-            // 编辑项目取消
-            handleEditCancel() {
-                this.showEditModal = false;
+            // 添加、编辑项目取消
+            handleAddCancel() {
+                this.showAddModal = false;
             },
             // 开始项目保存
             async handleStartSubmit() {

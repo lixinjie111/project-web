@@ -199,17 +199,17 @@
           },
           {
             dataIndex: 'planHour',
-            title: '工时/预计',
+            title: '预计工时',
             width: widthStatus,
           },
           {
             dataIndex: 'actualHour',
-            title: '工时/消耗',
+            title: '消耗工时',
             width: widthStatus,
           },
           {
             dataIndex: 'restHour',
-            title: '工时/剩余',
+            title: '剩余工时',
             width: widthStatus,
           },
           {

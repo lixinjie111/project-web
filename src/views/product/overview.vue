@@ -273,7 +273,7 @@
                                     this.resetList();
                                     this.showAddModal = false;
                                 }
-                            }else { //编辑添加
+                            }else { //添加
                                let {code} = await this.$api.product.addProduct(params);
                                if(code === 0){
                                    this.resetList();
