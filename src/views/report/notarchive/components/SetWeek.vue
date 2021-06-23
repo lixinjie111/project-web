@@ -71,7 +71,8 @@ export default {
           let {dateTime, week} = data;
           this.list = dateTime?.length ? dateTime : [{dateTime: null}];
           this.regular = week ? week : {week: null, "hour": null,"minute": null};
-          this.regularTime = moment(`${this.regular.hour}:${this.regular.minute}`, 'HH:mm') | '';
+          console.log(this.regular)
+          this.regularTime = this.regular.hour && this.regular.minute ? moment(`${this.regular.hour}:${this.regular.minute}`, 'HH:mm') : '';
         }
       } catch (error) {
         console.log(error)

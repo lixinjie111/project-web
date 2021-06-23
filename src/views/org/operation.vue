@@ -68,13 +68,11 @@ export default {
   methods: {
     // 关联父级选中 取消
     handleCheckbox(node, parent) {
-      console.log(this.checkedList)
       let methods = this.checkedList.includes(node.id) ? 'del' : 'add';
       node?.children?.length && this.handleSubCheckList(node.children, methods);
       setTimeout(() => {
         if(parent){
           let checkList = this.handleParentCheckboxList(parent);
-          debugger
           this.$set(this, 'checkedList', [...new Set(checkList)]);
         }
       }, 0)
@@ -95,15 +93,14 @@ export default {
       nodeList.map(item => (this.checkedList.includes(item.id) || parentCheckedList.includes(item.id)) && parentCheckedList.push(item.parentId));
       parentList = [...new Set(parentList)]; // 全部parentId
       parentCheckedList = [...new Set(parentCheckedList)]; // 选中parentId
-      console.log(parentCheckedList)
-      parentCheckedList = parentCheckedList?.length>1 ? parentCheckedList : [];
+      console.log(parentList,parentCheckedList)
+      parentCheckedList = parentCheckedList?.length>=1 ? parentCheckedList : [];
       const diff = function(arr1, arr2) {
-        let diff1 = arr1.filter((i) => arr2.indexOf(i) < 0);
-        let diff2 = arr1.filter((i) => arr2.indexOf(i) < 0);
-        return [...diff1, ...diff2];
+        return arr1.filter((i) => arr2.indexOf(i) < 0);
       }
-      let diffList = diff(parentCheckedList, parentList);
-      let checkList = diff([...this.checkedList, ...parentCheckedList], diffList)
+      let diffList = diff(parentList, parentCheckedList); // 待移除父节点
+      let checkList = parentCheckedList.length ? [...this.checkedList, ...parentCheckedList] : diff(this.checkedList, diffList)
+      // console.log([...this.checkedList, ...parentCheckedList], diffList2)
       return checkList;
     },
     // 修改子节点
