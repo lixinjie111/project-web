@@ -101,7 +101,7 @@
           if (! user.children)
             users.push(user);
         })
-        this.userKeys = e;
+        // this.userKeys = e;
         this.users = users;
         this.$emit('change', users)
         this.$emit('input', users)
@@ -119,9 +119,10 @@
         this.$emit('input', user)
       },
       handleDelete(index) {
-        this.users.splice(index, 1);
-        this.$emit('change', this.users)
-        this.$emit('input', this.users)
+        let users = this.userList;
+        users.splice(index, 1);
+        this.$emit('change', users)
+        this.$emit('input', users)
       },
     }
   }

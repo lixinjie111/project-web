@@ -1,9 +1,9 @@
 <template>
     <div class="list-table-container">
         <template v-if="data.length">
-            <div class="item-tr" v-for="(dataItem,dataIndex) in data" :key="dataIndex">
+            <div class="item-tr" v-for="(dataItem,dataIndex) in data" :key="dataIndex" @click="handleJump(dataItem)">
                 <div class="item-td" v-for="(columnsItem,columnsIndex) in columns" :key="columnsIndex"
-                     :style="{width: columnsItem.width}" @click="handleJump(dataItem)">
+                     :style="{width: columnsItem.width}">
                     <template v-if="columnsItem.key == 'index'">
                         <div class="item-td-index">{{dataIndex + 1}}</div>
                     </template>

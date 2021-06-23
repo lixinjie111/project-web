@@ -285,9 +285,9 @@
 <style scoped lang="scss">
     .list-container {
         /deep/ .item-tr {
-            .item-td {
-                cursor: pointer;
+            cursor: pointer;
 
+            .item-td {
                 &:first-child {
                     border-right: 1px solid #EAEDF7;
                 }

@@ -16,7 +16,7 @@
           <div>{{form.taskName}}
           </div>
         </ToggleInput>
-        <a-checkbox :checked="!!form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)" v-if="!parentId">在周报中显示</a-checkbox>
+        <a-checkbox :checked="!!form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)" v-if="!parentId">周报显示</a-checkbox>
       </div>
       <a-row :gutter="[16, 16]">
         <a-col :span="6"><StatusSelect :value="form.status" @change="val => handleSave('status', val)"/></a-col>
@@ -42,7 +42,7 @@
           <HoursSelect title="预计工时" icon="iconmiaobiao" :value="form.planHour" @change="val => handleSave('planHour', val)"/>
         </a-col>
         <a-col :span="6">
-          <HoursSelect title="实际工时" icon="iconzhexian" :value="form.actualHour" @change="val => handleSave('actualHour', val)"/>
+          <HoursSelect title="消耗工时" icon="iconzhexian" :value="form.actualHour" @change="val => handleSave('actualHour', val)"/>
         </a-col>
       </a-row>
 
@@ -122,7 +122,9 @@
           </span>
           <a-row :gutter="[16, 4]">
             <a-col span="20" v-if="form.attachment">共 1 个附件</a-col>
-            <a-col span="20" v-else>共 0 个附件</a-col>
+            <a-col span="20" v-else>共 0 个附件
+              <span class="remark">附件大小不超过100MB</span>
+            </a-col>
             <a-col span="4" v-if="!form.attachment">
               <a-upload
                   name="file"
@@ -143,7 +145,7 @@
           </a-row>
           <div>
             <div v-if="form.attachment" class="child-item">
-              <a target="_blank" :href="form.attachment.link">{{form.attachment.name}}</a>
+              <a @click="handleDownloadAttachment">{{form.attachment.name}}</a>
               <div>
                 <i class="iconfont iconshanchu" @click="handleDeleteAttachment"></i>
               </div>
@@ -230,6 +232,9 @@
     watch: {
       taskId() {
         this.getDetail();
+      },
+      projectId(val) {
+        this.$store.dispatch('projectMemberList', val);
       },
     },
     computed: {
@@ -322,13 +327,32 @@
             deleteAttachment(that.form.attachment.id).then(res => {
               if (res.code === 0 && res.data) {
                 that.form.attachment = null;
-                that.saveData({attachments: 0});
+                that.saveData({attachments: ''});
               }
             }).catch(err => {
             })
           },
           onCancel() {}
         });
+      },
+      handleDownloadAttachment() {
+        let att = this.form.attachment;
+        if (att) {
+          fetch({
+            url: att.link,
+          }).then(res => {
+            let filename = att.name;
+            let blob = new Blob([res], {type: "application/octet-stream"});
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+          }).catch( err => {
+            this.$message.error('下载失败');
+          })
+        }
       },
       handleCreateChild() {
         this.createChild = false;
@@ -435,6 +459,11 @@
 
   .prj-title {
     color: #636E95;
+  }
+
+  .remark {
+    color: #97A0C3;
+    margin-left: 6px;
   }
 </style>
 <style lang="scss">

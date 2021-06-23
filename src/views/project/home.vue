@@ -223,7 +223,7 @@
             margin-left: 8px;
 
             .header-left {
-                margin-left: 32px;
+                margin-left: 16px;
             }
 
             .export-btn {
