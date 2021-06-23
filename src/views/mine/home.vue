@@ -50,6 +50,6 @@
     }
 
     .mine-home-container {
-        padding: 24px;
+        padding: 24px 16px;
     }
 </style>

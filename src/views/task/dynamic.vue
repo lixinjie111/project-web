@@ -1,10 +1,8 @@
 <template>
-    <div class="dynamic-container">
+    <div class="task-dynamic-container">
         <TaskMenu @change="handleProjectChange"/>
-        <div class="dynamic-title">
-            <ContentHeader type="title" title="项目动态"></ContentHeader>
-        </div>
-        <div class="dynamic-content">
+        <div class="task-dynamic-content">
+            <ContentHeader class="task-dynamic-header" type="title" title="项目动态"></ContentHeader>
             <DynamicList :list="list"
                          :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                          @pagination-change-pagesize="handleChangePageSize"
@@ -69,17 +67,13 @@
 </script>
 
 <style scoped lang="scss">
-    .dynamic-container{
-        .dynamic-title {
-            padding: 0 24px;
-        }
+    .task-dynamic-container{
+        .task-dynamic-content {
+            padding: 0 16px;
 
-        .dynamic-content {
-            margin: 0 24px 24px;
-            padding: 24px 24px 10px 24px;
-            background: #FFFFFF;
-            box-shadow: 0px 0px 8px 0px rgba(124, 136, 177, 0.12);
-            border-radius: 4px;
+            .task-dynamic-header {
+                margin-left: 8px;
+            }
         }
     }
 </style>

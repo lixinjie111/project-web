@@ -80,8 +80,8 @@
                     return {
                         projectName: '',
                         projectCode: '',
-                        beginTime: '',
-                        endTime: '',
+                        beginTime: null,
+                        endTime: null,
                         masterList: [],
                         projectDescription: '',
                         productList: [],

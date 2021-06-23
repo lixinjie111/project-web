@@ -129,12 +129,12 @@ export default {
                 }
             },
             {
-                title: '工时/消耗',
+                title: '消耗工时',
                 field: 'actualHour',
                 minWidth: 95,
             },
             {
-                title: '工时/剩余',
+                title: '剩余工时',
                 field: 'restHour',
                 minWidth: 95,
             },

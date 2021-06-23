@@ -265,20 +265,7 @@
       width: 120px;
     }
   }
-  .task-home {
-    .ant-select-selection--single {
-      height: 32px;
-      line-height: 32px;
-      background: #F4F7FC;
-      border: none;
-      border-radius: 8px;
-      box-shadow: none !important;
 
-      .ant-select-selection__rendered {
-        line-height: 32px;
-      }
-    }
-  }
   .header {
     .left {
       .ant-radio-button-wrapper {

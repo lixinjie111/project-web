@@ -1,12 +1,11 @@
 <template>
-  <div class="dynamic-container">
-    <div class="dynamic-content">
+  <div class="org-dynamic-container">
+    <ContentHeader class="org-dynamic-header" type="title" title="全部动态"></ContentHeader>
       <DynamicList :list="list"
                 :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                 @pagination-change-pagesize="handleChangePageSize"
                 @pagination-change-page="handleChangePage"/>
     </div>
-</div>
 </template>
 <script>
 import DynamicList from '@/components/others/DynamicList'
@@ -53,14 +52,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.dynamic-container {
-  overflow: hidden;
-  .dynamic-content {
-    margin: 16px 24px 24px 24px;
-    padding: 24px 24px 10px 24px;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0px 0px 8px 0px rgba(124, 136, 177, 0.12);
+.org-dynamic-container {
+  padding: 0 16px;
+
+  .org-dynamic-header {
+    margin-left: 8px;
   }
 }
 </style>

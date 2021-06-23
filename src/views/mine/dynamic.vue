@@ -4,6 +4,7 @@
             <div slot="nav-left" class="nav-left-title">我的工作台</div>
         </MenuNav>
         <div class="mine-dynamic-container">
+           <ContentHeader class="mine-dynamic-header" type="title" title="我的动态"></ContentHeader>
            <DynamicList :list="list"
                         :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                         @pagination-change-pagesize="handleChangePageSize"
@@ -69,10 +70,10 @@
     }
 
     .mine-dynamic-container {
-        margin: 24px;
-        padding: 24px 24px 10px 24px;
-        background: #FFFFFF;
-        box-shadow: 0px 0px 8px 0px rgba(124, 136, 177, 0.12);
-        border-radius: 4px;
+        padding: 0 16px 24px 16px;
+
+        .mine-dynamic-header {
+            margin-left: 8px;
+        }
     }
 </style>
