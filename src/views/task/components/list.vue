@@ -138,7 +138,7 @@
           // },
           {
             dataIndex: 'id',
-            title: 'ID',
+            title: '编号',
             fixed: 'left',
             width: 60,
           },

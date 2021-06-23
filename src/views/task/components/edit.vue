@@ -51,40 +51,42 @@
           <span slot="tab">
             <i class="iconfont icondagangshitu"></i>任务信息
           </span>
-          <div class="block">
-            <a-row :gutter="[16, 4]">
-              <a-col span="8" class="prj-title">所属项目:</a-col>
-              <a-col span="6" class="prj-title">任务类型:</a-col>
-              <a-col span="10" class="prj-title">优先级:</a-col>
-            </a-row>
-            <a-row :gutter="[16, 4]">
-              <a-col span="8">{{form.projectName}}</a-col>
-              <a-col span="6">
-                <a-select style="width: 150px" :value="form.taskType" :options="types" size="small" @change="val => handleSave('taskType', val)">
-                </a-select>
-              </a-col>
-              <a-col span="10">
-                <PrioritySelect :value="form.priority" @change="val => handleSave('priority', val)"/>
-              </a-col>
-            </a-row>
-          </div>
-          <div class="block">
-            <a-row :gutter="[16, 8]">
-              <a-col span="8">参与人:</a-col>
-            </a-row>
-            <a-row :gutter="[16, 8]">
-              <a-col span="24"><UserSelect :options="memberList" :value="form.executorList" @change="val => handleSave('executorList', val)" multiple/></a-col>
-            </a-row>
-          </div>
-          <div class="block">
-            <a-row :gutter="[16, 4]">
-              <a-col span="8">任务描述:</a-col>
-            </a-row>
-            <a-row :gutter="[16, 4]">
-              <a-col span="24">
-                <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
-              </a-col>
-            </a-row>
+          <div class="panel-1">
+            <div class="block">
+              <a-row :gutter="[16, 4]">
+                <a-col span="8" class="prj-title">所属项目:</a-col>
+                <a-col span="6" class="prj-title">任务类型:</a-col>
+                <a-col span="10" class="prj-title">优先级:</a-col>
+              </a-row>
+              <a-row :gutter="[16, 4]">
+                <a-col span="8">{{form.projectName}}</a-col>
+                <a-col span="6">
+                  <a-select style="width: 150px" :value="form.taskType" :options="types" size="small" @change="val => handleSave('taskType', val)">
+                  </a-select>
+                </a-col>
+                <a-col span="10">
+                  <PrioritySelect :value="form.priority" @change="val => handleSave('priority', val)"/>
+                </a-col>
+              </a-row>
+            </div>
+            <div class="block">
+              <a-row :gutter="[16, 8]">
+                <a-col span="8">参与人:</a-col>
+              </a-row>
+              <a-row :gutter="[16, 8]">
+                <a-col span="24"><UserSelect :options="memberList" :value="form.executorList" @change="val => handleSave('executorList', val)" multiple/></a-col>
+              </a-row>
+            </div>
+            <div class="block">
+              <a-row :gutter="[16, 4]">
+                <a-col span="8">任务描述:</a-col>
+              </a-row>
+              <a-row :gutter="[16, 4]">
+                <a-col span="24">
+                  <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
+                </a-col>
+              </a-row>
+            </div>
           </div>
         </a-tab-pane>
         <a-tab-pane key="2" v-if="!parentId">
@@ -100,18 +102,25 @@
               </FlatButton>
             </a-col>
           </a-row>
-          <div>
-            <div v-for="child in childrenList" :key="child.id" class="child-item">
-              <a @click="handleEditChild(child)">{{child.taskName}}</a>
-              <div>
-                <i class="iconfont iconxiezuo" @click="handleEditChild(child)"></i>
-                <i class="iconfont iconshanchu" @click="handleDeleteChild(child)"></i>
-              </div>
+          <div class="child-cont">
+<!--            <div class="child-item">-->
+              <a-row :gutter="[16, 16]" v-for="child in childrenList" :key="child.id" class="child-item">
+                <a-col span="18">
+                  <a @click="handleEditChild(child)">{{child.taskName}}</a>
+                </a-col>
+                <a-col span="4">
+                  <Status :value="child.status"/>
+                </a-col>
+                <a-col span="2">
+                  <i class="iconfont iconxiezuo" @click="handleEditChild(child)"></i>
+                  <i class="iconfont iconshanchu" @click="handleDeleteChild(child)"></i>
+                </a-col>
+              </a-row>
             </div>
             <div v-if="createChild">
               <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
             </div>
-          </div>
+<!--          </div>-->
           <div>
             <a-divider></a-divider>
           </div>
@@ -143,7 +152,7 @@
               </a-upload>
             </a-col>
           </a-row>
-          <div>
+          <div class="child-cont">
             <div v-if="form.attachment" class="child-item">
               <a @click="handleDownloadAttachment">{{form.attachment.name}}</a>
               <div>
@@ -178,6 +187,7 @@
   import UserIcon from "@/components/business/UserIcon";
   import HoursSelect from "@/components/business/HoursSelect";
   import DateSelect from "@/components/business/DateSelect";
+  import Status from "@/components/business/Status";
   import StatusSelect from "@/components/business/StatusSelect";
   import MyIcon from "@/components/others/MyIcon";
   import FlatButton from "@/components/buttons/FlatButton";
@@ -190,7 +200,7 @@
 
   export default {
     name: "TaskEdit",
-    components: {ModalNoFooter, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, StatusSelect, FlatButton, MyIcon, ToggleInput, ToggleArea },
+    components: {ModalNoFooter, UserSelect, PrioritySelect, TwoValue, UserIcon, HoursSelect, DateSelect, Status, StatusSelect, FlatButton, MyIcon, ToggleInput, ToggleArea },
     props: {
       isShow: {
         type: Boolean,
@@ -441,10 +451,10 @@
   margin-bottom: 24px;
 }
   .child-item {
-    display: flex;
-    justify-content: space-between;
+    /*display: flex;*/
+    /*justify-content: space-between;*/
     width: 100%;
-    line-height: 36px;
+    /*line-height: 36px;*/
     .iconfont {
       margin-right: 12px;
       cursor: pointer;
@@ -455,6 +465,18 @@
     .iconshanchu {
       color: #FF4C60;
     }
+  }
+
+  .child-cont {
+    height: 200px;
+    overflow-y: auto;
+    width: 100%;
+  }
+  .panel-1 {
+    height: 283px;
+    overflow-y: auto;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   .prj-title {
