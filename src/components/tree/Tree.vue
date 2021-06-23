@@ -1,11 +1,15 @@
 <template>
   <div class="tree">
-    <a-tree show-line :blockNode="true" :default-selected-keys="defaultSelectedKeys" :default-expanded-keys="defaultExpandKeys" :treeData="treeData" @select="onSelect">
+    <a-tree show-line :blockNode="true" 
+    :default-selected-keys="defaultSelectedKeys" :default-expanded-keys="defaultExpandKeys" 
+    :selectedKeys="selectedKeyList" :expandedKeys="expandedKeys"
+    :treeData="treeData" 
+    @select="onSelect" @expand="onExpand">
       <template slot="custom" slot-scope="item">
         <div class="tree-view-item">
           <span class="tree-view-left">{{ item.title }}</span>
           <div class="tree-view-right">
-            <span class="tree-view-operation iconfont iconxiezuo" v-if="operation.indexOf('edit') !== -1" @click.stop="onHandleEdit(item)"></span>
+            <!-- <span class="tree-view-operation iconfont iconxiezuo" v-if="operation.indexOf('edit') !== -1" @click.stop="onHandleEdit(item)"></span> -->
             <span class="tree-view-operation iconfont iconshanchu" v-if="operation.indexOf('del') !== -1" @click.stop="onHandleDelete(item)"></span>
           </div>
         </div>
@@ -48,7 +52,8 @@ export default {
   },
   data(){
     return {
-      slots: {}
+      selectedKeyList: [], 
+      expandedKeys: []
     }
   },
   watch: {
@@ -61,8 +66,54 @@ export default {
     }
   },
   methods: {
-    onSelect(selectedKeys, e){
-      this.$emit('onSelectTreeNodes', selectedKeys, e.selectedNodes)
+    onSelect(selectedKeys, obj){
+      let {expandedKeys, selectedKeyList} = this;
+      //选中的状态
+      if (obj.selected) {
+          //判断是否已经展开，未展开就添加到 expandedKeys 中
+          //已经展开就不用管
+          let index = expandedKeys.indexOf(selectedKeys[0])
+          if (index === -1) {
+              expandedKeys.push(selectedKeys[0])
+              this.expandedKeys = expandedKeys;
+          } 
+          this.selectedKeyList = selectedKeys;
+      } else {
+        //selectedKey 是上次选中的元素 在 expandedKeys 肯定是存在的
+        let index = expandedKeys.indexOf(selectedKeyList[0])
+        if (index !== -1) {
+          //过渡掉子类元素
+          expandedKeys = expandedKeys.filter((ele) => ele!==(selectedKeyList[0]))
+          this.expandedKeys = expandedKeys;
+        } 
+        this.selectedKeyList = [];
+      }
+      this.$emit('onSelectTreeNodes', selectedKeys, obj.selectedNodes)
+    },
+ 
+    //展开的回调
+    onExpand(expandedKey, obj){
+        let {expandedKeys} = this;
+        //展开的状态
+        if (obj.expanded) {
+            this.expandedKeys = expandedKey;
+            // this.selectedKeyList = [];
+        } else {
+            //expandedKey 返回的是当前已经展开的元素 expandedKeys 是上次展开的元素
+            //比较两个数组中缺少的元素得出当前被收起的是哪个元素
+            let removeArray = this.diffArray(expandedKey, expandedKeys)
+            //收起的时候需要把里面展开的元素一并移除，不然会造成收起动作无效
+            expandedKeys = expandedKeys.filter((ele) => !removeArray.includes(ele) )
+            this.expandedKeys = expandedKeys;
+            // this.selectedKeyList = [];
+        }
+    },
+ 
+    //比较出2个数组中不一样的元素
+    diffArray(arr1, arr2) {
+      let diff1 = arr1.filter((i) => arr2.indexOf(i) < 0);
+      let diff2 = arr2.filter((i) => arr1.indexOf(i) < 0)
+      return [...diff1, ...diff2];
     },
     // 编辑处理
     onHandleEdit(item){
@@ -97,8 +148,13 @@ export default {
   height: 100%;
   overflow: auto;
   /deep/ .ant-tree li {
+    // span.ant-tree-iconEle {
+    //   display: none;
+    // }
+    
     // 修改选中背景颜色
     .ant-tree-node-content-wrapper{
+      display: inline-block;
       height: 30px;
       line-height: 30px;
       .ant-tree-node-selected {
@@ -122,7 +178,7 @@ export default {
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           content: '\e658;';
-          background: #fff;
+          background: none;
         }
         i{
           display: none;
@@ -139,7 +195,7 @@ export default {
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           content: '\e657';
-          background: #fff;
+          background: none;
         }
         i{
           display: none;
@@ -148,7 +204,7 @@ export default {
       &.ant-tree-switcher-noop {
         width: 8px;
         height: 8px;
-        margin: 8px;
+        margin:  11px 8px;
         border-radius: 50%;
         background: #C6CBDE;
         i{

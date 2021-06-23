@@ -143,15 +143,15 @@ export default {
 
     // tree选择部门 查询部门下人员
     handleGetDepartUsers(departIds){
+      if(departIds[0] === this.deptId) return false;
       this.deptId = departIds.length ? departIds[0] : '';
       this.handleGetUserList();
     },
 
     // 切换冻结状态
     async changeSwitch(row){
-      console.log(row);
       try {
-        let {code, data} = await this.$api.org.handlePutLockUser(row.userId, row.lockFlag === '0' ? 9 : 0);
+        let {code} = await this.$api.org.handlePutLockUser(row.userId, row.lockFlag === '0' ? 9 : 0);
         if(code === 0) {
           this.$message.success(row.lockFlag === '0' ? '冻结成功！' : '解冻成功！');
           this.handleGetUserList();
@@ -167,6 +167,7 @@ export default {
         {userId: '', username: '', realName: '', deptId: '', password: '', phone: '', position: '', roleList: [], gender: 0}
         : {userId: row.userId, username: row.username, realName: row.realName, deptId: row.deptId, password: '', phone: row.phone, position: row.position, roleList: row.roleList.map(item => item.roleId), gender: row.gender};
       this.$set(this, 'form', reset);
+      this.modal.modalTitle =  type == 'add' ? '新增用户' : '编辑用户';
 
       !this.roleList.length && this.handleGetAdminRoleList()
       this.isShowModal = true;

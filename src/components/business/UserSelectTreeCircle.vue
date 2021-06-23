@@ -12,7 +12,11 @@
                         :tree-data="treeList"
                         :replaceFields="replaceFields"
                         :selectedKeys="selectedKeys"
-                        @select="handleSelect"/>
+                        :expandedKeys="expandedKeys"
+                        @select="handleSelect"
+                        @click="handleClick"
+                        @expand="handleExpand">
+                </a-tree>
             </div>
         </a-popover>
     </div>
@@ -37,7 +41,8 @@
                     pId: 'parentId',
                     children: 'children',
                 },
-                selectedKeys: []
+                selectedKeys: [],
+                expandedKeys: []
             }
         },
         props: {
@@ -92,6 +97,38 @@
                     this.selectedKeys.splice(selectedKeysIndex, 1);
                 }
                 this.$emit('change', this.userList);
+            },
+            handleClick(event, treeNode){
+                console.log(treeNode)
+                let {expandedKeys} = this;
+                let id = treeNode?.dataRef.id;
+                let index = expandedKeys.indexOf(id);
+                if (index === -1) {
+                    expandedKeys.push(id)
+                    this.expandedKeys = expandedKeys;
+                }else{
+                    this.expandedKeys.splice(index, 1);
+                }
+            },
+            handleExpand(expandedKey, obj){
+                let {expandedKeys} = this;
+                //展开的状态
+                if (obj.expanded) {
+                    this.expandedKeys = expandedKey;
+                } else {
+                    //expandedKey 返回的是当前已经展开的元素 expandedKeys 是上次展开的元素
+                    //比较两个数组中缺少的元素得出当前被收起的是哪个元素
+                    let removeArray = this.diffArray(expandedKey, expandedKeys)
+                    //收起的时候需要把里面展开的元素一并移除，不然会造成收起动作无效
+                    expandedKeys = expandedKeys.filter((ele) => !removeArray.includes(ele) )
+                    this.expandedKeys = expandedKeys;
+                }
+            },
+            //比较出2个数组中不一样的元素
+            diffArray(arr1, arr2) {
+                let diff1 = arr1.filter((i) => arr2.indexOf(i) < 0);
+                let diff2 = arr2.filter((i) => arr1.indexOf(i) < 0)
+                return [...diff1, ...diff2];
             },
             handleDelete(index) {
                 let selectedKeysIndex = this.selectedKeys.findIndex(i => i == 'user-' + this.userList[index].userId);
