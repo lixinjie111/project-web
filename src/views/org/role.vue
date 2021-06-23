@@ -240,6 +240,7 @@ export default {
         > button{
           padding: 0 8px;
           border-radius: 4px;
+          border-color: #d9d9d9;
           span {
             &:nth-child(1) {
               margin-right: 4px;

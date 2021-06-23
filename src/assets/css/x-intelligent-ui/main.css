@@ -3294,7 +3294,7 @@ textarea.ant-input {
     border-radius: 4px;
     color: rgba(0, 0, 0, 0.65);
     background-color: #fff;
-    /*border-color: #d9d9d9;*/
+    /* border-color: #d9d9d9; */
 }
 .ant-btn .iconfont {
     margin-right: 8px;
@@ -22435,15 +22435,15 @@ li.ant-select-tree-treenode-disabled > .ant-select-tree-node-content-wrapper:hov
 }
 .ant-tree.ant-tree-directory > li span.ant-tree-node-content-wrapper.ant-tree-node-selected,
 .ant-tree.ant-tree-directory .ant-tree-child-tree > li span.ant-tree-node-content-wrapper.ant-tree-node-selected {
-    color: #fff;
-    background: transparent;
+    color: #242F57;
+    background: #F0F8FF;
 }
 .ant-tree.ant-tree-directory > li span.ant-tree-node-content-wrapper::before,
 .ant-tree.ant-tree-directory .ant-tree-child-tree > li span.ant-tree-node-content-wrapper::before {
     position: absolute;
     right: 0;
     left: 0;
-    height: 24px;
+    height: 30px;
     transition: all 0.3s;
     content: '';
 }
@@ -22470,11 +22470,11 @@ li.ant-select-tree-treenode-disabled > .ant-select-tree-node-content-wrapper:hov
 }
 .ant-tree.ant-tree-directory > li.ant-tree-treenode-selected > span.ant-tree-checkbox.ant-tree-checkbox-checked .ant-tree-checkbox-inner::after,
 .ant-tree.ant-tree-directory .ant-tree-child-tree > li.ant-tree-treenode-selected > span.ant-tree-checkbox.ant-tree-checkbox-checked .ant-tree-checkbox-inner::after {
-    border-color: #0064FF;
+    border-color: #F0F8FF;
 }
 .ant-tree.ant-tree-directory > li.ant-tree-treenode-selected > span.ant-tree-node-content-wrapper::before,
-.ant-tree.ant-tree-directory .ant-tree-child-tree > li.ant-tree-treenode-selected > span.ant-tree-node-content-wrapper::before {
-    background: #0064FF;
+.ant-tree.ant-tree-directory .ant-tree-child-tree > li.ant-tree-treenode-selected > span.ant-tree-node-content-wrapper::before { 
+    background: #c7e3ff;
 }
 .ant-tree-checkbox {
     box-sizing: border-box;
@@ -22876,7 +22876,7 @@ li.ant-tree-treenode-disabled > .ant-tree-node-content-wrapper:hover {
 }
 .ant-tree.ant-tree-show-line li span.ant-tree-switcher {
     color: rgba(0, 0, 0, 0.45);
-    background: #fff;
+    /* background: #fff; */
 }
 .ant-tree.ant-tree-show-line li span.ant-tree-switcher.ant-tree-switcher-noop .ant-tree-switcher-icon,
 .ant-tree.ant-tree-show-line li span.ant-tree-switcher.ant-tree-switcher-noop .ant-select-switcher-icon {

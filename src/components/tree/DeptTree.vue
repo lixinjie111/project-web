@@ -56,8 +56,18 @@ export default {
     },
     // 选中
     handleSelected(value) {
+      // let {expandedKeys, deptId} = this;
+      // let bool = expandedKeys.includes(deptId);
+      // console.log(bool)
+      // if (!bool) {
+      //   expandedKeys.push(deptId)
+      //   this.expandedKeys = expandedKeys;
+      // } 
       this.$emit('selected-tree', value)
-    }
+    },
+    // handleExpand(expandedKeys){
+
+    // }
   },
   mounted() {
     this.handleGetDepartTree()

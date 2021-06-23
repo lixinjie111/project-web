@@ -63,7 +63,7 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
     .vxe-table--tooltip-wrapper {
         &.theme--dark {
             font-size: 14px !important;
@@ -91,6 +91,12 @@
                     }
                 }
             }
+        }
+    }
+    .vxe-table--render-default.is--empty {
+        overflow: hidden;
+        .vxe-table--empty-block, .vxe-table--empty-placeholder {
+            padding: 5% 0;
         }
     }
 </style>

@@ -6,7 +6,7 @@
     <div class="member-content">
       <div class="member-left">
         <div class="member-tree">
-          <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" :defaultSelectedKeys="defaultSelectedKeys" @onSelectTreeNodes="handleGetDepartUsers"></Tree>
+          <Tree v-if="treeList.length" :treeData="treeList" :replaceFields="replaceFields" :defaultExpandKeys="defaultSelectedKeys" :defaultSelectedKeys="defaultSelectedKeys" @onSelectTreeNodes="handleGetDepartUsers"></Tree>
           <div v-else class="empty">暂无部门</div>
         </div>
         <div class="btn" @click="handleGotoPage">管理部门结构</div>

@@ -17,6 +17,7 @@
     </div>
     </div>
     <BasicTable
+        rowId="id"
         :tableData="tableData"
         :setTableColumns="setTableColumns"
         :rowClassName="handleRowClassName"
@@ -63,7 +64,7 @@ export default {
                                     row.isMerge ?
                                         '合计工时'
                                         :
-                                    null
+                                    'haha'
                                 }
                             </div>
                         ]
@@ -205,14 +206,14 @@ export default {
     },
     // 合并表格
     handleRowspanMethod({ row, _columnIndex, _rowIndex }){
-        if(row.isMerge){
+        if(!!row?.isMerge){
             let col = [1, 2, 3, 8, 9, 10]
             if (_columnIndex === 0) {
-                return {rowspan: _rowIndex,colspan: 4}
+                return {colspan: 4}
             } else if (_columnIndex === 7){
-                return {rowspan: _rowIndex,colspan: 4}
+                return {colspan: 4}
             } else if (col.includes(_columnIndex)) {
-                return { rowspan: 0, colspan: 0 }
+                return { colspan: null }
             }
         }
     },
@@ -257,6 +258,7 @@ export default {
             let {restHour, planHour, actualHour} = rest;
             result = [...result, ...item.projects, {restHour, planHour, actualHour, isMerge: true}];
         });
+        console.log(result)
         return result;
     },
     async handleGetList(){
