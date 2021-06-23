@@ -453,6 +453,8 @@
   .child-item {
     /*display: flex;*/
     /*justify-content: space-between;*/
+    color: #242F57;
+    font-size: 14px;
     width: 100%;
     /*line-height: 36px;*/
     .iconfont {
