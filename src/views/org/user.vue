@@ -91,7 +91,7 @@ export default {
 
       isShowModal: false, // 编辑 新增modal
       modal: {
-        modalTitle: '新增用户', // modal title
+        modalTitle: '添加用户', // modal title
         cancelText: '取消',
         okText: '保存'
       },
@@ -167,7 +167,7 @@ export default {
         {userId: '', username: '', realName: '', deptId: '', password: '', phone: '', position: '', roleList: [], gender: 0}
         : {userId: row.userId, username: row.username, realName: row.realName, deptId: row.deptId, password: '', phone: row.phone, position: row.position, roleList: row.roleList.map(item => item.roleId), gender: row.gender};
       this.$set(this, 'form', reset);
-      this.modal.modalTitle =  type == 'add' ? '新增用户' : '编辑用户';
+      this.modal.modalTitle =  type == 'add' ? '添加用户' : '编辑用户';
 
       !this.roleList.length && this.handleGetAdminRoleList()
       this.isShowModal = true;

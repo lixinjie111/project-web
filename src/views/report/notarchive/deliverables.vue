@@ -122,7 +122,7 @@ export default {
                 {
                     title: '验收结论',
                     fixed: 'right',
-                    minWidth: 145,
+                    minWidth: 105,
                     slots: {
                         default:({row}) => {
                             return [

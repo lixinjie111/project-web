@@ -121,6 +121,12 @@
                         }
                     },
                     {
+                        title: '工作日',
+                        field: 'manDays',
+                        width: 75,
+                        formatter: ({cellValue}) => `${cellValue}d`
+                    },
+                    {
                         title: '实际结束日期',
                         field: 'actualEndTime',
                         minWidth: 160

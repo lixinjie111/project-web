@@ -64,7 +64,7 @@ export default {
                                     row.isMerge ?
                                         '合计工时'
                                         :
-                                    'haha'
+                                    ''
                                 }
                             </div>
                         ]
@@ -106,20 +106,23 @@ export default {
             {
                 title: '时间计划',
                 field: 'beginTime',
-                minWidth: 166,
+                minWidth: 196,
                 slots: {
                     default: ({row}) => {
+                        let {beginTime, endTime, planBeginTime, planEndTime} = row;
+                        let start = beginTime ? beginTime : planBeginTime;
+                        let end = endTime ? endTime : planEndTime;
                         return [
                             <span class="plan-time">
                                 {
-                                    row.hasOwnProperty('beginTime') && row.beginTime !== null ?
-                                    (row.hasOwnProperty('endTime') && row.endTime !== null ?
-                                    `${row.beginTime} - ${row.endTime}`
+                                    start !== null ?
+                                    (end !== null ?
+                                    `${start} - ${end}`
                                     :
-                                    row.beginTime)
+                                    end)
                                     :
-                                    (row.hasOwnProperty('endTime') && row.endTime !== null ?
-                                    row.endTime
+                                    (end !== null ?
+                                    end
                                     :
                                     null)
                                 }

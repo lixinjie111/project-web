@@ -110,13 +110,13 @@ export default {
                                 <div class="table-time">
                                     <span>{row.beginTime}</span>
                                     {
-                                        // row.status === 1 ? 
-                                        // <IconToolTip iconName="iconrili-qitian-tianchong" content="本周新增"></IconToolTip>
-                                        // :
-                                        // row.status == 2 ?
-                                        // <IconToolTip iconName="iconrili-sanshitian-tianchong" content="本月新增"></IconToolTip>
-                                        // :
-                                        // ''
+                                        row.newFlag === 1 ? 
+                                        <IconToolTip iconName="iconrili-qitian-tianchong" content="本周新增"></IconToolTip>
+                                        :
+                                        row.newFlag == 2 ?
+                                        <IconToolTip iconName="iconrili-sanshitian-tianchong" content="本月新增"></IconToolTip>
+                                        :
+                                        ''
                                     }
                                 </div>
                             ]
@@ -133,13 +133,13 @@ export default {
                                 <div class="table-time">
                                     <span>{row.endTime}</span>
                                     {
-                                        // row.status === 1 ? 
-                                        // <IconToolTip iconName="iconrili-yuechu-tianchong" content="上月延期"></IconToolTip>
-                                        // :
-                                        // row.status == 2 ?
-                                        // <IconToolTip iconName="iconrili-yuemo-tianchong" content="本月截止"></IconToolTip>
-                                        // :
-                                        // ''
+                                        row.deadlineFlag === 1 ? 
+                                        <IconToolTip iconName="iconrili-yuechu-tianchong" content="上月延期"></IconToolTip>
+                                        :
+                                        row.deadlineFlag == 2 ?
+                                        <IconToolTip iconName="iconrili-yuemo-tianchong" content="本月截止"></IconToolTip>
+                                        :
+                                        ''
                                     }
                                 </div>
                             ]
@@ -166,7 +166,7 @@ export default {
                 {
                     title: '任务验收结论',
                     fixed: 'right',
-                    minWidth: 145,
+                    minWidth: 105,
                     slots: {
                         default:({row}) => {
                             return [

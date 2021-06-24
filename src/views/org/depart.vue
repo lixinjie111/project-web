@@ -85,9 +85,9 @@ export default {
             break;
         } else {
           this.parentId = 0;
-          this.handleSelectSubDepart(this.treeList)
         }
       }
+      this.handleSelectSubDepart(this.treeList)
     },
     // 选中部门下子部门
     handleSelectSubDepart(nodeList){
