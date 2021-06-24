@@ -6,7 +6,7 @@
         <div class="mine-project-container">
             <ContentHeader class="mine-project-header" type="title" title="我的项目">
                 <div class="header-left" slot="left">
-                    <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                    <BasicTabs :tabList="tabList" :tabActive="curKind" @change="handleChangeTab" ref="tab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_project_add')">
@@ -15,7 +15,7 @@
                     </a-button>
                 </div>
             </ContentHeader>
-            <ProjectList ref="projectList" :list="listData" :productList="productList"
+            <ProjectList ref="projectList" :list="listData" :productList="productList" @update="handleAddUpdate"
                          :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                          @pagination-change-pagesize="handleChangePageSize"
                          @pagination-change-page="handleChangePage"></ProjectList>
@@ -33,22 +33,27 @@
         components: {BasicTabs, ProjectList},
         data() {
             return {
+                curKind: 0,
                 tabList: [
                     {
                         name: '我的全部项目',
-                        status: 5
+                        status: 0,
+                        num: 0
                     },
                     {
                         name: '我创建的',
-                        status: 0
+                        status: 1,
+                        num: 0
                     },
                     {
                         name: '我负责的',
-                        status: 1
+                        status: 2,
+                        num: 0
                     },
                     {
                         name: '我参与的',
-                        status: 3
+                        status: 3,
+                        num: 0
                     }
                 ],
                 listData: [],
@@ -66,6 +71,7 @@
             isInPermission,
             // 重置列表
             resetList() {
+                this.getMyProjectCount();
                 this.getMyProjectList();
             },
             // 切换条目数量
@@ -79,12 +85,19 @@
                 this.curPageNum = pageNum;
                 this.resetList();
             },
-            handleChangeTab() {
-
+            handleChangeTab(kind) {
+                this.curKind = kind;
+                this.getMyProjectList();
             },
             // 添加项目
             handleAdd() {
                 this.$refs.projectList.handleAdd();
+            },
+            // 添加完成后更新列表
+            handleAddUpdate() {
+                this.curKind = 0;
+                this.getMyProjectCount();
+                this.getMyProjectList();
             },
             // 获取关联产品列表
             async getProductList() {
@@ -102,10 +115,28 @@
                     console.log(error)
                 }
             },
+            // 获取项目列表种类数量
+            async getMyProjectCount(){
+                try {
+                    let {code, data} = await this.$api.mine.getMyProjectCount();
+                    if(code === 0){
+                        console.log(data);
+                        this.tabList = this.tabList.map((item) => {
+                            let t = data.find((i) => {
+                                return i.kind == item.status;
+                            });
+                            return {...item, ...t};
+                        });
+                        console.log(this.tabList);
+                    }
+                }catch(error){
+                    console.log(error)
+                }
+            },
             // 获取我的项目列表
             async getMyProjectList(){
                 try {
-                    let {code, data} = await this.$api.mine.getMyProjectList(this.curPageNum, this.pageSize);
+                    let {code, data} = await this.$api.mine.getMyProjectList(this.curPageNum, this.pageSize, this.curKind);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;

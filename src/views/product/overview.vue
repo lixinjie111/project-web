@@ -3,7 +3,7 @@
         <div class="product-overview-container">
             <ContentHeader class="overview-header" type="title" title="产品">
                 <div class="header-left" slot="left">
-                    <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                    <BasicTabs :tabList="tabList" :tabActive="curStatus" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button class="export-btn" @click="handleExport" v-if="isInPermission('business_product_view')">
@@ -66,15 +66,18 @@
                 tabList: [
                     {
                         name: '未关闭',
-                        status: 0
+                        status: 0,
+                        num: 0
                     },
                     {
                         name: '关闭',
-                        status: 1
+                        status: 1,
+                        num: 0
                     },
                     {
                         name: '全部产品',
-                        status: 2
+                        status: 2,
+                        num: 0
                     }
                 ],
                 columns: [
@@ -276,6 +279,7 @@
                             }else { //添加
                                let {code} = await this.$api.product.addProduct(params);
                                if(code === 0){
+                                   this.curStatus = 0;
                                    this.resetList();
                                    this.showAddModal = false;
                                }

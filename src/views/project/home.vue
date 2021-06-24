@@ -3,7 +3,7 @@
         <div class="project-home-container">
             <ContentHeader class="home-header" type="title" title="项目">
                 <div class="header-left" slot="left">
-                   <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                   <BasicTabs :tabList="tabList" :tabActive="curStatus" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button class="export-btn" @click="handleExport" v-if="isInPermission('business_project_view')">
@@ -17,7 +17,7 @@
                 </div>
             </ContentHeader>
             <div class="home-content">
-                <ProjectList ref="projectList" :list="listData" :productList="productList"
+                <ProjectList ref="projectList" :list="listData" :productList="productList"  @update="handleAddUpdate"
                              :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                              @pagination-change-pagesize="handleChangePageSize"
                              @pagination-change-page="handleChangePage"></ProjectList>
@@ -40,27 +40,33 @@
                 tabList: [
                     {
                         name: '全部',
-                        status: 5
+                        status: 5,
+                        num: 0
                     },
                     {
                         name: '未开始',
-                        status: 0
+                        status: 0,
+                        num: 0
                     },
                     {
                         name: '进行中',
-                        status: 1
+                        status: 1,
+                        num: 0
                     },
                     {
                         name: '已延期',
-                        status: 3
+                        status: 3,
+                        num: 0
                     },
                     {
                         name: '已搁置',
-                        status: 4
+                        status: 4,
+                        num: 0
                     },
                     {
                         name: '已完成',
-                        status: 2
+                        status: 2,
+                        num: 0
                     }
                 ],
                 listData: [],
@@ -143,6 +149,12 @@
                 this.curPageNum = 1;
                 this.curStatus = status;
                 this.resetList();
+            },
+            // 添加完成后更新列表
+            handleAddUpdate() {
+                this.curStatus = 5;
+                this.getProjectCount();
+                this.getProjectList();
             },
             // 添加项目
             handleAdd() {

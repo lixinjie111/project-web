@@ -382,6 +382,8 @@
       },
       handleCreateOK(data) {
         this.showCreate = false;
+        // 我的任务新建更新状态
+        this.$emit('update');
         this.$emit('change');
       },
       handleEditClose() {

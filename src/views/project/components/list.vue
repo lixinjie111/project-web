@@ -235,7 +235,8 @@
                             }else{ //添加
                                 let {code} = await this.$api.project.addProject(params);
                                 if(code === 0){
-                                    this.$parent.resetList();
+                                    // 更新列表数据和状态
+                                    this.$emit('update');
                                     this.showAddModal = false;
                                 }
                             }
