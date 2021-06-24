@@ -39,7 +39,7 @@
                     {
                         title: '项目名称',
                         field: 'projectName',
-                        width: 300,
+                        width: 360,
                         slots: {
                             default: ({row, rowIndex}) => {
                                 return [
@@ -57,11 +57,13 @@
                     {
                         title: '负责人',
                         field: 'projectMaster',
-                        showOverflow: true
+                        showOverflow: true,
+                        width: 120,
                     },
                     {
                         title: '截止日期',
                         field: 'endTime',
+                        width: 132,
                         slots: {
                             default: ({row}) => {
                                 return [
@@ -76,7 +78,7 @@
                     {
                         title: '进度',
                         field: 'progress',
-                        width: 120,
+                        width: 132,
                         slots: {
                             default: ({row}) => {
                                 row.progress = Number(/(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress);
@@ -89,11 +91,12 @@
                     {
                         title: '剩余工期(天)',
                         field: 'remainingDuration',
-                        width: 120
+                        width: 100
                     },
                     {
                         title: '状态',
                         field: 'status',
+                        width: 96,
                         slots: {
                             default: ({row}) => {
                                 return [

@@ -8,7 +8,7 @@
                 :rowClassName="handleRowClassName"
                 :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else></NoData>
+            <NoData v-else title="暂无月度交付物验收"></NoData>
         </div>
     </div>
 </template>
@@ -37,7 +37,7 @@ export default {
                     title: '工作任务',
                     field: 'title',
                     treeNode: true,
-                    minWidth: 358,
+                    width: 360,
                     slots: {
                         default: ({row, $rowIndex, $seq}) => {
                             return [
@@ -53,13 +53,13 @@ export default {
                 {
                     title: '负责人',
                     field: 'chargePerson',
-                    minWidth: 112,
+                    width: 120,
                     showOverflow: true
                 },
                 {
                     title: '验收标准',
                     field: 'checkStandard',
-                    minWidth: 128,
+                    width: 100,
                     showOverflow: true,
                     editRender: {
                         name: 'input',
@@ -76,7 +76,7 @@ export default {
                 {
                     title: '月度交付物',
                     field: 'deliverable',
-                    minWidth: 220,
+                    width: 220,
                     slots: {
                         default: ({row}) => {
                             return [
@@ -88,7 +88,7 @@ export default {
                 {
                     title: '交付物备注',
                     field: 'remark',
-                    minWidth: 220,
+                    width: 200,
                     showOverflow: true,
                     editRender: {
                         name: 'input',
@@ -105,7 +105,7 @@ export default {
                 {
                     title: '验收情况',
                     field: 'acceptance',
-                    minWidth: 220,
+                    width: 220,
                     showOverflow: true,
                     editRender: {
                         name: 'input',
@@ -122,7 +122,7 @@ export default {
                 {
                     title: '验收结论',
                     fixed: 'right',
-                    minWidth: 105,
+                    width: 102,
                     slots: {
                         default:({row}) => {
                             return [

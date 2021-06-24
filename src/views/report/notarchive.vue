@@ -42,7 +42,11 @@
                     {name: '月度交付物验收', type: 'deliverables'}
                 ],
                 isShow: false,
-                archiveId: this.$store.state.report.archiveId, // 归档id
+            }
+        },
+        computed: {
+            archiveId(){ // 归档id
+                return this.$store.state.report.archiveId
             }
         },
         methods: {
@@ -67,6 +71,7 @@
                                 let {code} = await this.$api.report.handlePostExecute(this.archiveId);
                                 if(code === 0) {
                                     this.$message.success('归档成功！');
+                                    this.$store.dispatch('initArchiveId', '');
                                     this.$router.go(0);
                                 }
                             }catch(error){

@@ -50,7 +50,7 @@ export default {
                 title: '人员',
                 field: 'userName',
                 treeNode: true,
-                minWidth: 280,
+                width: 120,
                 fixed: 'left',
                 slots: {
                     default: ({row, $rowIndex}) => {
@@ -74,7 +74,7 @@ export default {
             {
                 title: '工作任务',
                 field: 'projectName',
-                minWidth: 264,
+                minWidth: 360,
                 showOverflow: true,
                 slots: {
                     default: ({row}) => {
@@ -87,7 +87,7 @@ export default {
             {
                 title: '优先级',
                 field: 'priority',
-                minWidth: 74,
+                width: 72,
                 slots: {
                     default: ({row}) => {
                         return [
@@ -106,27 +106,18 @@ export default {
             {
                 title: '时间计划',
                 field: 'beginTime',
-                minWidth: 196,
+                width: 240,
                 slots: {
                     default: ({row}) => {
                         let {beginTime, endTime, planBeginTime, planEndTime} = row;
                         let start = beginTime ? beginTime : planBeginTime;
                         let end = endTime ? endTime : planEndTime;
                         return [
-                            <span class="plan-time">
-                                {
-                                    start !== null ?
-                                    (end !== null ?
-                                    `${start} - ${end}`
-                                    :
-                                    end)
-                                    :
-                                    (end !== null ?
-                                    end
-                                    :
-                                    null)
-                                }
-                            </span>
+                            <p class="table-time">
+                                <span class="time text-right">{start}</span>
+                                <span class="spead">-</span>
+                                <span class="time text-left">{end}</span>
+                            </p>
                         ]
                     }
                 }
@@ -134,17 +125,17 @@ export default {
             {
                 title: '消耗工时',
                 field: 'actualHour',
-                minWidth: 95,
+                width: 100,
             },
             {
                 title: '剩余工时',
                 field: 'restHour',
-                minWidth: 95,
+                width: 100,
             },
             {
                 title: '总工时',
                 field: 'planHour',
-                minWidth: 86,
+                width: 100,
             },
             {
                 title: '状态',
@@ -168,7 +159,7 @@ export default {
             {
                 title: '进度',
                 field: 'progress',
-                minWidth: 126,
+                width: 132,
                 slots: {
                     default: ({row}) => {
                         if(row.hasOwnProperty('progress') &&  row.progress!== null) {
@@ -190,7 +181,7 @@ export default {
             {
                 title: '实际结束日期',
                 field: 'actualEndTime',
-                minWidth: 120
+                width: 132
             },
             {
                 title: '备注',
@@ -375,12 +366,23 @@ export default {
             }
         }
     }
-    .plan-time {
-        display: block;
+    .table-time {
+        display: flex;
         line-height: 24px;
-        text-align: center;
         background: #F4F7FC;
         border-radius: 2px;
+        .time {
+            flex: 1;
+            &.text-left {
+                text-align: left;
+            }
+            &.text-right {
+                text-align: right;
+            }
+        }
+        .spead {
+            padding: 0 5px;
+        }
     }
 }
 </style>

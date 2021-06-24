@@ -38,7 +38,7 @@ export default {
     return {
       deptId: '', // 查询部门
       total: 0, // 总数据条数
-      pageSize: 10, // 页面数据size
+      pageSize: 15, // 页面数据size
       curPageNum: 1, // 当前页码
 
       treeList: [], // 部门树

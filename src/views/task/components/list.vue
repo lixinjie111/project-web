@@ -146,7 +146,7 @@
             dataIndex: 'taskName',
             title: '任务名称',
             fixed: 'left',
-            width: 240,
+            width: 360,
             treeNode: true,
             ellipsis: true,
             // customRender: (text, record, index) => {
@@ -162,7 +162,7 @@
           {
             dataIndex: 'status',
             title: '状态',
-            width: widthStatus + 10,
+            width: 96,
             align: 'center',
             scopedSlots: {
               customRender: 'status'
@@ -171,7 +171,7 @@
           {
             dataIndex: 'priority',
             title: '优先级',
-            width: widthStatus,
+            width: 72,
             align: 'center',
             scopedSlots: {
               customRender: 'priority'
@@ -180,14 +180,14 @@
           {
             dataIndex: 'taskType',
             title: '任务类型',
-            width: widthStatus,
+            width: 88,
             customRender(text) {
               return taskTypes[text];
             }
           },
           {
             dataIndex: 'taskMaster',
-            width: widthStatus,
+            width: 120,
             ellipsis: true,
             title: '负责人',
           },
@@ -195,27 +195,27 @@
             dataIndex: 'taskExecutor',
             title: '执行者',
             ellipsis: true,
-            width: widthDate,
+            width: 120,
           },
           {
             dataIndex: 'planHour',
             title: '预计工时',
-            width: widthStatus,
+            width: 96,
           },
           {
             dataIndex: 'actualHour',
             title: '消耗工时',
-            width: widthStatus,
+            width: 96,
           },
           {
             dataIndex: 'restHour',
             title: '剩余工时',
-            width: widthStatus,
+            width: 96,
           },
           {
             dataIndex: 'progress',
             title: '进度',
-            width: widthStatus,
+            width: 132,
             scopedSlots: {
               customRender: 'progress'
             }
@@ -223,22 +223,22 @@
           {
             dataIndex: 'planBeginTime',
             title: '计划开始',
-            width: widthDate,
+            width: 120,
           },
           {
             dataIndex: 'planEndTime',
             title: '计划结束',
-            width: widthDate,
+            width: 120,
           },
           {
             dataIndex: 'actualBeginTime',
             title: '实际开始',
-            width: widthDate,
+            width: 120,
           },
           {
             dataIndex: 'actualEndTime',
             title: '实际结束',
-            width: widthDate,
+            width: 120,
           },
           ...operation
         ],

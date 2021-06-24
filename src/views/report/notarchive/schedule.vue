@@ -9,7 +9,7 @@
                 :rowClassName="handleRowClassName" 
                 :treeConfig="{children: 'children', expandRowKeys: expandRowKeys, iconOpen: 'tree-icon iconfont iconxia2', iconClose: 'tree-icon iconfont iconyou2'}"
             ></BasicTable>
-            <NoData v-else></NoData>
+            <NoData v-else title="本周周报暂未生成"></NoData>
         </div>
     </div>
 </template>
@@ -41,7 +41,7 @@
                         title: '工作任务',
                         field: 'title',
                         treeNode: true,
-                        width: 280,
+                        width: 360,
                         fixed: 'left',
                         slots: {
                             default: ({row, $seq, $rowIndex}) => {
@@ -61,13 +61,13 @@
                     {
                         title: '负责人',
                         field: 'projectMaster',
-                        width: 150,
+                        width: 120,
                         showOverflow: true
                     },
                     {
                         title: '优先级',
                         field: 'priority',
-                        width: 74,
+                        width: 72,
                         slots: {
                             default: ({row}) => {
                                 return [
@@ -79,13 +79,13 @@
                     {
                         title: '权重',
                         field: 'weight',
-                        width: 84,
+                        width: 88,
                         // formatter: ({cellValue}) => `${cellValue}%`
                     },
                     {
                         title: '进度',
                         field: 'progress',
-                        width: 159,
+                        width: 132,
                         slots: {
                             default: ({row}) => {
                                 row.progress = /(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress;
@@ -111,11 +111,21 @@
                     {
                         title: '时间计划',
                         field: 'planTime',
-                        width: 265,
+                        width: 240,
                         slots: {
                             default: ({row}) => {
+                                let reg = /([0-9]{4}\/[0-9]{2}\/[0-9]{2})*\s{1,}-\s{1}([0-9]{4}\/[0-9]{2}\/[0-9]{2})*/;
+                                let start = null, end = null;
+                                if(reg.test(row.planTime)){
+                                    start = RegExp.$1;
+                                    end = RegExp.$2;
+                                }
                                 return [
-                                    <span class="table-time">{row.planTime}</span>
+                                    <p class="table-time">
+                                        <span class="time text-right">{start}</span>
+                                        <span class="spead">-</span>
+                                        <span class="time text-left">{end}</span>
+                                    </p>
                                 ]
                             }
                         }
@@ -123,18 +133,18 @@
                     {
                         title: '工作日',
                         field: 'manDays',
-                        width: 75,
+                        width: 100,
                         formatter: ({cellValue}) => `${cellValue}d`
                     },
                     {
                         title: '实际结束日期',
                         field: 'actualEndTime',
-                        minWidth: 160
+                        width: 132
                     },
                     {
                         title: '工作进展描述',
                         field: 'description',
-                        minWidth: 150,
+                        minWidth: 120,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -151,7 +161,7 @@
                     {
                         title: '下周工作计划',
                         field: 'nextWeekWork',
-                        minWidth: 150,
+                        minWidth: 120,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -168,7 +178,7 @@
                     {
                         title: '备注',
                         field: 'remark',
-                        minWidth: 150,
+                        minWidth: 120,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -293,11 +303,22 @@
         }
 
         .table-time {
-            display: block;
+            display: flex;
             line-height: 24px;
-            text-align: center;
             background: #F4F7FC;
             border-radius: 2px;
+            .time {
+                flex: 1;
+                &.text-left {
+                    text-align: left;
+                }
+                &.text-right {
+                    text-align: right;
+                }
+            }
+            .spead {
+                padding: 0 5px;
+            }
         }
         .no-priority {
             color: #97A0C3;

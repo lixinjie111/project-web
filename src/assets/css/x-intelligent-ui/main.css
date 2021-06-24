@@ -19320,8 +19320,8 @@ textarea.ant-mentions {
     padding-right: 0;
 }
 .ant-progress-show-info .ant-progress-outer {
-    margin-right: calc(-2em - 8px);
-    padding-right: calc(2em + 8px);
+    margin-right: calc(-3em - 8px);
+    padding-right: calc(3em + 8px);
 }
 .ant-progress-inner {
     position: relative;
@@ -19357,7 +19357,7 @@ textarea.ant-mentions {
 }
 .ant-progress-text {
     display: inline-block;
-    width: 2em;
+    width: 3em;
     margin-left: 8px;
     color: rgba(0, 0, 0, 0.45);
     font-size: 1em;

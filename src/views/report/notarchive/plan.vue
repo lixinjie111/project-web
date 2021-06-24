@@ -8,7 +8,7 @@
                 :rowClassName="handleRowClassName" 
                 :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else></NoData>
+            <NoData v-else title="暂无月度计划"></NoData>
         </div>
     </div>
 </template>
@@ -38,7 +38,7 @@ export default {
                     title: '工作任务',
                     field: 'title',
                     treeNode: true,
-                    minWidth: 358,
+                    width: 360,
                     fixed: 'left',
                     slots: {
                         default: ({row, $rowIndex, $seq}) => {
@@ -55,23 +55,29 @@ export default {
                 {
                     title: '负责人',
                     field: 'master',
-                    minWidth: 112,
+                    width: 120,
                     showOverflow: true
                 },
                 {
                     title: '月度工作计划描述',
                     field: 'description',
-                    minWidth: 284,
+                    width: 240,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
                         attrs: {type: 'text', placeholder: '请输入月度工作计划描述'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectMonth(data);
+                            }
+                        }
                     }
                 },
                 {
                     title: '月度交付物',
                     field: 'deliverable',
-                    minWidth: 112,
+                    minWidth: 100,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
@@ -87,7 +93,7 @@ export default {
                 {
                     title: '验收标准',
                     field: 'acceptanceCriteria',
-                    minWidth: 112,
+                    minWidth: 100,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
@@ -103,7 +109,7 @@ export default {
                 {
                     title: '任务开始日期',
                     field: 'beginTime',
-                    minWidth: 116,
+                    minWidth: 132,
                         slots: {
                         default: ({row}) => {
                             return [
@@ -126,7 +132,7 @@ export default {
                 {
                     title: '任务截止日期',
                     field: 'endTime',
-                    minWidth: 116,
+                    minWidth: 132,
                     slots: {
                         default: ({row}) => {
                             return [
@@ -149,7 +155,7 @@ export default {
                 {
                     title: '备注',
                     field: 'remark',
-                    minWidth: 240,
+                    minWidth: 120,
                     showOverflow: true,
                     editRender: {
                         name: 'input', 
@@ -166,7 +172,7 @@ export default {
                 {
                     title: '任务验收结论',
                     fixed: 'right',
-                    minWidth: 105,
+                    minWidth: 102,
                     slots: {
                         default:({row}) => {
                             return [
