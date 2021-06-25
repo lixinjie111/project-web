@@ -131,8 +131,7 @@ export default {
         text-align: center;
         img {
           padding: 2px 0;
-          margin: 0 2px;
-          width: 20px;
+          width: 24px;
           text-align: center;
         }
       }

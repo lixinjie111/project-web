@@ -48,7 +48,7 @@
 
             > i {
                 margin-right: 10px;
-                font-size: 15px;
+                font-size: 18px;
                 color: #7C88B1;
 
                 &.down {

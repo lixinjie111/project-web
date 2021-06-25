@@ -40,10 +40,11 @@
       let canDelete = isInPermission('business_member_del');
 
       let columns = [
+        {title: '序号', align:'center', type: 'seq', width: 48},
         {
           title: '姓名',
           field: 'userName',
-          minWidth: 150,
+          width: 120,
           showOverflow: true,
           slots: {
             default: ({row}) => {
@@ -59,6 +60,7 @@
         {
           field: 'userRole',
           title: '角色',
+          width: 220,
           editRender: {
             name: 'input',
             enabled: canEdit,
@@ -71,24 +73,26 @@
         {
           field: 'createdTime',
           title: '加入日期',
+          minWidth: 800,
         }
       ];
       if (canDelete) {
         columns.push({
           field: 'type',
-            title: '操作',
+          title: '操作',
+          width: 132,
           slots: {
-        default: ({row}) => {
-            let operation = [];
-            // if (canEdit)
-            //   operation.push(<i class="iconfont iconxiezuo" on-click={e => this.handleEdit(row)} />)
-            if (canDelete)
-              operation.push(<i class="iconfont iconshanchu" on-click={e => this.handleDelete(row)} />)
+            default: ({row}) => {
+                let operation = [];
+                // if (canEdit)
+                //   operation.push(<i class="iconfont iconxiezuo" on-click={e => this.handleEdit(row)} />)
+                if (canDelete)
+                  operation.push(<i class="iconfont iconshanchu" on-click={e => this.handleDelete(row)} />)
 
-            return operation;
-          }
-        },
-        })
+                return operation;
+              }
+            },
+          })
       }
 
       return {
@@ -203,7 +207,7 @@
   .table {
     background: white;
     box-shadow: 0px 1px 8px 0px rgba(140, 144, 149, 0.16);
-    border-radius: 8px;
+    border-radius: 4px;
     min-height: calc(100vh - 145px);
   }
 

@@ -32,4 +32,7 @@ export default {
 /deep/ .ant-progress-status-success .ant-progress-text, /deep/ .ant-progress-text {
   color: rgba(0, 0, 0, 0.45);
 }
+.ant-progress {
+  font-size: 14px !important;
+}
 </style>

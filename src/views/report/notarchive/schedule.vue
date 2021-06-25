@@ -85,6 +85,13 @@
                         field: 'weight',
                         width: 88,
                         showOverflow: true,
+                        slots: {
+                            default: ({row, $rowIndex}) => {
+                                return [
+                                    <TextToolTip class="table-weight" content={row.weight} refName={'table-weight' + $rowIndex}></TextToolTip>
+                                ]
+                            }
+                        }
                     },
                     {
                         title: '进度',
@@ -221,6 +228,7 @@
             // 查询table
             async handleGetList() {
                 try {
+                    this.tableData = [];
                     let {code, data} = await this.$api.report.handleGetWeekList(this.deptId);
                     if(code === 0){
                         let {archiveId, startTime, endTime, list} = data;
@@ -232,8 +240,11 @@
                         this.$store.dispatch('initArchiveId', archiveId || '');
                         
                         expandRowKeys = expandRowKeys.length ? expandRowKeys : [];
-                        this.tableData = list || [];
-                        this.$set(this, 'treeConfig', {...this.treeConfig, expandRowKeys})
+                        this.$set(this, 'treeConfig', {...this.treeConfig, expandRowKeys});
+                        console.log(this.treeConfig)
+                        setTimeout(()=> {
+                            this.tableData = list || [];
+                        }, 0);
                     }
                 } catch (error) {
                     console.log(error)
@@ -270,6 +281,7 @@
             .tree-icon {
                 line-height: 14px;
                 font-size: 16px;
+                color: #97A0C3;
             }
         }
 
@@ -338,6 +350,10 @@
         }
         .no-priority {
             color: #97A0C3;
+        }
+
+        .table-weight {
+            font-size: 14px;
         }
     }
 </style>

@@ -34,18 +34,18 @@ export default {
         tableData: [],
         // 配置表格各字段
         setTableColumns: [
-            {title: ' ', type: 'seq', width: 50},
+            {title: ' ', align:'center', type: 'seq', width: 48},
             {title: '周报周期', field: 'updatedTime', width: 400,showOverflow: true,
                 slots: {
                     default: ({row}) => {
                         return [
-                            <span>{row.beginTime} 至 {row.endTime}</span>
+                            <span>{row.beginTime} - {row.endTime}</span>
                         ]
                     }
                 }
             },
             {title: '归档日期', field: 'archiveTime'},
-            {title: '操作', width: '100',
+            {title: '操作', width: '132',
                 // visible: isInPermission('') || isInPermission(''),
                 slots: {
                     default: ({row}) => {
