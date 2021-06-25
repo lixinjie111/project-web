@@ -2826,14 +2826,14 @@ html {
     transition: all 0.3s;
 }
 .ant-input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -12337,14 +12337,14 @@ span.ant-radio + * {
     cursor: auto;
 }
 .ant-calendar-input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-calendar-input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-calendar-input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-calendar-input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -13002,14 +13002,14 @@ span.ant-radio + * {
     outline: 0;
 }
 .ant-calendar-range-picker-input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-calendar-range-picker-input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-calendar-range-picker-input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-calendar-range-picker-input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -13129,16 +13129,16 @@ span.ant-radio + * {
 }
 .ant-calendar-range .ant-calendar-input::-moz-placeholder,
 .ant-calendar-range .ant-calendar-time-picker-input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-calendar-range .ant-calendar-input:-ms-input-placeholder,
 .ant-calendar-range .ant-calendar-time-picker-input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-calendar-range .ant-calendar-input::-webkit-input-placeholder,
 .ant-calendar-range .ant-calendar-time-picker-input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-calendar-range .ant-calendar-input:-moz-placeholder-shown, .ant-calendar-range .ant-calendar-time-picker-input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -14333,14 +14333,14 @@ li.ant-calendar-time-picker-select-option-disabled:hover {
     cursor: auto;
 }
 .ant-time-picker-panel-input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-time-picker-panel-input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-time-picker-panel-input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-time-picker-panel-input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -14503,14 +14503,14 @@ li.ant-time-picker-panel-select-option-disabled:focus {
     transition: all 0.3s;
 }
 .ant-time-picker-input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-time-picker-input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-time-picker-input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-time-picker-input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -16871,14 +16871,14 @@ form:not(.ant-form-vertical) .ant-input-group-wrapper {
     border-radius: 2px;
 }
 .ant-input-number::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-input-number:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-input-number::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-input-number:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -17036,14 +17036,14 @@ textarea.ant-input-number {
     -moz-appearance: textfield !important;
 }
 .ant-input-number-input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-input-number-input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-input-number-input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-input-number-input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -17970,14 +17970,14 @@ textarea.ant-input-number {
     margin: 0 8px;
 }
 .ant-pagination-options-quick-jumper input::-moz-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
     opacity: 1;
 }
 .ant-pagination-options-quick-jumper input:-ms-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-pagination-options-quick-jumper input::-webkit-input-placeholder {
-    color: #bfbfbf;
+    color: #C6CBDE;
 }
 .ant-pagination-options-quick-jumper input:-moz-placeholder-shown {
     text-overflow: ellipsis;
@@ -22473,7 +22473,7 @@ li.ant-select-tree-treenode-disabled > .ant-select-tree-node-content-wrapper:hov
     border-color: #F0F8FF;
 }
 .ant-tree.ant-tree-directory > li.ant-tree-treenode-selected > span.ant-tree-node-content-wrapper::before,
-.ant-tree.ant-tree-directory .ant-tree-child-tree > li.ant-tree-treenode-selected > span.ant-tree-node-content-wrapper::before { 
+.ant-tree.ant-tree-directory .ant-tree-child-tree > li.ant-tree-treenode-selected > span.ant-tree-node-content-wrapper::before {
     background: #c7e3ff;
 }
 .ant-tree-checkbox {

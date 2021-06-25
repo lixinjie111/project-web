@@ -8,12 +8,12 @@
                 <div class="header-left" slot="left">
                     <BasicTabs :tabList="tabList" :tabActive="tabActive" @change="handleChangeTab"></BasicTabs>
                 </div>
-                <div slot="operation">
-                    <a-button type="primary" @click="handleCreate" v-if="isInPermission('business_task_add')">
-                        <span class="iconfont iconjia"></span>
-                        添加任务
-                    </a-button>
-                </div>
+<!--                <div slot="operation">-->
+<!--                    <a-button type="primary" @click="handleCreate" v-if="isInPermission('business_task_add')">-->
+<!--                        <span class="iconfont iconjia"></span>-->
+<!--                        添加任务-->
+<!--                    </a-button>-->
+<!--                </div>-->
             </ContentHeader>
             <TaskList enter-type="mine" :page="page" :page-size="pageSize" :total="total" :table-data="tableData" :view-type="viewType"
                       @update="handleAddUpdate" @change="handleTaskListChange" @pageChange="handlePageChange" ref="taskList" />
@@ -24,7 +24,7 @@
 <script>
     import TaskList from "../task/components/list";
     import BasicTabs from "@/components/tabs/BasicTabs";
-    import {isInPermission} from '@/utils/common.js';
+    // import {isInPermission} from '@/utils/common.js';
 
     export default {
         name: "task",
@@ -62,7 +62,7 @@
             this.getMyTaskList();
         },
         methods: {
-            isInPermission,
+            // isInPermission,
             handleAddUpdate() {
                 this.tabActive = 0;
             },
