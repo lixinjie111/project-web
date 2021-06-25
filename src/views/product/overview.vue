@@ -67,18 +67,15 @@
                 tabList: [
                     {
                         name: '未关闭',
-                        status: 0,
-                        num: 0
+                        status: 0
                     },
                     {
                         name: '关闭',
-                        status: 1,
-                        num: 0
+                        status: 1
                     },
                     {
                         name: '全部产品',
-                        status: 2,
-                        num: 0
+                        status: 2
                     }
                 ],
                 columns: [

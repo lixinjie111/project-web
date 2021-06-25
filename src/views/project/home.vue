@@ -41,33 +41,27 @@
                 tabList: [
                     {
                         name: '全部',
-                        status: 5,
-                        num: 0
+                        status: 5
                     },
                     {
                         name: '未开始',
-                        status: 0,
-                        num: 0
+                        status: 0
                     },
                     {
                         name: '进行中',
-                        status: 1,
-                        num: 0
+                        status: 1
                     },
                     {
                         name: '已延期',
-                        status: 3,
-                        num: 0
+                        status: 3
                     },
                     {
                         name: '已搁置',
-                        status: 4,
-                        num: 0
+                        status: 4
                     },
                     {
                         name: '已完成',
-                        status: 2,
-                        num: 0
+                        status: 2
                     }
                 ],
                 listData: [],

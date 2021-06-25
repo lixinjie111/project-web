@@ -35,23 +35,19 @@
                 tabList: [
                     {
                         name: '我的全部任务',
-                        status: 0,
-                        num: 0
+                        status: 0
                     },
                     {
                         name: '我创建的',
-                        status: 1,
-                        num: 0
+                        status: 1
                     },
                     {
                         name: '我负责的',
-                        status: 2,
-                        num: 0
+                        status: 2
                     },
                     {
                         name: '指派给我',
-                        status: 3,
-                        num: 0
+                        status: 3
                     }
                 ],
                 page: 1,
