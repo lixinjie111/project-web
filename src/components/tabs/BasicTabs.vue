@@ -1,8 +1,8 @@
 <template>
     <div class="basic-tabs-container">
-        <div class="tabs-item" v-for="(item,index) in tabList" :key="index" :class="tabActive == index + 1 ? 'active' : ''" @click="changeTab(index+1,item.status)">
+        <div class="tabs-item" v-for="(item,index) in tabList" :key="index" :class="active == item.status ? 'active' : ''" @click="changeTab(item.status)">
             {{item.name}}
-            <span v-show="tabActive == index + 1">{{item.num}}</span>
+            <span v-show="active == item.status">{{item.num}}</span>
         </div>
     </div>
 </template>
@@ -12,19 +12,27 @@
         name: "BasicTabs",
         data() {
             return {
-                tabActive: 1,
-                tabTop: 0
+                active: this.tabActive
             }
         },
         props: {
+            tabActive: {
+                type: Number,
+                default: 0
+            },
             tabList: {
                 type: Array,
                 default: () => []
             }
         },
+        watch: {
+            tabActive(val) {
+                this.active = val;
+            }
+        },
         methods: {
-            changeTab(index,status) {
-                this.tabActive = index;
+            changeTab(status) {
+                this.active = status;
                 this.$emit('change', status);
             }
         }

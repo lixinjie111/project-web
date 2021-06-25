@@ -6,7 +6,7 @@
         <div class="mine-project-container">
             <ContentHeader class="mine-project-header" type="title" title="我的项目">
                 <div class="header-left" slot="left">
-                    <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                    <BasicTabs :tabList="tabList" :tabActive="tabActive" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_project_add')">
@@ -15,7 +15,7 @@
                     </a-button>
                 </div>
             </ContentHeader>
-            <ProjectList ref="projectList" :list="listData" :productList="productList"
+            <ProjectList ref="projectList" :list="listData" @update="handleAddUpdate"
                          :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                          @pagination-change-pagesize="handleChangePageSize"
                          @pagination-change-page="handleChangePage"></ProjectList>
@@ -33,18 +33,19 @@
         components: {BasicTabs, ProjectList},
         data() {
             return {
+                tabActive: 0, //当前项目种类
                 tabList: [
                     {
                         name: '我的全部项目',
-                        status: 5
-                    },
-                    {
-                        name: '我创建的',
                         status: 0
                     },
                     {
-                        name: '我负责的',
+                        name: '我创建的',
                         status: 1
+                    },
+                    {
+                        name: '我负责的',
+                        status: 2
                     },
                     {
                         name: '我参与的',
@@ -54,18 +55,17 @@
                 listData: [],
                 total: 0, // 总数据条数
                 pageSize: 10, // 页面数据size
-                curPageNum: 1, // 当前页码
-                productList: []
+                curPageNum: 1 // 当前页码
             }
         },
         created() {
             this.resetList();
-            this.getProductList();
         },
         methods:{
             isInPermission,
             // 重置列表
             resetList() {
+                this.getMyProjectCount();
                 this.getMyProjectList();
             },
             // 切换条目数量
@@ -79,33 +79,40 @@
                 this.curPageNum = pageNum;
                 this.resetList();
             },
-            handleChangeTab() {
-
+            handleChangeTab(kind) {
+                this.tabActive = kind;
+                this.getMyProjectList();
             },
             // 添加项目
             handleAdd() {
                 this.$refs.projectList.handleAdd();
             },
-            // 获取关联产品列表
-            async getProductList() {
+            // 添加完成后更新列表
+            handleAddUpdate() {
+                this.tabActive = 0;
+                this.getMyProjectCount();
+                this.getMyProjectList();
+            },
+            // 获取项目列表种类数量
+            async getMyProjectCount() {
                 try {
-                    let {code, data} = await this.$api.project.getBindingProductList();
-                    if (code === 0) {
-                        this.productList = data.map(item => {
-                            return {
-                                ...item,
-                                checked: false
-                            }
+                    let {code, data} = await this.$api.mine.getMyProjectCount();
+                    if(code === 0){
+                        this.tabList = this.tabList.map((item) => {
+                            let t = data.find((i) => {
+                                return i.kind == item.status;
+                            });
+                            return {...item, ...t};
                         });
                     }
-                } catch (error) {
+                }catch(error){
                     console.log(error)
                 }
             },
             // 获取我的项目列表
             async getMyProjectList(){
                 try {
-                    let {code, data} = await this.$api.mine.getMyProjectList(this.curPageNum, this.pageSize);
+                    let {code, data} = await this.$api.mine.getMyProjectList(this.curPageNum, this.pageSize, this.tabActive);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;

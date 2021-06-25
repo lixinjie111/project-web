@@ -350,22 +350,9 @@
       handleDownloadAttachment() {
         let att = this.form.attachment;
         if (att) {
-          fetch(att.link).then(response => {
-            if(response.ok) {
-              return response.blob();
-            }
-            throw new Error('Network response was not ok.');
-          }).then(blob => {
-            let filename = att.name;
-            let url = window.URL.createObjectURL(blob);
-            let a = document.createElement("a");
-            a.href = url;
-            a.download = filename;
-            a.click();
-            window.URL.revokeObjectURL(url);
-          }).catch( err => {
-            this.$message.error('下载失败');
-          })
+          let a = document.createElement("a");
+          a.href = att.link;
+          a.click();
         }
       },
       handleCreateChild() {

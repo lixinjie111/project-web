@@ -3,7 +3,7 @@
         <div class="project-home-container">
             <ContentHeader class="home-header" type="title" title="项目">
                 <div class="header-left" slot="left">
-                   <BasicTabs :tabList="tabList" @change="handleChangeTab"></BasicTabs>
+                   <BasicTabs :tabList="tabList" :tabActive="tabActive" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button class="export-btn" @click="handleExport" v-if="isInPermission('business_project_view')">
@@ -17,7 +17,7 @@
                 </div>
             </ContentHeader>
             <div class="home-content">
-                <ProjectList ref="projectList" :list="listData" :productList="productList"
+                <ProjectList ref="projectList" :list="listData" @update="handleAddUpdate"
                              :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                              @pagination-change-pagesize="handleChangePageSize"
                              @pagination-change-page="handleChangePage"></ProjectList>
@@ -37,6 +37,7 @@
         components: {Modal, ProjectList, BasicTabs},
         data() {
             return {
+                tabActive: 5,
                 tabList: [
                     {
                         name: '全部',
@@ -66,14 +67,11 @@
                 listData: [],
                 total: 0, // 总数据条数
                 pageSize: 10, // 页面数据size
-                curPageNum: 1, // 当前页码
-                curStatus: 5,
-                productList: []
+                curPageNum: 1 // 当前页码
             }
         },
         created() {
             this.resetList();
-            this.getProductList();
         },
         methods: {
             isInPermission,
@@ -92,22 +90,6 @@
             handleChangePage(pageNum) {
                 this.curPageNum = pageNum;
                 this.resetList();
-            },
-            // 获取关联产品列表
-            async getProductList() {
-                try {
-                    let {code, data} = await this.$api.project.getBindingProductList();
-                    if (code === 0) {
-                        this.productList = data.map(item => {
-                            return {
-                                ...item,
-                                checked: false
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
             },
             // 获取项目列表状态数量
             async getProjectCount(){
@@ -128,7 +110,7 @@
             // 获取项目列表
             async getProjectList(){
                 try {
-                    let {code, data} = await this.$api.project.getProjectList(this.curPageNum, this.pageSize, this.curStatus);
+                    let {code, data} = await this.$api.project.getProjectList(this.curPageNum, this.pageSize, this.tabActive);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;
@@ -141,8 +123,14 @@
             // 切换产品状态
             handleChangeTab(status) {
                 this.curPageNum = 1;
-                this.curStatus = status;
+                this.tabActive = status;
                 this.resetList();
+            },
+            // 添加完成后更新列表
+            handleAddUpdate() {
+                this.tabActive = 5;
+                this.getProjectCount();
+                this.getProjectList();
             },
             // 添加项目
             handleAdd() {
@@ -151,7 +139,7 @@
             // 导出项目excel
             handleExport() {
                 try {
-                    this.$api.project.exportProject(this.curStatus).then((res)=>{
+                    this.$api.project.exportProject(this.tabActive).then((res)=>{
                         let blob = new Blob([res], {type: "application/vnd.ms-excel"});
                         let url = window.URL.createObjectURL(blob);
                         let a = document.createElement("a");

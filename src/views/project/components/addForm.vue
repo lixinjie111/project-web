@@ -43,7 +43,7 @@
             <a-textarea v-model="form.projectDescription" :autoSize='{ minRows: 4, maxRows: 6}' placeholder="请输入项目描述"/>
         </a-form-model-item>
         <a-form-model-item label="">
-            <RelatedSelect title="关联产品" :list="checkedProductList" @change="handleChangeProduct"></RelatedSelect>
+            <RelatedSelect title="关联产品" :list="productList" @change="handleChangeProduct"></RelatedSelect>
             <div class="form-related-list">
                 <div class="item" v-for="(item,index) in form.productList" :key="index">
                     <TextToolTip className="left" :content="item.productName" :refName="'related-item' + index"></TextToolTip>
@@ -88,11 +88,6 @@
                         publicFlag: 0
                     }
                 }
-            },
-            // 关联产品列表
-            productList: {
-                type: Array,
-                default: () => []
             }
         },
         data() {
@@ -107,21 +102,11 @@
                     height: '30px',
                     lineHeight: '30px',
                 },
-                checkedProductList: JSON.parse(JSON.stringify(this.productList))
+                productList: [] //关联产品列表
             }
         },
         created (){
-            if(this.form.id){ //编辑
-                // 关联产品列表选中状态
-                this.checkedProductList = this.productList.map(item => {
-                    // 匹配已选中的关联产品
-                    let checked = this.form.productList && this.form.productList.find(i => item.id == i.productId);
-                    return {
-                        ...item,
-                        checked: checked ? true : false
-                    }
-                });
-            }
+           this.getProductList();
         },
         methods: {
             disabledStartDate(startValue) {
@@ -138,13 +123,40 @@
                 }
                 return startValue.valueOf() >= endValue.valueOf();
             },
+            // 获取关联产品列表
+            async getProductList() {
+                try {
+                    let {code, data} = await this.$api.project.getBindingProductList();
+                    if (code === 0) {
+                        if(this.form.id){ // 编辑
+                            this.productList = data.map(item => {
+                                // 匹配已选中的关联产品
+                                let checked = this.form.productList && this.form.productList.find(i => item.id == i.productId);
+                                return {
+                                    ...item,
+                                    checked: checked ? true : false
+                                }
+                            });
+                        }else { // 新建
+                            this.productList = data.map(item => {
+                                return {
+                                    ...item,
+                                    checked: false
+                                }
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
             // 取消关联产品
             handleCancelProduct(item) {
                 // 取消已选关联列表
                 let index = this.form.productList.findIndex(i => i.productId == item.productId);
                 this.form.productList.splice(index, 1);
                 // 切换关联列表选中状态
-                this.checkedProductList.forEach((t) => {
+                this.productList.forEach((t) => {
                     if (t.id == item.productId) {
                         t.checked = false;
                         if (this.form.id && item.id) { //编辑
