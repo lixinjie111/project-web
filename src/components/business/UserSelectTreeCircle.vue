@@ -6,8 +6,8 @@
             <CircleButton></CircleButton>
             <div slot="content" class="tree-list">
                 <a-tree v-if="treeList.length"
-                        show-line
                         multiple
+                        :showIcon="true"
                         :load-data="onLoadData"
                         :tree-data="treeList"
                         :replaceFields="replaceFields"
@@ -16,6 +16,7 @@
                         @select="handleSelect"
                         @click="handleClick"
                         @expand="handleExpand">
+                    <span slot="user" class="iconfont icona-renyuan-tianchong"></span>
                 </a-tree>
             </div>
         </a-popover>
@@ -75,6 +76,7 @@
             handlePreData(data) {
                 Array.isArray(data) && data.map(item => {
                     item.selectable = false; // 树形是否可点击
+                    // item.slots={icon: ''};
                     if (item.children) {
                         this.handlePreData(item.children);
                     }
@@ -150,6 +152,7 @@
                                     userId: item.userId,
                                     userName: item.realName,
                                     roleName: item.roleName,
+                                    scopedSlots: {icon: 'user'}
                                 }
                             });
                             if (treeNode.dataRef.children)
@@ -172,7 +175,8 @@
         max-height: 300px;
         overflow: auto;
 
-        /deep/ .ant-tree li {
+        /deep/ .ant-tree li.dept{
+
             // 修改选中背景颜色
             .ant-tree-node-content-wrapper{
                 height: 22px;
@@ -180,16 +184,21 @@
                 .ant-tree-node-selected {
                     background: #F0F8FF;
                 }
+                .iconfont {
+                    font-size: 12px;
+                }
             }
+
             span.ant-tree-switcher{
                 width:12px;
                 height:12px;
                 margin: 4px;
                 line-height: 16px;
                 overflow: hidden;
+
                 // 修改树结构合起的icon
                 &.ant-tree-switcher_close{
-                    &:before {
+                     &:before {
                         display: inline-block;
                         color: #97A0C3;
                         font-family: "iconfont" !important;
@@ -217,16 +226,6 @@
                         content: '\e657';
                         background: #fff;
                     }
-                    i{
-                        display: none;
-                    }
-                }
-                &.ant-tree-switcher-noop {
-                    width: 6px;
-                    height: 6px;
-                    margin: 8px 9px;
-                    border-radius: 50%;
-                    background: #C6CBDE;
                     i{
                         display: none;
                     }

@@ -7,9 +7,9 @@
                 :tableData="tableData" 
                 :setTableColumns="setTableColumns" 
                 :rowClassName="handleRowClassName" 
-                :treeConfig="{children: 'children', expandRowKeys: expandRowKeys, iconOpen: 'tree-icon iconfont iconxia2', iconClose: 'tree-icon iconfont iconyou2'}"
+                :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else></NoData>
+            <NoData v-else :title="!archiveId ? '本周周报暂未生成': '该部门未制定本月月度计划'" :isShowBtn="!archiveId"></NoData>
         </div>
     </div>
 </template>
@@ -35,23 +35,27 @@
                 endTime: '',
                 deptId: this.$store.state.users.userInfo.deptId,
                 tableData: [],
-                expandRowKeys: [],
+                treeConfig:{
+                    children: 'children', 
+                    expandRowKeys: [], 
+                    iconOpen: 'tree-icon iconfont iconxia2', 
+                    iconClose: 'tree-icon iconfont iconyou2'
+                },
                 setTableColumns: [
                     {
                         title: '工作任务',
                         field: 'title',
                         treeNode: true,
-                        width: 280,
+                        width: 360,
                         fixed: 'left',
                         slots: {
-                            default: ({row, $seq, $rowIndex}) => {
+                            default: ({row, $seq, $rowIndex, level}) => {
                                 return [
                                     <div class="table-name">
                                         <span class={'status' + (parseInt(row.status) + 1)}></span>
                                         <div class="content-name">
-                                        <span class={[row?.children ? 'none' : 'index']}>{$seq ? `${$seq}.${$rowIndex + 1}` : $rowIndex + 1}</span>
-                                        <TextToolTip className="name" content={row.title}
-                                                    refName={'table-name' + $rowIndex}></TextToolTip>
+                                            <span class={[row?.children.length ? 'none' : 'index']}>{$seq ? `${$seq}.${$rowIndex + 1}` : $rowIndex + 1}</span>
+                                            <TextToolTip className="name" content={row.title} refName={'table-name' + $rowIndex}></TextToolTip>
                                         </div>
                                     </div>
                                 ]
@@ -61,13 +65,13 @@
                     {
                         title: '负责人',
                         field: 'projectMaster',
-                        width: 150,
+                        width: 120,
                         showOverflow: true
                     },
                     {
                         title: '优先级',
                         field: 'priority',
-                        width: 74,
+                        width: 72,
                         slots: {
                             default: ({row}) => {
                                 return [
@@ -79,13 +83,13 @@
                     {
                         title: '权重',
                         field: 'weight',
-                        width: 84,
-                        // formatter: ({cellValue}) => `${cellValue}%`
+                        width: 88,
+                        showOverflow: true,
                     },
                     {
                         title: '进度',
                         field: 'progress',
-                        width: 159,
+                        width: 132,
                         slots: {
                             default: ({row}) => {
                                 row.progress = /(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress;
@@ -111,24 +115,42 @@
                     {
                         title: '时间计划',
                         field: 'planTime',
-                        width: 265,
+                        width: 240,
                         slots: {
                             default: ({row}) => {
+                                let reg = /([0-9]{4}\/[0-9]{2}\/[0-9]{2})*\s{1,}-\s{1}([0-9]{4}\/[0-9]{2}\/[0-9]{2})*/;
+                                let start = null, end = null;
+                                if(reg.test(row.planTime)){
+                                    start = RegExp.$1;
+                                    end = RegExp.$2;
+                                }
                                 return [
-                                    <span class="table-time">{row.planTime}</span>
+                                    <p class="table-time">
+                                        <span class="time text-right">{start}</span>
+                                        <span class="spead">-</span>
+                                        <span class="time text-left">{end}</span>
+                                    </p>
                                 ]
                             }
                         }
                     },
                     {
+                        title: '工作日',
+                        field: 'manDays',
+                        width: 100,
+                        showOverflow: true,
+                        formatter: ({cellValue}) => `${cellValue}d`
+                    },
+                    {
                         title: '实际结束日期',
                         field: 'actualEndTime',
-                        minWidth: 160
+                        width: 132,
+                        showOverflow: true,
                     },
                     {
                         title: '工作进展描述',
                         field: 'description',
-                        minWidth: 150,
+                        minWidth: 120,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -145,7 +167,7 @@
                     {
                         title: '下周工作计划',
                         field: 'nextWeekWork',
-                        minWidth: 150,
+                        minWidth: 120,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -162,7 +184,7 @@
                     {
                         title: '备注',
                         field: 'remark',
-                        minWidth: 150,
+                        minWidth: 120,
                         showOverflow: true,
                         editRender: {
                             name: 'input', 
@@ -177,6 +199,11 @@
                         }
                     },
                 ]
+            }
+        },
+        computed: {
+            archiveId(){ // 归档id
+                return this.$store.state.report.archiveId
             }
         },
         methods: {
@@ -197,12 +224,16 @@
                     let {code, data} = await this.$api.report.handleGetWeekList(this.deptId);
                     if(code === 0){
                         let {archiveId, startTime, endTime, list} = data;
+                        let expandRowKeys = [];
+                        list?.map(item=>expandRowKeys.push(item.id));
+
                         this.startTime = startTime || '';
                         this.endTime = endTime || '';
-                        this.tableData = list || [];
                         this.$store.dispatch('initArchiveId', archiveId || '');
-                        this.expandRowKeys = [];
-                        this.tableData?.map(item=>this.expandRowKeys.push(item.id));
+                        
+                        expandRowKeys = expandRowKeys.length ? expandRowKeys : [];
+                        this.tableData = list || [];
+                        this.$set(this, 'treeConfig', {...this.treeConfig, expandRowKeys})
                     }
                 } catch (error) {
                     console.log(error)
@@ -265,6 +296,7 @@
                 position: relative;
             }
             .index {
+                margin-right: 8px;
                 position: absolute;
                 left: -1.5rem;
                 width: 1.5rem;
@@ -282,16 +314,27 @@
             .text-tooltip {
                 display: inline-block;
                 vertical-align: top;
-                width: 220px;
+                width: 100%;
             }
         }
 
         .table-time {
-            display: block;
+            display: flex;
             line-height: 24px;
-            text-align: center;
             background: #F4F7FC;
             border-radius: 2px;
+            .time {
+                flex: 1;
+                &.text-left {
+                    text-align: left;
+                }
+                &.text-right {
+                    text-align: right;
+                }
+            }
+            .spead {
+                padding: 0 5px;
+            }
         }
         .no-priority {
             color: #97A0C3;

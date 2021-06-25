@@ -1,5 +1,5 @@
 <template>
-  <a-tree-select
+  <!-- <a-tree-select
       @select="handleSelect"
       style="width: 100%"
       :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
@@ -10,19 +10,40 @@
       :load-data="onLoadData"
       :replace-fields="replaceFields"
   >
-  </a-tree-select>
+  </a-tree-select> -->
+  <div class="users-select">
+        <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
+          <div :class="['select', showPopup ? 'select-open': 'select-close']">
+            <p>{{username}}</p>
+            <span class="icon iconfont iconxia"></span>
+          </div>
+            <div slot="content" class="tree-list">
+                <a-tree v-if="treeList.length"
+                        multiple
+                        :showIcon="true"
+                        :load-data="onLoadData"
+                        :tree-data="treeList"
+                        :replaceFields="replaceFields"
+                        :selectedKeys="selectedKeys"
+                        :expandedKeys="expandedKeys"
+                        @select="handleSelect"
+                        @click="handleClick"
+                        @expand="handleExpand">
+                    <span slot="user" class="iconfont icona-renyuan-tianchong"></span>
+                </a-tree>
+            </div>
+        </a-popover>
+    </div>
 </template>
 
 <script>
   import UserIcon from './UserIcon';
   import TwoValue from './TwoValue';
-  import CircleButton from "../buttons/CircleButton";
-  import Tree from "@/components/tree/Tree";
   import {getDeptTree, getDeptUserList, searchUserList} from "@/api/org";
 
   export default {
     userName: "UserSelectTree",
-    components: { UserIcon, CircleButton, TwoValue, Tree },
+    components: { UserIcon, TwoValue },
     data() {
       return {
         mode: 'user', // user/add
@@ -39,6 +60,10 @@
         ],
         autoExpandParent: true,
         showPopup: false,
+
+        username: '',
+        selectedKeys: [],
+        expandedKeys: []
       }
     },
     props: {
@@ -71,6 +96,7 @@
                   userId: item.userId,
                   userName: item.realName,
                   roleName: item.roleName,
+                  scopedSlots: {icon: 'user'}
                 }
               });
 
@@ -107,14 +133,87 @@
         }
         return data;
       },
-      handleSelect(value, node, extra) {
-        console.log(value, node.dataRef)
-        this.$emit('select', node.dataRef);
-      }
+      handleSelect(value, event, extra) {
+        this.$nextTick(() => {
+          this.username = event.node.dataRef.userName;
+          this.selectedKeys =  value;
+          this.showPopup = false; // 关闭弹窗
+          this.$emit('select', event.node.dataRef);
+        });
+      },
+      handleClick(event, treeNode){
+          let {expandedKeys} = this;
+          let id = treeNode?.dataRef.id;
+          let index = expandedKeys.indexOf(id);
+          if (index === -1) {
+              expandedKeys.push(id)
+              this.expandedKeys = expandedKeys;
+          }else{
+              this.expandedKeys.splice(index, 1);
+          }
+      },
+      handleExpand(expandedKey, obj){
+          let {expandedKeys} = this;
+          //展开的状态
+          if (obj.expanded) {
+              this.expandedKeys = expandedKey;
+          } else {
+              //expandedKey 返回的是当前已经展开的元素 expandedKeys 是上次展开的元素
+              //比较两个数组中缺少的元素得出当前被收起的是哪个元素
+              let removeArray = this.diffArray(expandedKey, expandedKeys)
+              //收起的时候需要把里面展开的元素一并移除，不然会造成收起动作无效
+              expandedKeys = expandedKeys.filter((ele) => !removeArray.includes(ele) )
+              this.expandedKeys = expandedKeys;
+          }
+      },
+      //比较出2个数组中不一样的元素
+      diffArray(arr1, arr2) {
+          let diff1 = arr1.filter((i) => arr2.indexOf(i) < 0);
+          let diff2 = arr2.filter((i) => arr1.indexOf(i) < 0)
+          return [...diff1, ...diff2];
+      },
     }
   }
 </script>
 
 <style lang="scss" scoped>
-
+.users-select {
+  .select {
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #C6CBDE;
+    border-top-width: 1.02px;
+    border-radius: 4px;
+    display: flex;
+    p {
+      padding: 0 5px;
+      flex: 1;
+    }
+    .icon{
+      display: inline-block;
+      padding: 0 5px;
+      color: #97A0C3;
+      transition: all 500ms;
+    }
+    &.select-open {
+      .icon {
+        transform: rotate(-180deg);
+      }
+    }
+    &.select-close {
+      .icon {
+        transform: rotate(0deg);
+      }
+      
+    }
+  }
+}
+.tree-list {
+  width: 160px;
+  max-height: 300px;
+  overflow: auto;
+}
 </style>

@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       total: null, // 总数据条数
-      pageSize: 10, // 页面数据size
+      pageSize: 15, // 页面数据size
       curPageNum: 1, // 当前页码
 
       // 配置表格各字段

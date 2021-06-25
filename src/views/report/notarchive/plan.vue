@@ -8,7 +8,7 @@
                 :rowClassName="handleRowClassName" 
                 :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else></NoData>
+            <NoData v-else :title="!archiveId ? '暂无月度计划': '该部门未制定本月月度计划'" :isShowBtn="!archiveId"></NoData>
         </div>
     </div>
 </template>
@@ -38,7 +38,7 @@ export default {
                     title: '工作任务',
                     field: 'title',
                     treeNode: true,
-                    minWidth: 358,
+                    minWidth: 360,
                     fixed: 'left',
                     slots: {
                         default: ({row, $rowIndex, $seq}) => {
@@ -55,23 +55,30 @@ export default {
                 {
                     title: '负责人',
                     field: 'master',
-                    minWidth: 112,
+                    // width: '8.5%',
+                    width: 120,
                     showOverflow: true
                 },
                 {
                     title: '月度工作计划描述',
                     field: 'description',
-                    minWidth: 284,
+                    minWidth: 240,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
                         attrs: {type: 'text', placeholder: '请输入月度工作计划描述'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectMonth(data);
+                            }
+                        }
                     }
                 },
                 {
                     title: '月度交付物',
                     field: 'deliverable',
-                    minWidth: 112,
+                    minWidth: 100,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
@@ -87,7 +94,7 @@ export default {
                 {
                     title: '验收标准',
                     field: 'acceptanceCriteria',
-                    minWidth: 112,
+                    width: 100,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
@@ -103,20 +110,20 @@ export default {
                 {
                     title: '任务开始日期',
                     field: 'beginTime',
-                    minWidth: 116,
-                        slots: {
+                    width: 132,
+                    slots: {
                         default: ({row}) => {
                             return [
                                 <div class="table-time">
                                     <span>{row.beginTime}</span>
                                     {
-                                        // row.status === 1 ? 
-                                        // <IconToolTip iconName="iconrili-qitian-tianchong" content="本周新增"></IconToolTip>
-                                        // :
-                                        // row.status == 2 ?
-                                        // <IconToolTip iconName="iconrili-sanshitian-tianchong" content="本月新增"></IconToolTip>
-                                        // :
-                                        // ''
+                                        row.newFlag === 1 ? 
+                                        <IconToolTip iconName="iconrili-qitian-tianchong" content="本周新增"></IconToolTip>
+                                        :
+                                        row.newFlag == 2 ?
+                                        <IconToolTip iconName="iconrili-sanshitian-tianchong" content="本月新增"></IconToolTip>
+                                        :
+                                        ''
                                     }
                                 </div>
                             ]
@@ -126,20 +133,20 @@ export default {
                 {
                     title: '任务截止日期',
                     field: 'endTime',
-                    minWidth: 116,
+                    width: 132,
                     slots: {
                         default: ({row}) => {
                             return [
                                 <div class="table-time">
                                     <span>{row.endTime}</span>
                                     {
-                                        // row.status === 1 ? 
-                                        // <IconToolTip iconName="iconrili-yuechu-tianchong" content="上月延期"></IconToolTip>
-                                        // :
-                                        // row.status == 2 ?
-                                        // <IconToolTip iconName="iconrili-yuemo-tianchong" content="本月截止"></IconToolTip>
-                                        // :
-                                        // ''
+                                        row.deadlineFlag === 1 ? 
+                                        <IconToolTip iconName="iconrili-yuechu-tianchong" content="上月延期"></IconToolTip>
+                                        :
+                                        row.deadlineFlag == 2 ?
+                                        <IconToolTip iconName="iconrili-yuemo-tianchong" content="本月截止"></IconToolTip>
+                                        :
+                                        ''
                                     }
                                 </div>
                             ]
@@ -149,7 +156,7 @@ export default {
                 {
                     title: '备注',
                     field: 'remark',
-                    minWidth: 240,
+                    minWidth: 120,
                     showOverflow: true,
                     editRender: {
                         name: 'input', 
@@ -166,7 +173,7 @@ export default {
                 {
                     title: '任务验收结论',
                     fixed: 'right',
-                    minWidth: 145,
+                    width: 102,
                     slots: {
                         default:({row}) => {
                             return [
@@ -176,6 +183,11 @@ export default {
                     }
                 }
             ]
+        }
+    },
+    computed: {
+        archiveId(){ // 归档id
+            return this.$store.state.report.archiveId
         }
     },
     methods: {

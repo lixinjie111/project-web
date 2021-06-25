@@ -39,7 +39,7 @@
                     {
                         title: '项目名称',
                         field: 'projectName',
-                        width: 300,
+                        width: 360,
                         slots: {
                             default: ({row, rowIndex}) => {
                                 return [
@@ -47,7 +47,7 @@
                                         <span class={'status' + (parseInt(row.status) + 1)}></span>
                                         <TextToolTip className="index" content={rowIndex + 1 + ''}
                                                      refName={'index' + rowIndex}></TextToolTip>
-                                        <TextToolTip className="name" content={row.title}
+                                        <TextToolTip class="tip-name" className="name" content={row.title}
                                                      refName={'name' + rowIndex}></TextToolTip>
                                     </div>
                                 ]
@@ -57,11 +57,13 @@
                     {
                         title: '负责人',
                         field: 'projectMaster',
-                        showOverflow: true
+                        width: 120,
+                        showOverflow: true,
                     },
                     {
                         title: '截止日期',
                         field: 'endTime',
+                        width: 132,
                         slots: {
                             default: ({row}) => {
                                 return [
@@ -76,7 +78,7 @@
                     {
                         title: '进度',
                         field: 'progress',
-                        width: 120,
+                        width: 132,
                         slots: {
                             default: ({row}) => {
                                 row.progress = Number(/(\d{0,})%/.test(row.progress) ? RegExp.$1 : row.progress);
@@ -89,11 +91,13 @@
                     {
                         title: '剩余工期(天)',
                         field: 'remainingDuration',
-                        width: 120
+                        width: 100,
+                        showOverflow: true,
                     },
                     {
                         title: '状态',
                         field: 'status',
+                        width: 96,
                         slots: {
                             default: ({row}) => {
                                 return [
@@ -105,6 +109,7 @@
                     {
                         title: '备注',
                         field: 'remark',
+                        minWidth: 120,
                         showOverflow: true,
                         editRender: {
                             name: 'input',
@@ -157,6 +162,7 @@
         }
 
         .table-name {
+            width: 100%;
             height: 40px;
             line-height: 40px;
             position: relative;
@@ -176,6 +182,9 @@
             .text-tooltip {
                 display: inline-block;
                 vertical-align: top;
+                &.tip-name {
+                    width: calc(100% - 48px);
+                }
 
                 /deep/ .index {
                     max-width: 48px;
@@ -187,7 +196,7 @@
                 }
 
                 /deep/ .name {
-                    width: 200px;
+                    width: 100%;
                 }
             }
         }

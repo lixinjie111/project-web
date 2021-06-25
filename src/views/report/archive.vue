@@ -45,13 +45,13 @@ export default {
                 }
             },
             {title: '归档日期', field: 'archiveTime'},
-            {title: '操作', width: '90',
-                visible: isInPermission('sys_role_edit') || isInPermission('sys_role_del'),
+            {title: '操作', width: '100',
+                // visible: isInPermission('') || isInPermission(''),
                 slots: {
                     default: ({row}) => {
                         return [
                             <div class="operations">
-                              {isInPermission('sys_role_del') ? <a href={row.url}><span class="iconfont iconxiazai"></span></a> : null}
+                              <a href={row.url}><span class="iconfont iconxiazai"></span></a>
                             </div>
                         ]
                     }

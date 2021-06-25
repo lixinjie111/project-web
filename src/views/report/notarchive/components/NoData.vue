@@ -1,8 +1,8 @@
 <template>
   <div class="no-data">
     <img src="@/assets/images/report/no-data.png" />
-    <div class="title">本周周报暂未生成</div>
-    <a-button v-if="isInPermission('business_jobproject_add')" type="primary" @click="isShow = true;">更新生成时间</a-button>
+    <div class="title">{{title}}</div>
+    <a-button v-if="isInPermission('business_jobproject_add') && isShowBtn" type="primary" @click="isShow = true;">更新生成时间</a-button>
     <SetModal v-if="isShow" @modal-cancel="isShow = false"></SetModal>
   </div>
 </template>
@@ -13,6 +13,17 @@ import SetModal from './SetModal'
 export default {
   name: 'NoData',
   components: {SetModal},
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    isShowBtn: {
+      type: Boolean|String,
+      required: false,
+      default: false
+    }
+  },
   data() {
     return {
       isShow: false

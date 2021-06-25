@@ -72,6 +72,23 @@ export default {
         margin-right: 4px;
       }
     }
+    &:hover {
+      .iconfont {
+        color: #C6CBDE;
+      }
+    }
+    &.ant-dropdown-open {
+      .iconfont:before {
+        transform: rotate(-180deg);
+        transition: all 500ms;
+      }
+    }
+    &:not(.ant-dropdown-open){
+      .iconfont:before {
+        transform: rotate(0deg) scale(2);
+        transition: all 500ms;
+      }
+    }
   }
   $colors: $acceptance-font;
   @each $clr in $colors {

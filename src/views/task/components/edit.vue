@@ -153,12 +153,14 @@
             </a-col>
           </a-row>
           <div class="child-cont">
-            <div v-if="form.attachment" class="child-item">
-              <a @click="handleDownloadAttachment">{{form.attachment.name}}</a>
-              <div>
+            <a-row :gutter="[16, 4]" v-if="form.attachment" class="child-item">
+              <a-col span="22">
+                <a @click="handleDownloadAttachment">{{form.attachment.name}}</a>
+              </a-col>
+              <a-col span="2">
                 <i class="iconfont iconshanchu" @click="handleDeleteAttachment"></i>
-              </div>
-            </div>
+              </a-col>
+            </a-row>
             <div v-if="createChild">
               <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
             </div>
@@ -348,11 +350,13 @@
       handleDownloadAttachment() {
         let att = this.form.attachment;
         if (att) {
-          fetch({
-            url: att.link,
-          }).then(res => {
+          fetch(att.link).then(response => {
+            if(response.ok) {
+              return response.blob();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(blob => {
             let filename = att.name;
-            let blob = new Blob([res], {type: "application/octet-stream"});
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement("a");
             a.href = url;

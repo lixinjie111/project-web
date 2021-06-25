@@ -1,15 +1,16 @@
 <template>
 <div class="pagination">
-  <a-select :default-value="`每页 ${pageSize} 条`" @change="handleChangePageSize">
+  <!-- <a-select :default-value="`每页 ${pageSize} 条`" @change="handleChangePageSize">
     <a-select-option v-for="(item, index) in pageSizeOptions" :key="index" :value="`每页 ${item} 条`">每页 {{ item }} 条</a-select-option>
-  </a-select>
+  </a-select> -->
+  <p></p>
   <a-pagination
     v-model="curPage"
     :total="total"
     :page-size="pageSize"
-    :show-total="total => `共${total}条 到 `"
     @change="handleChangePage"
   >
+  <!-- :show-total="total => `共${total}条 到 `" -->
   </a-pagination>
 </div>
 
