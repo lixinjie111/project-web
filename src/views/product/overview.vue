@@ -3,7 +3,7 @@
         <div class="product-overview-container">
             <ContentHeader class="overview-header" type="title" title="产品">
                 <div class="header-left" slot="left">
-                    <BasicTabs :tabList="tabList" :tabActive="curStatus" @change="handleChangeTab"></BasicTabs>
+                    <BasicTabs :tabList="tabList" :tabActive="tabActive" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button class="export-btn" @click="handleExport" v-if="isInPermission('business_product_view')">
@@ -63,6 +63,7 @@
         components: {closeForm, AddForm, Modal, IconToolTip, TextToolTip, ListTable, BasicTabs},
         data() {
             return {
+                tabActive: 0, //当前产品状态
                 tabList: [
                     {
                         name: '未关闭',
@@ -114,7 +115,6 @@
                 total: 0, // 总数据条数
                 pageSize: 10, // 页面数据size
                 curPageNum: 1, // 当前页码
-                curStatus: 0, //当前产品状态
                 showAddModal: false,
                 addModal: {
                     modalTitle: '添加产品',
@@ -191,7 +191,7 @@
             // 获取产品列表
             async getProductList(){
                 try {
-                    let {code, data} = await this.$api.product.getProductList(this.curPageNum, this.pageSize, this.curStatus);
+                    let {code, data} = await this.$api.product.getProductList(this.curPageNum, this.pageSize, this.tabActive);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;
@@ -204,7 +204,7 @@
             // 切换产品状态
             handleChangeTab(status) {
                 this.curPageNum = 1;
-                this.curStatus = status;
+                this.tabActive = status;
                 this.resetList();
             },
             // 添加产品
@@ -279,7 +279,7 @@
                             }else { //添加
                                let {code} = await this.$api.product.addProduct(params);
                                if(code === 0){
-                                   this.curStatus = 0;
+                                   this.tabActive = 0;
                                    this.resetList();
                                    this.showAddModal = false;
                                }
@@ -318,7 +318,7 @@
             // 导出产品excel
             handleExport() {
                 try {
-                    this.$api.product.exportProduct(this.curStatus).then((res)=>{
+                    this.$api.product.exportProduct(this.tabActive).then((res)=>{
                         let blob = new Blob([res], {type: "application/vnd.ms-excel"});
                         let url = window.URL.createObjectURL(blob);
                         let a = document.createElement("a");

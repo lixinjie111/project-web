@@ -6,7 +6,7 @@
         <div class="mine-project-container">
             <ContentHeader class="mine-project-header" type="title" title="我的项目">
                 <div class="header-left" slot="left">
-                    <BasicTabs :tabList="tabList" :tabActive="curKind" @change="handleChangeTab" ref="tab"></BasicTabs>
+                    <BasicTabs :tabList="tabList" :tabActive="tabActive" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button type="primary" @click="handleAdd" v-if="isInPermission('business_project_add')">
@@ -33,7 +33,7 @@
         components: {BasicTabs, ProjectList},
         data() {
             return {
-                curKind: 0,
+                tabActive: 0, //当前项目种类
                 tabList: [
                     {
                         name: '我的全部项目',
@@ -86,7 +86,7 @@
                 this.resetList();
             },
             handleChangeTab(kind) {
-                this.curKind = kind;
+                this.tabActive = kind;
                 this.getMyProjectList();
             },
             // 添加项目
@@ -95,7 +95,7 @@
             },
             // 添加完成后更新列表
             handleAddUpdate() {
-                this.curKind = 0;
+                this.tabActive = 0;
                 this.getMyProjectCount();
                 this.getMyProjectList();
             },
@@ -134,7 +134,7 @@
             // 获取我的项目列表
             async getMyProjectList(){
                 try {
-                    let {code, data} = await this.$api.mine.getMyProjectList(this.curPageNum, this.pageSize, this.curKind);
+                    let {code, data} = await this.$api.mine.getMyProjectList(this.curPageNum, this.pageSize, this.tabActive);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;

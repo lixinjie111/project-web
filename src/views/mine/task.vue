@@ -6,7 +6,7 @@
         <div class="mine-task-container">
             <ContentHeader class="mine-task-header" type="title" title="我的任务">
                 <div class="header-left" slot="left">
-                    <BasicTabs :tabList="tabList" :tabActive="curKind" @change="handleChangeTab"></BasicTabs>
+                    <BasicTabs :tabList="tabList" :tabActive="tabActive" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
                     <a-button type="primary" @click="handleCreate" v-if="isInPermission('business_project_add')">
@@ -31,7 +31,7 @@
         components: {TaskList, BasicTabs},
         data() {
             return {
-                curKind: 0,
+                tabActive: 0, //当前任务种类
                 tabList: [
                     {
                         name: '我的全部任务',
@@ -68,7 +68,7 @@
         methods: {
             isInPermission,
             handleAddUpdate() {
-                this.curKind = 0;
+                this.tabActive = 0;
             },
             handleTaskListChange() {
                 this.getMyTaskCount();
@@ -79,7 +79,7 @@
                 this.getMyTaskList();
             },
             handleChangeTab(kind) {
-                this.curKind = kind;
+                this.tabActive = kind;
                 this.getMyTaskList();
             },
             handleCreate() {
@@ -104,7 +104,7 @@
             // 获取我的任务列表
             async getMyTaskList(){
                 try {
-                    let {code, data} = await this.$api.mine.getMyTaskList(this.page, this.pageSize, this.curKind);
+                    let {code, data} = await this.$api.mine.getMyTaskList(this.page, this.pageSize, this.tabActive);
                     if(code === 0){
                         let {total, records} = data;
                         this.total = total;
