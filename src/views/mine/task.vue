@@ -9,7 +9,7 @@
                     <BasicTabs :tabList="tabList" :tabActive="tabActive" @change="handleChangeTab"></BasicTabs>
                 </div>
                 <div slot="operation">
-                    <a-button type="primary" @click="handleCreate" v-if="isInPermission('business_project_add')">
+                    <a-button type="primary" @click="handleCreate" v-if="isInPermission('business_task_add')">
                         <span class="iconfont iconjia"></span>
                         添加任务
                     </a-button>
