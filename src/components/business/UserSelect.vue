@@ -24,6 +24,7 @@
               @check="handleChange"
               :checkable="multiple"
               :selectable="!multiple" />
+        <div class="no-user" v-else>请在【团队】页面先添加项目成员</div>
       </template>
     </a-popover>
   </div>
@@ -135,6 +136,10 @@
   .user-align {
     display: flex;
     align-items: flex-end;
+  }
+  .no-user {
+    color: #636E95;
+    font-size: 14px;
   }
 </style>
 <style lang="scss">
