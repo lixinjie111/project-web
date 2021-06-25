@@ -28,42 +28,45 @@
                     {
                         title: '序号',
                         field: 'id',
-                        width: 60
+                        width: 50
                     },
                     {
                         title: '附件名',
-                        field: 'name'
+                        field: 'name',
+                        minWidth: 400,
+                        showOverflow: true,
                     },
                     {
                         title: '地址',
                         field: 'link',
-                        width: 280,
+                        minwidth: 320,
                         showOverflow: true
                     },
                     {
                         title: '类型',
                         field: 'attchmentType',
-                        width: 120
-
+                        width: 88
                     },
                     {
                         title: '大小',
                         field: 'size',
-                        width: 120
+                        width: 88,
+                        showOverflow: true
                     },
                     {
                         title: '上传人',
                         field: 'createdBy',
-                        width: 200,
+                        width: 120,
                         showOverflow: true
                     },
                     {
                         title: '添加时间',
-                        field: 'createdTime'
+                        field: 'createdTime',
+                        width: 132,
                     },
                     {
                         title: '操作',
-                        width: '110',
+                        width: 132,
                         slots: {
                             default: ({row}) => {
                                 return [

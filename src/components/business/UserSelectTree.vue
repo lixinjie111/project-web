@@ -215,5 +215,9 @@
   width: 160px;
   max-height: 300px;
   overflow: auto;
+  .icona-renyuan-tianchong {
+    color: #7c88b1;
+    font-size: 16px;
+  }
 }
 </style>

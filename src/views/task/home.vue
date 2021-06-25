@@ -227,6 +227,13 @@
     border-bottom: 1px solid #EAEDF7;
     padding: 0 8px;
     margin-bottom: 16px;
+    a.ant-dropdown-link {
+      color: #636E95;
+      &:hover {
+        color: #0064FF;
+      }
+    }
+
 
     .iconfont {
       transition: .2s;

@@ -232,6 +232,11 @@
                 }
             }
         }
+
+        .icona-renyuan-tianchong {
+            color: #7c88b1;
+            font-size: 16px;
+        }
     }
 
     .user-icon {
