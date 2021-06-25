@@ -17,7 +17,7 @@
                 </div>
             </ContentHeader>
             <div class="home-content">
-                <ProjectList ref="projectList" :list="listData" :productList="productList"  @update="handleAddUpdate"
+                <ProjectList ref="projectList" :list="listData" @update="handleAddUpdate"
                              :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                              @pagination-change-pagesize="handleChangePageSize"
                              @pagination-change-page="handleChangePage"></ProjectList>
@@ -67,13 +67,11 @@
                 listData: [],
                 total: 0, // 总数据条数
                 pageSize: 10, // 页面数据size
-                curPageNum: 1, // 当前页码
-                productList: []
+                curPageNum: 1 // 当前页码
             }
         },
         created() {
             this.resetList();
-            this.getProductList();
         },
         methods: {
             isInPermission,
@@ -92,22 +90,6 @@
             handleChangePage(pageNum) {
                 this.curPageNum = pageNum;
                 this.resetList();
-            },
-            // 获取关联产品列表
-            async getProductList() {
-                try {
-                    let {code, data} = await this.$api.project.getBindingProductList();
-                    if (code === 0) {
-                        this.productList = data.map(item => {
-                            return {
-                                ...item,
-                                checked: false
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
             },
             // 获取项目列表状态数量
             async getProjectCount(){

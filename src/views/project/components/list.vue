@@ -17,18 +17,18 @@
             </div>
             <div slot="action" slot-scope="data" class="table-action">
                 <!--未开始的可以开始，搁置的不能搁置，完成的的不能完成、删除、搁置-->
-                <IconToolTip iconName="iconbofang" :disabled="data.row.status > 0" content="开始" @action="handleStart(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
+                <IconToolTip iconName="iconbofang" :disabled="data.row.status > 0 || !isInPermission('business_product_operate')" content="开始" @action="handleStart(data.row)"></IconToolTip>
                 <!--<IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay(data.row)"></IconToolTip>-->
-                <IconToolTip iconName="iconzanting" :disabled="data.row.status == 2 || data.row.status == 4" content="搁置" @action="handlePause(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
-                <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 2" content="完成" @action="handleFinish(data.row)" v-if="isInPermission('business_product_operate')"></IconToolTip>
-                <a-divider type="vertical" v-if="isInPermission('business_product_operate')"/>
-                <IconToolTip iconName="iconxiezuo" content="编辑" @action="handleEdit(data.row)" v-if="isInPermission('business_project_edit')"></IconToolTip>
-                <IconToolTip iconName="iconshanchu" :disabled="data.row.status == 2" content="删除" @action="handleDel(data.row)" v-if="isInPermission('business_project_del')"></IconToolTip>
+                <IconToolTip iconName="iconzanting" :disabled="data.row.status == 2 || data.row.status == 4 || !isInPermission('business_product_operate')" content="搁置" @action="handlePause(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 2 || !isInPermission('business_product_operate')" content="完成" @action="handleFinish(data.row)"></IconToolTip>
+                <a-divider type="vertical"/>
+                <IconToolTip iconName="iconxiezuo" :disabled="!isInPermission('business_project_edit')" content="编辑" @action="handleEdit(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconshanchu" :disabled="data.row.status == 2 || !isInPermission('business_project_del')" content="删除" @action="handleDel(data.row)"></IconToolTip>
             </div>
         </ListTable>
         <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
         <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
-            <AddForm ref="addForm" slot="content" :form="form" :productList="productList"></AddForm>
+            <AddForm ref="addForm" slot="content" :form="form"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showStartModal" :title="startModal.modalTitle" :okText="startModal.okText" :cancelText="startModal.cancelText" headeralgin="left" @modal-sure="handleStartSubmit" @modal-cancel="handleStartCancel">
             <RemarkForm slot="content" name="startForm" ref="startForm"></RemarkForm>
@@ -59,10 +59,6 @@
         components: {RemarkForm, AddForm, Modal, IconToolTip, TextToolTip, ListTable, Progress},
         props: {
             list: {
-                type: Array,
-                default: () => []
-            },
-            productList: {
                 type: Array,
                 default: () => []
             }
