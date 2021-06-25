@@ -120,14 +120,12 @@
                 try {
                     let {code, data} = await this.$api.mine.getMyProjectCount();
                     if(code === 0){
-                        console.log(data);
                         this.tabList = this.tabList.map((item) => {
                             let t = data.find((i) => {
                                 return i.kind == item.status;
                             });
                             return {...item, ...t};
                         });
-                        console.log(this.tabList);
                     }
                 }catch(error){
                     console.log(error)
