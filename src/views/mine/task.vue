@@ -51,7 +51,7 @@
                     }
                 ],
                 page: 1,
-                pageSize: 10,
+                pageSize: 15,
                 total: 0,
                 tableData: [],
                 viewType: 0
@@ -75,6 +75,7 @@
                 this.getMyTaskList();
             },
             handleChangeTab(kind) {
+                this.page = 1;
                 this.tabActive = kind;
                 this.getMyTaskList();
             },
