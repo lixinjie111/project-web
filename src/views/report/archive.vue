@@ -45,7 +45,7 @@ export default {
                 }
             },
             {title: '归档日期', field: 'archiveTime'},
-            {title: '操作', width: '90',
+            {title: '操作', width: '100',
                 // visible: isInPermission('') || isInPermission(''),
                 slots: {
                     default: ({row}) => {

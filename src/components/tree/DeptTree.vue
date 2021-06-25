@@ -34,7 +34,7 @@ export default {
     // 查询部门树
     handleGetDepartTree(){
       try {
-        this.$store.dispatch('initDeptTree').then(() => {
+        this.$store.dispatch('initDeptTree', true).then(() => {
           this.$set(this, 'treeList', this.handleData(this.$store.state.deptTree));
         })
       }catch(error){

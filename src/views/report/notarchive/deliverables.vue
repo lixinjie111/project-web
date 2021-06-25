@@ -8,7 +8,7 @@
                 :rowClassName="handleRowClassName"
                 :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else title="暂无月度交付物验收"></NoData>
+            <NoData v-else :title="!archiveId ? '暂无月度交付物验收': '该部门未制定本月月度计划'" :isShowBtn="!archiveId"></NoData>
         </div>
     </div>
 </template>
@@ -37,7 +37,7 @@ export default {
                     title: '工作任务',
                     field: 'title',
                     treeNode: true,
-                    width: 360,
+                    minWidth: 360,
                     slots: {
                         default: ({row, $rowIndex, $seq}) => {
                             return [
@@ -76,7 +76,7 @@ export default {
                 {
                     title: '月度交付物',
                     field: 'deliverable',
-                    width: 220,
+                    minWidth: 220,
                     slots: {
                         default: ({row}) => {
                             return [
@@ -88,7 +88,7 @@ export default {
                 {
                     title: '交付物备注',
                     field: 'remark',
-                    width: 200,
+                    minWidth: 200,
                     showOverflow: true,
                     editRender: {
                         name: 'input',
@@ -105,7 +105,7 @@ export default {
                 {
                     title: '验收情况',
                     field: 'acceptance',
-                    width: 220,
+                    minWidth: 220,
                     showOverflow: true,
                     editRender: {
                         name: 'input',
@@ -132,6 +132,11 @@ export default {
                     }
                 }
             ]
+        }
+    },
+    computed: {
+        archiveId(){ // 归档id
+            return this.$store.state.report.archiveId
         }
     },
     methods: {

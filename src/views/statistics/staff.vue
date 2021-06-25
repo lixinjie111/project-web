@@ -74,7 +74,7 @@ export default {
             {
                 title: '工作任务',
                 field: 'projectName',
-                minWidth: 360,
+                width: 360,
                 showOverflow: true,
                 slots: {
                     default: ({row}) => {
@@ -351,7 +351,7 @@ export default {
         .text-tooltip {
             display: inline-block;
             vertical-align: top;
-            width: 220px;
+            width: 100%;
         }
     }
 

@@ -8,7 +8,7 @@
                 :rowClassName="handleRowClassName" 
                 :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else title="暂无月度计划"></NoData>
+            <NoData v-else :title="!archiveId ? '暂无月度计划': '该部门未制定本月月度计划'" :isShowBtn="!archiveId"></NoData>
         </div>
     </div>
 </template>
@@ -38,7 +38,7 @@ export default {
                     title: '工作任务',
                     field: 'title',
                     treeNode: true,
-                    width: 360,
+                    minWidth: 360,
                     fixed: 'left',
                     slots: {
                         default: ({row, $rowIndex, $seq}) => {
@@ -55,13 +55,14 @@ export default {
                 {
                     title: '负责人',
                     field: 'master',
+                    // width: '8.5%',
                     width: 120,
                     showOverflow: true
                 },
                 {
                     title: '月度工作计划描述',
                     field: 'description',
-                    width: 240,
+                    minWidth: 240,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
@@ -93,7 +94,7 @@ export default {
                 {
                     title: '验收标准',
                     field: 'acceptanceCriteria',
-                    minWidth: 100,
+                    width: 100,
                     editRender: {
                         name: 'input', 
                         enabled: isInPermission('business_projectmonth_edit'), 
@@ -109,8 +110,8 @@ export default {
                 {
                     title: '任务开始日期',
                     field: 'beginTime',
-                    minWidth: 132,
-                        slots: {
+                    width: 132,
+                    slots: {
                         default: ({row}) => {
                             return [
                                 <div class="table-time">
@@ -132,7 +133,7 @@ export default {
                 {
                     title: '任务截止日期',
                     field: 'endTime',
-                    minWidth: 132,
+                    width: 132,
                     slots: {
                         default: ({row}) => {
                             return [
@@ -172,7 +173,7 @@ export default {
                 {
                     title: '任务验收结论',
                     fixed: 'right',
-                    minWidth: 102,
+                    width: 102,
                     slots: {
                         default:({row}) => {
                             return [
@@ -182,6 +183,11 @@ export default {
                     }
                 }
             ]
+        }
+    },
+    computed: {
+        archiveId(){ // 归档id
+            return this.$store.state.report.archiveId
         }
     },
     methods: {

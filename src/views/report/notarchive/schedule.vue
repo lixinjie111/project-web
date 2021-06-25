@@ -7,9 +7,9 @@
                 :tableData="tableData" 
                 :setTableColumns="setTableColumns" 
                 :rowClassName="handleRowClassName" 
-                :treeConfig="{children: 'children', expandRowKeys: expandRowKeys, iconOpen: 'tree-icon iconfont iconxia2', iconClose: 'tree-icon iconfont iconyou2'}"
+                :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else title="本周周报暂未生成"></NoData>
+            <NoData v-else :title="!archiveId ? '本周周报暂未生成': '该部门未制定本月月度计划'" :isShowBtn="!archiveId"></NoData>
         </div>
     </div>
 </template>
@@ -35,7 +35,12 @@
                 endTime: '',
                 deptId: this.$store.state.users.userInfo.deptId,
                 tableData: [],
-                expandRowKeys: [],
+                treeConfig:{
+                    children: 'children', 
+                    expandRowKeys: [], 
+                    iconOpen: 'tree-icon iconfont iconxia2', 
+                    iconClose: 'tree-icon iconfont iconyou2'
+                },
                 setTableColumns: [
                     {
                         title: '工作任务',
@@ -44,14 +49,13 @@
                         width: 360,
                         fixed: 'left',
                         slots: {
-                            default: ({row, $seq, $rowIndex}) => {
+                            default: ({row, $seq, $rowIndex, level}) => {
                                 return [
                                     <div class="table-name">
                                         <span class={'status' + (parseInt(row.status) + 1)}></span>
                                         <div class="content-name">
-                                        <span class={[row?.children ? 'none' : 'index']}>{$seq ? `${$seq}.${$rowIndex + 1}` : $rowIndex + 1}</span>
-                                        <TextToolTip className="name" content={row.title}
-                                                    refName={'table-name' + $rowIndex}></TextToolTip>
+                                            <span class={[row?.children.length ? 'none' : 'index']}>{$seq ? `${$seq}.${$rowIndex + 1}` : $rowIndex + 1}</span>
+                                            <TextToolTip className="name" content={row.title} refName={'table-name' + $rowIndex}></TextToolTip>
                                         </div>
                                     </div>
                                 ]
@@ -80,7 +84,7 @@
                         title: '权重',
                         field: 'weight',
                         width: 88,
-                        // formatter: ({cellValue}) => `${cellValue}%`
+                        showOverflow: true,
                     },
                     {
                         title: '进度',
@@ -134,12 +138,14 @@
                         title: '工作日',
                         field: 'manDays',
                         width: 100,
+                        showOverflow: true,
                         formatter: ({cellValue}) => `${cellValue}d`
                     },
                     {
                         title: '实际结束日期',
                         field: 'actualEndTime',
-                        width: 132
+                        width: 132,
+                        showOverflow: true,
                     },
                     {
                         title: '工作进展描述',
@@ -195,6 +201,11 @@
                 ]
             }
         },
+        computed: {
+            archiveId(){ // 归档id
+                return this.$store.state.report.archiveId
+            }
+        },
         methods: {
             // 修改row样式
             handleRowClassName(e){
@@ -213,12 +224,16 @@
                     let {code, data} = await this.$api.report.handleGetWeekList(this.deptId);
                     if(code === 0){
                         let {archiveId, startTime, endTime, list} = data;
+                        let expandRowKeys = [];
+                        list?.map(item=>expandRowKeys.push(item.id));
+
                         this.startTime = startTime || '';
                         this.endTime = endTime || '';
-                        this.tableData = list || [];
                         this.$store.dispatch('initArchiveId', archiveId || '');
-                        this.expandRowKeys = [];
-                        this.tableData?.map(item=>this.expandRowKeys.push(item.id));
+                        
+                        expandRowKeys = expandRowKeys.length ? expandRowKeys : [];
+                        this.tableData = list || [];
+                        this.$set(this, 'treeConfig', {...this.treeConfig, expandRowKeys})
                     }
                 } catch (error) {
                     console.log(error)
@@ -281,6 +296,7 @@
                 position: relative;
             }
             .index {
+                margin-right: 8px;
                 position: absolute;
                 left: -1.5rem;
                 width: 1.5rem;
@@ -298,7 +314,7 @@
             .text-tooltip {
                 display: inline-block;
                 vertical-align: top;
-                width: 220px;
+                width: 100%;
             }
         }
 

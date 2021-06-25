@@ -91,7 +91,7 @@ export default {
     // 请求部门树
     handleGetDeptTree() {
       try{
-        this.$store.dispatch('initDeptTree').then(() => {
+        this.$store.dispatch('initDeptTree', true).then(() => {
           this.$set(this, 'treeList', this.$store.state.deptTree);
           this.handleGetDeptRoleList();
           this.defaultSelectedKeys = [this.treeList?.[0].id]
