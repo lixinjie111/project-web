@@ -223,22 +223,22 @@
           {
             dataIndex: 'planBeginTime',
             title: '计划开始',
-            width: 120,
+            // width: 120,
           },
           {
             dataIndex: 'planEndTime',
             title: '计划结束',
-            width: 120,
+            // width: 120,
           },
           {
             dataIndex: 'actualBeginTime',
             title: '实际开始',
-            width: 120,
+            // width: 120,
           },
           {
             dataIndex: 'actualEndTime',
             title: '实际结束',
-            width: 120,
+            // width: 120,
           },
           ...operation
         ],
