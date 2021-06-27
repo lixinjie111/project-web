@@ -103,7 +103,7 @@
       let canEditChild = isInPermission('business_child_task_edit');
       let canDeleteChild = isInPermission('business_child_task_del');
       let operation = [];
-      if (canEdit && canDelete) {
+      if (canEdit || canDelete || canEditChild || canDeleteChild) {
         operation.push(          {
           dataIndex: 'type',
           title: '操作',

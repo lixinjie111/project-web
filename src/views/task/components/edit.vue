@@ -83,7 +83,7 @@
               </a-row>
               <a-row :gutter="[16, 4]">
                 <a-col span="24">
-                  <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
+                  <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 4, maxRows: 7 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
                 </a-col>
               </a-row>
             </div>
@@ -147,7 +147,6 @@
             <a-col span="4" v-if="!form.attachment">
               <a-upload
                   name="file"
-                  multiple
                   :showUploadList="false"
                   :action="uploadUrl"
                   :headers="uploadHeaders"
@@ -367,6 +366,7 @@
         if (att) {
           let a = document.createElement("a");
           a.href = att.link;
+          a.target = '_blank';
           a.click();
         }
       },
@@ -422,8 +422,10 @@
         this.saveData({taskDescription: this.form.taskDescription});
       },
       handleUpload({file}) {
-        console.log(file)
+        // console.log(file)
         if (file.status === 'done' && file.response.code === 0) {
+          this.hideLoading && this.hideLoading();
+          this.hideLoading = null;
           this.form.attachment = {id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name};
           this.saveData({attachments: parseInt(file.response.data.attachmentId)});
         }
@@ -432,7 +434,8 @@
         }
       },
       handleBeforeUpload(file) {
-        console.log(file)
+        // console.log(file)
+        this.hideLoading = this.$message.loading('上传中...');
         if (file.size > 100*1024*1024) {
           message.error(file.name + '超过100M，不允许上传');
           return false;
@@ -487,8 +490,10 @@
     }
   }
 
+  $bottomHeight: 360px;
+
   .child-cont {
-    height: 200px;
+    height: $bottomHeight;
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
@@ -500,8 +505,8 @@
     }
   }
   .panel-1 {
-    height: 283px;
-    overflow-y: auto;
+    height: $bottomHeight + 72px;
+    overflow-y: hidden;
     overflow-x: hidden;
     width: 100%;
   }
