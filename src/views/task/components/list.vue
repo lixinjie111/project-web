@@ -100,6 +100,8 @@
     data() {
       let canEdit = isInPermission('business_task_edit');
       let canDelete = isInPermission('business_task_del');
+      let canEditChild = isInPermission('business_child_task_edit');
+      let canDeleteChild = isInPermission('business_child_task_del');
       let operation = [];
       if (canEdit && canDelete) {
         operation.push(          {
@@ -109,11 +111,11 @@
           width: widthStatus,
           customRender: (text, record, index) => {
             let ops = [];
-            if (canEdit)
+            if ((!record.parentId && canEdit) || (record.parentId && canEditChild))
               ops.push(this.$createElement('i', {
                 'class': 'iconfont iconxiezuo',
                 on: {click: () => this.handleEdit(record)}}, ''));
-            if (canDelete)
+            if ((!record.parentId && canDelete) || (record.parentId && canDeleteChild))
               ops.push(this.$createElement('i', {
                 'class': 'iconfont iconshanchu',
                 on: {click: () => this.handleDelete(record)}}, ''));

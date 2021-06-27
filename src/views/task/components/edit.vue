@@ -1,5 +1,5 @@
 <template>
-  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" :body-style="{paddingTop: '10px'}" centered>
+  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" :body-style="{padding: '14px 32px'}" centered>
     <template slot="title">
       <i class="iconfont iconxiezuo"></i>
       编辑任务
@@ -96,7 +96,7 @@
           <a-row :gutter="[16, 4]">
             <a-col span="20">共 {{childrenList.length}} 个子任务</a-col>
             <a-col span="4">
-              <FlatButton @click="handleCreateChildTask">
+              <FlatButton @click="handleCreateChildTask" v-if="canCreateChild">
                 添加子任务
                 <MyIcon slot="icon" name="iconjia" type="main"/>
               </FlatButton>
@@ -106,14 +106,15 @@
 <!--            <div class="child-item">-->
               <a-row :gutter="[16, 16]" v-for="child in childrenList" :key="child.id" class="child-item">
                 <a-col span="18">
-                  <a @click="handleEditChild(child)">{{child.taskName}}</a>
+                  <a @click="handleEditChild(child)" v-if="canEditChild">{{child.taskName}}</a>
+                  <span>{{child.taskName}}</span>
                 </a-col>
                 <a-col span="4">
                   <Status :value="child.status"/>
                 </a-col>
                 <a-col span="2">
-                  <i class="iconfont iconxiezuo" @click="handleEditChild(child)"></i>
-                  <i class="iconfont iconshanchu" @click="handleDeleteChild(child)"></i>
+                  <i class="iconfont iconxiezuo" @click="handleEditChild(child)" v-if="canEditChild"></i>
+                  <i class="iconfont iconshanchu" @click="handleDeleteChild(child)" v-if="canDeleteChild"></i>
                 </a-col>
               </a-row>
             </div>
@@ -199,6 +200,7 @@
   import moment from "moment";
   import { message } from 'x-intelligent-ui'
   import ToggleArea from "@/components/forms/ToggleArea";
+  import {isInPermission} from "@/utils/common";
 
   export default {
     name: "TaskEdit",
@@ -239,6 +241,9 @@
         childTaskName: '',
         childrenList: [],
         uploadUrl: '/api/business/attachment/file/uploadAndSave',
+        canCreateChild: isInPermission('business_child_task_add'),
+        canEditChild: isInPermission('business_child_task_edit'),
+        canDeleteChild: isInPermission('business_child_task_del'),
       }
     },
     watch: {
