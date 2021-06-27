@@ -196,7 +196,7 @@
   import FlatButton from "@/components/buttons/FlatButton";
   import ToggleInput from "@/components/forms/ToggleInput";
   import {taskTypes} from "@/const/data";
-  import {createChildTask, deleteAttachment, deleteTask, getTaskDetail, saveTask} from "@/api/task";
+  import {createChildTask, deleteAttachment, deleteTask, getTaskDetail, saveTask, saveChildTask, deleteChildTask} from "@/api/task";
   import moment from "moment";
   import { message } from 'x-intelligent-ui'
   import ToggleArea from "@/components/forms/ToggleArea";
@@ -324,7 +324,7 @@
           okText: '确认删除',
           icon: 'none',
           onOk() {
-            deleteTask(child.id).then(res => {
+            deleteChildTask(child.id).then(res => {
               if (res.code === 0 && res.data) {
                 that.childrenList.splice(that.childrenList.indexOf(child), 1);
               }
@@ -378,10 +378,18 @@
           }
         }
         data.id = this.taskId;
-        saveTask(data).then(res => {
-        }).catch(err => {
-          failCallback && failCallback();
-        });
+        if (this.parentId) {
+          saveChildTask(data).then(res => {
+          }).catch(err => {
+            failCallback && failCallback();
+          });
+        }
+        else {
+          saveTask(data).then(res => {
+          }).catch(err => {
+            failCallback && failCallback();
+          });
+        }
       },
       getDetail() {
         if (! this.taskId)
