@@ -1,5 +1,5 @@
 <template>
-  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" :body-style="{padding: '14px 32px'}" centered>
+  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" :body-style="{padding: '6px 22px'}" centered>
     <template slot="title">
       <i class="iconfont iconxiezuo"></i>
       编辑任务
@@ -18,7 +18,7 @@
         </ToggleInput>
         <a-checkbox :checked="!!form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)" v-if="!parentId">周报显示</a-checkbox>
       </div>
-      <a-row :gutter="[16, 16]">
+      <a-row :gutter="[16, 30]">
         <a-col :span="6"><StatusSelect :value="form.status" @change="val => handleSave('status', val)"/></a-col>
         <a-col :span="6"><!--<UserSelect :form="0"/>-->
               <UserSelect :options="memberList" :value="form.incharge" @change="val => handleSave('incharge', val)" subtitle="负责人" />
@@ -31,7 +31,7 @@
           <DateSelect title="计划结束" icon="iconjihua" :value="form.planEndTime" @select="val => handleSave('planEndTime', val)" :range="{begin: form.planBeginTime}" />
         </a-col>
       </a-row>
-      <a-row :gutter="[16, 16]">
+      <a-row :gutter="[16, 30]">
         <a-col :span="6">
           <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @select="val => handleSave('actualBeginTime', val)" :range="{end: form.actualEndTime}" />
         </a-col>
@@ -102,12 +102,24 @@
               </FlatButton>
             </a-col>
           </a-row>
-          <div class="child-cont">
+          <div class="child-cont" ref="childCont">
 <!--            <div class="child-item">-->
-              <a-row :gutter="[16, 16]" v-for="child in childrenList" :key="child.id" class="child-item">
+            <a-row :gutter="[16, 12]" v-if="createChild">
+              <a-col span="24">
+                <a-input class="edit" v-model="childTaskName" @pressEnter="handleCreateChild" placeholder="输入子任务名称…" />
+              </a-col>
+            </a-row>
+            <a-row :gutter="[16, 12]" v-if="createChild">
+              <a-col span="19"></a-col>
+              <a-col span="5" style="text-align: right;">
+                <a-button style="margin-right: 8px" @click="handleCancelCreateChild">取消</a-button>
+                <a-button type="primary" @click="handleCreateChild">保存</a-button>
+              </a-col>
+            </a-row>
+            <a-row :gutter="[16, 16]" v-for="child in childrenList" :key="child.id" class="child-item">
                 <a-col span="18">
                   <a @click="handleEditChild(child)" v-if="canEditChild">{{child.taskName}}</a>
-                  <span>{{child.taskName}}</span>
+                  <span v-else>{{child.taskName}}</span>
                 </a-col>
                 <a-col span="4">
                   <Status :value="child.status"/>
@@ -117,9 +129,6 @@
                   <i class="iconfont iconshanchu" @click="handleDeleteChild(child)" v-if="canDeleteChild"></i>
                 </a-col>
               </a-row>
-            </div>
-            <div v-if="createChild">
-              <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
             </div>
 <!--          </div>-->
           <div>
@@ -312,6 +321,7 @@
         // this.form.childrenList.push({id: -1, taskName: ''});
         this.childTaskName = '';
         this.createChild = true;
+        this.$refs.childCont.scroll(0, 0);
       },
       handleEditChild(child) {
         this.$emit('editChild', child.id, this.taskId)
@@ -359,6 +369,9 @@
           a.href = att.link;
           a.click();
         }
+      },
+      handleCancelCreateChild() {
+        this.createChild = false;
       },
       handleCreateChild() {
         this.createChild = false;
@@ -441,6 +454,7 @@
     display: flex;
     height: 50px;
     align-items: center;
+    margin-bottom: 16px;
 
     .ant-checkbox-wrapper {
       color: #636E95;
@@ -476,13 +490,20 @@
   .child-cont {
     height: 200px;
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
+
+    .edit {
+      height: 48px;
+      background: #F4F7FC;
+      border-radius: 4px;
+    }
   }
   .panel-1 {
     height: 283px;
     overflow-y: auto;
-    width: 100%;
     overflow-x: hidden;
+    width: 100%;
   }
 
   .prj-title {

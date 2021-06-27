@@ -143,6 +143,7 @@
             title: '编号',
             fixed: 'left',
             width: 60,
+            align: 'center',
           },
           {
             dataIndex: 'taskName',
@@ -165,7 +166,7 @@
             dataIndex: 'status',
             title: '状态',
             width: 96,
-            align: 'center',
+            // align: 'center',
             scopedSlots: {
               customRender: 'status'
             }
@@ -174,7 +175,7 @@
             dataIndex: 'priority',
             title: '优先级',
             width: 72,
-            align: 'center',
+            // align: 'center',
             scopedSlots: {
               customRender: 'priority'
             }
