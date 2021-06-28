@@ -1,5 +1,5 @@
 <template>
-  <a-modal :visible="isShow"
+  <a-modal :visible="isShow" :wrapClassName="className"
     :width="Number(width)" :closable="closable" :centered="true" :destroyOnClose="true"
     @ok="handleOk" @cancel="handleCancel">
     <div slot="closeIcon" class="iconfont iconguanbi"></div>
@@ -11,7 +11,7 @@
 
     <slot name="content"></slot>
 
-    
+
     <div slot="footer" class="footer">
       <a-button class="back" type="link" @click="handleCancel">{{cancelText}}</a-button>
       <a-button class="submit" type="primary" @click="handleOk"><span>{{okText}}</span></a-button>
@@ -24,6 +24,10 @@ export default {
     isShow: {
       type: Boolean,
       default: false
+    },
+    className: { // modal 对话框外层容器的类名
+      type: String,
+      default: ''
     },
     width: { // modal 宽度
       type: String | Number,

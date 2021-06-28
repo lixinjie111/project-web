@@ -75,7 +75,7 @@
 <style lang="scss">
   .status-menu {
     .ant-dropdown-menu {
-      padding: 6px;
+      padding: 6px 0;
     }
   }
 </style>

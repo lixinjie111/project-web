@@ -239,7 +239,12 @@
         }
     }
 
-    .user-icon {
-        margin-right: 4px;
+    .users-list {
+        display: flex;
+        align-items: center;
+
+        .user-icon {
+            margin-right: 4px;
+        }
     }
 </style>

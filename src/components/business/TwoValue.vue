@@ -4,7 +4,7 @@
       <slot />
     </div>
     <div class="cont">
-      <div class="title">{{title}}</div>
+      <div :class="['title',title=='-'?'empty':'']">{{title}}</div>
       <div class="subtitle" v-if="subtitle">{{subtitle}}</div>
     </div>
   </div>
@@ -29,6 +29,10 @@
     font-size: 14px;
     color: #242F57;
     line-height: 18px;
+
+    &.empty {
+      color: #7c88b1;
+    }
   }
   .subtitle {
     height: 16px;

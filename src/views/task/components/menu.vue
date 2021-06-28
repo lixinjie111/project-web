@@ -61,40 +61,45 @@
 </script>
 
 <style lang="scss" scoped>
-  .proj-list {
-    width: 300px;
-    height: 32px;
-    background: #F4F7FC;
-    border-radius: 8px;
+  .nav-left-title {
+    display: flex;
+    align-items: center;
 
-    /deep/ .ant-select-selection--single {
+    .proj-list {
+      width: 300px;
       height: 32px;
-      line-height: 32px;
       background: #F4F7FC;
-      border: none;
       border-radius: 8px;
-      box-shadow: none !important;
 
-      .ant-select-selection__rendered {
+      /deep/ .ant-select-selection--single {
+        height: 32px;
         line-height: 32px;
+        background: #F4F7FC;
+        border: none;
+        border-radius: 8px;
+        box-shadow: none !important;
+
+        .ant-select-selection__rendered {
+          line-height: 32px;
+        }
       }
     }
-  }
 
-  .back {
-    width: 68px;
-    height: 32px;
-    background: #F4F7FC;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 400;
-    color: #242F57;
-    line-height: 24px;
-    padding: 4px;
-    margin: 9px 12px 0 16px;
+    .back {
+      width: 68px;
+      height: 32px;
+      background: #F4F7FC;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #242F57;
+      line-height: 24px;
+      padding: 4px;
+      margin: 0 12px 0 16px;
 
-    .iconfont {
-      margin-right: 4px;
+      .iconfont {
+        margin-right: 4px;
+      }
     }
   }
 </style>

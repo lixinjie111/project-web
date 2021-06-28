@@ -6211,11 +6211,11 @@ a.ant-btn-sm {
 .ant-dropdown-menu-item-selected > a,
 .ant-dropdown-menu-submenu-title-selected > a {
     color: #0064FF;
-    background-color: #f0f8ff;
+    background: #F4F7FC;
 }
 .ant-dropdown-menu-item:hover,
 .ant-dropdown-menu-submenu-title:hover {
-    background-color: #f0f8ff;
+    background: #F4F7FC;
 }
 .ant-dropdown-menu-item-disabled,
 .ant-dropdown-menu-submenu-title-disabled {
@@ -7347,7 +7347,7 @@ span.ant-radio + * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    color: rgba(0, 0, 0, 0.65);
+    color: #97A0C3;
     font-size: 14px;
     font-variant: tabular-nums;
     line-height: 1.5;
@@ -19262,7 +19262,7 @@ textarea.ant-mentions {
     transform: translateX(-50%) rotate(45deg);
 }
 .ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow {
-    left: 16px;
+    left: 12px;
 }
 .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
     right: 16px;

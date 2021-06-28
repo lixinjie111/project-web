@@ -23,7 +23,7 @@
     computed: {
       showDate() {
         if (!this.value)
-          return '----';
+          return '-';
         return moment(this.value).format('MM月DD日');
       },
       mValue() {

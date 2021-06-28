@@ -1,5 +1,5 @@
 <template>
-    <a-form-model ref="addForm" :model="form" :rules="rules">
+    <a-form-model ref="addForm" :model="form" :rules="rules" class="add-from-content">
         <a-row :gutter="16">
             <a-col :span="12">
                 <a-form-model-item label="项目名称" prop="projectName">
@@ -191,40 +191,41 @@
 </script>
 
 <style scoped lang="scss">
-    .form-related-list {
-        max-height: 100px;
-        overflow-y: auto;
+    .add-from-content {
+        padding: 24px 24px 0 24px;
 
-        .item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 12px;
-            margin-top: 8px;
-            width: 100%;
-            height: 40px;
-            line-height: 40px;
-            background: #F4F7FC;
-            border-radius: 4px;
+        .form-related-list {
+            .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 12px;
+                margin-top: 8px;
+                width: 100%;
+                height: 40px;
+                line-height: 40px;
+                background: #F4F7FC;
+                border-radius: 4px;
 
-            /deep/ .left {
-                width: 400px;
-                font-size: 14px;
-                font-family: PingFangSC-Regular, PingFang SC;
-                font-weight: 400;
-                color: #242F57;
-            }
+                /deep/ .left {
+                    width: 400px;
+                    font-size: 14px;
+                    font-family: PingFangSC-Regular, PingFang SC;
+                    font-weight: 400;
+                    color: #242F57;
+                }
 
-            .right {
-                font-size: 12px;
-                font-family: PingFangSC-Regular, PingFang SC;
-                font-weight: 400;
-                color: #C6CBDE;
-                cursor: pointer;
+                .right {
+                    font-size: 12px;
+                    font-family: PingFangSC-Regular, PingFang SC;
+                    font-weight: 400;
+                    color: #C6CBDE;
+                    cursor: pointer;
 
-                > i {
-                    margin-left: 8px;
-                    vertical-align: -2px;
+                    > i {
+                        margin-left: 8px;
+                        vertical-align: -2px;
+                    }
                 }
             }
         }
