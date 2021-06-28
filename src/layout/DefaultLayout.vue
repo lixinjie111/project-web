@@ -31,7 +31,7 @@ export default {
         top: 0;
         width: 80px;
         height: 100vh;
-        z-index: 100;
+        z-index: 1001;
     }
     .layout-container{
         position: relative;
@@ -39,6 +39,7 @@ export default {
         min-width: 1360px;
         width: calc(100vw - 80px);
         min-width: 1360px;
+        min-height: 450px;
         height: 100%;
         max-height: 100%;
         overflow: auto;

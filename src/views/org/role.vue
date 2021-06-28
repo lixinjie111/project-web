@@ -232,6 +232,7 @@ export default {
       }
       &.has-pagination {
         height: calc(100% - 63px);
+        border-bottom: 1px solid #EAEDF7
       }
       /deep/ .vxe-grid{
         height: 100%;

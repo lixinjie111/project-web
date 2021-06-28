@@ -113,7 +113,12 @@
 
 <style scoped lang="scss">
     .report-notarchive-container {
+        height: 100%;
+        overflow: auto;
         .header {
+            position: fixed;
+            top: 51px;
+            width: calc(100vw - 80px);
             background-color: white;
             display: flex;
             justify-content: space-between;
@@ -122,6 +127,7 @@
             border-top: 1px solid #EAEDF7;
             border-bottom: 1px solid #EAEDF7;
             padding: 0 8px;
+            z-index: 100;
 
             .left {
                 display: flex;
@@ -130,7 +136,14 @@
         }
 
         .child-content {
-            padding: 24px 16px;
+            height: calc(100% - 50px);
+            margin-top: 50px;
+            padding: 0 16px 24px;
+            overflow: auto;
+            /deep/ .table-content {
+                // margin-top: 128px;
+                height: calc(100% - 128px);
+            }
         }
     }
 </style>

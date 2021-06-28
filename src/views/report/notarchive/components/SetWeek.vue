@@ -71,8 +71,10 @@ export default {
           let {dateTime, week} = data;
           this.list = dateTime?.length ? dateTime : [{dateTime: null}];
           this.regular = week ? week : {week: null, "hour": null,"minute": null};
-          console.log(this.regular)
-          this.regularTime = this.regular.hour && this.regular.minute ? moment(`${this.regular.hour}:${this.regular.minute}`, 'HH:mm') : '';
+          console.log(this.regular, this.regular.hasOwnProperty('hour') && this.regular.hasOwnProperty('minute'))
+          let bool = this.regular.hour !=null && this.regular.hasOwnProperty('hour') && this.regular.minute !=null && this.regular.hasOwnProperty('minute')
+          this.regularTime = bool ? moment(`${this.regular.hour}:${this.regular.minute}`, 'HH:mm') : '';
+          console.log(this.regularTime, moment(`${this.regular.hour}:${this.regular.minute}`, 'HH:mm'))
         }
       } catch (error) {
         console.log(error)
@@ -85,6 +87,9 @@ export default {
         let {code} = await this.$api.report.handlePostRegular(this.regular);
         if(code === 0) {
           this.$message.success('修改成功！');
+          if(!this.regular.hasOwnProperty('id')){
+            this.handleGetSetList()
+          }
         }
       } catch (error) {
         console.log(error)

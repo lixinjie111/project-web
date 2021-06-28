@@ -16,14 +16,18 @@
         </span>
     </div>
     </div>
-    <BasicTable
-        rowId="id"
-        :tableData="tableData"
-        :setTableColumns="setTableColumns"
-        :rowClassName="handleRowClassName"
-        :treeConfig="treeConfig"
-        :spanMethod="handleRowspanMethod"
-    ></BasicTable>
+    <div class="table-content">
+        <BasicTable
+            class="table"
+            rowId="id"
+            height="100%"
+            :tableData="tableData"
+            :setTableColumns="setTableColumns"
+            :rowClassName="handleRowClassName"
+            :treeConfig="treeConfig"
+            :spanMethod="handleRowspanMethod"
+        ></BasicTable>
+    </div>
   </div>
 </template>
 
@@ -276,6 +280,12 @@ export default {
 @import '@/assets/css/variables.scss';
 .statistics-staff-container {
   padding: 0 16px 24px;
+  height: 100%;
+
+  .table-content {
+      height: calc(100% - 124px);
+      min-height: 100px;
+  }
 
   .select-container {
     display: flex;
@@ -384,5 +394,6 @@ export default {
             padding: 0 5px;
         }
     }
+
 }
 </style>

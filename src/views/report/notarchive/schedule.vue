@@ -4,6 +4,7 @@
         <div class="table-content">
             <BasicTable v-if="tableData.length" 
                 rowId="id"
+                height="100%"
                 :tableData="tableData" 
                 :setTableColumns="setTableColumns" 
                 :rowClassName="handleRowClassName" 
