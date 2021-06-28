@@ -78,7 +78,7 @@
               </a-row>
             </div>
             <div class="block">
-              <a-row :gutter="[16, 4]">
+              <a-row :gutter="[16, 8]">
                 <a-col span="8">任务描述:</a-col>
               </a-row>
               <a-row :gutter="[16, 4]">
@@ -143,12 +143,12 @@
           <span slot="tab">
             <i class="iconfont iconlianjie"></i>附件
           </span>
-          <a-row :gutter="[16, 4]">
-            <a-col span="20" v-if="form.attachment">共 1 个附件</a-col>
-            <a-col span="20" v-else>共 0 个附件
+          <div class="child-tit">
+            <div v-if="form.attachment">共 1 个附件</div>
+            <div v-else>共 0 个附件
               <span class="remark">附件大小不超过50MB</span>
-            </a-col>
-            <a-col span="4" v-if="!form.attachment">
+            </div>
+            <div span="4" v-if="!form.attachment">
               <a-upload
                   name="file"
                   :showUploadList="false"
@@ -163,8 +163,8 @@
                   <MyIcon slot="icon" name="iconjia" type="main"/>
                 </FlatButton>
               </a-upload>
-            </a-col>
-          </a-row>
+            </div>
+          </div>
           <div class="child-cont">
             <a-row :gutter="[16, 4]" v-if="form.attachment" class="child-item">
               <a-col span="22">
@@ -178,9 +178,9 @@
               <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
             </div>
           </div>
-          <div>
-            <a-divider></a-divider>
-          </div>
+<!--          <div>-->
+<!--            <a-divider></a-divider>-->
+<!--          </div>-->
         </a-tab-pane>
       </a-tabs>
     <a-row :gutter="[16, 4]" v-if="form.history">
@@ -513,7 +513,7 @@
     }
   }
   .panel-1 {
-    height: $bottomHeight + 72px;
+    height: $bottomHeight + 40px;
     overflow-y: hidden;
     overflow-x: hidden;
     width: 100%;
