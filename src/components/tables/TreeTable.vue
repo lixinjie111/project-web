@@ -75,7 +75,7 @@
     },
     computed: {
       scrollWidth() {
-        return this.columns.reduce((sum, col) => sum + col.width);
+        return this.columns.reduce((sum, col) => sum + (col.width ? col.width : 120), 0);
       }
     },
     methods: {

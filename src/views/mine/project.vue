@@ -80,6 +80,7 @@
                 this.resetList();
             },
             handleChangeTab(kind) {
+                this.curPageNum = 1;
                 this.tabActive = kind;
                 this.getMyProjectList();
             },

@@ -5,7 +5,7 @@
     </div>
     <div class="cont">
       <div class="title">{{title}}</div>
-      <div class="subtitle">{{subtitle}}</div>
+      <div class="subtitle" v-if="subtitle">{{subtitle}}</div>
     </div>
   </div>
 </template>

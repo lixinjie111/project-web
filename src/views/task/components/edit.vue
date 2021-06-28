@@ -1,5 +1,5 @@
 <template>
-  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" :body-style="{paddingTop: '10px'}" centered>
+  <ModalNoFooter :isShow="isShow" :width="980" :maskClosable="false" :footer="null" @modal-cancel="handleCancel" :body-style="{padding: '6px 22px'}" centered>
     <template slot="title">
       <i class="iconfont iconxiezuo"></i>
       编辑任务
@@ -18,7 +18,7 @@
         </ToggleInput>
         <a-checkbox :checked="!!form.weeklyShow" @change="e => handleSave('weeklyShow', e.target.checked ? 1 : 0)" v-if="!parentId">周报显示</a-checkbox>
       </div>
-      <a-row :gutter="[16, 16]">
+      <a-row :gutter="[16, 30]">
         <a-col :span="6"><StatusSelect :value="form.status" @change="val => handleSave('status', val)"/></a-col>
         <a-col :span="6"><!--<UserSelect :form="0"/>-->
               <UserSelect :options="memberList" :value="form.incharge" @change="val => handleSave('incharge', val)" subtitle="负责人" />
@@ -31,7 +31,7 @@
           <DateSelect title="计划结束" icon="iconjihua" :value="form.planEndTime" @select="val => handleSave('planEndTime', val)" :range="{begin: form.planBeginTime}" />
         </a-col>
       </a-row>
-      <a-row :gutter="[16, 16]">
+      <a-row :gutter="[16, 30]">
         <a-col :span="6">
           <DateSelect title="实际开始" icon="iconrili" :value="form.actualBeginTime" @select="val => handleSave('actualBeginTime', val)" :range="{end: form.actualEndTime}" />
         </a-col>
@@ -83,7 +83,7 @@
               </a-row>
               <a-row :gutter="[16, 4]">
                 <a-col span="24">
-                  <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 8 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
+                  <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 4, maxRows: 7 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
                 </a-col>
               </a-row>
             </div>
@@ -96,29 +96,39 @@
           <a-row :gutter="[16, 4]">
             <a-col span="20">共 {{childrenList.length}} 个子任务</a-col>
             <a-col span="4">
-              <FlatButton @click="handleCreateChildTask">
+              <FlatButton @click="handleCreateChildTask" v-if="canCreateChild">
                 添加子任务
                 <MyIcon slot="icon" name="iconjia" type="main"/>
               </FlatButton>
             </a-col>
           </a-row>
-          <div class="child-cont">
+          <div class="child-cont" ref="childCont">
 <!--            <div class="child-item">-->
-              <a-row :gutter="[16, 16]" v-for="child in childrenList" :key="child.id" class="child-item">
+            <a-row :gutter="[16, 12]" v-if="createChild">
+              <a-col span="24">
+                <a-input class="edit" v-model="childTaskName" @pressEnter="handleCreateChild" placeholder="输入子任务名称…" />
+              </a-col>
+            </a-row>
+            <a-row :gutter="[16, 12]" v-if="createChild">
+              <a-col span="19"></a-col>
+              <a-col span="5" style="text-align: right;">
+                <a-button style="margin-right: 8px" @click="handleCancelCreateChild">取消</a-button>
+                <a-button type="primary" @click="handleCreateChild">保存</a-button>
+              </a-col>
+            </a-row>
+            <a-row :gutter="[16, 16]" v-for="child in childrenList" :key="child.id" class="child-item">
                 <a-col span="18">
-                  <a @click="handleEditChild(child)">{{child.taskName}}</a>
+                  <a @click="handleEditChild(child)" v-if="canEditChild">{{child.taskName}}</a>
+                  <span v-else>{{child.taskName}}</span>
                 </a-col>
                 <a-col span="4">
                   <Status :value="child.status"/>
                 </a-col>
                 <a-col span="2">
-                  <i class="iconfont iconxiezuo" @click="handleEditChild(child)"></i>
-                  <i class="iconfont iconshanchu" @click="handleDeleteChild(child)"></i>
+                  <i class="iconfont iconxiezuo" @click="handleEditChild(child)" v-if="canEditChild"></i>
+                  <i class="iconfont iconshanchu" @click="handleDeleteChild(child)" v-if="canDeleteChild"></i>
                 </a-col>
               </a-row>
-            </div>
-            <div v-if="createChild">
-              <a-input v-model="childTaskName" @pressEnter="handleCreateChild" />
             </div>
 <!--          </div>-->
           <div>
@@ -137,7 +147,6 @@
             <a-col span="4" v-if="!form.attachment">
               <a-upload
                   name="file"
-                  multiple
                   :showUploadList="false"
                   :action="uploadUrl"
                   :headers="uploadHeaders"
@@ -195,10 +204,11 @@
   import FlatButton from "@/components/buttons/FlatButton";
   import ToggleInput from "@/components/forms/ToggleInput";
   import {taskTypes} from "@/const/data";
-  import {createChildTask, deleteAttachment, deleteTask, getTaskDetail, saveTask} from "@/api/task";
+  import {createChildTask, deleteAttachment, deleteTask, getTaskDetail, saveTask, saveChildTask, deleteChildTask} from "@/api/task";
   import moment from "moment";
   import { message } from 'x-intelligent-ui'
   import ToggleArea from "@/components/forms/ToggleArea";
+  import {isInPermission} from "@/utils/common";
 
   export default {
     name: "TaskEdit",
@@ -239,6 +249,9 @@
         childTaskName: '',
         childrenList: [],
         uploadUrl: '/api/business/attachment/file/uploadAndSave',
+        canCreateChild: isInPermission('business_child_task_add'),
+        canEditChild: isInPermission('business_child_task_edit'),
+        canDeleteChild: isInPermission('business_child_task_del'),
       }
     },
     watch: {
@@ -307,6 +320,7 @@
         // this.form.childrenList.push({id: -1, taskName: ''});
         this.childTaskName = '';
         this.createChild = true;
+        this.$refs.childCont.scroll(0, 0);
       },
       handleEditChild(child) {
         this.$emit('editChild', child.id, this.taskId)
@@ -319,7 +333,7 @@
           okText: '确认删除',
           icon: 'none',
           onOk() {
-            deleteTask(child.id).then(res => {
+            deleteChildTask(child.id).then(res => {
               if (res.code === 0 && res.data) {
                 that.childrenList.splice(that.childrenList.indexOf(child), 1);
               }
@@ -352,8 +366,12 @@
         if (att) {
           let a = document.createElement("a");
           a.href = att.link;
+          a.target = '_blank';
           a.click();
         }
+      },
+      handleCancelCreateChild() {
+        this.createChild = false;
       },
       handleCreateChild() {
         this.createChild = false;
@@ -373,10 +391,18 @@
           }
         }
         data.id = this.taskId;
-        saveTask(data).then(res => {
-        }).catch(err => {
-          failCallback && failCallback();
-        });
+        if (this.parentId) {
+          saveChildTask(data).then(res => {
+          }).catch(err => {
+            failCallback && failCallback();
+          });
+        }
+        else {
+          saveTask(data).then(res => {
+          }).catch(err => {
+            failCallback && failCallback();
+          });
+        }
       },
       getDetail() {
         if (! this.taskId)
@@ -396,8 +422,10 @@
         this.saveData({taskDescription: this.form.taskDescription});
       },
       handleUpload({file}) {
-        console.log(file)
+        // console.log(file)
         if (file.status === 'done' && file.response.code === 0) {
+          this.hideLoading && this.hideLoading();
+          this.hideLoading = null;
           this.form.attachment = {id: file.response.data.attachmentId, link: file.response.data.filePath, name: file.name};
           this.saveData({attachments: parseInt(file.response.data.attachmentId)});
         }
@@ -406,7 +434,8 @@
         }
       },
       handleBeforeUpload(file) {
-        console.log(file)
+        // console.log(file)
+        this.hideLoading = this.$message.loading('上传中...');
         if (file.size > 100*1024*1024) {
           message.error(file.name + '超过100M，不允许上传');
           return false;
@@ -428,6 +457,7 @@
     display: flex;
     height: 50px;
     align-items: center;
+    margin-bottom: 16px;
 
     .ant-checkbox-wrapper {
       color: #636E95;
@@ -460,16 +490,25 @@
     }
   }
 
+  $bottomHeight: 360px;
+
   .child-cont {
-    height: 200px;
+    height: $bottomHeight;
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
+
+    .edit {
+      height: 48px;
+      background: #F4F7FC;
+      border-radius: 4px;
+    }
   }
   .panel-1 {
-    height: 283px;
-    overflow-y: auto;
-    width: 100%;
+    height: $bottomHeight + 72px;
+    overflow-y: hidden;
     overflow-x: hidden;
+    width: 100%;
   }
 
   .prj-title {

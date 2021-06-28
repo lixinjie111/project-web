@@ -61,7 +61,7 @@
                     },
                     {
                         title: '添加时间',
-                        field: 'createdTime',
+                        field: 'createdTimeForm',
                         width: 132,
                     },
                     {

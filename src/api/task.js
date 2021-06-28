@@ -90,6 +90,14 @@ export function createChildTask(projectId, fatherTaskId, taskName) {
   return httpaxios.post('/business/task/add/child', {data: {fatherTaskId, projectId, taskName}})
 }
 
+export function saveChildTask(data) {
+  return httpaxios.put('/business/task/edit/child', {data})
+}
+
+export function deleteChildTask(taskId) {
+  return httpaxios.delete('/business/task/child/' + taskId)
+}
+
 /**
  * 看板拖拉修改任务状态
  * @param id

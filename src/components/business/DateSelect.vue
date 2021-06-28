@@ -1,5 +1,5 @@
 <template>
-  <a-date-picker :value="mValue" @change="handleSelect" :disabledDate="disabledDate" v-bind="$attrs">
+  <a-date-picker :value="mValue" @change="handleSelect" :disabledDate="disabledDate" v-bind="$attrs" style="width: 100%;">
     <TwoValue :title="showDate" :subtitle="title" class="btn" v-if="!original">
       <i class="iconfont" :class="icon"></i>
     </TwoValue>
