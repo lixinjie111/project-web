@@ -83,7 +83,7 @@
               </a-row>
               <a-row :gutter="[16, 4]">
                 <a-col span="24">
-                  <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 4, maxRows: 7 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
+                  <ToggleArea v-model="form.taskDescription" :auto-size="{ minRows: 3, maxRows: 6 }" @commit="saveDescription" over-class="toggle-desc">{{form.taskDescription}}</ToggleArea>
                 </a-col>
               </a-row>
             </div>
