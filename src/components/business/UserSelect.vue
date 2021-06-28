@@ -135,7 +135,8 @@
   }
   .user-align {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    height: 40px;
   }
   .no-user {
     color: #636E95;
