@@ -2,7 +2,9 @@
   <div class="statistics-staff-container">
     <ContentHeader type="title" title="人员任务统计">
       <div slot="operation">
-        <a-button type="primary" @click="handleExport">导出</a-button>
+        <a-config-provider :auto-insert-space-in-button="false">
+          <a-button type="primary" @click="handleExport">导出</a-button>
+        </a-config-provider>
       </div>
     </ContentHeader>
     <div class="select-container">

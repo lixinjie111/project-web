@@ -162,5 +162,9 @@
 </script>
 
 <style lang="scss" scoped>
-
+    /deep/ .user-sel-popover {
+     .ant-tree li span.ant-tree-switcher.ant-tree-switcher-noop {
+         display: none;
+     }
+  }
 </style>

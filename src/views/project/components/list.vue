@@ -27,7 +27,7 @@
             </div>
         </ListTable>
         <Pagination v-bind="$attrs" v-on="$listeners" v-if="$attrs.total > $attrs.pageSize"></Pagination>
-        <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
+        <Modal :isShow="showAddModal" className="project-add-modal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
             <AddForm ref="addForm" slot="content" :form="form"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showStartModal" :title="startModal.modalTitle" :okText="startModal.okText" :cancelText="startModal.cancelText" headeralgin="left" @modal-sure="handleStartSubmit" @modal-cancel="handleStartCancel">
@@ -398,6 +398,14 @@
             /deep/ .ant-divider {
                 background: #EAEDF7;
             }
+        }
+    }
+
+    /deep/ .project-add-modal {
+        .ant-modal-body {
+            padding: 0;
+            height: 580px;
+            overflow-y: auto;
         }
     }
 </style>

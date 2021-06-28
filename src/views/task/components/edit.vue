@@ -93,36 +93,40 @@
           <span slot="tab">
             <i class="iconfont iconzirenwu"></i>子任务
           </span>
-          <a-row :gutter="[16, 4]">
-            <a-col span="20">共 {{childrenList.length}} 个子任务</a-col>
-            <a-col span="4">
+          <div class="child-tit">
+            <div>共 {{childrenList.length}} 个子任务</div>
+            <div>
               <FlatButton @click="handleCreateChildTask" v-if="canCreateChild">
                 添加子任务
                 <MyIcon slot="icon" name="iconjia" type="main"/>
               </FlatButton>
-            </a-col>
-          </a-row>
+            </div>
+          </div>
           <div class="child-cont" ref="childCont">
 <!--            <div class="child-item">-->
             <a-row :gutter="[16, 12]" v-if="createChild">
               <a-col span="24">
-                <a-input class="edit" v-model="childTaskName" @pressEnter="handleCreateChild" placeholder="输入子任务名称…" />
+                <a-input class="edit" v-model="childTaskName" @pressEnter="handleCreateChild" placeholder="输入子任务名称…" style="border: none;"/>
               </a-col>
             </a-row>
             <a-row :gutter="[16, 12]" v-if="createChild">
               <a-col span="19"></a-col>
               <a-col span="5" style="text-align: right;">
-                <a-button style="margin-right: 8px" @click="handleCancelCreateChild">取消</a-button>
-                <a-button type="primary" @click="handleCreateChild">保存</a-button>
+                <a-config-provider :auto-insert-space-in-button="false">
+                  <a-button style="margin-right: 8px" @click="handleCancelCreateChild">取消</a-button>
+                </a-config-provider>
+                <a-config-provider :auto-insert-space-in-button="false">
+                  <a-button type="primary" @click="handleCreateChild">保存</a-button>
+                </a-config-provider>
               </a-col>
             </a-row>
             <a-row :gutter="[16, 16]" v-for="child in childrenList" :key="child.id" class="child-item">
-                <a-col span="18">
+                <a-col span="3">
+                  <Status :value="child.status"/>
+                </a-col>
+                <a-col span="19">
                   <a @click="handleEditChild(child)" v-if="canEditChild">{{child.taskName}}</a>
                   <span v-else>{{child.taskName}}</span>
-                </a-col>
-                <a-col span="4">
-                  <Status :value="child.status"/>
                 </a-col>
                 <a-col span="2">
                   <i class="iconfont iconxiezuo" @click="handleEditChild(child)" v-if="canEditChild"></i>
@@ -131,9 +135,9 @@
               </a-row>
             </div>
 <!--          </div>-->
-          <div>
-            <a-divider></a-divider>
-          </div>
+<!--          <div>-->
+<!--            <a-divider></a-divider>-->
+<!--          </div>-->
         </a-tab-pane>
         <a-tab-pane key="3">
           <span slot="tab">
@@ -142,7 +146,7 @@
           <a-row :gutter="[16, 4]">
             <a-col span="20" v-if="form.attachment">共 1 个附件</a-col>
             <a-col span="20" v-else>共 0 个附件
-              <span class="remark">附件大小不超过100MB</span>
+              <span class="remark">附件大小不超过50MB</span>
             </a-col>
             <a-col span="4" v-if="!form.attachment">
               <a-upload
@@ -450,24 +454,23 @@
 </script>
 
 <style lang="scss" scoped>
-.iconfont {
-  margin-right: 4px;
-}
-  .title-row {
-    display: flex;
-    height: 50px;
-    align-items: center;
-    margin-bottom: 16px;
-
-    .ant-checkbox-wrapper {
-      color: #636E95;
+  .iconfont {
+      margin-right: 4px;
     }
-  }
+  .title-row {
+        display: flex;
+        height: 50px;
+        align-items: center;
+        margin-bottom: 16px;
 
-.ant-tabs {
-  width: 100%;
-}
-.block {
+        .ant-checkbox-wrapper {
+          color: #636E95;
+        }
+      }
+  .ant-tabs {
+      width: 100%;
+    }
+  .block {
   width: 100%;
   margin-bottom: 24px;
 }
@@ -477,7 +480,8 @@
     color: #242F57;
     font-size: 14px;
     width: 100%;
-    /*line-height: 36px;*/
+    line-height: 32px;
+    border-bottom: 1px solid #EAEDF7;
     .iconfont {
       margin-right: 12px;
       cursor: pointer;
@@ -489,9 +493,13 @@
       color: #FF4C60;
     }
   }
-
   $bottomHeight: 360px;
-
+  .child-tit {
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
   .child-cont {
     height: $bottomHeight;
     overflow-y: auto;
@@ -510,11 +518,9 @@
     overflow-x: hidden;
     width: 100%;
   }
-
   .prj-title {
     color: #636E95;
   }
-
   .remark {
     color: #97A0C3;
     margin-left: 6px;

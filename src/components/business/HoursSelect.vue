@@ -4,7 +4,7 @@
       <i class="iconfont" :class="icon"></i>
     </TwoValue>
       <template slot="content">
-        <div>{{title}}</div>
+        <div class="hours-pop-title">{{title}}</div>
         <a-input :value="showValue" @input="handleInput" ref="input">
           <template slot="suffix">
             小时
@@ -67,6 +67,10 @@
   .hours-pop {
     .ant-popover-inner-content {
       padding: 24px;
+    }
+
+    .hours-pop-title {
+      margin-bottom: 8px;
     }
   }
 </style>

@@ -39,7 +39,7 @@
                             @pagination-change-page="handleChangePage"></Pagination>
             </div>
         </div>
-        <Modal :isShow="showAddModal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
+        <Modal :isShow="showAddModal" className="product-add-modal" :title="addModal.modalTitle" :okText="addModal.okText" :cancelText="addModal.cancelText" headeralgin="left" @modal-sure="handleAddSubmit" @modal-cancel="handleAddCancel">
             <AddForm ref="addForm" slot="content" :form="form"></AddForm>
         </Modal>
         <Modal :width="420" :isShow="showCloseModal" :title="closeModal.modalTitle" :okText="closeModal.okText" :cancelText="closeModal.cancelText" headeralgin="left" @modal-sure="handleCloseSubmit" @modal-cancel="handleCloseCancel">
@@ -376,6 +376,14 @@
                     }
                 }
             }
+        }
+    }
+
+    /deep/ .product-add-modal {
+        .ant-modal-body {
+            padding: 0;
+            height: 560px;
+            overflow-y: auto;
         }
     }
 </style>
