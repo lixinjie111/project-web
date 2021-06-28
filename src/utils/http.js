@@ -56,6 +56,9 @@ const httpaxios = {
 		// response's interceptors，Error handling here，And return data for ease of use
 		instance.interceptors.response.use(
 			response => {
+				// debugger;
+				// console.log(response.headers.date);
+
 				removePending(response.config);  //在一个axios响应后再执行一下取消操作，把已经完成的请求从pending中移除
 				const status = Number(response.status) || 200
         const msg = response.data.msg || errorCode[status] || errorCode['default']

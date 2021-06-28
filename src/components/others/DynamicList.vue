@@ -1,7 +1,7 @@
 <template>
     <div class="dynamic-list-container">
         <template v-if="list.length">
-            <div class="dynamic-list">
+            <div v-bind="$attrs" :class="['dynamic-list', $attrs.total > $attrs.pageSize ? 'has-pagination' : '']">
                 <div class="dynamic-item" v-for="(item,index) in list" :key="index">
                     <div class="time">{{item.createdTime}}</div>
                     <div class="info">{{item.userName}} {{item.log}}</div>
@@ -31,15 +31,15 @@
 
 <style scoped lang="scss">
     .dynamic-list-container {
-        padding: 24px 24px 10px 24px;
         background: #FFFFFF;
         box-shadow: 0px 0px 8px 0px rgba(124, 136, 177, 0.12);
         border-radius: 4px;
         height: calc(100vh - 147px);
 
         .dynamic-list {
-            height: calc(100vh - 242px);
+            height: calc(100vh - 209px);
             overflow: auto;
+            padding:  24px 24px 10px 24px;
 
             .dynamic-item {
                 margin-bottom: 24px;
@@ -59,6 +59,13 @@
                     color: #242F57;
                 }
             }
+
+            &.has-pagination {
+                border-bottom: 1px solid #EAEDF7;
+            }
+        }
+        /deep/ .pagination {
+            padding: 5px 24px;
         }
     }
 </style>

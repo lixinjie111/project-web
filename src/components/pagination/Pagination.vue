@@ -3,7 +3,7 @@
   <!-- <a-select :default-value="`每页 ${pageSize} 条`" @change="handleChangePageSize">
     <a-select-option v-for="(item, index) in pageSizeOptions" :key="index" :value="`每页 ${item} 条`">每页 {{ item }} 条</a-select-option>
   </a-select> -->
-  <p></p>
+  <p class="text">共<span>{{total}}</span>条</p>
   <a-pagination
     v-model="curPage"
     :total="total"
@@ -75,6 +75,12 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  .text {
+    font-size: 14px;
+    > span {
+      padding: 0 5px;
+    }
+  }
   /deep/ .ant-pagination {
     .ant-pagination-prev , .ant-pagination-next {
       .ant-pagination-item-link {

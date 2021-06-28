@@ -130,7 +130,6 @@ export default {
         height: 24px;
         text-align: center;
         img {
-          padding: 2px 0;
           width: 24px;
           text-align: center;
         }

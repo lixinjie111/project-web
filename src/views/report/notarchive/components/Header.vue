@@ -33,7 +33,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .header {
-  padding: 0 8px;
+  // position: fixed;
+  padding: 24px 8px 0 8px;
+  // width: calc(100% - 32px);
+  background: #F4F7FC;
 }
 .header-container {
   height: 44px;

@@ -2,7 +2,9 @@
     <vxe-grid
         border
         resizable
+        auto-resize
         ref="table"
+        :max-height="height"
         :row-id="rowId"
         :row-class-name="rowClassName"
         :data="tableData"
@@ -17,6 +19,11 @@
     export default {
         name: 'BasicTable',
         props: {
+            height: {
+                type: String | Number,
+                required: false,
+                default: null
+            },
             rowId: { // 某些功能依赖
                 type: String,
                 required: false,
@@ -47,7 +54,9 @@
             }
         },
         data() {
-            return {}
+            return {
+                'table-body-height': null
+            }
         },
         watch: {
             // 解决数据刷新 默认展开失效
@@ -59,6 +68,27 @@
                 },
                 deep: true
             }
+        },
+        mounted(){
+            // this.$nextTick(() => {
+            //     let reg1 = /^calc\(([0-9]+[vh|vw|%])\s-\s([0-9]+)(px)\)$/;
+            //     let reg2 =/^([0-9]+%)$/;
+            //     let reg3 = /^([0-9]+)px$/;
+            //     let headerHeight = document.querySelector('.vxe-table--header-wrapper').offsetHeight;
+            //     if(reg1.test(this.height)){
+            //         let height = Number(headerHeight) + Number(RegExp.$2);
+            //         this['table-body-height'] = `calc(${RegExp.$1} - ${height}${RegExp.$3})`;
+            //     }else if(reg2.test(this.height)){
+            //         this['table-body-height'] = `calc(${RegExp.$1} - ${headerHeight}px)`;
+            //     }else if(reg3.test(this.height)){
+            //         let height = Number(RegExp.$1) - Number(headerHeight);
+            //         this['table-body-height'] = `${height}px`;
+            //     }
+            //     if(this['table-body-height']){
+            //         console.log(document.querySelector('.vxe-table--body-wrapper').style, this['table-body-height'])
+            //         document.querySelector('.vxe-table--body-wrapper').style.height = this['table-body-height'];
+            //     }
+            // })
         }
     }
 </script>

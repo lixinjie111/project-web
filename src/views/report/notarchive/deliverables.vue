@@ -3,12 +3,13 @@
         <Header title="月度交付物验收" :date="`${startTime} - ${endTime}`" @selected-tree="handleSetSelectedTree"></Header>
         <div class="table-content">
             <BasicTable v-if="tableData.length"
+                height="100%"
                 :tableData="tableData"
                 :setTableColumns="setTableColumns"
                 :rowClassName="handleRowClassName"
                 :treeConfig="treeConfig"
             ></BasicTable>
-            <NoData v-else :title="!archiveId ? '暂无月度交付物验收': '该部门未制定本月月度计划'" :isShowBtn="!archiveId"></NoData>
+            <NoData v-else :title="!archiveId ? '本周周报暂未生成': '该部门没有提交交付物'" :isShowBtn="!archiveId"></NoData>
         </div>
     </div>
 </template>
