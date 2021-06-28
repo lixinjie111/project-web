@@ -145,6 +145,7 @@ export default {
     handleGetDepartUsers(departIds){
       if(departIds[0] === this.deptId) return false;
       this.deptId = departIds.length ? departIds[0] : '';
+      this.curPageNum = 1;
       this.handleGetUserList();
     },
 
