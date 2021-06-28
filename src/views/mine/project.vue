@@ -15,10 +15,13 @@
                     </a-button>
                 </div>
             </ContentHeader>
-            <ProjectList ref="projectList" :list="listData" @update="handleAddUpdate"
+            <div class="mine-project-content">
+                <ProjectList ref="projectList" :list="listData" @update="handleAddUpdate"
                          :total="total" :curPageNum="curPageNum" :pageSize="pageSize"
                          @pagination-change-pagesize="handleChangePageSize"
                          @pagination-change-page="handleChangePage"></ProjectList>
+            </div>
+            
         </div>
     </div>
 </template>
@@ -138,10 +141,14 @@
     }
 
     .mine-project-container {
-        padding: 0 16px;
+        padding: 0 16px 24px;
 
         .mine-project-header {
             margin-left: 8px;
+        }
+        .mine-project-content {
+            height: calc(100vh - 156px);
+            overflow: auto;
         }
     }
 </style>

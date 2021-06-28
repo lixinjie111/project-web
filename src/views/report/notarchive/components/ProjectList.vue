@@ -1,6 +1,5 @@
 <template>
     <div class="project-list-container">
-        <div class="list-header">重点项目</div>
         <template v-if="list.length">
             <Collapse :title="item.title" v-for="(item,index) in list" :key="index">
                 <BasicTable :tableData="item.children" :setTableColumns="setTableColumns"></BasicTable>
@@ -144,16 +143,6 @@
 <style scoped lang="scss">
 @import '@/assets/css/variables.scss';
     .project-list-container {
-
-        .list-header {
-            margin: 0 0 8px 8px;
-            height: 44px;
-            line-height: 44px;
-            font-size: 20px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #242F57;
-        }
 
         .collapse-container {
             &:last-child {

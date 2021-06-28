@@ -10,7 +10,11 @@
       <div class="time">
         <span class="label">统计时段</span>
         <span class="time-picker">
-          <a-range-picker format="YYYY/MM/DD" :inputReadOnly="true" @change="handleChangeRange">
+          <a-range-picker 
+            format="YYYY/MM/DD" 
+            :inputReadOnly="true" 
+            :value="[moment(startDate, 'YYYY/MM/DD'), moment(endDate, 'YYYY/MM/DD')]"
+            @change="handleChangeRange">
             <span class="iconfont iconrili calendar-picker-icon" slot="suffixIcon"></span>
           </a-range-picker>
         </span>
@@ -197,6 +201,7 @@ export default {
     }
   },
   methods: {
+    moment,
     // 修改row样式
     handleRowClassName(e){
         let {level, row} = e;
@@ -271,6 +276,10 @@ export default {
     }
   },
   mounted(){
+    let start = moment(localStorage.getItem('serverDate')).subtract(6, 'days').format('YYYY/MM/DD');
+    let end = moment(localStorage.getItem('serverDate')).format('YYYY/MM/DD');
+    this.startDate = start;
+    this.endDate = end;
     this.handleGetList();
   }
 }

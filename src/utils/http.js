@@ -58,6 +58,7 @@ const httpaxios = {
 			response => {
 				// debugger;
 				// console.log(response.headers.date);
+				localStorage.setItem('serverDate', response.headers.date);
 
 				removePending(response.config);  //在一个axios响应后再执行一下取消操作，把已经完成的请求从pending中移除
 				const status = Number(response.status) || 200
