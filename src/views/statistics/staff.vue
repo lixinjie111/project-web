@@ -15,6 +15,7 @@
           <a-range-picker 
             format="YYYY/MM/DD" 
             :inputReadOnly="true" 
+            :allowClear="false"
             :value="[moment(startDate, 'YYYY/MM/DD'), moment(endDate, 'YYYY/MM/DD')]"
             @change="handleChangeRange">
             <span class="iconfont iconrili calendar-picker-icon" slot="suffixIcon"></span>
