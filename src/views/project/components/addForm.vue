@@ -85,7 +85,7 @@
                         masterList: [],
                         projectDescription: '',
                         productList: [],
-                        publicFlag: 0
+                        publicFlag: 1
                     }
                 }
             }

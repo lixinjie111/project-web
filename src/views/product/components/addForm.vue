@@ -57,7 +57,7 @@
                         productDescription: '',
                         productCode: '',
                         masterList: [],
-                        publicFlag: 0,
+                        publicFlag: 1,
                         projectList: []
                     }
                 }

@@ -152,7 +152,7 @@
                     masterList: [],
                     projectDescription: '',
                     productList: [],
-                    publicFlag: 0
+                    publicFlag: 1
                 };
                 this.showAddModal = true;
                 this.addModal.modalTitle = '添加项目';
