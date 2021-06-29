@@ -10,10 +10,10 @@
         <CircleButton v-else></CircleButton>
       </template>
       <template v-else>
-        <TwoValue :title="value.userName" :subtitle="subtitle" v-if="value">
+        <TwoValue :title="value.userName || '-'" :subtitle="subtitle" v-if="value">
           <UserIcon :value="value.userName" :length="1" :size="1"/>
         </TwoValue>
-        <TwoValue :subtitle="subtitle" v-else>
+        <TwoValue title="-" :subtitle="subtitle" v-else>
           <CircleButton></CircleButton>
         </TwoValue>
       </template>
