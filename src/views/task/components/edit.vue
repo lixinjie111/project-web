@@ -441,7 +441,7 @@
         // console.log(file)
         this.hideLoading = this.$message.loading('上传中...');
         if (file.size > 100*1024*1024) {
-          message.error(file.name + '超过100M，不允许上传');
+          message.error(file.name + '超过50M，不允许上传');
           return false;
         }
         return true;
