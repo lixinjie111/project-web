@@ -36,8 +36,8 @@ vueRouter.beforeEach((to, from, next) => {
 // 重置title
 vueRouter.afterEach((to) => {
     // reset the page title
-    const title = to.meta && to.meta?.title ? to.meta.title : '项目管理';
-    document.title = title
+    const title = to.meta && to.meta?.title ? to.meta.title : '元知项目协作管理平台';
+    document.title = '元知项目协作管理平台';
     // 从路由的元信息中获取 title 属性
     // if (to.meta.title) {
     //     document.title = to.meta.title;
