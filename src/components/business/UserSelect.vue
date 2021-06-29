@@ -114,7 +114,7 @@
           return;
         }
         this.showPopup = false;
-        console.log(e, user);
+        // console.log(e, user);
         this.users = user;
         this.$emit('change', user)
         this.$emit('input', user)

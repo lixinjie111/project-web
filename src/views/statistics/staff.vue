@@ -13,9 +13,9 @@
       <div class="time">
         <span class="label">统计时段</span>
         <span class="time-picker">
-          <a-range-picker 
-            format="YYYY/MM/DD" 
-            :inputReadOnly="true" 
+          <a-range-picker
+            format="YYYY/MM/DD"
+            :inputReadOnly="true"
             :value="[startDate ? moment(startDate, 'YYYY/MM/DD') : startDate, endDate ? moment(endDate, 'YYYY/MM/DD') : endDate]"
             @change="handleChangeRange">
             <span class="iconfont iconrili calendar-picker-icon" slot="suffixIcon"></span>
@@ -264,7 +264,7 @@ export default {
             let {restHour, planHour, actualHour} = rest;
             result = [...result, ...item.projects, {restHour, planHour, actualHour, isMerge: true}];
         });
-        console.log(result)
+        // console.log(result)
         return result;
     },
     async handleGetList(){

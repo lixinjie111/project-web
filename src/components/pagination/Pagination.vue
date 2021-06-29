@@ -63,7 +63,7 @@ export default {
       }
     },
     handleChangePage(pageNum, pageSize) {
-      console.log(pageNum, pageSize);
+      // console.log(pageNum, pageSize);
       this.$emit('pagination-change-page', pageNum)
     }
   }

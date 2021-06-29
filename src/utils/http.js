@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import store from '@/store' 
+import store from '@/store'
 import errorCode from '@/const/errorCode'
 import { message } from 'x-intelligent-ui'
 import router from '../router/index'
@@ -28,7 +28,7 @@ const httpaxios = {
 				for(let p in pending){
 						if(pending[p].u === config.url + JSON.stringify(config.data) + '&' + config.method) { //当当前请求在数组中存在时执行函数体
 								pending[p].f(); //执行取消操作
-								pending.splice(p, 1); 
+								pending.splice(p, 1);
 						}
 				}
 		}
@@ -39,7 +39,7 @@ const httpaxios = {
 				removePending(config); //在一个axios发送前执行一下取消操作
 				config.cancelToken = new cancelToken((c)=>{
 						// 这里的axios标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
-						pending.push({ u: config.url + '&' + config.method, f: c });  
+						pending.push({ u: config.url + '&' + config.method, f: c });
 				});
 				try {
 					const token = store.state.users.accessToken
@@ -56,14 +56,13 @@ const httpaxios = {
 		// response's interceptors，Error handling here，And return data for ease of use
 		instance.interceptors.response.use(
 			response => {
-				// debugger;
 				// console.log(response.headers.date);
 				localStorage.setItem('serverDate', response.headers.date);
 
 				removePending(response.config);  //在一个axios响应后再执行一下取消操作，把已经完成的请求从pending中移除
 				const status = Number(response.status) || 200
         const msg = response.data.msg || errorCode[status] || errorCode['default']
-				
+
 				if (status === 401) { // token过期重定向 login
 					// message.error( msg)
 					store.dispatch('logOut').then(() => {
@@ -75,12 +74,12 @@ const httpaxios = {
 				if (status !== 200 || response.data.code === 1) {
 					message.error( msg)
 					return Promise.reject(new Error(msg))
-				} 
+				}
 
 				//set data
 				const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
 				return data
-				
+
 			}, function (error) {
 				if (error instanceof axios.Cancel) {
 					error.isCanceled = true

@@ -113,8 +113,8 @@
       handleSubmit() {
         this.$refs.userForm.validate((valid, data) => {
           if (valid) {
-            console.log(data)
-            console.log('submit!', this.form);
+            // console.log(data)
+            // console.log('submit!', this.form);
             // 接口提交成功 isShow
             this.form.projectId = this.projectId;
             if (this.form.incharge) {
