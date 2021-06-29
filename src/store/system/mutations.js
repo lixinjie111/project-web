@@ -4,7 +4,7 @@ export default {
   [types.INIT_TOP_MENU] (state, menu) {
     state.topMenu = menu
     state.menuList = toMenuListByTree(menu)
-    console.log(state.menuList)
+    // console.log(state.menuList)
     state.menuMap = toMenuMapByLevel(menu)
   },
   [types.ACTIVE_FIRST_MENU] (state, menu) {

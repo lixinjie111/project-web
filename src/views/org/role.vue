@@ -140,7 +140,7 @@ export default {
     },
     // 维护 type: 组员管理 role, 操作权限 operation, 数据权限 data
     handlePermission(type, role) {
-      console.log(type, role);
+      // console.log(type, role);
       if(type==='role'){
         this.$router.push({
           path: '/org/member',

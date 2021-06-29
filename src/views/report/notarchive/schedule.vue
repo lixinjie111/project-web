@@ -2,12 +2,12 @@
     <div class="notarchive-schedule-container">
         <Header title="本周工作进度" :date="`${startTime} - ${endTime}`" @selected-tree="handleSetSelectedTree"></Header>
         <div class="table-content">
-            <BasicTable v-if="tableData.length" 
+            <BasicTable v-if="tableData.length"
                 rowId="id"
                 height="100%"
-                :tableData="tableData" 
-                :setTableColumns="setTableColumns" 
-                :rowClassName="handleRowClassName" 
+                :tableData="tableData"
+                :setTableColumns="setTableColumns"
+                :rowClassName="handleRowClassName"
                 :treeConfig="treeConfig"
             ></BasicTable>
             <NoData v-else :title="!archiveId ? '本周周报暂未生成': '该部门未制定本月月度计划'" :isShowBtn="!archiveId"></NoData>
@@ -37,9 +37,9 @@
                 deptId: this.$store.state.users.userInfo.deptId,
                 tableData: [],
                 treeConfig:{
-                    children: 'children', 
-                    expandRowKeys: [], 
-                    iconOpen: 'tree-icon iconfont iconxia2', 
+                    children: 'children',
+                    expandRowKeys: [],
+                    iconOpen: 'tree-icon iconfont iconxia2',
                     iconClose: 'tree-icon iconfont iconyou2'
                 },
                 setTableColumns: [
@@ -161,7 +161,7 @@
                         minWidth: 120,
                         showOverflow: true,
                         editRender: {
-                            name: 'input', 
+                            name: 'input',
                             enabled: isInPermission('business_projectweek_edit'),
                             attrs: {type: 'text', placeholder: '请输入工作进展描述'},
                             events: {
@@ -178,8 +178,8 @@
                         minWidth: 120,
                         showOverflow: true,
                         editRender: {
-                            name: 'input', 
-                            enabled: isInPermission('business_projectweek_edit'), 
+                            name: 'input',
+                            enabled: isInPermission('business_projectweek_edit'),
                             attrs: {type: 'text', placeholder: '请输入下周工作计划'},
                             events: {
                                 blur: ({row, column}) => {
@@ -195,8 +195,8 @@
                         minWidth: 120,
                         showOverflow: true,
                         editRender: {
-                            name: 'input', 
-                            enabled: isInPermission('business_projectweek_edit'), 
+                            name: 'input',
+                            enabled: isInPermission('business_projectweek_edit'),
                             attrs: {type: 'text', placeholder: '请输入备注'},
                             events: {
                                 blur: ({row, column}) => {
@@ -239,10 +239,10 @@
                         this.startTime = startTime || '';
                         this.endTime = endTime || '';
                         this.$store.dispatch('initArchiveId', archiveId || '');
-                        
+
                         expandRowKeys = expandRowKeys.length ? expandRowKeys : [];
                         this.$set(this, 'treeConfig', {...this.treeConfig, expandRowKeys});
-                        console.log(this.treeConfig)
+                        // console.log(this.treeConfig)
                         setTimeout(()=> {
                             this.tableData = list || [];
                         }, 0);

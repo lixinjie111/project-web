@@ -64,7 +64,7 @@ export default {
     isInPermission,
     // 切换条目数量
     handleChangePageSize(pageSize, pageNum) {
-        console.log(pageSize)
+      // console.log(pageSize)
       this.pageSize = pageSize;
       if(pageNum) this.curPageNum = pageNum;
       this.handleGetList();
@@ -106,7 +106,7 @@ export default {
 
 <style scoped lang="scss">
 .report-archive-container {
-  padding: 24px 16px; 
+  padding: 24px 16px;
   .header {
     padding: 0 8px;
     margin-bottom: 16px;

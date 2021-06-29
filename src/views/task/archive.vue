@@ -96,7 +96,7 @@
             },
             // 切换条目数量
             handleChangePageSize(pageSize, pageNum) {
-                console.log(pageSize)
+                // console.log(pageSize)
                 this.pageSize = pageSize;
                 if(pageNum) this.curPageNum = pageNum;
                 this.getAttachmentList();
