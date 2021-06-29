@@ -2,7 +2,7 @@
     <div class="users-list">
         <UserIcon class="user-icon" :value="item.userName" :key="item.userId" v-for="(item, index) in userList" closable
                   @close="handleDelete(index)"/>
-        <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
+        <a-popover trigger="click" overlay-class-name="user-sel-circle-popover" placement="bottomLeft" v-model="showPopup">
             <CircleButton></CircleButton>
             <div slot="content" class="tree-list">
                 <a-tree v-if="treeList.length"
@@ -171,10 +171,6 @@
 
 <style lang="scss" scoped>
     .tree-list {
-        width: 160px;
-        max-height: 300px;
-        overflow: auto;
-
         /deep/ .ant-tree li.dept{
 
             // 修改选中背景颜色
@@ -245,6 +241,15 @@
 
         .user-icon {
             margin-right: 4px;
+        }
+    }
+</style>
+<style lang="scss" >
+    .user-sel-circle-popover {
+        .ant-popover-inner-content {
+            max-width: 200px;
+            max-height: 300px;
+            overflow: auto;
         }
     }
 </style>
