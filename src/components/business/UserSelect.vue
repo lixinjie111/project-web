@@ -146,8 +146,12 @@
 <style lang="scss">
 .user-sel-popover {
   .ant-popover-inner-content {
-    max-height: 350px;
+    max-height: 280px;
     overflow-y: auto;
+  }
+
+  .ant-tree li span.ant-tree-switcher.ant-tree-switcher-noop {
+    display: none;
   }
 }
 </style>
