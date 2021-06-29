@@ -1,9 +1,10 @@
 <template>
   <div class="statistics-staff-container">
     <ContentHeader type="title" title="人员任务统计">
+      <div slot="left" class="sub-title">该表仅统计每个人担任执行人的子任务的工时</div>
       <div slot="operation">
         <a-config-provider :auto-insert-space-in-button="false">
-          <a-button type="primary" @click="handleExport">导出</a-button>
+          <a-button class="btn" type="primary" @click="handleExport">导出</a-button>
         </a-config-provider>
       </div>
     </ContentHeader>
@@ -292,7 +293,14 @@ export default {
 .statistics-staff-container {
   padding: 0 16px 24px;
   height: 100%;
-
+  .sub-title {
+      margin-left: 12px;
+      font-size: 14px;
+      color: #97A0C3;
+  }
+  .btn {
+      min-width: 96px;
+  }
   .table-content {
       height: calc(100% - 124px);
       min-height: 100px;
