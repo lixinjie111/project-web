@@ -96,7 +96,7 @@
           <div class="child-tit">
             <div>共 {{childrenList.length}} 个子任务</div>
             <div>
-              <FlatButton @click="handleCreateChildTask" v-if="canCreateChild">
+              <FlatButton @click="handleCreateChildTask" v-if="canCreateChild" class="btn-pad0">
                 添加子任务
                 <MyIcon slot="icon" name="iconjia" type="main"/>
               </FlatButton>
@@ -158,7 +158,7 @@
                   @change="handleUpload"
                   :before-upload="handleBeforeUpload"
               >
-                <FlatButton>
+                <FlatButton class="btn-pad0">
                   添加附件
                   <MyIcon slot="icon" name="iconjia" type="main"/>
                 </FlatButton>
@@ -524,6 +524,9 @@
   .remark {
     color: #97A0C3;
     margin-left: 6px;
+  }
+  .btn-pad0 {
+    padding: 0;
   }
 </style>
 <style lang="scss">
