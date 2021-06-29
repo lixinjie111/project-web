@@ -17,7 +17,7 @@
             </div>
             <div slot="action" slot-scope="data" class="table-action">
                 <!--未开始的可以开始，搁置的不能搁置，完成的的不能完成、删除、搁置-->
-                <IconToolTip iconName="iconbofang" :disabled="data.row.status > 0 || !isInPermission('business_product_operate')" content="开始" @action="handleStart(data.row)"></IconToolTip>
+                <IconToolTip iconName="iconbofang" :disabled="data.row.status == 1 || data.row.status == 2 || data.row.status == 3 || !isInPermission('business_product_operate')" content="开始" @action="handleStart(data.row)"></IconToolTip>
                 <!--<IconToolTip iconName="iconyanqi" content="延期" @action="handleDelay(data.row)"></IconToolTip>-->
                 <IconToolTip iconName="iconzanting" :disabled="data.row.status == 2 || data.row.status == 4 || !isInPermission('business_product_operate')" content="搁置" @action="handlePause(data.row)"></IconToolTip>
                 <IconToolTip iconName="iconkaiguan" :disabled="data.row.status == 2 || !isInPermission('business_product_operate')" content="完成" @action="handleFinish(data.row)"></IconToolTip>
