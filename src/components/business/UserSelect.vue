@@ -146,6 +146,7 @@
 <style lang="scss">
 .user-sel-popover {
   .ant-popover-inner-content {
+    max-width: 200px;
     max-height: 280px;
     overflow-y: auto;
   }
