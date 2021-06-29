@@ -101,7 +101,7 @@
                 this.$emit('change', this.userList);
             },
             handleClick(event, treeNode){
-                console.log(treeNode)
+                // console.log(treeNode)
                 let {expandedKeys} = this;
                 let id = treeNode?.dataRef.id;
                 let index = expandedKeys.indexOf(id);

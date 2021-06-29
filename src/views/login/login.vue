@@ -4,10 +4,13 @@
       <img class="logo" src="@/assets/images/login/login-logo.png" />
     </div>
     <div class="login-content">
-      <div class="login-title">欢迎登录项目管理平台</div>
+      <div class="login-title">
+        <p>欢迎登录</p>
+        <p>元知项目协作管理平台</p>
+      </div>
       <a-form-model ref="loginForm" class="login-form" :model="form" :rules="rules" @submit="handleValidate">
         <a-form-model-item prop="username">
-          <a-input class="username" :value="form.username" v-model="form.username" placeholder="用户名/手机号" />
+          <a-input class="username" :value="form.username" v-model="form.username" placeholder="用户名" />
         </a-form-model-item>
         <a-form-model-item prop="password">
           <a-input-password class="pwd" :value="form.password" v-model="form.password"  placeholder="6-8位数字和字母的组合" />
@@ -49,7 +52,7 @@ export default {
       errorMsg: '',
       rules: {
         username: [
-          {required: true, message: '请输入用户名/手机号', trigger: 'change'},
+          {required: true, message: '请输入用户名', trigger: 'change'},
         ],
         password: [
           {required: true, message: '请输入登录密码', trigger: 'change'},
@@ -113,6 +116,8 @@ export default {
     }
   }
   .login-content {
+    display: flex;
+    flex-direction: column;
     margin: 80px auto 0 auto;
     padding: 32px 40px 40px 40px;
     width: 364px;
@@ -121,11 +126,14 @@ export default {
     border-radius: 16px;
     .login-title {
       margin-bottom: 32px;
-      font-size: 24px;
+      font-size: 20px;
       line-height: 32px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 500;
       color: #25272b;
+      > p {
+        text-align: center;
+      }
     }
     .login-form {
       position: relative;

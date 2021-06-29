@@ -83,7 +83,7 @@
     methods: {
       onLoadData(treeNode) {
         return new Promise(resolve => {
-          console.log(treeNode.dataRef)
+          // console.log(treeNode.dataRef)
           const { id } = treeNode.dataRef;
           getDeptUserList(id).then(res => {
             if (res.code === 0 && res.data) {
