@@ -216,7 +216,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .task-home {
-
+  height: 100%;
+  overflow: auto;
   .header {
     background-color: white;
     display: flex;
@@ -261,6 +262,11 @@
         margin-left: 4px;
       }
     }
+  }
+  .task-list {
+    height: calc(100% - 66px);
+    max-height: calc(100% - 66px);
+    overflow: auto;
   }
 }
 </style>

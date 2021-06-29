@@ -41,6 +41,9 @@
 </script>
 
 <style scoped lang="scss">
+.layout {
+    height: 100%;
+}
     .nav-left-title {
         padding: 0 24px;
         line-height: 51px;
@@ -51,12 +54,9 @@
     }
 
     .list-header {
-        position: fixed;
-        top: 51px;
         padding: 24px 0 8px 24px;
         width: 100%;
-        // height: 44px;
-        line-height: 44px;
+        line-height: 40px;
         font-size: 20px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 500;
@@ -65,7 +65,9 @@
         z-index: 100;
     }
     .mine-home-container {
-        margin-top: 76px;
         padding: 0 16px 24px;
+        height: calc(100% - 72px);
+        max-height: calc(100% - 72px);
+        overflow: auto;
     }
 </style>

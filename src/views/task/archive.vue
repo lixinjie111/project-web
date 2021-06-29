@@ -149,12 +149,15 @@
 </script>
 <style lang="scss" scoped>
     .archive-container {
+        height: 100%;
         .archive-title {
             padding: 0 24px;
         }
 
         .archive-content {
-            padding: 0 24px;
+            padding: 0 24px 24px;
+            height: calc(100% - 72px);
+            max-height: calc(100% - 72px);
 
             .operations {
                 .iconfont {

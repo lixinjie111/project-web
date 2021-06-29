@@ -158,6 +158,7 @@
 <style lang="scss" scoped>
     .project-home-container {
         padding: 0 16px 24px;
+        height: 100%;
 
         .home-header {
             margin-left: 8px;
@@ -172,6 +173,11 @@
                 background-color: transparent;
                 border-color: #C6CBDE;
             }
+        }
+        .home-content {
+            height: calc(100% - 72px);
+            max-height: calc(100% - 72px);
+            overflow: auto;
         }
     }
 </style>

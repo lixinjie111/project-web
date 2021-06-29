@@ -130,6 +130,9 @@
 </script>
 
 <style scoped lang="scss">
+.layout {
+    height: 100%;
+}
     .nav-left-title {
         padding: 0 24px;
         line-height: 51px;
@@ -141,6 +144,13 @@
 
     .mine-task-container {
         margin: 0 16px;
+        height: 100%;
+        .task-list {
+            padding-bottom: 24px;
+            height: calc(100% - 72px);
+            max-height: calc(100% - 72px);
+            overflow: auto;
+        }
 
         .mine-task-header {
             margin-left: 8px;

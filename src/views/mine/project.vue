@@ -21,7 +21,6 @@
                          @pagination-change-pagesize="handleChangePageSize"
                          @pagination-change-page="handleChangePage"></ProjectList>
             </div>
-            
         </div>
     </div>
 </template>
@@ -131,6 +130,9 @@
 </script>
 
 <style scoped lang="scss">
+.layout {
+    height: 100%;
+}
     .nav-left-title {
         padding: 0 24px;
         line-height: 51px;
@@ -141,13 +143,15 @@
     }
 
     .mine-project-container {
+        height: 100%;
         padding: 0 16px 24px;
 
         .mine-project-header {
             margin-left: 8px;
         }
         .mine-project-content {
-            height: calc(100vh - 156px);
+            height: calc(100% - 72px);
+            max-height: calc(100% - 72px);
             overflow: auto;
         }
     }

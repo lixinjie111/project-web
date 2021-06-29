@@ -314,6 +314,7 @@
 <style lang="scss" scoped>
     .product-overview-container {
         padding: 0 16px 24px;
+        height: 100%;
 
         .overview-header {
             margin-left: 8px;
@@ -331,6 +332,9 @@
         }
 
         .overview-content {
+            height: calc(100% - 72px);
+            max-height: calc(100% - 72px);
+            overflow: auto;
             /deep/ .table-name {
                 font-size: 16px;
                 font-family: PingFangSC-Medium, PingFang SC;
