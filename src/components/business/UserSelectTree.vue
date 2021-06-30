@@ -12,7 +12,7 @@
   >
   </a-tree-select> -->
   <div class="users-select">
-        <a-popover trigger="click" placement="bottomLeft" v-model="showPopup">
+        <a-popover trigger="click" overlay-class-name="user-sel-tree-popover" placement="bottomLeft" v-model="showPopup">
           <div :class="['select', showPopup ? 'select-open': 'select-close']">
             <p>{{username}}</p>
             <span class="icon iconfont iconxia"></span>
@@ -207,17 +207,23 @@
       .icon {
         transform: rotate(0deg);
       }
-      
+
     }
   }
 }
 .tree-list {
-  width: 160px;
-  max-height: 300px;
-  overflow: auto;
   .icona-renyuan-tianchong {
     color: #7c88b1;
     font-size: 16px;
   }
 }
+</style>
+<style lang="scss">
+    .user-sel-tree-popover {
+        .ant-popover-inner-content {
+            max-width: 200px;
+            max-height: 300px;
+            overflow: auto;
+        }
+    }
 </style>
