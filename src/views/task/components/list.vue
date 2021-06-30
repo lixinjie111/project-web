@@ -490,7 +490,8 @@
         color: #242F57;
         line-height: 22px;
         cursor: pointer;
-
+        word-break: break-all;
+        
         &:hover {
           color: #0064FF;
           text-decoration: underline;
