@@ -169,6 +169,7 @@
       },
       handleViewType(e) {
         // console.log('test', e)
+        this.showTypeMenu = false;
         this.viewType = e.key;
         this.loadCurrentList();
       },

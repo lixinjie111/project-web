@@ -7,7 +7,7 @@
     <div class="board" v-else>
       <div class="group" :class="{droparea: dragging}">
         <div class="name">未开始</div>
-        <draggable class="board-list" v-model="status0" group="site" @start="handleDragStart" @end="handleDragEnd">
+        <draggable class="board-list" :class="{empty: status0.length===0}" v-model="status0" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status0" :key="item.id">
               <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
@@ -21,7 +21,7 @@
 
       <div class="group" :class="{droparea: dragging}">
         <div class="name">进行中</div>
-        <draggable class="board-list" v-model="status1" group="site" @start="handleDragStart" @end="handleDragEnd">
+        <draggable class="board-list" :class="{empty: status1.length===0}" v-model="status1" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status1" :key="item.id">
               <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
@@ -35,7 +35,7 @@
 
       <div class="group" :class="{droparea: dragging}">
         <div class="name">已完成</div>
-        <draggable class="board-list" v-model="status2" group="site" @start="handleDragStart" @end="handleDragEnd">
+        <draggable class="board-list" :class="{empty: status2.length===0}" v-model="status2" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status2" :key="item.id">
               <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
@@ -49,7 +49,7 @@
 
       <div class="group" :class="{droparea: dragging}">
         <div class="name">已延期</div>
-        <draggable class="board-list" v-model="status3" group="site" @start="handleDragStart" @end="handleDragEnd">
+        <draggable class="board-list" :class="{empty: status3.length===0}" v-model="status3" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status3" :key="item.id">
               <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
@@ -63,7 +63,7 @@
 
       <div class="group" :class="{droparea: dragging}">
         <div class="name">已搁置</div>
-        <draggable class="board-list" v-model="status4" group="site" @start="handleDragStart" @end="handleDragEnd">
+        <draggable class="board-list" :class="{empty: status4.length===0}" v-model="status4" group="site" @start="handleDragStart" @end="handleDragEnd">
           <transition-group>
             <div class="item" v-for="item in status4" :key="item.id">
               <div class="title" @click="handleEdit(item)">{{item.taskName}}</div>
@@ -448,7 +448,8 @@
     .droparea {
       >div {
         > span {
-          min-height: 118px;
+          min-height: 106px;
+          margin-bottom: 8px;
         }
       }
     }
@@ -464,7 +465,7 @@
         }
       }
       .name {
-        margin-bottom: 12px;
+        margin-bottom: 20px;
         height: 22px;
         font-size: 16px;
         font-weight: 500;
@@ -526,9 +527,13 @@
       }
     }
     .board-list {
-      max-height: calc(100% - 72px);
+      max-height: calc(100% - 82px);
       font-size: 0;
       overflow: auto;
+      font-size: 0;
+      &.empty {
+        margin-bottom: 0;
+      }
     }
   }
 }

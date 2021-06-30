@@ -1,7 +1,7 @@
 <template>
   <div :class="overClass">
     <div v-show="!edit" :class="overClass">
-      <span v-if="value" @click="handleClick">{{value}}</span>
+      <span v-if="value" @click="handleClick" class="text">{{value}}</span>
       <span v-else>无<a class="btn" @click="handleClick">添加描述</a></span>
     </div>
     <div v-if="edit"><a-textarea v-bind="$attrs" @change="handleChange" :value="value"/></div>
@@ -58,5 +58,8 @@
     font-size: 14px;
     color: #2373FF;
     margin-left: 16px;
+  }
+  .text {
+    color: #242F57;
   }
 </style>
