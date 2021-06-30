@@ -16,7 +16,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate(0)" block><i class="iconfont iconjia"></i></a-button>
+        <a-button  :class="status0.length ? 'has-mart8': ''" @click="handleCreate(0)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
       <div class="group" :class="{droparea: dragging}">
@@ -30,7 +30,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate(1)" block><i class="iconfont iconjia"></i></a-button>
+        <a-button :class="status1.length ? 'has-mart8': ''" @click="handleCreate(1)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
       <div class="group" :class="{droparea: dragging}">
@@ -44,7 +44,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate(2)" block><i class="iconfont iconjia"></i></a-button>
+        <a-button :class="status2.length ? 'has-mart8': ''" @click="handleCreate(2)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
       <div class="group" :class="{droparea: dragging}">
@@ -58,7 +58,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate(3)" block><i class="iconfont iconjia"></i></a-button>
+        <a-button :class="status3.length ? 'has-mart8': ''" @click="handleCreate(3)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
       <div class="group" :class="{droparea: dragging}">
@@ -72,7 +72,7 @@
             </div>
           </transition-group>
         </draggable>
-        <a-button @click="handleCreate(4)" block><i class="iconfont iconjia"></i></a-button>
+        <a-button :class="status4.length ? 'has-mart8': ''" @click="handleCreate(4)" block><i class="iconfont iconjia"></i></a-button>
       </div>
 
     </div>
@@ -476,7 +476,10 @@
         background: #FFFFFF;
         border-radius: 4px;
         padding: 12px;
-        margin: 8px 0;
+        margin-top: 8px;
+        &:first-child{
+          margin-top: 0;
+        }
       }
 
       .title {
@@ -518,9 +521,13 @@
       .ant-btn {
         border: none;
       }
+      .has-mart8 {
+        margin-top: 8px;
+      }
     }
     .board-list {
-      max-height: calc(100% - 64px);
+      max-height: calc(100% - 72px);
+      font-size: 0;
       overflow: auto;
     }
   }
