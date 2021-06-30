@@ -54,7 +54,7 @@ export default {
         // {type: 'checkbox', width: '60'},
         {title: '用户ID', field: 'userId', showOverflow: true,},
         {title: '真实姓名', field: 'realName', showOverflow: true,},
-        {title: '用户姓名', field: 'username', showOverflow: true,},
+        {title: '用户名', field: 'username', showOverflow: true,},
         {title: '职位', field: 'position'},
         {title: '性别', field: 'gender', formatter: ({cellValue}) => cellValue==0 ? '男' : '女'},
         {title: '电话', field: 'phone', showOverflow: true,},
