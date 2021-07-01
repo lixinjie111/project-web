@@ -106,7 +106,7 @@
 <!--            <div class="child-item">-->
             <a-row :gutter="[16, 12]" v-if="createChild">
               <a-col span="24">
-                <a-input class="edit" v-model="childTaskName" @pressEnter="handleCreateChild" placeholder="输入子任务名称…" style="border: none;"/>
+                <a-input class="edit" v-model="childTaskName" @pressEnter="handleCreateChild" placeholder="输入子任务名称…"/>
               </a-col>
             </a-row>
             <a-row :gutter="[16, 12]" v-if="createChild">
@@ -510,6 +510,10 @@
       height: 48px;
       background: #F4F7FC;
       border-radius: 4px;
+      border: none;
+      &:focus {
+        box-shadow: none;
+      }
     }
   }
   .panel-1 {
