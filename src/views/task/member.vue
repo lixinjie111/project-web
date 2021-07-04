@@ -58,6 +58,11 @@
           },
         },
         {
+          field: 'userNumber',
+          title: '工号',
+          width: 120,
+        },
+        {
           field: 'userRole',
           title: '角色',
           width: 220,
@@ -71,9 +76,19 @@
           }
         },
         {
+          field: 'departName',
+          title: '所属部门',
+          width: 300,
+        },
+        {
+          field: 'phone',
+          title: '手机',
+          width: 150,
+        },
+        {
           field: 'createdTime',
           title: '加入日期',
-          minWidth: 800,
+          minWidth: 150,
         }
       ];
       if (canDelete) {
