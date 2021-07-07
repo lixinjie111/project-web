@@ -18,12 +18,14 @@
       <NoData v-else></NoData>
     </div>
   </div>
+  <AddMember :isShow="true" />
 </div>
 </template>
 
 <script>
 
   import UserSelectTree from "@/components/business/UserSelectTree";
+  import AddMember from "./components/addMember";
   import TaskMenu from "./components/menu";
   import {isInPermission} from "@/utils/common";
   import BasicTable from "@/components/tables/BasicTable";
@@ -32,7 +34,7 @@
 
   export default {
     name: "Member",
-    components: {UserSelectTree, TaskMenu, BasicTable, NoData},
+    components: {UserSelectTree, TaskMenu, BasicTable, NoData, AddMember},
     data() {
       let projectId = parseInt(this.$router.currentRoute.query.id);
       let canAdd = isInPermission('business_member_add');
