@@ -45,5 +45,9 @@ export default {
         overflow: auto;
         background: #F4F7FC;
     }
+    /*修改icon默认大小*/
+	/deep/ .iconfont {
+		font-size: 20px;
+	}
 }
 </style>

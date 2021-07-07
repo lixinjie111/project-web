@@ -13,15 +13,23 @@
           </a-form-model-item>
         </a-col>
       </a-row>
-      
-      <a-form-model-item label="部门" prop="deptId">
-        <a-tree-select
-          v-model="form.deptId"
-          style="width: 100%"
-          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-          :default-value ="form.deptId"
-          :tree-data="treeList"></a-tree-select>
-      </a-form-model-item>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-model-item label="部门" prop="deptId">
+            <a-tree-select
+              v-model="form.deptId"
+              style="width: 100%"
+              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+              :default-value ="form.deptId"
+              :tree-data="treeList"></a-tree-select>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-model-item label="工号" prop="realName">
+            <a-input v-model="form.realName" placeholder="工号" />
+          </a-form-model-item>
+        </a-col>
+      </a-row>
 
       <a-form-model-item prop="roleList">
         <template slot="label">

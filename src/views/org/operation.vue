@@ -93,7 +93,7 @@ export default {
       nodeList.map(item => (this.checkedList.includes(item.id) || parentCheckedList.includes(item.id)) && parentCheckedList.push(item.parentId));
       parentList = [...new Set(parentList)]; // 全部parentId
       parentCheckedList = [...new Set(parentCheckedList)]; // 选中parentId
-      // console.log(parentList,parentCheckedList)
+      // console.log(nodeList, parentList,parentCheckedList)
       parentCheckedList = parentCheckedList?.length>=1 ? parentCheckedList : [];
       const diff = function(arr1, arr2) {
         return arr1.filter((i) => arr2.indexOf(i) < 0);

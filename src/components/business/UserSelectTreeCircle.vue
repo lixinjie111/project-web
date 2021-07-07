@@ -144,9 +144,10 @@
                     this.$api.org.getDeptUserList(id).then(res => {
                         if (res.code === 0 && res.data) {
                             let users = res.data.map(item => {
+                                console.log(item)
                                 return {
                                     id: 'user-' + item.userId,
-                                    name: item.realName,
+                                    name: `${item.realName}(${item.realName})`,
                                     isLeaf: true,
                                     parentId: id,
                                     userId: item.userId,
@@ -171,17 +172,25 @@
 
 <style lang="scss" scoped>
     .tree-list {
-        /deep/ .ant-tree li.dept{
+        /deep/ .ant-tree li{
 
             // 修改选中背景颜色
             .ant-tree-node-content-wrapper{
-                height: 22px;
-                line-height: 22px;
+                height: 24px;
+                font-size: 0;
+                line-height: 24px;
+                >span {
+                    font-size: 14px;
+                }
                 .ant-tree-node-selected {
                     background: #F0F8FF;
                 }
                 .iconfont {
-                    font-size: 12px;
+                    font-size: 16px;
+                    &.icona-renyuan-tianchong {
+                        color: #7c88b1;
+                        font-size: 16px;
+                    }
                 }
             }
 
@@ -226,12 +235,10 @@
                         display: none;
                     }
                 }
+                &.ant-tree-switcher-noop {
+                    display: none;
+                }
             }
-        }
-
-        .icona-renyuan-tianchong {
-            color: #7c88b1;
-            font-size: 16px;
         }
     }
 

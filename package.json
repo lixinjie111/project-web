@@ -12,8 +12,8 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "crypto-js": "^4.0.0",
-    "qs": "^6.10.1",
     "moment": "^2.29.1",
+    "qs": "^6.10.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.4",
     "vue-router": "^3.5.1",
@@ -22,7 +22,8 @@
     "vuex-persistedstate": "^4.0.0-beta.3",
     "vxe-table": "^3.3.2",
     "x-intelligent-ui": "0.0.7",
-    "xe-utils": "^3.2.1"
+    "xe-utils": "^3.2.1",
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

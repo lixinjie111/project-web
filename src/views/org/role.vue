@@ -26,10 +26,11 @@
 <script>
 import BasicTable from '@/components/tables/BasicTable.vue'
 import Modal from '@/components/Modal/Modal.vue'
+import DataPermission from './components/DataPermission.vue'
 import {isInPermission} from '@/utils/common.js'
 export default {
   name: 'roleorg',
-  components: {BasicTable, Modal},
+  components: {BasicTable, Modal, DataPermission},
   data() {
     return {
       total: null, // 总数据条数
@@ -66,11 +67,8 @@ export default {
                     null
                   }
                   {
-                    false ?
-                    (<a-button onClick={() => this.handlePermission('data', row)}>
-                      <span class="iconfont iconshujuku"></span>
-                      <span>数据权限</span>
-                    </a-button>)
+                    true ?
+                    <DataPermission></DataPermission>
                     :
                     null
                   }
@@ -238,7 +236,7 @@ export default {
         height: 100%;
       }
       .permission {
-        > button{
+        button, > section /deep/ button{
           padding: 0 8px;
           border-radius: 4px;
           border-color: #d9d9d9;
@@ -250,6 +248,10 @@ export default {
           &:nth-child(n+2){
             margin-left: 12px;
           }
+        }
+        > section { 
+          display: inline-block;
+          margin-left: 12px;
         }
       }
       .operations {

@@ -52,6 +52,7 @@ export default {
                         return [
                             <div class="operations">
                               <a href={row.url}><span class="iconfont iconxiazai"></span></a>
+                              <a class="preview" onClick={() => this.handleGotoPages(row)}><span class="iconfont iconyulan-dakai"></span></a>
                             </div>
                         ]
                     }
@@ -96,7 +97,16 @@ export default {
         } catch (error) {
             console.log(error)
         }
-    }
+    },
+    // 在线预览
+    handleGotoPages(row){
+        this.$router.push({
+            path: '/report/archive/excel',
+            query: {
+                url: row.url
+            }
+        })
+    },
   },
   mounted(){
       this.handleGetList();
@@ -136,6 +146,9 @@ export default {
       color: #999;
       a {
           color: #999;
+          &:nth-child(n+2){
+              margin-left: 10px;
+          }
       }
   }
 }

@@ -206,6 +206,23 @@
                             }
                         }
                     },
+                    {
+                    title: '批注',
+                    fixed: 'right',
+                    width: 120,
+                    showOverflow: true,
+                    editRender: {
+                        name: 'input', 
+                        enabled: isInPermission('business_projectmonth_status'), 
+                        attrs: {type: 'text', placeholder: '请输入批注'},
+                        events: {
+                            blur: ({row, column}) => {
+                                let data = {id: row.id, [column.property]: column.model.value}
+                                column.model.update && this.handlePutProjectMonth(data);
+                            }
+                        }
+                    }
+                },
                 ]
             }
         },

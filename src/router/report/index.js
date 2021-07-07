@@ -1,5 +1,6 @@
 import Simple from '@/layout/SimpleNav.vue'
 import Archive from '@/views/report/archive.vue'
+import Excel from '@/views/report/excel.vue'
 import Notarchive from '@/views/report/notarchive.vue'
 import Schedule from '@/views/report/notarchive/schedule.vue'
 import Project from '@/views/report/notarchive/project.vue'
@@ -50,6 +51,12 @@ export default {
             component: Archive,
             name: '已归档',
             meta: {isAuth: true}
+        },
+        {
+            path: '/report/archive/excel',
+            component: Excel,
+            name: '已归档',
+            meta: {isAuth: true, permissionKey: null, entryPath: '/report/archive'}
         }
     ]
 }

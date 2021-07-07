@@ -212,9 +212,73 @@
   }
 }
 .tree-list {
-  .icona-renyuan-tianchong {
-    color: #7c88b1;
-    font-size: 16px;
+  /deep/ .ant-tree li{
+
+    // 修改选中背景颜色
+    .ant-tree-node-content-wrapper{
+        height: 24px;
+        font-size: 0;
+        line-height: 24px;
+        >span {
+            font-size: 14px;
+        }
+        .ant-tree-node-selected {
+            background: #F0F8FF;
+        }
+        .iconfont {
+            font-size: 16px;
+            &.icona-renyuan-tianchong {
+                color: #7c88b1;
+                font-size: 16px;
+            }
+        }
+    }
+
+    span.ant-tree-switcher{
+      width:12px;
+      height:12px;
+      margin: 4px;
+      line-height: 16px;
+      overflow: hidden;
+
+      // 修改树结构合起的icon
+      &.ant-tree-switcher_close{
+            &:before {
+              display: inline-block;
+              color: #97A0C3;
+              font-family: "iconfont" !important;
+              font-size: 16px;
+              font-style: normal;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              content: '\e658;';
+              background: #fff;
+          }
+          i{
+              display: none;
+          }
+      }
+      // 修改树结构展开的icon
+      &.ant-tree-switcher_open{
+          &:before{
+              display: inline-block;
+              color: #97A0C3;
+              font-family: "iconfont" !important;
+              font-size: 16px;
+              font-style: normal;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              content: '\e657';
+              background: #fff;
+          }
+          i{
+              display: none;
+          }
+      }
+      &.ant-tree-switcher-noop {
+          display: none;
+      }
+    }
   }
 }
 </style>

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "22598598",
+      "name": "锁 - 填充",
+      "font_class": "a-suo-tianchong",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
       "icon_id": "22431345",
       "name": "人员 - 填充",
       "font_class": "a-renyuan-tianchong",
